@@ -42,23 +42,24 @@ export default function Landing(props: LandingProps) {
 
             {/* banner img */}
             <div className="relative w-full mx-auto h-[70vh] max-lg:h-[30vh] justify-around px-15  ">
-                <img className="w-full h-full object-cover rounded-4xl bg-white" src={props.banner} alt={props.altBanner} />
+                <img className="w-full h-full object-cover rounded-2xl bg-white" src={props.banner} alt={props.altBanner} />
             </div>
 
             {/* new section the categories of the app */}
-            <section className="flex flex-col items-center justify-center gap-25 py-80 max-lg:gap-10 max-lg:py-30 px-15">
-                <h2 className="text-7xl font-semibold max-lg:text-4xl pb-20 max-lg:pb-10"> Categories</h2>
+            <section className="flex flex-col items-center justify-center gap-20 py-75 max-lg:gap-10 max-lg:py-30 px-15">
+                <h2 className="text-7xl font-semibold max-lg:text-4xl pb-15 max-lg:pb-10"> Categories</h2>
                 <div className="flex justify-around w-full ">
                     {props.categoriesUp.map((categoriesUp, number) => (
                         <Link to={props.links[number]}>
-                            <img src={categoriesUp} alt={`Image ${number}`} className='w-50 h-50 object-cover rounded-3xl bg-white max-xl:w-25 max-xl:h-25 duration-600 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-white' />
+                            <img src={categoriesUp} alt={`Image ${number}`} className='w-40 h-40 object-cover rounded-4xl bg-white max-xl:w-25 max-xl:h-25 duration-600 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-black' />
                         </Link>
                     ))}
                 </div>
                 <div className="flex justify-around w-3/4">
                     {props.categoriesDown.map((categoriesDown, number) => (
                         <Link to={props.links2[number]}>
-                            <img src={categoriesDown} alt={`Image ${number}`} className='w-50 h-50 object-cover rounded-3xl bg-white duration-600 max-xl:w-25 max-xl:h-25 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-white' />
+                            <img src={categoriesDown} alt={`Image ${number}`} className='w-40 h-40 object-cover rounded-4xl bg-white duration-600 max-xl:w-25 max-xl:h-25 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-black
+                            ' />
                         </Link>
                     ))}
                 </div>
@@ -134,7 +135,7 @@ export default function Landing(props: LandingProps) {
                         <div className="grid grid-cols-2">
                             {props.socialMedias.map((socialMedia, number) => (
                                 <Link to={props.linksSocialMedia[number]}>
-                                    <img src={socialMedia} alt='' className="hover:scale-110 duration-600 w-25 h-25 max-lg:w-15 max-lg:h-15 max-lg:m-2 bg-amber-50 object-cover m-5 rounded-full" />
+                                    <img src={socialMedia} alt='' className="hover:scale-110 duration-600 w-20 h-20 max-lg:w-15 max-lg:h-15 max-lg:m-2 object-cover m-5 rounded-full" />
                                 </Link>
                             ))}
                         </div>

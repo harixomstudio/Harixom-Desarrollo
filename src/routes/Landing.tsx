@@ -5,9 +5,9 @@ export const Route = createFileRoute('/Landing')({
   component: RouteComponent,
 })
 
-const categoriesUp = ['circles.svg', 'circles.svg', 'circles.svg', 'circles.svg']
+const categoriesUp = ['icon-digitalart.svg', 'icon-animacion.svg', 'icon-sculture.svg', 'icon-traditional.svg']
 const links = ['', '', '', '']
-const categoriesDown = ['circles.svg', 'circles.svg', 'circles.svg']
+const categoriesDown = ['icon-3d.svg', 'icon-streetart.svg', 'icon-foto.svg']
 const links2 = ['', '', '']
 
 const rankingArtist = ['circles.svg', 'circles.svg', 'circles.svg', 'circles.svg', 'circles.svg', 'circles.svg', 'circles.svg', 'circles.svg', 'circles.svg', 'circles.svg']
@@ -21,7 +21,7 @@ const linksCommisions = ['', '', '']
 const products = ['Explorar', 'Comisiones', 'Recursos', 'Ayuda']
 const linksProducts = ['']
 
-const socialMedia = ['circles.svg', 'circles.svg', 'circles.svg', 'circles.svg']
+const socialMedia = ['instagram.svg', 'facebook.svg', 'tiktok.svg', 'youtube.svg']
 const linksSocialMedia = ['']
 
 const contact = ['1234 6548',  'info@gmail.com',  'ucra'];
@@ -30,7 +30,7 @@ const linksContact = ['']
 function RouteComponent() {
   return (
     <Landing
-      banner="circles.svg"
+      banner="banner.svg"
       altBanner='a'
 
       categoriesUp={categoriesUp}
