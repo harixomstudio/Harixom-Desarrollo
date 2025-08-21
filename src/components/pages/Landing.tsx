@@ -1,4 +1,17 @@
 import { Link } from "@tanstack/react-router";
+import Footer from "../Footer";
+
+interface FooterProps {
+    titlePage: string;
+    logo: string;
+    altLogo: string;
+    products: string[];
+    linksProducts: string[];
+    socialMedias: string[];
+    linksSocialMedia: string[];
+    contacts: string[];
+    linksContacts: string[];
+}
 
 interface LandingProps {
     banner: string;
@@ -22,43 +35,34 @@ interface LandingProps {
     commisionsCategories: string[];
     linksCommisions: string[];
 
-    titlePage: string;
-    logo: string;
-    altLogo: string;
-
-    products: string[];
-    linksProducts: string[];
-
-    socialMedias: string[];
-    linksSocialMedia: string[];
-
-    contacts: string[];
-    linksContacts: string[];
+    footer?: FooterProps;
 }
 
 export default function Landing(props: LandingProps) {
+    if (!props.footer) return null;
+    
     return (
-        <main className="pt-40 w-full bg-[#141414] text-white">
+        <main className="pt-40 w-full bg-[#141414] text-white ">
 
             {/* banner img */}
-            <div className="relative w-full mx-auto h-[70vh] max-lg:h-[30vh] justify-around px-15  ">
-                <img className="w-full h-full object-cover rounded-2xl bg-white" src={props.banner} alt={props.altBanner} />
+            <div className=" w-full h-[70vh] max-lg:h-[40vh] px-15 max-lg:px-5">
+                <img className="w-full h-full " src={props.banner} alt={props.altBanner} />
             </div>
 
             {/* new section the categories of the app */}
-            <section className="flex flex-col items-center justify-center gap-20 py-75 max-lg:gap-10 max-lg:py-30 px-15">
-                <h2 className="text-7xl font-semibold max-lg:text-4xl pb-15 max-lg:pb-10"> Categories</h2>
-                <div className="flex justify-around w-full ">
+            <section className="flex flex-col items-center justify-center gap-20 py-75 max-lg:gap-10 max-lg:py-30 px-15 max-lg:px-5">
+                <h2 className="text-7xl  max-lg:text-4xl pb-15 max-lg:pb-10 font-berkshire"> Categories</h2>
+                <div className="flex justify-between w-full ">
                     {props.categoriesUp.map((categoriesUp, number) => (
                         <Link to={props.links[number]}>
-                            <img src={categoriesUp} alt={`Image ${number}`} className='w-40 h-40 object-cover rounded-4xl bg-white max-xl:w-25 max-xl:h-25 duration-600 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-black' />
+                            <img src={categoriesUp} alt={`Image ${number}`} className='w-40 h-40 max-xl:w-25 max-xl:h-25 duration-600 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-black' />
                         </Link>
                     ))}
                 </div>
-                <div className="flex justify-around w-3/4">
+                <div className="flex justify-between w-3/4">
                     {props.categoriesDown.map((categoriesDown, number) => (
                         <Link to={props.links2[number]}>
-                            <img src={categoriesDown} alt={`Image ${number}`} className='w-40 h-40 object-cover rounded-4xl bg-white duration-600 max-xl:w-25 max-xl:h-25 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-black
+                            <img src={categoriesDown} alt={`Image ${number}`} className='w-40 h-40  duration-600 max-xl:w-25 max-xl:h-25 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-black
                             ' />
                         </Link>
                     ))}
@@ -66,23 +70,23 @@ export default function Landing(props: LandingProps) {
             </section>
 
             {/* new section about the app */}
-            <section className="flex items-center justify-center py-30 max-lg:flex-col bg-[#FFAFEE] text-black h-screen w-full" >
-                <div className=" flex w-1/2 object-cover justify-center items-center h-screen ">
-                    <img src={props.imgApp} alt={props.imgAppAlt} className=" w-2/3 object-cover h-2/3 bg-white rounded-3xl border max-lg:w-full" />
+            <section className="flex items-center py-30 bg-[#FFAFEE] text-black px-15 gap-35 max-lg:flex-col max-lg:px-5" >
+                <div className="w-1/2 flex justify-start items-center max-lg:w-full ">
+                    <img src={props.imgApp} alt={props.imgAppAlt} className="w-full object-cover " />
                 </div>
-                <div className="flex flex-col w-1/2 h-screen text-justify justify-center gap-35 max-lg:gap-5 max-lg:w-3/4 max-lg:items-center">
-                    <h2 className="text-5xl font-semibold max-lg:text-2xl"> {props.descriptionApp}</h2>
-                    <p className="w-3/4 text-2xl max-lg:text-sm">{props.textApp}</p>
+                <div className="flex flex-col w-1/2 text-justify justify-center gap-35 max-lg:gap-5 max-lg:w-full max-lg:items-center">
+                    <h2 className="text-5xl max-lg:text-3xl font-berkshire"> {props.descriptionApp}</h2>
+                    <p className=" text-2xl max-lg:text-lg">{props.textApp}</p>
                 </div>
             </section>
 
             {/* new section the artists ranking */}
             <section className="flex flex-col items-center justify-center gap-25 py-80 max-lg:gap-10 max-lg:py-30 ">
-                <h2 className="text-7xl font-semibold max-lg:text-4xl pb-20 max-lg:pb-10">Artists ranking</h2>
-                <div className="flex flex-wrap justify-evenly w-full gap-25 max-lg:gap-10 text-2xl max-lg:text-sm ">
+                <h2 className="text-7xl max-lg:text-5xl pb-20 max-lg:pb-10 font-berkshire">Artists ranking</h2>
+                <div className="flex flex-wrap justify-evenly w-full gap-25 max-lg:gap-10 text-2xl max-lg:text-sm px-15 max-lg:px-5">
                     {props.rankingArtist.map((rankingArtist, number) => (
                         <Link to={props.linksArt[number]} className="flex flex-col w-130 max-lg:w-40 max-lg:h-60 hover:scale-110 duration-600 text-center gap-10 max-lg:gap-3 max-lg:pb-10 overflow-hidden">
-                            <img src={rankingArtist} alt={`Image ${number}`} className='w-130 h-130 object-cover rounded-3xl bg-white duration-600 hover:shadow-lg shadow-white' />
+                            <img src={rankingArtist} alt={`Image ${number}`} className='w-130 h-130 object-cover rounded-4xl duration-600 hover:shadow-lg shadow-black' />
                             <div className="whitespace-nowrap">
                                 <h4 >Artista: {props.ArtistName[number]}</h4>
                                 <p>Obra: {props.artName[number]}</p>
@@ -94,67 +98,17 @@ export default function Landing(props: LandingProps) {
 
             {/* new section about the commission of the app */}
             <section className="flex flex-col items-center justify-center text-center py-30 max-lg:flex-col bg-[#A39FF6] text-black h-screen w-full ">
-                <h2 className="text-7xl font-semibold max-lg:text-4xl pb-20 max-lg:pb-10">Commisions</h2>
-                <div className=" justify-center text-2xl columns-2 max-lg:text-lg max-lg:flex-col max-lg:flex-wrap  ">
+                <h2 className="text-8xl max-lg:text-4xl pb-20 max-lg:pb-10 font-berkshire">Commisions</h2>
+                <div className=" flex flex-wrap  w-full text-2xl max-lg:text-lg  max-lg:px-5">
                     {props.commisionsCategories.map((commisionsCategories, number) => (
-                        <Link to={props.linksCommisions[number]} className="flex justify-center pb-15 cursor-default max-lg:w-1/2" >
-                            <p className="font-semibold hover:scale-110 duration-600 hover:text-[#FA6063] cursor-pointer" >{commisionsCategories}</p>
+                        <Link to={props.linksCommisions[number]} className="flex flex-col w-1/2 pb-15 cursor-default max-lg:w-1/2 " >
+                            <p className="font-semibold w-auto mx-auto hover:scale-110 duration-600 hover:text-[#FA6063] cursor-pointer " >{commisionsCategories}</p>
                         </Link>
                     ))}
                 </div>
             </section>
-            {/* the footer of the app */}
-            <footer className="flex flex-col items-center justify-center h-screen w-full">
 
-                {/* the decoration between the footer and the section up */}
-                <div className="relative -top-50 max-lg:-top-20 ">
-                    <img src="lineDecoration.svg" alt="decoration" />
-                </div>
-
-                <section className="flex justify-around w-full items-baseline text-3xl max-lg:text-2xl py-20 max-lg:flex-col max-lg:text-start max-lg:items-center max-lg:gap-15 bg-[#141414]">
-
-                    {/* the footer of the app */}
-                    <div className="flex flex-col items-center justify-center max-lg:items-start ">
-                        <h4 className="font-semibold pb-15 max-lg:pb-10">{props.titlePage} </h4>
-                        <img src={props.logo} alt={props.altLogo} className="w-25 h-25 max-lg:w-15 max-lg:h-15 bg-amber-50 object-cover" />
-                    </div>
-
-                    {/* the products of the app */}
-                    <div className="flex flex-col items-start justify-center">
-                        <h4 className="font-semibold pb-15 max-lg:pb-5">Products</h4>
-                        {props.products.map((products, number) => (
-                            <Link to={props.linksProducts[number]} className=" hover:scale-110 duration-600 hover:text-[#FA6063] pb-5 max-lg:pb-2" >
-                                <li>{products}</li>
-                            </Link>
-                        ))}
-                    </div>
-
-                    {/* the social networks of the app */}
-                    <div className="flex flex-col items-center justify-center max-lg:items-start">
-                        <h4 className="font-semibold pb-15 max-lg:pb-5">Social Medias</h4>
-                        <div className="grid grid-cols-2">
-                            {props.socialMedias.map((socialMedia, number) => (
-                                <Link to={props.linksSocialMedia[number]}>
-                                    <img src={socialMedia} alt='' className="hover:scale-110 duration-600 w-20 h-20 max-lg:w-15 max-lg:h-15 max-lg:m-2 object-cover m-5 rounded-full" />
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* the contats of the app */}
-                    <div className="flex flex-col items-start justify-center ">
-                        <h4 className="font-semibold pb-15 max-lg:pb-10">Contacts</h4>
-                        {props.contacts.map((contacts, number) => (
-                            <Link to={props.linksContacts[number]} className=" hover:scale-110 duration-600 hover:text-[#FA6063] pb-5 max-lg:pb-2 " >
-                                <li>{contacts}</li>
-                            </Link>
-                        ))}
-                    </div>
-                </section>
-
-                <p className="w-full text-center bg-[#141414] pb-15">© 2025 {props.titlePage}. All rights reserved</p>
-            </footer>
-
+            <Footer {...props.footer}></Footer>
         </main>
     );
 }
