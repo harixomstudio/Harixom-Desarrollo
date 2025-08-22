@@ -22,7 +22,7 @@ export default function Nav(props: NavProps) {
 
             <li>
               <a
-                className="text-black font-bold bg-[#F778BD] py-1 px-9 rounded-2xl border-rose-300 border-2"href="/login">Login</a>
+                className="text-black font-bold bg-[#F778BD] py-1 px-9 rounded-2xl border-rose-300 border-2"href="/Login">Login</a>
             </li>
           </ul>
         </nav>

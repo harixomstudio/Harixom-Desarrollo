@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { Outlet, createRootRoute, useLocation } from '@tanstack/react-router'
 import Nav from '../components/Nav'
+
 
 
 export const Route = createRootRoute({
@@ -8,13 +9,20 @@ export const Route = createRootRoute({
 })
 
 const list = ['Featured', 'Courses', 'Commissions', 'Artistis Feed']
-const reference = ['/about', '/contact', '/SetProfile', '/index', '/login']
+const reference = ['/Profile', '/Landing', '/SetProfile', '/', '/Login']
 
 function RootComponent() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const hideNavRoutes = ['/', '/Login', '/Register'].includes(currentPath);
+
+  
+
   return (
     <React.Fragment>
-      <Nav list={list} reference={reference} />
+      {!hideNavRoutes && (<Nav list={list} reference={reference} />)}
       <Outlet />
+      
     </React.Fragment>
   )
 }
