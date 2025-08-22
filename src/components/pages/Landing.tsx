@@ -56,15 +56,14 @@ export default function Landing(props: LandingProps) {
                 <div className="flex justify-between w-full ">
                     {props.categoriesUp.map((categoriesUp, number) => (
                         <Link to={props.links[number]}>
-                            <img src={categoriesUp} alt={`Image ${number}`} className='w-40 h-40 max-xl:w-25 max-xl:h-25 duration-600 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-black' />
+                            <img src={categoriesUp} alt={`Image ${number}`} className='w-30 h-30 max-xl:w-22 max-xl:h-22 duration-600 max-lg:w-15 max-lg:h-15 hover:scale-110 hover:shadow-lg shadow-black' />
                         </Link>
                     ))}
                 </div>
                 <div className="flex justify-between w-3/4">
                     {props.categoriesDown.map((categoriesDown, number) => (
                         <Link to={props.links2[number]}>
-                            <img src={categoriesDown} alt={`Image ${number}`} className='w-40 h-40  duration-600 max-xl:w-25 max-xl:h-25 max-lg:w-17 max-lg:h-20 hover:scale-110 hover:shadow-lg shadow-black
-                            ' />
+                            <img src={categoriesDown} alt={`Image ${number}`} className='w-30 h-30 duration-600 max-xl:w-22 max-xl:h-22 max-lg:w-15 max-lg:h-15 hover:scale-110 hover:shadow-lg shadow-black' />
                         </Link>
                     ))}
                 </div>
