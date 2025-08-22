@@ -14,20 +14,15 @@ interface FooterProps {
 
 export default function Footer(props: FooterProps) {
     return (
-        <footer className="flex flex-col items-center justify-center h-screen w-full">
+        <footer className="flex flex-col items-center  w-full py-20">
 
-            {/* the decoration between the footer and the section up */}
-            <div className="relative -top-50 max-lg:top-5 ">
-                <img src="lineDecoration.svg" alt="decoration" />
-            </div>
+            <section className="flex  w-full text-3xl max-lg:text-xl max-xl:text-xl py-40 max-lg:items-cente bg-[#141414]">
 
-            <section className="flex flex-col w-full text-3xl max-lg:text-2xl py-20 max-lg:items-center bg-[#141414]">
-
-                <div className="flex justify-between w-full max-lg:flex-col max-lg:items-center max-lg:gap-20 px-15 ">
+                <div className="flex justify-between items-baseline w-full max-lg:flex-col max-lg:items-center max-lg:gap-20 px-15 ">
                     {/* the footer of the app */}
                     <div className="flex flex-col items-center justify-center max-lg:items-center ">
                         <h4 className="font-semibold pb-15 max-lg:pb-10">{props.titlePage} </h4>
-                        <img src={props.logo} alt={props.altLogo} className="w-25 h-25 max-lg:w-15 max-lg:h-15 bg-amber-50 object-cover" />
+                        <img src={props.logo} alt={props.altLogo} className="w-25 h-25 max-lg:w-20 max-lg:h-20 rounded-xl object-cover" />
                     </div>
 
                     {/* the products of the app */}
@@ -43,10 +38,10 @@ export default function Footer(props: FooterProps) {
                     {/* the social networks of the app */}
                     <div className="flex flex-col items-center justify-center max-lg:items-start">
                         <h4 className="font-semibold pb-15 max-lg:pb-5">Social Medias</h4>
-                        <div className="grid grid-cols-2">
+                        <div className="grid grid-cols-2 gap-5">
                             {props.socialMedias.map((socialMedia, number) => (
                                 <Link to={props.linksSocialMedia[number]}>
-                                    <img src={socialMedia} alt='' className="hover:scale-110 duration-600 w-20 h-20 max-lg:w-15 max-lg:h-15 max-lg:m-2 object-cover m-5 rounded-full" />
+                                    <img src={socialMedia} alt='' className="hover:scale-110 duration-600 w-20 h-20 max-lg:w-15 max-lg:h-15 object-cover  rounded-full" />
                                 </Link>
                             ))}
                         </div>

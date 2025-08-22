@@ -27,6 +27,7 @@ interface LandingProps {
     descriptionApp: string;
     textApp: string;
 
+    rankImg: string[];
     rankingArtist: string[];
     ArtistName: string[];
     artName: string[];
@@ -40,7 +41,7 @@ interface LandingProps {
 
 export default function Landing(props: LandingProps) {
     if (!props.footer) return null;
-    
+
     return (
         <main className="pt-40 w-full bg-[#141414] text-white ">
 
@@ -83,10 +84,11 @@ export default function Landing(props: LandingProps) {
             {/* new section the artists ranking */}
             <section className="flex flex-col items-center justify-center gap-25 py-80 max-lg:gap-10 max-lg:py-30 ">
                 <h2 className="text-7xl max-lg:text-5xl pb-20 max-lg:pb-10 font-berkshire">Artists ranking</h2>
-                <div className="flex flex-wrap justify-evenly w-full gap-25 max-lg:gap-10 text-2xl max-lg:text-sm px-15 max-lg:px-5">
+                <div className="flex flex-wrap justify-between w-full gap-30 max-lg:gap-10 text-2xl max-lg:text-sm px-15 max-lg:px-5">
                     {props.rankingArtist.map((rankingArtist, number) => (
-                        <Link to={props.linksArt[number]} className="flex flex-col w-130 max-lg:w-40 max-lg:h-60 hover:scale-110 duration-600 text-center gap-10 max-lg:gap-3 max-lg:pb-10 overflow-hidden">
-                            <img src={rankingArtist} alt={`Image ${number}`} className='w-130 h-130 object-cover rounded-4xl duration-600 hover:shadow-lg shadow-black' />
+                        <Link to={props.linksArt[number]} className="flex flex-col items-center w-3/7 hover:scale-110 duration-600 text-center gap-10 max-lg:gap-3 max-lg:pb-10 overflow-hidden">
+                            <img src={props.rankImg[number]} alt={`Image ${number}`} className='bg-amber-50 w-25 h-25 max-lg:w-10 max-lg:h-10 rounded-full ' />
+                            <img src={rankingArtist} alt={`Image ${number}`} className='bg-amber-50 w-full h-150 max-lg:h-60 object-cover rounded-4xl duration-600 hover:shadow-lg shadow-black' />
                             <div className="whitespace-nowrap">
                                 <h4 >Artista: {props.ArtistName[number]}</h4>
                                 <p>Obra: {props.artName[number]}</p>
@@ -97,15 +99,20 @@ export default function Landing(props: LandingProps) {
             </section>
 
             {/* new section about the commission of the app */}
-            <section className="flex flex-col items-center justify-center text-center py-30 max-lg:flex-col bg-[#A39FF6] text-black h-screen w-full ">
-                <h2 className="text-8xl max-lg:text-4xl pb-20 max-lg:pb-10 font-berkshire">Commisions</h2>
-                <div className=" flex flex-wrap  w-full text-2xl max-lg:text-lg  max-lg:px-5">
+            <section className="flex flex-col relative justify-center text-center bg-[#A39FF6] max-lg:h-1/1 text-black w-full h-screen py-30 ">
+                <h2 className="text-8xl max-lg:text-4xl pb-40 max-lg:pb-15 font-berkshire">Commisions</h2>
+                <div className=" flex flex-wrap w-full text-2xl max-lg:text-lg max-lg:px-5">
                     {props.commisionsCategories.map((commisionsCategories, number) => (
-                        <Link to={props.linksCommisions[number]} className="flex flex-col w-1/2 pb-15 cursor-default max-lg:w-1/2 " >
+                        <Link to={props.linksCommisions[number]} className="flex flex-col w-1/3 pb-10 cursor-default max-lg:w-1/2 " >
                             <p className="font-semibold w-auto mx-auto hover:scale-110 duration-600 hover:text-[#FA6063] cursor-pointer " >{commisionsCategories}</p>
                         </Link>
                     ))}
                 </div>
+
+                {/* the decoration between the footer and the section up */}
+
+                <img src="lineDecoration.svg" alt="decoration" className="absolute w-full bottom-0 translate-y-1/2" />
+
             </section>
 
             <Footer {...props.footer}></Footer>
