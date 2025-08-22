@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
+import { Route as SetProfileRouteImport } from './routes/SetProfile'
 import { Route as RegisterRouteImport } from './routes/Register'
 import { Route as ProfileRouteImport } from './routes/Profile'
 import { Route as LoginRouteImport } from './routes/Login'
@@ -19,6 +20,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const UserRegisterRoute = UserRegisterRouteImport.update({
   id: '/UserRegister',
   path: '/UserRegister',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetProfileRoute = SetProfileRouteImport.update({
+  id: '/SetProfile',
+  path: '/SetProfile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
+  '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
+  '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
+  '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRouteTypes {
@@ -80,9 +89,17 @@ export interface FileRouteTypes {
     | '/Login'
     | '/Profile'
     | '/Register'
+    | '/SetProfile'
     | '/UserRegister'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/Landing' | '/Login' | '/Profile' | '/Register' | '/UserRegister'
+  to:
+    | '/'
+    | '/Landing'
+    | '/Login'
+    | '/Profile'
+    | '/Register'
+    | '/SetProfile'
+    | '/UserRegister'
   id:
     | '__root__'
     | '/'
@@ -90,6 +107,7 @@ export interface FileRouteTypes {
     | '/Login'
     | '/Profile'
     | '/Register'
+    | '/SetProfile'
     | '/UserRegister'
   fileRoutesById: FileRoutesById
 }
@@ -99,6 +117,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  SetProfileRoute: typeof SetProfileRoute
   UserRegisterRoute: typeof UserRegisterRoute
 }
 
@@ -109,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/UserRegister'
       fullPath: '/UserRegister'
       preLoaderRoute: typeof UserRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/SetProfile': {
+      id: '/SetProfile'
+      path: '/SetProfile'
+      fullPath: '/SetProfile'
+      preLoaderRoute: typeof SetProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/Register': {
@@ -155,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  SetProfileRoute: SetProfileRoute,
   UserRegisterRoute: UserRegisterRoute,
 }
 export const routeTree = rootRouteImport
