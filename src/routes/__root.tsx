@@ -14,7 +14,7 @@ const reference = ['/Profile', '/Landing', '/SetProfile', '/', '/Login']
 function RootComponent() {
   const location = useLocation();
   const currentPath = location.pathname;
-  const hideNavRoutes = ['/', '/Login', '/Register'].includes(currentPath);
+  const hideNavRoutes = ['/', '/Login', '/Register', '/RegisterAdmin'].includes(currentPath);
 
   
 
