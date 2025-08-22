@@ -72,8 +72,8 @@ export default function Landing(props: LandingProps) {
 
             {/* new section about the app */}
             <section className="flex items-center py-30 bg-[#FFAFEE] text-black px-15 gap-35 max-lg:flex-col max-lg:px-5" >
-                <div className="w-1/2 flex justify-start items-center max-lg:w-full ">
-                    <img src={props.imgApp} alt={props.imgAppAlt} className="w-full object-cover " />
+                <div className="w-1/2 flex justify-start items-center  max-lg:justify-center max-lg:w-full ">
+                    <img src={props.imgApp} alt={props.imgAppAlt} className="w-2/3 object-cover " />
                 </div>
                 <div className="flex flex-col w-1/2 text-justify justify-center gap-35 max-lg:gap-5 max-lg:w-full max-lg:items-center">
                     <h2 className="text-5xl max-lg:text-3xl font-berkshire"> {props.descriptionApp}</h2>
@@ -82,13 +82,14 @@ export default function Landing(props: LandingProps) {
             </section>
 
             {/* new section the artists ranking */}
-            <section className="flex flex-col items-center justify-center gap-25 py-80 max-lg:gap-10 max-lg:py-30 ">
+            <section className="flex flex-col items-center justify-center gap-25 py-50 max-lg:gap-10 max-lg:py-30 ">
                 <h2 className="text-7xl max-lg:text-5xl pb-20 max-lg:pb-10 font-berkshire">Artists ranking</h2>
                 <div className="flex flex-wrap justify-between w-full gap-30 max-lg:gap-10 text-2xl max-lg:text-sm px-15 max-lg:px-5">
                     {props.rankingArtist.map((rankingArtist, number) => (
                         <Link to={props.linksArt[number]} className="flex flex-col items-center w-3/7 hover:scale-110 duration-600 text-center gap-10 max-lg:gap-3 max-lg:pb-10 overflow-hidden">
-                            <img src={props.rankImg[number]} alt={`Image ${number}`} className='bg-amber-50 w-25 h-25 max-lg:w-10 max-lg:h-10 rounded-full ' />
-                            <img src={rankingArtist} alt={`Image ${number}`} className='bg-amber-50 w-full h-150 max-lg:h-60 object-cover rounded-4xl duration-600 hover:shadow-lg shadow-black' />
+                            <img src={props.rankImg[number]} alt={`Image ${number}`} className='bg-amber-50 w-20 h-20 max-lg:w-10 max-lg:h-10 rounded-full ' />
+
+                            <img src={rankingArtist} alt={`Image ${number}`} className='bg-amber-50 w-full h-90 max-lg:h-50 object-cover rounded-4xl duration-600 hover:shadow-lg shadow-black' />
                             <div className="whitespace-nowrap">
                                 <h4 >Artista: {props.ArtistName[number]}</h4>
                                 <p>Obra: {props.artName[number]}</p>
