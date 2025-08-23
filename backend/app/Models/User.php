@@ -25,8 +25,16 @@ class User extends Authenticatable
         'address',
         'phone',
         'profile_completed',
-        'image',
+        'profile_picture',
+        'banner_picture',
+        'description',
+        'is_active',
     ];
+
+    public function isActive()
+{
+    return $this->is_active;
+}
 
     /**
      * The attributes that should be hidden for serialization.
@@ -36,6 +44,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        
     ];
 
     /**
@@ -48,15 +57,26 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
-    public function image_path(){
-        if($this->image){
-            return asset('storage/images/users/'.$this->image);
-        } else {
-            return 'https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/external-user-interface-kiranshastry-lineal-kiranshastry.png';
-        }
+    public function profilePicturePath()
+{
+    if($this->profile_picture){
+        return asset('storage/images/users/'.$this->profile_picture);
+    } else {
+        return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
     }
+}
+
+public function bannerPicturePath()
+{
+    if($this->banner_picture){
+        return asset('storage/images/users/'.$this->banner_picture);
+    } else {
+        return 'https://via.placeholder.com/1200x300/444/fff?text=Banner';
+    }
+}
 
 }

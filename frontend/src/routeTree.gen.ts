@@ -10,15 +10,34 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
+import { Route as SetProfileRouteImport } from './routes/SetProfile'
+import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
+import { Route as RegisterAdminRouteImport } from './routes/RegisterAdmin'
 import { Route as RegisterRouteImport } from './routes/Register'
 import { Route as ProfileRouteImport } from './routes/Profile'
 import { Route as LoginRouteImport } from './routes/Login'
 import { Route as LandingRouteImport } from './routes/Landing'
+import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as IndexRouteImport } from './routes/index'
 
 const UserRegisterRoute = UserRegisterRouteImport.update({
   id: '/UserRegister',
   path: '/UserRegister',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetProfileRoute = SetProfileRouteImport.update({
+  id: '/SetProfile',
+  path: '/SetProfile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/ResetPassword',
+  path: '/ResetPassword',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterAdminRoute = RegisterAdminRouteImport.update({
+  id: '/RegisterAdmin',
+  path: '/RegisterAdmin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -41,6 +60,11 @@ const LandingRoute = LandingRouteImport.update({
   path: '/Landing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/ForgotPassword',
+  path: '/ForgotPassword',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,56 +73,90 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
+  '/RegisterAdmin': typeof RegisterAdminRoute
+  '/ResetPassword': typeof ResetPasswordRoute
+  '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
+  '/RegisterAdmin': typeof RegisterAdminRoute
+  '/ResetPassword': typeof ResetPasswordRoute
+  '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
+  '/RegisterAdmin': typeof RegisterAdminRoute
+  '/ResetPassword': typeof ResetPasswordRoute
+  '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ForgotPassword'
     | '/Landing'
     | '/Login'
     | '/Profile'
     | '/Register'
+    | '/RegisterAdmin'
+    | '/ResetPassword'
+    | '/SetProfile'
     | '/UserRegister'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/Landing' | '/Login' | '/Profile' | '/Register' | '/UserRegister'
+  to:
+    | '/'
+    | '/ForgotPassword'
+    | '/Landing'
+    | '/Login'
+    | '/Profile'
+    | '/Register'
+    | '/RegisterAdmin'
+    | '/ResetPassword'
+    | '/SetProfile'
+    | '/UserRegister'
   id:
     | '__root__'
     | '/'
+    | '/ForgotPassword'
     | '/Landing'
     | '/Login'
     | '/Profile'
     | '/Register'
+    | '/RegisterAdmin'
+    | '/ResetPassword'
+    | '/SetProfile'
     | '/UserRegister'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LandingRoute: typeof LandingRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  RegisterAdminRoute: typeof RegisterAdminRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SetProfileRoute: typeof SetProfileRoute
   UserRegisterRoute: typeof UserRegisterRoute
 }
 
@@ -109,6 +167,27 @@ declare module '@tanstack/react-router' {
       path: '/UserRegister'
       fullPath: '/UserRegister'
       preLoaderRoute: typeof UserRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/SetProfile': {
+      id: '/SetProfile'
+      path: '/SetProfile'
+      fullPath: '/SetProfile'
+      preLoaderRoute: typeof SetProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ResetPassword': {
+      id: '/ResetPassword'
+      path: '/ResetPassword'
+      fullPath: '/ResetPassword'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/RegisterAdmin': {
+      id: '/RegisterAdmin'
+      path: '/RegisterAdmin'
+      fullPath: '/RegisterAdmin'
+      preLoaderRoute: typeof RegisterAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/Register': {
@@ -139,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ForgotPassword': {
+      id: '/ForgotPassword'
+      path: '/ForgotPassword'
+      fullPath: '/ForgotPassword'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -151,10 +237,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LandingRoute: LandingRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  RegisterAdminRoute: RegisterAdminRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SetProfileRoute: SetProfileRoute,
   UserRegisterRoute: UserRegisterRoute,
 }
 export const routeTree = rootRouteImport

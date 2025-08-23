@@ -31,11 +31,42 @@ class AdminController extends Controller
         $request->session()->regenerate();
         return redirect()->route('admin.index');
 }
-
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
+
+    //
+    public function enable($id) {
+    $user = User::findOrFail($id);
+
+    if ($user->is_active) {
+        return back()->with('error', 'El usuario ya está activo.');
+    }
+    $user->is_active = true;
+    $user->save();
+    
+    return back()->with('success', 'Usuario activado correctamente.');
+}
+
+//
+public function disable($id) {
+    $user = User::findOrFail($id);
+
+    if (!$user->is_active) {
+        return back()->with('error', 'El usuario ya está deshabilitado.');
+    }
+    $user->is_active = false;
+    $user->save();
+
+    return back()->with('success', 'Usuario deshabilitado correctamente.');
+}
+
+    //
+    public function create()
+{
+    return view('admin.createUser');
+}
 
     //
     public function logout(Request $request)

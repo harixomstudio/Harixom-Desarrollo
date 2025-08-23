@@ -24,6 +24,7 @@
                     style="font-family: 'Starstruck', cursive;">
                     HARIXOM
                 </h1>
+                <p class="text-lg text-white mt-6">For admins</p>
             </div>
 
             <!-- DERECHA -->

@@ -120,6 +120,16 @@ export default function Login(props: LoginProps) {
             </button>
           </form>
 
+                {/* Botón de Forgot Password */}
+                          <div className="flex justify-center mt-3 text-sm">
+                            <Link
+                              to="/ForgotPassword"
+                              className="text-pink-500 font-semibold underline hover:scale-105 duration-200"
+                            >
+                              Forgot Password?
+                            </Link>
+                          </div>
+
           <div className="flex justify-center mt-4 text-sm">
             <p className="text-gray-700">{props.text}</p>
             <Link
