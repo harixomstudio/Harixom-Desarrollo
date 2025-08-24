@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\AuthUserRequest;
 use App\Models\User;
@@ -29,29 +31,29 @@ class UserController extends Controller
     return redirect()->route('admin.index')->with('success', 'Usuario creado correctamente.');
 }
 
-    public function auth(AuthUserRequest $request){
+    public function auth(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
     $user = User::where('email', $request->email)->first();
 
     if (!$user || !Hash::check($request->password, $user->password)) {
         return response()->json([
-            'error' => 'Credenciales incorrectas.'
+            'error' => 'Las credenciales no son correctas.',
         ], 401);
     }
 
-    // Validar si el usuario está activo
-    if (!$user->is_active) {
-        return response()->json([
-            'error' => 'Tu cuenta está inactiva. Contacta al administrador.'
-        ], 403);
-    }
-
-    // Crear token personal de acceso
-    $token = $user->createToken('user_token')->plainTextToken;
+    // Crear token de Sanctum
+    $token = $user->createToken('auth_token')->plainTextToken;
 
     return response()->json([
-        'user' => UserResource::make($user),
+        'message' => 'Login exitoso',
         'access_token' => $token,
-        'message' => 'Bienvenido.'
+        'token_type' => 'Bearer',
+        'user' => new UserResource($user),
     ]);
 }
 
@@ -69,21 +71,27 @@ public function updateProfile(Request $request)
     $user = $request->user();
 
     $data = $request->validate([
-        'name' => 'sometimes|string|max:255',
-        'phone' => 'sometimes|string|max:20',
-        'address' => 'sometimes|string|max:255',
-        'description' => 'sometimes|string|max:500',
-        'profile_picture' => 'sometimes|image|max:2048',
-        'banner_picture' => 'sometimes|image|max:4096',
+        'name' => 'nullable|string|max:255',
+        'email' => 'nullable|email|unique:users,email,' . $user->id,
+        'phone' => 'nullable|string|max:20',
+        'address' => 'nullable|string|max:255',
+        'description' => 'nullable|string|max:500',
+        'profile_picture' => 'nullable|image|max:2048',
+        'banner_picture' => 'nullable|image|max:4096',
     ]);
 
-    // Si vienen archivos, guardarlos
+    // Guardar archivos si vienen
     if ($request->hasFile('profile_picture')) {
+        // Opcional: eliminar imagen anterior
+        if ($user->profile_picture) Storage::delete('public/images/users/' . $user->profile_picture);
+
         $path = $request->file('profile_picture')->store('public/images/users');
         $data['profile_picture'] = basename($path);
     }
 
     if ($request->hasFile('banner_picture')) {
+        if ($user->banner_picture) Storage::delete('public/images/users/' . $user->banner_picture);
+
         $path = $request->file('banner_picture')->store('public/images/users');
         $data['banner_picture'] = basename($path);
     }

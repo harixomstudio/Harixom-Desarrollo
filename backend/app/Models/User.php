@@ -75,7 +75,7 @@ public function bannerPicturePath()
     if($this->banner_picture){
         return asset('storage/images/users/'.$this->banner_picture);
     } else {
-        return 'https://via.placeholder.com/1200x300/444/fff?text=Banner';
+        return 'https://cdn.pixabay.com/photo/2014/03/29/23/49/the-background-301145_1280.png';
     }
 }
 

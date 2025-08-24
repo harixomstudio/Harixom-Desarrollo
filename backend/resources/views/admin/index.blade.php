@@ -91,15 +91,6 @@
         </button>
     </form>
 
-    <!-- Reset Password -->
-    <form id="resetForm" method="POST">
-        @csrf
-        <input type="hidden" name="user_id" id="resetUserId">
-        <button type="submit" class="px-8 py-2 rounded-full font-semibold text-black bg-pink-400 hover:shadow-lg">
-            Reset password
-        </button>
-    </form>
-
     <!-- Logout -->
     <form action="{{ route('admin.logout') }}" method="POST">
         @csrf

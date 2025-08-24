@@ -32,7 +32,9 @@ export default function Login(props: LoginProps) {
         alert(response.data.error);
       } else {
         alert(response.data.message);
-        navigate({ to: "/Profile" }); // o la ruta de tu dashboard
+        localStorage.setItem("access_token", response.data.access_token);
+        alert(response.data.message);
+        navigate({ to: "/Landing" }); 
       }
     } catch (error: any) {
   setLoading(false);

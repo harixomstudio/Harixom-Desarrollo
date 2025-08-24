@@ -6,12 +6,5 @@ export const Route = createFileRoute('/SetProfile')({
 })
 
 function RouteComponent() {
-  return <SetProfilePage
-    title="Profile"
-    name="Name"
-    email="Email"
-    phone="Phone"
-    address="Address"
-    link="Reset Password"
-  />;
+  return <SetProfilePage />; // No necesitas pasar props estáticos
 }
