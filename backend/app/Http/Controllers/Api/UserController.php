@@ -16,6 +16,7 @@ use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
+    //Funcion store
         public function store(StoreUserRequest $request){
     $data = $request->validated();
     $data['password'] = bcrypt($data['password']);
@@ -31,6 +32,7 @@ class UserController extends Controller
     return redirect()->route('admin.index')->with('success', 'Usuario creado correctamente.');
 }
 
+    //Funcion auth
     public function auth(Request $request)
 {
     $request->validate([
@@ -57,7 +59,7 @@ class UserController extends Controller
     ]);
 }
 
-    //
+    //Funcion profile
     public function profile(Request $request)
 {
     return response()->json([
@@ -65,7 +67,7 @@ class UserController extends Controller
     ]);
 }
 
-//
+//Funcion updateProfile (no funciona)
 public function updateProfile(Request $request)
 {
     $user = $request->user();
@@ -104,6 +106,7 @@ public function updateProfile(Request $request)
     ]);
 }
 
+    //Funcion Logout, funciona, pero aun no se implementa en el Frontend
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
         return response()->json([

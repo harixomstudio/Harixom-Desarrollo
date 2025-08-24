@@ -44,7 +44,7 @@
                 data-user-id="{{ $user->id }}">
                 <td class="border border-stone-700 px-4 py-3 text-gray-300">{{ $loop->iteration }}</td>
                 <td class="border border-stone-700 px-4 py-3 text-gray-300">
-                    <img src="{{ $user->image_path() }}" alt="{{ $user->name }}" class="w-10 h-10 rounded-full">
+                    <img src="{{ $user->profilePicturePath() }}" alt="{{ $user->name }}" class="w-10 h-10 rounded-full">
                 </td>
                 <td class="border border-stone-700 px-4 py-3 text-gray-300">{{ $user->name }}</td>
                 <td class="border border-stone-700 px-4 py-3 text-gray-300">{{ $user->email }}</td>
