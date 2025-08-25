@@ -20,16 +20,29 @@ class UserController extends Controller
         public function store(StoreUserRequest $request){
     $data = $request->validated();
     $data['password'] = bcrypt($data['password']);
-    $user = User::create($data);
 
-    if ($request->wantsJson()) {
-        return response()->json([
-            'user' => $user,
-            'message' => 'Usuario creado correctamente.'
-        ], 201);
+    // Guardar imagen de perfil
+    if ($request->hasFile('profile_picture')) {
+        $file = $request->file('profile_picture');
+        $filename = time().'_profile_'.$file->getClientOriginalName();
+        $file->move(public_path('images/users'), $filename);
+        $data['profile_picture'] = $filename;
     }
 
-    return redirect()->route('admin.index')->with('success', 'Usuario creado correctamente.');
+    // Guardar banner
+    if ($request->hasFile('banner_picture')) {
+        $file = $request->file('banner_picture');
+        $filename = time().'_banner_'.$file->getClientOriginalName();
+        $file->move(public_path('images/users'), $filename);
+        $data['banner_picture'] = $filename;
+    }
+
+    $user = User::create($data);
+
+    return response()->json([
+        'user' => new UserResource($user),
+        'message' => 'Usuario creado correctamente.'
+    ], 201);
 }
 
     //Funcion auth
@@ -72,6 +85,9 @@ public function updateProfile(Request $request)
 {
     $user = $request->user();
 
+    Log::info("Usuario autenticado", $user->toArray());
+    Log::info("Request completo", $request->all());
+
     $data = $request->validate([
         'name' => 'nullable|string|max:255',
         'email' => 'nullable|email|unique:users,email,' . $user->id,
@@ -82,27 +98,49 @@ public function updateProfile(Request $request)
         'banner_picture' => 'nullable|image|max:4096',
     ]);
 
-    // Guardar archivos si vienen
-    if ($request->hasFile('profile_picture')) {
-        // Opcional: eliminar imagen anterior
-        if ($user->profile_picture) Storage::delete('public/images/users/' . $user->profile_picture);
+    Log::info("Datos validados", $data);
 
-        $path = $request->file('profile_picture')->store('public/images/users');
-        $data['profile_picture'] = basename($path);
+    // Manejo de archivos
+    if ($request->hasFile('profile_picture')) {
+        Log::info("Nueva imagen de perfil recibida", ['file' => $request->file('profile_picture')->getClientOriginalName()]);
+
+        if ($user->profile_picture) {
+            @unlink(public_path('images/users/' . $user->profile_picture));
+        }
+
+        $file = $request->file('profile_picture');
+        $filename = time().'_profile_'.$file->getClientOriginalName();
+        $file->move(public_path('images/users'), $filename);
+        $data['profile_picture'] = $filename;
+        Log::info("Nueva imagen de perfil guardada", ['new' => $filename]);
     }
 
     if ($request->hasFile('banner_picture')) {
-        if ($user->banner_picture) Storage::delete('public/images/users/' . $user->banner_picture);
+        Log::info("Nuevo banner recibido", ['file' => $request->file('banner_picture')->getClientOriginalName()]);
 
-        $path = $request->file('banner_picture')->store('public/images/users');
-        $data['banner_picture'] = basename($path);
+        if ($user->banner_picture) {
+            @unlink(public_path('images/users/' . $user->banner_picture));
+            Log::info("Banner anterior eliminado", ['old' => $user->banner_picture]);
+        }
+
+        $file = $request->file('banner_picture');
+        $filename = time().'_banner_'.$file->getClientOriginalName();
+        $file->move(public_path('images/users'), $filename);
+        $data['banner_picture'] = $filename;
+        Log::info("Nuevo banner guardado", ['new' => $filename]);
     }
 
-    $user->update($data);
+    Log::info("Antes de actualizar", $user->toArray());
+
+    $user->fill($data);
+    $user->save();
+    $user->refresh();
+
+    Log::info("Después de actualizar", $user->toArray());
 
     return response()->json([
         'message' => 'Perfil actualizado correctamente',
-        'user' => UserResource::make($user),
+        'user' => new UserResource($user),
     ]);
 }
 

@@ -98,12 +98,13 @@ export default function SetProfilePage() {
   });
 
   try {
-    const res = await axiosRequest.put("/user/profile", formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await axiosRequest.post("/user/profile?_method=PUT", formData, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "multipart/form-data",
+  },
+});
+
     console.log("Respuesta del backend:", res.data);
 
     alert("Perfil actualizado!");

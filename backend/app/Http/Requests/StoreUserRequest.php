@@ -20,15 +20,18 @@ class StoreUserRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        return [
-            'name' => 'required|max:255',
-        'email' => 'required|email|max:255',
+{
+    return [
+        'name' => 'required|max:255',
+        'email' => 'required|email|max:255|unique:users,email',
         'phone' => 'required|max:20',
         'address' => 'required|max:255',
-        'password' => 'required|min:6|max:255'
-        ];
-    }
+        'password' => 'required|min:6|max:255',
+        'description' => 'nullable|string|max:500',
+        'profile_picture' => 'nullable|image|max:2048',
+        'banner_picture' => 'nullable|image|max:4096',
+    ];
+}
 
     public function messages(): array
     {

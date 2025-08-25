@@ -1,30 +1,73 @@
+import * as React from "react";
+import { useLocation, useNavigate } from "@tanstack/react-router";
+import { axiosRequest } from ".././components/helpers/config";
+
 interface NavProps {
   list: string[];
   reference: string[];
 }
 
 export default function Nav(props: NavProps) {
-  return (
-    <section >
-      <div className="flex items-center justify-between bg-gray-800 p-4">
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPath = location.pathname;
 
-        <div className='text-white text-3xl font-bold'>
+  // función logout
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
+
+      await axiosRequest.post(
+        "/user/logout",
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      localStorage.removeItem("access_token");
+      alert("Sesión cerrada exitosamente");
+      navigate({ to: "/" }); // 👈 redirige al Landing
+    } catch (err) {
+      console.error("Error al cerrar sesión:", err);
+      alert("Error al cerrar sesión");
+    }
+  };
+
+  return (
+    <section>
+      <div className="flex items-center justify-between bg-gray-800 p-4">
+        <div className="text-white text-3xl font-bold">
           <a href="/Landing">Harixom</a>
         </div>
 
         <nav>
           <ul className="flex space-x-8">
             {props.list.map((list, i) => (
-              <li>
+              <li key={i}>
                 <a className="text-white" href={props.reference[i]}>
                   {list}
                 </a>
               </li>
-            ))};
+            ))}
 
             <li>
-              <a
-                className="text-black font-bold bg-[#F778BD] py-1 px-9 rounded-2xl border-rose-300 border-2"href="/Profile">Profile</a>
+              {currentPath === "/Profile" ? (
+                <button
+                  onClick={handleLogout}
+                  className="text-black font-bold bg-red-400 py-1 px-9 rounded-2xl border-rose-300 border-2"
+                >
+                  Logout
+                </button>
+              ) : (
+                <a
+                  className="text-black font-bold bg-[#F778BD] py-1 px-9 rounded-2xl border-rose-300 border-2"
+                  href="/Profile"
+                >
+                  Profile
+                </a>
+              )}
             </li>
           </ul>
         </nav>

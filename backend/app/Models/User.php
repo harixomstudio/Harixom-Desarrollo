@@ -63,20 +63,16 @@ class User extends Authenticatable
 
     public function profilePicturePath()
 {
-    if($this->profile_picture){
-        return asset('storage/images/users/'.$this->profile_picture);
-    } else {
-        return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-    }
+    return $this->profile_picture 
+        ? asset('images/users/'.$this->profile_picture)
+        : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 }
 
 public function bannerPicturePath()
 {
-    if($this->banner_picture){
-        return asset('storage/images/users/'.$this->banner_picture);
-    } else {
-        return 'https://cdn.pixabay.com/photo/2014/03/29/23/49/the-background-301145_1280.png';
-    }
+    return $this->banner_picture 
+        ? asset('images/users/'.$this->banner_picture)
+        : 'https://cdn.pixabay.com/photo/2014/03/29/23/49/the-background-301145_1280.png';
+}
 }
 
-}

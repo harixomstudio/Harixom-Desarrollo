@@ -11,7 +11,7 @@ function RootComponent() {
   const currentPath = location.pathname
 
   // Rutas donde NO quieres mostrar el Nav
-  const hideNav = ['/Register', '/Login', '/ForgotPassword'].includes(currentPath)
+  const hideNav = ['/','/Register', '/Login', '/ForgotPassword', '/ResetPassword', '/SetProfile'].includes(currentPath)
 
   return (
     <React.Fragment>
