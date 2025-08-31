@@ -10,9 +10,6 @@ interface RegisterProps {
   address: string;
   password: string;
   confirmPassword: string;
-  description: string;
-  profilePicture: string;
-  bannerPicture: string;
   text: string;
   link: string;
 }
@@ -24,9 +21,6 @@ interface UserForm {
   address: string;
   password: string;
   confirmPassword: string;
-  description: string;
-  profile_picture: File | null;
-  banner_picture: File | null;
 }
 
 export default function Register(props: RegisterProps) {
@@ -37,30 +31,24 @@ export default function Register(props: RegisterProps) {
     address: "",
     password: "",
     confirmPassword: "",
-    description: "",
-    profile_picture: null,
-    banner_picture: null,
   });
 
   const [loading, setLoading] = useState(false);
-  const [profilePreview, setProfilePreview] = useState<string | null>(null);
-  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const handleFileChange = (field: "profile_picture" | "banner_picture", file: File | null) => {
     setUser({ ...user, [field]: file });
+  };
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (field === "profile_picture") setProfilePreview(reader.result as string);
-        else setBannerPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      if (field === "profile_picture") setProfilePreview(null);
-      else setBannerPreview(null);
-    }
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const registerNewUser = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -79,9 +67,6 @@ export default function Register(props: RegisterProps) {
     formData.append("phone", user.phone);
     formData.append("address", user.address);
     formData.append("password", user.password);
-    formData.append("description", user.description || "");
-    if (user.profile_picture) formData.append("profile_picture", user.profile_picture);
-    if (user.banner_picture) formData.append("banner_picture", user.banner_picture);
 
     try {
       const response = await axiosRequest.post("user/register", formData, {
@@ -129,47 +114,25 @@ export default function Register(props: RegisterProps) {
             {(["name", "email", "phone", "address", "password", "confirmPassword"] as const).map((field) => (
               <div key={field}>
                 <label className="block text-sm mb-1 text-gray-700">{props[field]}</label>
-                <input
-                  type={field.includes("password") ? "password" : "text"}
-                  value={user[field]}
-                  onChange={(e) => setUser({ ...user, [field]: e.target.value })}
-                  className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
-                />
+                <div className="relative">
+                  <input
+                    type={field === "confirmPassword" ? (showConfirmPassword ? "text" : "password") : field === "password" ? (showPassword ? "text" : "password") : "text"}
+                    value={user[field]}
+                    onChange={(e) => setUser({ ...user, [field]: e.target.value })}
+                    className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
+                  />
+                  {(field === "confirmPassword" || field === "password") && (
+                    <button
+                      type="button"
+                      onClick={field === "confirmPassword" ? toggleConfirmPasswordVisibility : togglePasswordVisibility}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 hover:text-gray-700 focus:outline-none"
+                    >
+                      {field === "confirmPassword" ? (showConfirmPassword ? "🙈" : "👁️") : showPassword ? "🙈" : "👁️"}
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
-
-            <div>
-              <label className="block text-sm mb-1 text-gray-700">{props.description}</label>
-              <textarea
-                value={user.description}
-                onChange={(e) => setUser({ ...user, description: e.target.value })}
-                className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm mb-1 text-gray-700">{props.profilePicture}</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  handleFileChange("profile_picture", e.target.files ? e.target.files[0] : null)
-                }
-              />
-              {profilePreview && <img src={profilePreview} alt="Profile Preview" className="mt-2 w-24 h-24 object-cover rounded-full" />}
-            </div>
-
-            <div>
-              <label className="block text-sm mb-1 text-gray-700">{props.bannerPicture}</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  handleFileChange("banner_picture", e.target.files ? e.target.files[0] : null)
-                }
-              />
-              {bannerPreview && <img src={bannerPreview} alt="Banner Preview" className="mt-2 w-full h-32 object-cover rounded-xl" />}
-            </div>
 
             <button
               type="submit"

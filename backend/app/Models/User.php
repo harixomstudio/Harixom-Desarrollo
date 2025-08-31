@@ -61,6 +61,27 @@ class User extends Authenticatable
         ];
     }
 
+    public function posts()
+{
+    return $this->hasMany(\App\Models\Publication::class); // Ajusta el modelo según tu tabla
+}
+
+public function likes() {
+    return $this->hasMany(Like::class);
+}
+
+public function follows() {
+    return $this->hasMany(Follow::class, 'follower_id');
+}
+
+public function followers() {
+    return $this->hasMany(Follow::class, 'following_id');
+}
+
+public function comments() {
+    return $this->hasMany(Comment::class);
+}
+
     public function profilePicturePath()
 {
     return $this->profile_picture 

@@ -18,6 +18,8 @@ import { Route as ProfileRouteImport } from './routes/Profile'
 import { Route as LoginRouteImport } from './routes/Login'
 import { Route as LandingRouteImport } from './routes/Landing'
 import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
+import { Route as FeedRouteImport } from './routes/Feed'
+import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
 import { Route as IndexRouteImport } from './routes/index'
 
 const UserRegisterRoute = UserRegisterRouteImport.update({
@@ -65,6 +67,16 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/ForgotPassword',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/Feed',
+  path: '/Feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreatePublicationRoute = CreatePublicationRouteImport.update({
+  id: '/CreatePublication',
+  path: '/CreatePublication',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,6 +85,8 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/CreatePublication': typeof CreatePublicationRoute
+  '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
@@ -85,6 +99,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/CreatePublication': typeof CreatePublicationRoute
+  '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
@@ -98,6 +114,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/CreatePublication': typeof CreatePublicationRoute
+  '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
@@ -112,6 +130,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/CreatePublication'
+    | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
@@ -124,6 +144,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/CreatePublication'
+    | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
@@ -136,6 +158,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/CreatePublication'
+    | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
@@ -149,6 +173,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CreatePublicationRoute: typeof CreatePublicationRoute
+  FeedRoute: typeof FeedRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LandingRoute: typeof LandingRoute
   LoginRoute: typeof LoginRoute
@@ -225,6 +251,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/Feed': {
+      id: '/Feed'
+      path: '/Feed'
+      fullPath: '/Feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/CreatePublication': {
+      id: '/CreatePublication'
+      path: '/CreatePublication'
+      fullPath: '/CreatePublication'
+      preLoaderRoute: typeof CreatePublicationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -237,6 +277,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CreatePublicationRoute: CreatePublicationRoute,
+  FeedRoute: FeedRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LandingRoute: LandingRoute,
   LoginRoute: LoginRoute,

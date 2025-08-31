@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Api\PublicationController;
+
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('user', function (Request $request) {
@@ -16,24 +18,31 @@ Route::middleware('auth:sanctum')->group(function(){
     // Obtener perfil del usuario logueado
     Route::get('/user', [UserController::class, 'profile']);
 
-    // Actualizar perfil (excepto email y password)
+    // Actualizar perfil
     Route::put('/user/profile', [UserController::class, 'updateProfile']);
 
     //Cerrar sesion
     Route::post('user/logout', [UserController::class, 'logout']);
-});
 
-//Rutas para publicaciones
+    //Rutas para publicaciones
+    Route::post('/publications', [PublicationController::class, 'store']);
+    Route::get('/publications', [PublicationController::class, 'index']);
 
 //Rutas para comentarios
+Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
 
 //Rutas para likes
+Route::post('/like/{publication}', [InteractionController::class, 'toggleLike']);
 
 //Rutas para seguidores
+Route::post('/follow/{user}', [InteractionController::class, 'toggleFollow']);
 
 //Rutas para mensajes
 
 //Rutas para notificaciones
+
+
+});
 
 //Rutas de reset password
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
