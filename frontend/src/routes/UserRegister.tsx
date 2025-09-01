@@ -1,4 +1,3 @@
-import type React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import UserRegister from "../components/pages/UserRegister";
 

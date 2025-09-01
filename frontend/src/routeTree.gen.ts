@@ -9,15 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
 import { Route as SetProfileRouteImport } from './routes/SetProfile'
+import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
 import { Route as RegisterAdminRouteImport } from './routes/RegisterAdmin'
 import { Route as RegisterRouteImport } from './routes/Register'
 import { Route as ProfileRouteImport } from './routes/Profile'
 import { Route as LoginRouteImport } from './routes/Login'
 import { Route as LandingRouteImport } from './routes/Landing'
+import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
+import { Route as FeedRouteImport } from './routes/Feed'
+import { Route as EventsRouteImport } from './routes/Events'
+import { Route as ChallengesRouteImport } from './routes/Challenges'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WorkshopsRoute = WorkshopsRouteImport.update({
+  id: '/Workshops',
+  path: '/Workshops',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UserRegisterRoute = UserRegisterRouteImport.update({
   id: '/UserRegister',
   path: '/UserRegister',
@@ -26,6 +37,11 @@ const UserRegisterRoute = UserRegisterRouteImport.update({
 const SetProfileRoute = SetProfileRouteImport.update({
   id: '/SetProfile',
   path: '/SetProfile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/ResetPassword',
+  path: '/ResetPassword',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterAdminRoute = RegisterAdminRouteImport.update({
@@ -53,6 +69,26 @@ const LandingRoute = LandingRouteImport.update({
   path: '/Landing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/ForgotPassword',
+  path: '/ForgotPassword',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/Feed',
+  path: '/Feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/Events',
+  path: '/Events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChallengesRoute = ChallengesRouteImport.update({
+  id: '/Challenges',
+  path: '/Challenges',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,81 +97,130 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/Challenges': typeof ChallengesRoute
+  '/Events': typeof EventsRoute
+  '/Feed': typeof FeedRoute
+  '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
+  '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
+  '/Workshops': typeof WorkshopsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/Challenges': typeof ChallengesRoute
+  '/Events': typeof EventsRoute
+  '/Feed': typeof FeedRoute
+  '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
+  '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
+  '/Workshops': typeof WorkshopsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/Challenges': typeof ChallengesRoute
+  '/Events': typeof EventsRoute
+  '/Feed': typeof FeedRoute
+  '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
+  '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
+  '/Workshops': typeof WorkshopsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/Challenges'
+    | '/Events'
+    | '/Feed'
+    | '/ForgotPassword'
     | '/Landing'
     | '/Login'
     | '/Profile'
     | '/Register'
     | '/RegisterAdmin'
+    | '/ResetPassword'
     | '/SetProfile'
     | '/UserRegister'
+    | '/Workshops'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/Challenges'
+    | '/Events'
+    | '/Feed'
+    | '/ForgotPassword'
     | '/Landing'
     | '/Login'
     | '/Profile'
     | '/Register'
     | '/RegisterAdmin'
+    | '/ResetPassword'
     | '/SetProfile'
     | '/UserRegister'
+    | '/Workshops'
   id:
     | '__root__'
     | '/'
+    | '/Challenges'
+    | '/Events'
+    | '/Feed'
+    | '/ForgotPassword'
     | '/Landing'
     | '/Login'
     | '/Profile'
     | '/Register'
     | '/RegisterAdmin'
+    | '/ResetPassword'
     | '/SetProfile'
     | '/UserRegister'
+    | '/Workshops'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChallengesRoute: typeof ChallengesRoute
+  EventsRoute: typeof EventsRoute
+  FeedRoute: typeof FeedRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LandingRoute: typeof LandingRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
   RegisterAdminRoute: typeof RegisterAdminRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SetProfileRoute: typeof SetProfileRoute
   UserRegisterRoute: typeof UserRegisterRoute
+  WorkshopsRoute: typeof WorkshopsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/Workshops': {
+      id: '/Workshops'
+      path: '/Workshops'
+      fullPath: '/Workshops'
+      preLoaderRoute: typeof WorkshopsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/UserRegister': {
       id: '/UserRegister'
       path: '/UserRegister'
@@ -148,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/SetProfile'
       fullPath: '/SetProfile'
       preLoaderRoute: typeof SetProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ResetPassword': {
+      id: '/ResetPassword'
+      path: '/ResetPassword'
+      fullPath: '/ResetPassword'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/RegisterAdmin': {
@@ -185,6 +277,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ForgotPassword': {
+      id: '/ForgotPassword'
+      path: '/ForgotPassword'
+      fullPath: '/ForgotPassword'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Feed': {
+      id: '/Feed'
+      path: '/Feed'
+      fullPath: '/Feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Events': {
+      id: '/Events'
+      path: '/Events'
+      fullPath: '/Events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Challenges': {
+      id: '/Challenges'
+      path: '/Challenges'
+      fullPath: '/Challenges'
+      preLoaderRoute: typeof ChallengesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -197,13 +317,19 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChallengesRoute: ChallengesRoute,
+  EventsRoute: EventsRoute,
+  FeedRoute: FeedRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LandingRoute: LandingRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
   RegisterAdminRoute: RegisterAdminRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SetProfileRoute: SetProfileRoute,
   UserRegisterRoute: UserRegisterRoute,
+  WorkshopsRoute: WorkshopsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

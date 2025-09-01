@@ -6,7 +6,7 @@ export const Route = createFileRoute('/SetProfile')({
 })
 
 function RouteComponent() {
-  return <SetProfilePage
+  return <SetProfilePage 
     title="Profile"
     name="Name"
     email="Email"

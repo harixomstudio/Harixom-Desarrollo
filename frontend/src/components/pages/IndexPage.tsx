@@ -1,4 +1,3 @@
-import type React from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 interface HomeProps {

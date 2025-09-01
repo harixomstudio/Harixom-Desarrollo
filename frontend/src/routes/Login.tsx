@@ -1,7 +1,5 @@
-
-import type React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import Login from "../components/pages/Login";
+import LoginPage from "../components/pages/LoginPage";
 
 export const Route = createFileRoute("/Login")({
   component: LoginRoute,
@@ -9,7 +7,7 @@ export const Route = createFileRoute("/Login")({
 
 function LoginRoute() {
   return (
-    <Login
+    <LoginPage
       title="Login"
       email="Email"
       password="Password"

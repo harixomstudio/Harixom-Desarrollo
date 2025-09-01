@@ -1,6 +1,5 @@
-import type React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import Register from "../components/pages/Register";
+import RegisterPage from "../components/pages/RegisterPage";
 
 export const Route = createFileRoute("/Register")({
   component: RegisterRoute,
@@ -8,7 +7,7 @@ export const Route = createFileRoute("/Register")({
 
 function RegisterRoute() {
   return (
-    <Register
+    <RegisterPage
       title="Register"
       name="Name"
       email="Email"
