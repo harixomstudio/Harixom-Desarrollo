@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Api\PublicationController;
+use App\Http\Controllers\Api\InteractionController;
 
 
 Route::middleware('auth:sanctum')->group(function(){

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Like;
 use App\Models\Follow;
 use App\Models\Comment;
+use App\Models\Publication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

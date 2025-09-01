@@ -111,7 +111,7 @@ export default function Login(props: LoginProps) {
               />
               <button type="button" className="absolute right-15 top-1/2 transform text-sm "
                 onClick={() => {setShowPassword(!showPassword)}}>
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? "👁️" : "🙈"}
               </button>
             </div>
 

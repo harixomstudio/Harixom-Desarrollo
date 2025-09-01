@@ -23,16 +23,18 @@ export default function FeedPage({ publications }: FeedPageProps) {
       const res = await fetch(`http://localhost:8000/api/like/${id}`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`, // o como manejes el token
         },
       });
+      
       const data = await res.json();
       setLikes((prev) => ({ ...prev, [id]: data.liked }));
     } catch (err) {
       console.error(err);
     }
   };
+  console.log(toggleLike);
 
   //Follows
   const toggleFollow = async (userId: number) => {
@@ -86,7 +88,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             className="break-inside-avoid mb-6 relative bg-stone-800 rounded-xl overflow-hidden"
           >
             {/* Imagen con iconos superpuestos */}
-            <div className="relative w-full flex items-center justify-center hover:scale-101 transition-all duration-300">
+            <div className="relative w-full flex items-center justify-center transition-all duration-300">
               {pub.image ? (
                 <img
                   src={pub.image}
@@ -100,22 +102,23 @@ export default function FeedPage({ publications }: FeedPageProps) {
               )}
 
               {/* Iconos */}
-              <div className="absolute bottom-3 right-3 flex flex-col items-end gap-2 bg-stone-950 p-1 rounded">
+              <div className="absolute bottom-3 right-3 flex flex-col items-end gap-2 bg-stone-950 p-2 rounded-2xl ">
                 {/* Follow */}
                 <button
-                  className="relative flex items-center justify-center text-white opacity-80 w-6 h-6"
+                  className="relative flex items-center justify-center text-white opacity-80 w-6 h-6 hover:scale-115"
                   title={follows[pub.id] ? "Siguiendo" : "Seguir"}
                   onClick={() => toggleFollow(pub.id!)}
+                  onClickCapture={() => setFollows(pub.id ? { ...follows, [pub.id]: !follows[pub.id] } : { ...follows, [pub.id]: true })}
                 >
                   {pub.user_profile_picture && (
                     <img
                       src={pub.user_profile_picture}
                       alt={pub.user_name}
-                      className="w-6 h-6 rounded-full border-2 border-white"
+                      className="w-6 h-6 rounded-full border-2 border-black transition-all duration-300"
                     />
                   )}
                   {!follows[pub.id] && (
-                    <span className="absolute inset-0 flex items-center justify-center font-bold text-white text-sm">
+                    <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
                       +
                     </span>
                   )}
@@ -123,26 +126,20 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
                 {/* Like */}
                 <button
-                  className="text-white opacity-80"
-                  title="Like"
-                  onClick={() => toggleLike(pub.id)}
-                >
+                  className="text-white opacity-80 hover:scale-110" title="Like" onClick={() => toggleLike(pub.id)} onClickCapture={() => setLikes(pub.id ? { ...likes, [pub.id]: !likes[pub.id] } : { ...likes, [pub.id]: true })} >
                   {likes[pub.id] ? (
-                    <svg width="24" height="24" fill="red" viewBox="0 0 24 24">
+
+                    <svg width="24" height="24" fill="red" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
                       <path d="M12 21s-1-.5-2-1.5S5 14 5 10.5 8 5 12 8s7-2 7 2.5-5 9-5 9-1 1-2 1z" />
                     </svg>
+
                   ) : (
-                    <svg
-                      width="24"
-                      height="24"
-                      fill="none"
-                      stroke="#fff"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
+
+                    <svg width="24" height="24" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
                       <path d="M12 21s-1-.5-2-1.5S5 14 5 10.5 8 5 12 8s7-2 7 2.5-5 9-5 9-1 1-2 1z" />
                     </svg>
                   )}
+
                 </button>
 
                 {/* Comentar */}

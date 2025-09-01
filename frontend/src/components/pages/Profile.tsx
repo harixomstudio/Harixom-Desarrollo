@@ -20,18 +20,12 @@ export default function Profile(props: ProfileProps) {
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen">
       <div className="w-full flex flex-col">
         {/* Banner */}
-        <div className="relative mb-8">
-          <div
-            className="rounded-xl h-70 flex items-end relative"
-            style={{
-              backgroundImage: `url(${
-                props.bannerPicture ||
-                "https://via.placeholder.com/1200x300/444/fff?text=Banner"
-              })`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
+        <div className="relative mb-10">
+          <div className="rounded-xl h-100 flex relative overflow-hidden w-full">
+
+              <img src={props.bannerPicture} alt="" className="w-full h-full object-cover"/> {/*banner image */}
+           
+
             {/* Edit icon */}
             <div className="absolute right-8 bottom-8 cursor-pointer">
               <Link to="/SetProfile">
@@ -80,11 +74,10 @@ export default function Profile(props: ProfileProps) {
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-2 font-semibold text-base ${
-                activeTab === i
-                  ? "text-pink-400 border-b-2 border-pink-400"
-                  : "text-gray-200"
-              }`}
+              className={`pb-2 font-semibold text-base ${activeTab === i
+                ? "text-pink-400 border-b-2 border-pink-400"
+                : "text-gray-200"
+                }`}
               onClick={() => setActiveTab(i)}
             >
               {tab}
@@ -137,6 +130,6 @@ export default function Profile(props: ProfileProps) {
       >
         +
       </Link>
-    </section>
+    </section >
   );
 }
