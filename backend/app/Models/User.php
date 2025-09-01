@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -24,8 +25,16 @@ class User extends Authenticatable
         'address',
         'phone',
         'profile_completed',
-        'image',
+        'profile_picture',
+        'banner_picture',
+        'description',
+        'is_active',
     ];
+
+    public function isActive()
+{
+    return $this->is_active;
+}
 
     /**
      * The attributes that should be hidden for serialization.
@@ -35,6 +44,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        
     ];
 
     /**
@@ -47,15 +57,43 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
-    public function image_path(){
-        if($this->image){
-            return asset('storage/images/users/'.$this->image);
-        } else {
-            return 'https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/external-user-interface-kiranshastry-lineal-kiranshastry.png';
-        }
-    }
-
+    public function posts()
+{
+    return $this->hasMany(\App\Models\Publication::class); // Ajusta el modelo según tu tabla
 }
+
+public function likes() {
+    return $this->hasMany(Like::class);
+}
+
+public function follows() {
+    return $this->hasMany(Follow::class, 'follower_id');
+}
+
+public function followers() {
+    return $this->hasMany(Follow::class, 'following_id');
+}
+
+public function comments() {
+    return $this->hasMany(Comment::class);
+}
+
+    public function profilePicturePath()
+{
+    return $this->profile_picture 
+        ? asset('images/users/'.$this->profile_picture)
+        : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+}
+
+public function bannerPicturePath()
+{
+    return $this->banner_picture 
+        ? asset('images/users/'.$this->banner_picture)
+        : 'https://cdn.pixabay.com/photo/2014/03/29/23/49/the-background-301145_1280.png';
+}
+}
+

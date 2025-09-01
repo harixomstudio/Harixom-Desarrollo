@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+font-face {
+  font-family: 'Startruc';
+  src: url('./assets/fonts/Starstruck.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
