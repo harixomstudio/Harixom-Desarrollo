@@ -15,7 +15,7 @@ function RootComponent() {
 
   return (
     <React.Fragment>
-      {!hideNav && <Nav list={['Feed']} reference={['/Feed']} />}
+      {!hideNav && <Nav list={['Feed', 'Create']} reference={['/Feed', '/CreatePublication']} />}
        {/* {!hideNav && <Nav list={[ 'About', 'Contact']} reference={['/about', '/contact']} />} */}
       <Outlet />
     </React.Fragment>

@@ -20,6 +20,9 @@ export default function Login(props: LoginProps) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [showPassword, setShowPassword] = useState(false);
+  console.log(showPassword);
+
   const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -34,25 +37,25 @@ export default function Login(props: LoginProps) {
         alert(response.data.message);
         localStorage.setItem("access_token", response.data.access_token);
         alert(response.data.message);
-        navigate({ to: "/Landing" }); 
+        navigate({ to: "/Landing" });
       }
     } catch (error: any) {
-  setLoading(false);
+      setLoading(false);
 
-  // Mostrar más detalles
-  if (error.response) {
-    // Error devuelto por el backend
-    console.error("Backend error response:", error.response);
-    alert(`Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`);
-  } else if (error.request) {
-    // La petición se hizo pero no hubo respuesta
-    console.error("No response from server:", error.request);
-    alert("No se recibió respuesta del servidor.");
-  } else {
-    // Otro error
-    console.error("Error inesperado:", error.message);
-    alert(`Error inesperado: ${error.message}`);
-  }
+      // Mostrar más detalles
+      if (error.response) {
+        // Error devuelto por el backend
+        console.error("Backend error response:", error.response);
+        alert(`Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`);
+      } else if (error.request) {
+        // La petición se hizo pero no hubo respuesta
+        console.error("No response from server:", error.request);
+        alert("No se recibió respuesta del servidor.");
+      } else {
+        // Otro error
+        console.error("Error inesperado:", error.message);
+        alert(`Error inesperado: ${error.message}`);
+      }
     }
   };
 
@@ -96,41 +99,43 @@ export default function Login(props: LoginProps) {
             </div>
 
             <div>
-              <label className="block text-sm mb-1 text-gray-700">
+              <label className="relative text-sm mb-1 text-gray-700">
                 {props.password}
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={user.password}
-                onChange={(e) =>
-                  setUser({ ...user, password: e.target.value })
-                }
+                onChange={(e) => setUser({ ...user, password: e.target.value })}
+
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
+              <button type="button" className="absolute right-15 top-1/2 transform text-sm "
+                onClick={() => {setShowPassword(!showPassword)}}>
+                {showPassword ? "🙈" : "👁️"}
+              </button>
             </div>
 
             <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-pink-400 to-blue-400"
-              }`}
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-pink-400 to-blue-400"
+                }`}
               disabled={loading}
             >
               {loading ? "Logging in..." : "LOGIN"}
             </button>
           </form>
 
-                {/* Botón de Forgot Password */}
-                          <div className="flex justify-center mt-3 text-sm">
-                            <Link
-                              to="/ForgotPassword"
-                              className="text-pink-500 font-semibold underline hover:scale-105 duration-200"
-                            >
-                              Forgot Password?
-                            </Link>
-                          </div>
+          {/* Botón de Forgot Password */}
+          <div className="flex justify-center mt-3 text-sm">
+            <Link
+              to="/ForgotPassword"
+              className="text-pink-500 font-semibold underline hover:scale-105 duration-200"
+            >
+              Forgot Password?
+            </Link>
+          </div>
 
           <div className="flex justify-center mt-4 text-sm">
             <p className="text-gray-700">{props.text}</p>

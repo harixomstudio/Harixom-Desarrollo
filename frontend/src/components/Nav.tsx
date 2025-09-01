@@ -43,7 +43,7 @@ export default function Nav(props: NavProps) {
         </div>
 
         <nav>
-          <ul className="flex space-x-8">
+          <ul className="flex space-x-8 items-center">
             {props.list.map((list, i) => (
               <li key={i}>
                 <a className="text-white" href={props.reference[i]}>
@@ -58,7 +58,7 @@ export default function Nav(props: NavProps) {
                   onClick={handleLogout}
                   className="text-black font-bold bg-red-400 py-1 px-9 rounded-2xl border-rose-300 border-2"
                 >
-                  Logout
+                  Log out
                 </button>
               ) : (
                 <a
