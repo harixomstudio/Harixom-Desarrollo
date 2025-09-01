@@ -10,11 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-import { Route as SetProfileRouteImport } from './routes/SetProfile'
-import { Route as RegisterAdminRouteImport } from './routes/RegisterAdmin'
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
 import { Route as RegisterRouteImport } from './routes/Register'
 import { Route as ProfileRouteImport } from './routes/Profile'
 import { Route as LoginRouteImport } from './routes/Login'
@@ -26,19 +21,6 @@ const UserRegisterRoute = UserRegisterRouteImport.update({
   path: '/UserRegister',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-const SetProfileRoute = SetProfileRouteImport.update({
-  id: '/SetProfile',
-  path: '/SetProfile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegisterAdminRoute = RegisterAdminRouteImport.update({
-  id: '/RegisterAdmin',
-  path: '/RegisterAdmin',
-  getParentRoute: () => rootRouteImport,
-} as any)
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
 const RegisterRoute = RegisterRouteImport.update({
   id: '/Register',
   path: '/Register',
@@ -71,11 +53,6 @@ export interface FileRoutesByFullPath {
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-  '/RegisterAdmin': typeof RegisterAdminRoute
-  '/SetProfile': typeof SetProfileRoute
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRoutesByTo {
@@ -84,11 +61,6 @@ export interface FileRoutesByTo {
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-  '/RegisterAdmin': typeof RegisterAdminRoute
-  '/SetProfile': typeof SetProfileRoute
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRoutesById {
@@ -98,11 +70,6 @@ export interface FileRoutesById {
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
   '/Register': typeof RegisterRoute
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-  '/RegisterAdmin': typeof RegisterAdminRoute
-  '/SetProfile': typeof SetProfileRoute
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
   '/UserRegister': typeof UserRegisterRoute
 }
 export interface FileRouteTypes {
@@ -113,25 +80,9 @@ export interface FileRouteTypes {
     | '/Login'
     | '/Profile'
     | '/Register'
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
     | '/UserRegister'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/Landing' | '/Login' | '/Profile' | '/Register' | '/UserRegister'
-========
-    | '/RegisterAdmin'
-    | '/SetProfile'
-    | '/UserRegister'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/Landing'
-    | '/Login'
-    | '/Profile'
-    | '/Register'
-    | '/RegisterAdmin'
-    | '/SetProfile'
-    | '/UserRegister'
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
   id:
     | '__root__'
     | '/'
@@ -139,11 +90,6 @@ export interface FileRouteTypes {
     | '/Login'
     | '/Profile'
     | '/Register'
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-    | '/RegisterAdmin'
-    | '/SetProfile'
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
     | '/UserRegister'
   fileRoutesById: FileRoutesById
 }
@@ -153,11 +99,6 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-  RegisterAdminRoute: typeof RegisterAdminRoute
-  SetProfileRoute: typeof SetProfileRoute
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
   UserRegisterRoute: typeof UserRegisterRoute
 }
 
@@ -170,23 +111,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-    '/SetProfile': {
-      id: '/SetProfile'
-      path: '/SetProfile'
-      fullPath: '/SetProfile'
-      preLoaderRoute: typeof SetProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/RegisterAdmin': {
-      id: '/RegisterAdmin'
-      path: '/RegisterAdmin'
-      fullPath: '/RegisterAdmin'
-      preLoaderRoute: typeof RegisterAdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
     '/Register': {
       id: '/Register'
       path: '/Register'
@@ -231,11 +155,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
-<<<<<<<< HEAD:frontend/.tanstack/tmp/7d6eb843-1de9137eebc391f656de049a7943c6d6
-========
-  RegisterAdminRoute: RegisterAdminRoute,
-  SetProfileRoute: SetProfileRoute,
->>>>>>>> 5b3c309cf27a730cd37023dbcb5040fd2c971db5:src/routeTree.gen.ts
   UserRegisterRoute: UserRegisterRoute,
 }
 export const routeTree = rootRouteImport
