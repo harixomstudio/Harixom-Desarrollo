@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
+import TermsAndConditions from "./TermsAndConditions";
 
 interface LoginProps {
   title: string;
@@ -18,10 +19,10 @@ interface UserForm {
 export default function Login(props: LoginProps) {
   const [user, setUser] = useState<UserForm>({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
-  console.log(showPassword);
+  const [showTerms, setShowTerms] = useState(false);
+  const [tempToken, setTempToken] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,30 +35,37 @@ export default function Login(props: LoginProps) {
       if (response.data.error) {
         alert(response.data.error);
       } else {
-        alert(response.data.message);
-        localStorage.setItem("access_token", response.data.access_token);
-        alert(response.data.message);
-        navigate({ to: "/Landing" });
+        // No guardamos el token aún
+        setTempToken(response.data.access_token);
+        setShowTerms(true);
       }
     } catch (error: any) {
       setLoading(false);
-
-      // Mostrar más detalles
       if (error.response) {
-        // Error devuelto por el backend
-        console.error("Backend error response:", error.response);
         alert(`Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`);
       } else if (error.request) {
-        // La petición se hizo pero no hubo respuesta
-        console.error("No response from server:", error.request);
         alert("No se recibió respuesta del servidor.");
       } else {
-        // Otro error
-        console.error("Error inesperado:", error.message);
         alert(`Error inesperado: ${error.message}`);
       }
     }
   };
+
+  const handleAcceptTerms = () => {
+    if (tempToken) {
+      localStorage.setItem("access_token", tempToken);
+      navigate({ to: "/Landing" });
+    }
+  };
+
+  if (showTerms) {
+    return (
+      <TermsAndConditions
+        title="Términos y Condiciones"
+        onAccept={handleAcceptTerms}
+      />
+    );
+  }
 
   return (
     <section className="relative flex min-h-screen items-center justify-center bg-stone-950">
@@ -91,43 +99,43 @@ export default function Login(props: LoginProps) {
               <input
                 type="email"
                 value={user.email}
-                onChange={(e) =>
-                  setUser({ ...user, email: e.target.value })
-                }
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
             </div>
 
-            <div>
-              <label className="relative text-sm mb-1 text-gray-700">
+            <div className="relative">
+              <label className="block text-sm mb-1 text-gray-700">
                 {props.password}
               </label>
               <input
                 type={showPassword ? "text" : "password"}
                 value={user.password}
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
-
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
-              <button type="button" className="absolute right-15 top-1/2 transform text-sm "
-                onClick={() => {setShowPassword(!showPassword)}}>
+              <button
+                type="button"
+                className="absolute right-3 top-9 text-sm"
+                onClick={() => setShowPassword(!showPassword)}
+              >
                 {showPassword ? "👁️" : "🙈"}
               </button>
             </div>
 
             <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-pink-400 to-blue-400"
-                }`}
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-pink-400 to-blue-400"
+              }`}
               disabled={loading}
             >
               {loading ? "Logging in..." : "LOGIN"}
             </button>
           </form>
 
-          {/* Botón de Forgot Password */}
           <div className="flex justify-center mt-3 text-sm">
             <Link
               to="/ForgotPassword"

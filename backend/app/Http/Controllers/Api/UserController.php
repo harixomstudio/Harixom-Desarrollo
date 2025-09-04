@@ -61,6 +61,13 @@ class UserController extends Controller
         ], 401);
     }
 
+    // Validar si el usuario está habilitado
+    if (!$user->is_active) {
+        return response()->json([
+            'error' => 'Tu cuenta ha sido deshabilitada, contacta con soporte.',
+        ], 403);
+    }
+
     // Crear token de Sanctum
     $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -80,7 +87,7 @@ class UserController extends Controller
     ]);
 }
 
-//Funcion updateProfile (no funciona)
+//Funcion updateProfile
 public function updateProfile(Request $request)
 {
     $user = $request->user();
@@ -144,7 +151,7 @@ public function updateProfile(Request $request)
     ]);
 }
 
-    //Funcion Logout, funciona, pero aun no se implementa en el Frontend
+    //Funcion Logout
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
         return response()->json([
