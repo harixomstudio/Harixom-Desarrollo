@@ -47,11 +47,13 @@ export default function Profile(props: ProfileProps) {
         {/* Banner */}
         <div className="relative mb-10">
           <div className="rounded-xl h-100 flex relative overflow-hidden w-full">
-            <img
-              src={props.bannerPicture}
-              alt=""
-              className="w-full h-full object-cover"
-            />
+
+            {!props.bannerPicture ?
+            <img src={props.bannerPicture} alt="" className="w-full h-full object-cover"/>
+             :
+            <img src="ChangeBanner.svg" alt="" className="w-full h-full object-cover" />
+            }
+
             {/* Edit icon */}
             <div className="absolute right-8 bottom-8 cursor-pointer">
               <Link to="/SetProfile">
@@ -100,6 +102,7 @@ export default function Profile(props: ProfileProps) {
           {tabs.map((tab, i) => (
             <button
               key={tab}
+
               className={`pb-4 font-semibold text-xl px-5 ${
                 activeTab === i
                   ? "text-pink-400 border-b-2 border-pink-400"
@@ -230,15 +233,16 @@ export default function Profile(props: ProfileProps) {
             </div>
           ) : (
             // Posts (Cards)
-            <div
-              className="w-full"
-              style={{ columnCount: 4, columnGap: "1rem" }}
-            >
+
+            <div className="w-full  columns-4 max-lg:columns-2 max-md:columns-1">
+
               {cards.length ? (
                 cards.map((card) => (
                   <div
                     key={card.id}
-                    className="mb-6 break-inside-avoid rounded-lg bg-stone-800 overflow-hidden relative"
+
+                    className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative "
+
                   >
                     {/* Botón eliminar */}
                     <button
