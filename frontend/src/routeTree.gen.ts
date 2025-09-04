@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
 import { Route as SetProfileRouteImport } from './routes/SetProfile'
 import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
@@ -19,9 +20,15 @@ import { Route as LoginRouteImport } from './routes/Login'
 import { Route as LandingRouteImport } from './routes/Landing'
 import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
+import { Route as EventsRouteImport } from './routes/Events'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WorkshopsRoute = WorkshopsRouteImport.update({
+  id: '/Workshops',
+  path: '/Workshops',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UserRegisterRoute = UserRegisterRouteImport.update({
   id: '/UserRegister',
   path: '/UserRegister',
@@ -72,6 +79,11 @@ const FeedRoute = FeedRouteImport.update({
   path: '/Feed',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/Events',
+  path: '/Events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreatePublicationRoute = CreatePublicationRouteImport.update({
   id: '/CreatePublication',
   path: '/CreatePublication',
@@ -86,6 +98,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/CreatePublication': typeof CreatePublicationRoute
+  '/Events': typeof EventsRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
@@ -96,10 +109,12 @@ export interface FileRoutesByFullPath {
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
+  '/Workshops': typeof WorkshopsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/CreatePublication': typeof CreatePublicationRoute
+  '/Events': typeof EventsRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
@@ -110,11 +125,13 @@ export interface FileRoutesByTo {
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
+  '/Workshops': typeof WorkshopsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/CreatePublication': typeof CreatePublicationRoute
+  '/Events': typeof EventsRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
@@ -125,12 +142,14 @@ export interface FileRoutesById {
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/UserRegister': typeof UserRegisterRoute
+  '/Workshops': typeof WorkshopsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/CreatePublication'
+    | '/Events'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
@@ -141,10 +160,12 @@ export interface FileRouteTypes {
     | '/ResetPassword'
     | '/SetProfile'
     | '/UserRegister'
+    | '/Workshops'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/CreatePublication'
+    | '/Events'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
@@ -155,10 +176,12 @@ export interface FileRouteTypes {
     | '/ResetPassword'
     | '/SetProfile'
     | '/UserRegister'
+    | '/Workshops'
   id:
     | '__root__'
     | '/'
     | '/CreatePublication'
+    | '/Events'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
@@ -169,11 +192,13 @@ export interface FileRouteTypes {
     | '/ResetPassword'
     | '/SetProfile'
     | '/UserRegister'
+    | '/Workshops'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreatePublicationRoute: typeof CreatePublicationRoute
+  EventsRoute: typeof EventsRoute
   FeedRoute: typeof FeedRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LandingRoute: typeof LandingRoute
@@ -184,10 +209,18 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SetProfileRoute: typeof SetProfileRoute
   UserRegisterRoute: typeof UserRegisterRoute
+  WorkshopsRoute: typeof WorkshopsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/Workshops': {
+      id: '/Workshops'
+      path: '/Workshops'
+      fullPath: '/Workshops'
+      preLoaderRoute: typeof WorkshopsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/UserRegister': {
       id: '/UserRegister'
       path: '/UserRegister'
@@ -258,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/Events': {
+      id: '/Events'
+      path: '/Events'
+      fullPath: '/Events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/CreatePublication': {
       id: '/CreatePublication'
       path: '/CreatePublication'
@@ -278,6 +318,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreatePublicationRoute: CreatePublicationRoute,
+  EventsRoute: EventsRoute,
   FeedRoute: FeedRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LandingRoute: LandingRoute,
@@ -288,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SetProfileRoute: SetProfileRoute,
   UserRegisterRoute: UserRegisterRoute,
+  WorkshopsRoute: WorkshopsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
