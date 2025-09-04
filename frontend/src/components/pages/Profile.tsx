@@ -102,10 +102,12 @@ export default function Profile(props: ProfileProps) {
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
+
+              className={`pb-4 font-semibold text-xl px-5 ${
+                activeTab === i
                   ? "text-pink-400 border-b-2 border-pink-400"
                   : "text-gray-200"
-                }`}
+              }`}
               onClick={() => setActiveTab(i)}
             >
               {tab}
@@ -231,12 +233,16 @@ export default function Profile(props: ProfileProps) {
             </div>
           ) : (
             // Posts (Cards)
+
             <div className="w-full  columns-4 max-lg:columns-2 max-md:columns-1">
+
               {cards.length ? (
                 cards.map((card) => (
                   <div
                     key={card.id}
+
                     className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative "
+
                   >
                     {/* Botón eliminar */}
                     <button

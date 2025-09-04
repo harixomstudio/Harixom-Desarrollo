@@ -27,6 +27,7 @@ class UserResource extends JsonResource
             'profile_completed' => $this->profile_completed,
             'posts' => $this->posts()->get()->map(function ($post) {
     return [
+        'id' => $post->id,
         'description' => $post->description,
         'image' => $post->image ? url($post->image) : null,
         'created_at' => $post->created_at, 
