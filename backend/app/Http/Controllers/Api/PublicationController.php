@@ -47,10 +47,8 @@ class PublicationController extends Controller
             $file = $request->file('image');
             $filename = time() . '_publication_' . $file->getClientOriginalName();
             
-            // Mueve la imagen a public/images/publications
             $file->move(public_path('images/publications'), $filename);
             
-            // Crea la URL completa que se puede usar en el frontend
             $imageUrl = url('images/publications/' . $filename);
         }
 
@@ -66,5 +64,32 @@ class PublicationController extends Controller
             'message' => 'Publicación creada correctamente',
             'publication' => $publication
         ]);
+    } 
+
+    //Funcion destroy
+    public function destroy($id)
+{
+    $publication = Publication::find($id);
+
+    if (!$publication) {
+        return response()->json(['error' => 'Publicación no encontrada'], 404);
     }
+
+    // Validar propietario
+    if ($publication->user_id !== Auth::id()) {
+        return response()->json(['error' => 'No autorizado'], 403);
+    }
+
+    // Eliminar imagen si existe
+    if ($publication->image) {
+        $filePath = public_path('images/publications/' . basename($publication->image));
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+    }
+
+    $publication->delete();
+
+    return response()->json(['message' => 'Publicación eliminada correctamente']);
+}
 }

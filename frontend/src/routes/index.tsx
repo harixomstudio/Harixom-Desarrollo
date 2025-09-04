@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
 function HomeRoute() {
   return (
     <Home
-      subtitle="Welcome to"
+      subtitle="“Tu arte, tu espacio protegido”"
       title="HARIXOM"
     />
   );
