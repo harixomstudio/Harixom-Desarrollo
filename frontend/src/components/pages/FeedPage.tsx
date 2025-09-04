@@ -81,7 +81,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   return (
     <div className="bg-stone-950 min-h-screen p-10">
-      <div className="columns-4 gap-6 max-lg:columns-2 max-md:columns-1">
+      <div className="columns-4 gap-6">
         {publications.map((pub) => (
           <div
             key={pub.id}
