@@ -27,7 +27,7 @@ const footer = {
   products: ['Explorar', 'Comisiones', 'Recursos', 'Ayuda'],
   linksProducts: [''],
   socialMedias: ['instagram.svg', 'facebook.svg', 'tiktok.svg', 'youtube.svg'],
-  linksSocialMedia: ['https://www.instagram.com', 'https://www.facebook.com', 'https://tiktok.com', 'https://youtube.com'],
+  linksSocialMedia: ['https://www.instagram.com/harixom2025', 'https://www.facebook.com/share/16myX55RSd/', 'https://www.tiktok.com/@harixom2025', 'https://youtube.com/@harixom_2025'],
   contacts: ['1234 6548', 'info@gmail.com', '1234 6548', 'info@gmail.com'],
   linksContacts: ['']
 }

@@ -48,11 +48,10 @@ export default function Profile(props: ProfileProps) {
         <div className="relative mb-10">
           <div className="rounded-xl h-100 flex relative overflow-hidden w-full">
 
-            {!props.bannerPicture ?
-            <img src={props.bannerPicture} alt="" className="w-full h-full object-cover"/>
-             :
-            <img src="ChangeBanner.svg" alt="" className="w-full h-full object-cover" />
-            }
+            <div className="flex relative w-full h-full items-center justify-center">
+              <img src={props.bannerPicture} alt="" className="w-full h-full object-cover" />
+              {props.bannerPicture === "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" ?  <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">Change banner</h2> : ''}
+            </div>
 
             {/* Edit icon */}
             <div className="absolute right-8 bottom-8 cursor-pointer">
@@ -88,7 +87,7 @@ export default function Profile(props: ProfileProps) {
             <span>{props.username}</span>
             <span>Followers</span>
           </div>
-          <div className="flex gap-19 text-gray-400 text-lg mb-1">
+          <div className="flex gap-35 text-gray-400 text-lg mb-1">
             <span>{props.address}</span>
             <span>{props.followers}</span>
           </div>
@@ -103,11 +102,10 @@ export default function Profile(props: ProfileProps) {
             <button
               key={tab}
 
-              className={`pb-4 font-semibold text-xl px-5 ${
-                activeTab === i
+              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
                   ? "text-pink-400 border-b-2 border-pink-400"
                   : "text-gray-200"
-              }`}
+                }`}
               onClick={() => setActiveTab(i)}
             >
               {tab}
@@ -234,7 +232,7 @@ export default function Profile(props: ProfileProps) {
           ) : (
             // Posts (Cards)
 
-            <div className="w-full  columns-4 max-lg:columns-2 max-md:columns-1">
+            <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
 
               {cards.length ? (
                 cards.map((card) => (
@@ -299,7 +297,7 @@ export default function Profile(props: ProfileProps) {
                   </div>
                 ))
               ) : (
-                <p className="text-gray-400 text-sm text-center col-span-3">
+                <p className="text-gray-400 text-sm text-center col-span-3 ">
                   No hay posts aún.
                 </p>
               )}
