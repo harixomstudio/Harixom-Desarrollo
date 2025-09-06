@@ -11,17 +11,16 @@ function RootComponent() {
   const location = useLocation()
   const currentPath = location.pathname
 
-
-  const listEvents= ['Events', 'Workshop', 'Challenges']
-  const referenceEvents = ['/Events', '/Workshops', '/Challenges']
-  const hideEventsNav = ['/Feed', '/Login', '/Register', '/RegisterAdmin', '/ForgotPassword', '/Landing', '/'].includes(currentPath);
+  const listEvents= ['Events', 'Workshop', 'AI Challenges']
+  const referenceEvents = ['/Events', '/Workshops', '/AIChallenge']
+  const hideEventsNav = ['/Feed', '/Login', '/Register', '/RegisterAdmin', '/ForgotPassword', '/Landing', '/', '/Profile', '/SetProfile', '/CreatePublication'].includes(currentPath);
 
   // Rutas donde NO quieres mostrar el Nav
-  const hideNav = ['/','/Register', '/Login', '/ForgotPassword', '/ResetPassword', '/SetProfile', '/CreatePublication'].includes(currentPath)
+  const hideNav = ['/','/Register', '/Login', '/ForgotPassword', '/ResetPassword', '/SetProfile', '/CreatePublication', '/Terms'].includes(currentPath)
 
   return (
     <React.Fragment>
-      {!hideNav && <Nav list={['Feed', 'Create']} reference={['/Feed', '/CreatePublication']} />}
+      {!hideNav && <Nav list={['Feed', 'Create', 'Events']} reference={['/Feed', '/CreatePublication', '/Events']} />}
        {/* {!hideNav && <Nav list={[ 'About', 'Contact']} reference={['/about', '/contact']} />} */}
       <div className="flex min-h-screen">
         {!hideEventsNav && (<EventsNav listEvents={listEvents} referenceEvents={referenceEvents} />)}

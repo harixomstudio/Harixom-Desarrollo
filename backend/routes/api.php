@@ -7,7 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Api\PublicationController;
 use App\Http\Controllers\Api\InteractionController;
-
+use App\Http\Controllers\Api\AIController;
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('user', function (Request $request) {
@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function(){
     //Rutas para publicaciones
     Route::post('/publications', [PublicationController::class, 'store']);
     Route::get('/publications', [PublicationController::class, 'index']);
+    Route::delete('/publications/{id}', [PublicationController::class, 'destroy']);
 
 //Rutas para comentarios
 Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
@@ -44,6 +45,10 @@ Route::post('/follow/{user}', [InteractionController::class, 'toggleFollow']);
 
 
 });
+
+// Rutas de IA sin auth si quieres que cualquiera pueda usarlo
+Route::post('ia/challenge', [AIController::class, 'getChallenge']);
+
 
 //Rutas de reset password
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);

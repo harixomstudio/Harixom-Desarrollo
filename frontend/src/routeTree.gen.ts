@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
+import { Route as TermsRouteImport } from './routes/Terms'
 import { Route as SetProfileRouteImport } from './routes/SetProfile'
 import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
 import { Route as RegisterAdminRouteImport } from './routes/RegisterAdmin'
@@ -22,6 +23,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
 import { Route as EventsRouteImport } from './routes/Events'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
+import { Route as AIChallengeRouteImport } from './routes/AIChallenge'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WorkshopsRoute = WorkshopsRouteImport.update({
@@ -32,6 +34,11 @@ const WorkshopsRoute = WorkshopsRouteImport.update({
 const UserRegisterRoute = UserRegisterRouteImport.update({
   id: '/UserRegister',
   path: '/UserRegister',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/Terms',
+  path: '/Terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SetProfileRoute = SetProfileRouteImport.update({
@@ -89,6 +96,11 @@ const CreatePublicationRoute = CreatePublicationRouteImport.update({
   path: '/CreatePublication',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AIChallengeRoute = AIChallengeRouteImport.update({
+  id: '/AIChallenge',
+  path: '/AIChallenge',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -97,6 +109,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/AIChallenge': typeof AIChallengeRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Events': typeof EventsRoute
   '/Feed': typeof FeedRoute
@@ -108,11 +121,13 @@ export interface FileRoutesByFullPath {
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
+  '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/AIChallenge': typeof AIChallengeRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Events': typeof EventsRoute
   '/Feed': typeof FeedRoute
@@ -124,12 +139,14 @@ export interface FileRoutesByTo {
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
+  '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/AIChallenge': typeof AIChallengeRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Events': typeof EventsRoute
   '/Feed': typeof FeedRoute
@@ -141,6 +158,7 @@ export interface FileRoutesById {
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
+  '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
 }
@@ -148,6 +166,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/AIChallenge'
     | '/CreatePublication'
     | '/Events'
     | '/Feed'
@@ -159,11 +178,13 @@ export interface FileRouteTypes {
     | '/RegisterAdmin'
     | '/ResetPassword'
     | '/SetProfile'
+    | '/Terms'
     | '/UserRegister'
     | '/Workshops'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/AIChallenge'
     | '/CreatePublication'
     | '/Events'
     | '/Feed'
@@ -175,11 +196,13 @@ export interface FileRouteTypes {
     | '/RegisterAdmin'
     | '/ResetPassword'
     | '/SetProfile'
+    | '/Terms'
     | '/UserRegister'
     | '/Workshops'
   id:
     | '__root__'
     | '/'
+    | '/AIChallenge'
     | '/CreatePublication'
     | '/Events'
     | '/Feed'
@@ -191,12 +214,14 @@ export interface FileRouteTypes {
     | '/RegisterAdmin'
     | '/ResetPassword'
     | '/SetProfile'
+    | '/Terms'
     | '/UserRegister'
     | '/Workshops'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AIChallengeRoute: typeof AIChallengeRoute
   CreatePublicationRoute: typeof CreatePublicationRoute
   EventsRoute: typeof EventsRoute
   FeedRoute: typeof FeedRoute
@@ -208,6 +233,7 @@ export interface RootRouteChildren {
   RegisterAdminRoute: typeof RegisterAdminRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SetProfileRoute: typeof SetProfileRoute
+  TermsRoute: typeof TermsRoute
   UserRegisterRoute: typeof UserRegisterRoute
   WorkshopsRoute: typeof WorkshopsRoute
 }
@@ -226,6 +252,13 @@ declare module '@tanstack/react-router' {
       path: '/UserRegister'
       fullPath: '/UserRegister'
       preLoaderRoute: typeof UserRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Terms': {
+      id: '/Terms'
+      path: '/Terms'
+      fullPath: '/Terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/SetProfile': {
@@ -305,6 +338,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreatePublicationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/AIChallenge': {
+      id: '/AIChallenge'
+      path: '/AIChallenge'
+      fullPath: '/AIChallenge'
+      preLoaderRoute: typeof AIChallengeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -317,6 +357,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AIChallengeRoute: AIChallengeRoute,
   CreatePublicationRoute: CreatePublicationRoute,
   EventsRoute: EventsRoute,
   FeedRoute: FeedRoute,
@@ -328,6 +369,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterAdminRoute: RegisterAdminRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SetProfileRoute: SetProfileRoute,
+  TermsRoute: TermsRoute,
   UserRegisterRoute: UserRegisterRoute,
   WorkshopsRoute: WorkshopsRoute,
 }

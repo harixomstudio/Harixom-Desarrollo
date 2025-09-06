@@ -93,7 +93,7 @@ public function bannerPicturePath()
 {
     return $this->banner_picture 
         ? asset('images/users/'.$this->banner_picture)
-        : 'https://cdn.pixabay.com/photo/2014/03/29/23/49/the-background-301145_1280.png';
+        : 'https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80';
 }
 }
 

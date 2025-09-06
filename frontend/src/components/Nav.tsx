@@ -1,4 +1,5 @@
-import * as React from "react";
+
+import { useToast } from "./ui/ToastContext";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from ".././components/helpers/config";
 
@@ -13,6 +14,7 @@ export default function Nav(props: NavProps) {
   const currentPath = location.pathname;
 
   // función logout
+  const { showToast } = useToast();
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("access_token");
@@ -27,11 +29,11 @@ export default function Nav(props: NavProps) {
       );
 
       localStorage.removeItem("access_token");
-      alert("Sesión cerrada exitosamente");
+      showToast("Sesión cerrada exitosamente", "success");
       navigate({ to: "/" }); // 👈 redirige al Landing
     } catch (err) {
       console.error("Error al cerrar sesión:", err);
-      alert("Error al cerrar sesión");
+      showToast("Error al cerrar sesión", "error");
     }
   };
 

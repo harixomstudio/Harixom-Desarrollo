@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useToast } from "../ui/ToastContext";
 import { Link } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
@@ -14,6 +15,7 @@ export default function CreatePublicationPage({
   category = "",
 }: CreatePublicationProps) {
   const [desc, setDesc] = useState(description);
+  const { showToast } = useToast();
   const [cat, setCat] = useState(category);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -41,7 +43,10 @@ export default function CreatePublicationPage({
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("access_token");
-    if (!token) return alert("No estás logueado");
+    if (!token) {
+      showToast("No estás logueado", "error");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("description", desc);
@@ -57,35 +62,35 @@ export default function CreatePublicationPage({
         },
       });
       console.log("Publicación creada:", res.data);
-      alert("Publicación creada correctamente");
+  showToast("Publicación creada correctamente", "success");
       setDesc("");
       setCat("");
       setSelectedImage(null);
       setPreviewUrl(null); // Limpiamos el preview
     } catch (err: any) {
       console.error("Error al crear publicación:", err);
-      alert("Error al crear publicación");
+  showToast("Error al crear publicación", "error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="relative h-screen bg-stone-950 p-8 overflow-hidden ">
-      <div className="relative z-10 ">
-        <div className="mb-4 pl-4 ">
+    <section className=" min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')]">
+      <div className="">
+        <div className="mb-35 pl-4 ">
           <Link
             to="/Profile"
             className="font-bold bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-2.5 "
           >←</Link>
         </div>
 
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center h-full ">
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-pink-500">{title}</h2>
           </div>
 
-          <div className="w-full max-w-xl mx-auto flex flex-col items-center gap-8">
+          <div className="w-full max-w-xl flex flex-col items-center gap-8">
             {/* Selector de imagen */}
             <div className="w-full bg-gray-700 rounded-lg flex items-center justify-center text-white cursor-pointer relative overflow-hidden">
               <label className="w-full flex items-center justify-center relative">
