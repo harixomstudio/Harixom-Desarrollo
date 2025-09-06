@@ -15,13 +15,6 @@ interface ProfileProps {
 
 export default function Profile(props: ProfileProps) {
   const [cards, setCards] = React.useState(props.cards || []);
-<<<<<<< Updated upstream
-
-  const { showToast } = useToast();
-  const [confirmDelete, setConfirmDelete] = useState<{ id: number | null, open: boolean }>({ id: null, open: false });
-=======
->>>>>>> Stashed changes
-
 
   const [activeTab, setActiveTab] = React.useState(0);
   const tabs = props.tabs || ["Home", "Commissions", "Muro"];
@@ -196,47 +189,6 @@ export default function Profile(props: ProfileProps) {
             <div className="w-full max-w-4xl mx-auto">
               {/* Caja de comentario */}
               <div className="mb-6">
-<<<<<<< Updated upstream
-
-                <div className="flex items-start gap-4">
-                  <div className="bg-gradient-to-br from-pink-400 via-blue-400 to-purple-400 p-1 rounded-full">
-                    <img
-                      src={props.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
-                      alt="Avatar"
-                      className="w-12 h-12 rounded-full object-cover border-4 border-stone-950"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <textarea
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                      placeholder="Escribe un comentario..."
-                      className="w-full bg-stone-900/80 text-gray-200 p-4 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-stone-700 shadow-md backdrop-blur-sm transition-all placeholder:text-pink-300"
-                      rows={3}
-                    />
-                    <div className="flex justify-end mt-2">
-                      <button
-                        onClick={() => {
-                          if (newComment.trim()) {
-                            setComments([
-                              { user: props.username, message: newComment },
-                              ...comments,
-                            ]);
-                            setNewComment("");
-                          }
-                        }}
-                        className="flex items-center gap-2 bg-gradient-to-r from-pink-400 to-blue-400 hover:from-pink-500 hover:to-blue-500 text-white font-bold px-6 py-2 rounded-full shadow-lg transition-all"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                        </svg>
-                        Publicar
-                      </button>
-                    </div>
-                  </div>
-
-=======
->>>>>>> Stashed changes
                 <textarea
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
@@ -259,10 +211,6 @@ export default function Profile(props: ProfileProps) {
                   >
                     Publish
                   </button>
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
                 </div>
               </div>
 
@@ -326,48 +274,6 @@ export default function Profile(props: ProfileProps) {
                             alert("No se pudo eliminar la publicación.");
                           }
                         }
-<<<<<<< Updated upstream
-                        setConfirmDelete({ id: card.id, open: true });
-
-
-                    className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative "
-
-                  >
-                    {/* Botón eliminar */}
-                    <button
-                      onClick={async () => {
-                        if (!card.id)
-                          return alert("Esta publicación no tiene ID");
-                        if (
-                          confirm(
-                            "¿Seguro que deseas eliminar esta publicación?"
-                          )
-                        ) {
-                          try {
-                            await axios.delete(
-                              `http://127.0.0.1:8000/api/publications/${card.id}`,
-                              {
-                                headers: {
-                                  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                                },
-                              }
-                            );
-
-                            // Actualiza el estado de las cards sin recargar
-                            setCards((prev) =>
-                              prev.filter((c) => c.id !== card.id)
-                            );
-                          } catch (error) {
-                            console.error(
-                              "Error al eliminar la publicación:",
-                              error
-                            );
-                            alert("No se pudo eliminar la publicación.");
-                          }
-                        }
-
-=======
->>>>>>> Stashed changes
                       }}
                       className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 text-white text-xs px-2 py-1 rounded"
                     >
@@ -395,52 +301,6 @@ export default function Profile(props: ProfileProps) {
                   No hay posts aún.
                 </p>
               )}
-<<<<<<< Updated upstream
-
-
-              {/* Modal de confirmación para eliminar publicación */}
-              {confirmDelete.open && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-xs">
-                  <div className="bg-white rounded-lg p-8 shadow-lg flex flex-col items-center">
-                    <p className="mb-4 text-lg text-gray-800 font-semibold">¿Seguro que deseas eliminar esta publicación?</p>
-                    <div className="flex gap-4">
-                      <button
-                        className="px-6 py-2 rounded-full font-semibold text-white bg-gray-500 hover:bg-gray-600"
-                        onClick={() => setConfirmDelete({ id: null, open: false })}
-                      >
-                        Cancelar
-                      </button>
-                      <button
-                        className="px-6 py-2 rounded-full font-semibold text-white bg-pink-500 hover:bg-pink-600"
-                        onClick={async () => {
-                          try {
-                            await axios.delete(
-                              `http://127.0.0.1:8000/api/publications/${confirmDelete.id}`,
-                              {
-                                headers: {
-                                  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                                },
-                              }
-                            );
-                            setCards((prev) => prev.filter((c) => c.id !== confirmDelete.id));
-                            showToast("Publicación eliminada", "success");
-                          } catch (error) {
-                            console.error("Error al eliminar la publicación:", error);
-                            showToast("No se pudo eliminar la publicación.", "error");
-                          } finally {
-                            setConfirmDelete({ id: null, open: false });
-                          }
-                        }}
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-=======
->>>>>>> Stashed changes
             </div>
           )}
         </div>
