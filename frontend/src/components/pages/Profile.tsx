@@ -16,8 +16,10 @@ interface ProfileProps {
 
 export default function Profile(props: ProfileProps) {
   const [cards, setCards] = React.useState(props.cards || []);
+
   const { showToast } = useToast();
   const [confirmDelete, setConfirmDelete] = useState<{ id: number | null, open: boolean }>({ id: null, open: false });
+
 
   const [activeTab, setActiveTab] = React.useState(0);
   const tabs = props.tabs || ["Home", "Commissions", "Muro"];
@@ -106,6 +108,7 @@ export default function Profile(props: ProfileProps) {
           {tabs.map((tab, i) => (
             <button
               key={tab}
+
               className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
                   ? "text-pink-400 border-b-2 border-pink-400"
                   : "text-gray-200"
@@ -193,6 +196,7 @@ export default function Profile(props: ProfileProps) {
             <div className="w-full max-w-4xl mx-auto">
               {/* Caja de comentario */}
               <div className="mb-6">
+
                 <div className="flex items-start gap-4">
                   <div className="bg-gradient-to-br from-pink-400 via-blue-400 to-purple-400 p-1 rounded-full">
                     <img
@@ -229,6 +233,30 @@ export default function Profile(props: ProfileProps) {
                       </button>
                     </div>
                   </div>
+
+                <textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Write message..."
+                  className="w-full bg-stone-800 text-gray-200 p-4 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  rows={3}
+                />
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={() => {
+                      if (newComment.trim()) {
+                        setComments([
+                          { user: props.username, message: newComment },
+                          ...comments,
+                        ]);
+                        setNewComment("");
+                      }
+                    }}
+                    className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-full transition-all"
+                  >
+                    Publish
+                  </button>
+
                 </div>
               </div>
 
@@ -251,10 +279,12 @@ export default function Profile(props: ProfileProps) {
             // Posts (Cards)
 
             <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
+
               {cards.length ? (
                 cards.map((card) => (
                   <div
                     key={card.id}
+
                     className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative "
                   >
                     {/* Botón eliminar */}
@@ -265,11 +295,50 @@ export default function Profile(props: ProfileProps) {
                           return;
                         }
                         setConfirmDelete({ id: card.id, open: true });
+
+
+                    className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative "
+
+                  >
+                    {/* Botón eliminar */}
+                    <button
+                      onClick={async () => {
+                        if (!card.id)
+                          return alert("Esta publicación no tiene ID");
+                        if (
+                          confirm(
+                            "¿Seguro que deseas eliminar esta publicación?"
+                          )
+                        ) {
+                          try {
+                            await axios.delete(
+                              `http://127.0.0.1:8000/api/publications/${card.id}`,
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                                },
+                              }
+                            );
+
+                            // Actualiza el estado de las cards sin recargar
+                            setCards((prev) =>
+                              prev.filter((c) => c.id !== card.id)
+                            );
+                          } catch (error) {
+                            console.error(
+                              "Error al eliminar la publicación:",
+                              error
+                            );
+                            alert("No se pudo eliminar la publicación.");
+                          }
+                        }
+
                       }}
                       className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 text-white text-xs px-2 py-1 rounded"
                     >
                       ✕
                     </button>
+
                     {card.image ? (
                       <img
                         src={card.image}
@@ -291,6 +360,7 @@ export default function Profile(props: ProfileProps) {
                   No hay posts aún.
                 </p>
               )}
+
 
               {/* Modal de confirmación para eliminar publicación */}
               {confirmDelete.open && (
@@ -332,6 +402,7 @@ export default function Profile(props: ProfileProps) {
                   </div>
                 </div>
               )}
+
             </div>
           )}
         </div>
