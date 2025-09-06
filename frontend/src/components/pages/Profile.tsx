@@ -123,7 +123,7 @@ export default function Profile(props: ProfileProps) {
           {activeTab === 1 ? (
             <>
               {/* Botón de edición */}
-              <div className="flex justify-end mb-6">
+              <div className="flex justify-end">
                 <button
                   onClick={() => setEditing(!editing)}
                   className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-full transition-all"
@@ -276,7 +276,7 @@ export default function Profile(props: ProfileProps) {
                     </button>
       {/* Modal de confirmación para eliminar publicación */}
       {confirmDelete.open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-xs">
           <div className="bg-white rounded-lg p-8 shadow-lg flex flex-col items-center">
             <p className="mb-4 text-lg text-gray-800 font-semibold">¿Seguro que deseas eliminar esta publicación?</p>
             <div className="flex gap-4">
