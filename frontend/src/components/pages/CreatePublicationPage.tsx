@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useToast } from "../ui/ToastContext";
 import { Link } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
@@ -15,7 +14,6 @@ export default function CreatePublicationPage({
   category = "",
 }: CreatePublicationProps) {
   const [desc, setDesc] = useState(description);
-  const { showToast } = useToast();
   const [cat, setCat] = useState(category);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -43,10 +41,7 @@ export default function CreatePublicationPage({
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("access_token");
-    if (!token) {
-      showToast("No estás logueado", "error");
-      return;
-    }
+    if (!token) return alert("No estás logueado");
 
     const formData = new FormData();
     formData.append("description", desc);
@@ -62,14 +57,14 @@ export default function CreatePublicationPage({
         },
       });
       console.log("Publicación creada:", res.data);
-  showToast("Publicación creada correctamente", "success");
+      alert("Publicación creada correctamente");
       setDesc("");
       setCat("");
       setSelectedImage(null);
       setPreviewUrl(null); // Limpiamos el preview
     } catch (err: any) {
       console.error("Error al crear publicación:", err);
-  showToast("Error al crear publicación", "error");
+      alert("Error al crear publicación");
     } finally {
       setLoading(false);
     }

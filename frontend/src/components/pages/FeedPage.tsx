@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface Publication {
   id: number;
@@ -16,8 +16,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
   const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
   const [comments, setComments] = useState<{ [key: number]: string[] }>({});
-  const [commentBox, setCommentBox] = useState<number | null>(null);
-  const [commentText, setCommentText] = useState<string>("");
 
   //Likes
   const toggleLike = async (id: number) => {
@@ -148,7 +146,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 <button
                   className="text-white opacity-80"
                   title="Comentar"
-                  onClick={() => setCommentBox(pub.id)}
+                  onClick={async () => {
+                    const comment = prompt("Escribe tu comentario:");
+                    if (comment) await addComment(pub.id, comment);
+                  }}
                 >
                   <svg
                     width="24"
@@ -171,48 +172,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
               </span>
               <p className="text-gray-300 text-xs mt-1">{pub.description}</p>
 
-              {/* Caja de comentario visual */}
-              {commentBox === pub.id && (
-                <div className="flex items-start gap-3 mt-3 mb-2 animate-fade-in">
-                  <div className="bg-gradient-to-br from-pink-400 via-blue-400 to-purple-400 p-1 rounded-full">
-                    <img
-                      src={pub.user_profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
-                      alt="Avatar"
-                      className="w-10 h-10 rounded-full object-cover border-4 border-stone-950"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <textarea
-                      value={commentText}
-                      onChange={e => setCommentText(e.target.value)}
-                      placeholder="Escribe un comentario..."
-                      className="w-full bg-stone-900/80 text-gray-200 p-3 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-stone-700 shadow-md backdrop-blur-sm transition-all placeholder:text-pink-300"
-                      rows={2}
-                    />
-                    <div className="flex justify-end mt-2 gap-2">
-                      <button
-                        className="px-4 py-1 rounded-full font-semibold text-white bg-gray-500 hover:bg-gray-600"
-                        onClick={() => { setCommentBox(null); setCommentText(""); }}
-                      >Cancelar</button>
-                      <button
-                        className="flex items-center gap-2 bg-gradient-to-r from-pink-400 to-blue-400 hover:from-pink-500 hover:to-blue-500 text-white font-bold px-5 py-1.5 rounded-full shadow-lg transition-all"
-                        onClick={async () => {
-                          if (commentText.trim()) {
-                            await addComment(pub.id, commentText);
-                            setCommentText("");
-                            setCommentBox(null);
-                          }
-                        }}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                        </svg>
-                        Publicar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
               {/* Comentarios */}
               {comments[pub.id]?.length > 0 && (
                 <div className="mt-1 text-xs text-gray-400">

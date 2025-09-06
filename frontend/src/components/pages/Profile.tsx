@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useToast } from "../ui/ToastContext";
+import React from "react";
 import { Link } from "@tanstack/react-router";
 import axios from "axios";
 
@@ -16,9 +15,12 @@ interface ProfileProps {
 
 export default function Profile(props: ProfileProps) {
   const [cards, setCards] = React.useState(props.cards || []);
+<<<<<<< Updated upstream
 
   const { showToast } = useToast();
   const [confirmDelete, setConfirmDelete] = useState<{ id: number | null, open: boolean }>({ id: null, open: false });
+=======
+>>>>>>> Stashed changes
 
 
   const [activeTab, setActiveTab] = React.useState(0);
@@ -62,15 +64,13 @@ export default function Profile(props: ProfileProps) {
             <div className="absolute right-8 bottom-8 cursor-pointer">
               <Link to="/SetProfile">
                 <svg
-                  width="100"
-                  height="56"
-                  viewBox="0 0 32 32"
+                  width="24"
+                  height="24"
                   stroke="currentColor"
-                  strokeWidth={2.5}
+                  strokeWidth={2}
                   className="text-gray-400 hover:text-pink-400"
-                  fill="none"
                 >
-                  <path d="M16 25h12M22 10.5l5.5 5.5-12.5 12.5H10.5v-5z" />
+                  <path d="M12 19h9M16.5 7.5l4 4-9 9H7.5v-4z" />
                 </svg>
               </Link>
             </div>
@@ -82,7 +82,7 @@ export default function Profile(props: ProfileProps) {
                   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 }
                 alt="Avatar"
-                className="w-42 h-42 rounded-full border-5 border-stone-950 object-cover"
+                className="w-30 h-30 rounded-full border-5 border-stone-950 object-cover"
               />
             </div>
           </div>
@@ -196,6 +196,7 @@ export default function Profile(props: ProfileProps) {
             <div className="w-full max-w-4xl mx-auto">
               {/* Caja de comentario */}
               <div className="mb-6">
+<<<<<<< Updated upstream
 
                 <div className="flex items-start gap-4">
                   <div className="bg-gradient-to-br from-pink-400 via-blue-400 to-purple-400 p-1 rounded-full">
@@ -234,6 +235,8 @@ export default function Profile(props: ProfileProps) {
                     </div>
                   </div>
 
+=======
+>>>>>>> Stashed changes
                 <textarea
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
@@ -256,7 +259,10 @@ export default function Profile(props: ProfileProps) {
                   >
                     Publish
                   </button>
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                 </div>
               </div>
 
@@ -286,14 +292,41 @@ export default function Profile(props: ProfileProps) {
                     key={card.id}
 
                     className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative "
+
                   >
                     {/* Botón eliminar */}
                     <button
-                      onClick={() => {
-                        if (!card.id) {
-                          showToast("Esta publicación no tiene ID", "error");
-                          return;
+                      onClick={async () => {
+                        if (!card.id)
+                          return alert("Esta publicación no tiene ID");
+                        if (
+                          confirm(
+                            "¿Seguro que deseas eliminar esta publicación?"
+                          )
+                        ) {
+                          try {
+                            await axios.delete(
+                              `http://127.0.0.1:8000/api/publications/${card.id}`,
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                                },
+                              }
+                            );
+
+                            // Actualiza el estado de las cards sin recargar
+                            setCards((prev) =>
+                              prev.filter((c) => c.id !== card.id)
+                            );
+                          } catch (error) {
+                            console.error(
+                              "Error al eliminar la publicación:",
+                              error
+                            );
+                            alert("No se pudo eliminar la publicación.");
+                          }
                         }
+<<<<<<< Updated upstream
                         setConfirmDelete({ id: card.id, open: true });
 
 
@@ -333,6 +366,8 @@ export default function Profile(props: ProfileProps) {
                           }
                         }
 
+=======
+>>>>>>> Stashed changes
                       }}
                       className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 text-white text-xs px-2 py-1 rounded"
                     >
@@ -360,6 +395,7 @@ export default function Profile(props: ProfileProps) {
                   No hay posts aún.
                 </p>
               )}
+<<<<<<< Updated upstream
 
 
               {/* Modal de confirmación para eliminar publicación */}
@@ -403,6 +439,8 @@ export default function Profile(props: ProfileProps) {
                 </div>
               )}
 
+=======
+>>>>>>> Stashed changes
             </div>
           )}
         </div>
