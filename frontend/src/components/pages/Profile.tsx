@@ -106,7 +106,6 @@ export default function Profile(props: ProfileProps) {
           {tabs.map((tab, i) => (
             <button
               key={tab}
-
               className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
                   ? "text-pink-400 border-b-2 border-pink-400"
                   : "text-gray-200"
@@ -123,7 +122,7 @@ export default function Profile(props: ProfileProps) {
           {activeTab === 1 ? (
             <>
               {/* Botón de edición */}
-              <div className="flex justify-end">
+              <div className="flex justify-end mb-6">
                 <button
                   onClick={() => setEditing(!editing)}
                   className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-full transition-all"
@@ -252,14 +251,11 @@ export default function Profile(props: ProfileProps) {
             // Posts (Cards)
 
             <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
-
               {cards.length ? (
                 cards.map((card) => (
                   <div
                     key={card.id}
-
                     className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative "
-
                   >
                     {/* Botón eliminar */}
                     <button
@@ -274,47 +270,6 @@ export default function Profile(props: ProfileProps) {
                     >
                       ✕
                     </button>
-      {/* Modal de confirmación para eliminar publicación */}
-      {confirmDelete.open && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-xs">
-          <div className="bg-white rounded-lg p-8 shadow-lg flex flex-col items-center">
-            <p className="mb-4 text-lg text-gray-800 font-semibold">¿Seguro que deseas eliminar esta publicación?</p>
-            <div className="flex gap-4">
-              <button
-                className="px-6 py-2 rounded-full font-semibold text-white bg-gray-500 hover:bg-gray-600"
-                onClick={() => setConfirmDelete({ id: null, open: false })}
-              >
-                Cancelar
-              </button>
-              <button
-                className="px-6 py-2 rounded-full font-semibold text-white bg-pink-500 hover:bg-pink-600"
-                onClick={async () => {
-                  try {
-                    await axios.delete(
-                      `http://127.0.0.1:8000/api/publications/${confirmDelete.id}`,
-                      {
-                        headers: {
-                          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                        },
-                      }
-                    );
-                    setCards((prev) => prev.filter((c) => c.id !== confirmDelete.id));
-                    showToast("Publicación eliminada", "success");
-                  } catch (error) {
-                    console.error("Error al eliminar la publicación:", error);
-                    showToast("No se pudo eliminar la publicación.", "error");
-                  } finally {
-                    setConfirmDelete({ id: null, open: false });
-                  }
-                }}
-              >
-                Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
                     {card.image ? (
                       <img
                         src={card.image}
@@ -335,6 +290,47 @@ export default function Profile(props: ProfileProps) {
                 <p className="text-gray-400 text-sm text-center col-span-3 ">
                   No hay posts aún.
                 </p>
+              )}
+
+              {/* Modal de confirmación para eliminar publicación */}
+              {confirmDelete.open && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-xs">
+                  <div className="bg-white rounded-lg p-8 shadow-lg flex flex-col items-center">
+                    <p className="mb-4 text-lg text-gray-800 font-semibold">¿Seguro que deseas eliminar esta publicación?</p>
+                    <div className="flex gap-4">
+                      <button
+                        className="px-6 py-2 rounded-full font-semibold text-white bg-gray-500 hover:bg-gray-600"
+                        onClick={() => setConfirmDelete({ id: null, open: false })}
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        className="px-6 py-2 rounded-full font-semibold text-white bg-pink-500 hover:bg-pink-600"
+                        onClick={async () => {
+                          try {
+                            await axios.delete(
+                              `http://127.0.0.1:8000/api/publications/${confirmDelete.id}`,
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                                },
+                              }
+                            );
+                            setCards((prev) => prev.filter((c) => c.id !== confirmDelete.id));
+                            showToast("Publicación eliminada", "success");
+                          } catch (error) {
+                            console.error("Error al eliminar la publicación:", error);
+                            showToast("No se pudo eliminar la publicación.", "error");
+                          } finally {
+                            setConfirmDelete({ id: null, open: false });
+                          }
+                        }}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           )}
