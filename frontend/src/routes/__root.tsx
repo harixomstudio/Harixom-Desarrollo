@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Outlet, createRootRoute, useLocation } from '@tanstack/react-router'
 import Nav from '../components/Nav'
+import EventsNav from '../components/EventsNav'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -13,11 +14,22 @@ function RootComponent() {
   // Rutas donde NO quieres mostrar el Nav
   const hideNav = ['/','/Register', '/Login', '/ForgotPassword', '/ResetPassword', '/SetProfile', '/CreatePublication', '/Terms'].includes(currentPath)
 
+  const listEvents= ['Events', 'Workshop', 'AI Challenges']
+  const referenceEvents = ['/Events', '/Workshops', '/AIChallenge']
+  const hideEventsNav = ['/Feed', '/Login', '/Register', '/RegisterAdmin', '/ForgotPassword', '/Landing', '/', '/Profile', '/SetProfile', '/CreatePublication'].includes(currentPath);
+
+
+
   return (
     <React.Fragment>
-      {!hideNav && <Nav list={['Feed', 'Create']} reference={['/Feed', '/CreatePublication']} />}
+      {!hideNav && <Nav list={['Feed', 'Create', 'Events']} reference={['/Feed', '/CreatePublication', '/Events']} />}
        {/* {!hideNav && <Nav list={[ 'About', 'Contact']} reference={['/about', '/contact']} />} */}
-      <Outlet />
+      <div className="flex min-h-screen">
+        {!hideEventsNav && (<EventsNav listEvents={listEvents} referenceEvents={referenceEvents} />)}
+        <div className="flex-1">
+          <Outlet />
+        </div>
+      </div>
     </React.Fragment>
   )
 }
