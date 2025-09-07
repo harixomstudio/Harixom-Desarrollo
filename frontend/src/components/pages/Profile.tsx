@@ -57,13 +57,15 @@ export default function Profile(props: ProfileProps) {
             <div className="absolute right-8 bottom-8 cursor-pointer">
               <Link to="/SetProfile">
                 <svg
-                  width="24"
-                  height="24"
+                  width="100"
+                  height="56"
+                  viewBox="0 0 32 32"
                   stroke="currentColor"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   className="text-gray-400 hover:text-pink-400"
+                  fill="none"
                 >
-                  <path d="M12 19h9M16.5 7.5l4 4-9 9H7.5v-4z" />
+                  <path d="M16 25h12M22 10.5l5.5 5.5-12.5 12.5H10.5v-5z" />
                 </svg>
               </Link>
             </div>
@@ -75,7 +77,7 @@ export default function Profile(props: ProfileProps) {
                   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 }
                 alt="Avatar"
-                className="w-30 h-30 rounded-full border-5 border-stone-950 object-cover"
+                className="w-42 h-42 rounded-full border-5 border-stone-950 object-cover"
               />
             </div>
           </div>
