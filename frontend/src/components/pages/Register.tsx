@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
+import { useToast } from "../ui/Toast"
+
 interface RegisterProps {
   title: string;
   name: string;
@@ -24,6 +26,9 @@ interface UserForm {
 }
 
 export default function Register(props: RegisterProps) {
+
+  const { showToast } = useToast();
+
   const [user, setUser] = useState<UserForm>({
     name: "",
     email: "",
@@ -56,7 +61,7 @@ export default function Register(props: RegisterProps) {
     setLoading(true);
 
     if (user.password !== user.confirmPassword) {
-      alert("Las contraseñas no coinciden");
+      showToast("Las contraseñas no coinciden", "error");
       setLoading(false);
       return;
     }
@@ -80,13 +85,13 @@ export default function Register(props: RegisterProps) {
       setLoading(false);
       if (error.response) {
         console.error("Backend error response:", error.response);
-        alert(`Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`);
+        showToast(`Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`, "error");
       } else if (error.request) {
         console.error("No response from server:", error.request);
-        alert("No se recibió respuesta del servidor.");
+        showToast("No se recibió respuesta del servidor.", "error");
       } else {
         console.error("Error inesperado:", error.message);
-        alert(`Error inesperado: ${error.message}`);
+        showToast(`Error inesperado: ${error.message}`, "error");
       }
     }
   };

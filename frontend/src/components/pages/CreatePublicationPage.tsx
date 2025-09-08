@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
+import { useToast } from "../ui/Toast"
+
 interface CreatePublicationProps {
   title: string;
   description?: string;
@@ -18,6 +20,8 @@ export default function CreatePublicationPage({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const { showToast } = useToast();
 
   const categoryOptions = [
     "Digital Art",
@@ -41,7 +45,7 @@ export default function CreatePublicationPage({
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("access_token");
-    if (!token) return alert("No estás logueado");
+    if (!token) return showToast("No estás logueado", "error");
 
     const formData = new FormData();
     formData.append("description", desc);
@@ -57,14 +61,14 @@ export default function CreatePublicationPage({
         },
       });
       console.log("Publicación creada:", res.data);
-      alert("Publicación creada correctamente");
+      showToast("Publicación creada correctamente", "success");
       setDesc("");
       setCat("");
       setSelectedImage(null);
       setPreviewUrl(null); // Limpiamos el preview
     } catch (err: any) {
       console.error("Error al crear publicación:", err);
-      alert("Error al crear publicación");
+      showToast("Error al crear publicación", "error");
     } finally {
       setLoading(false);
     }
