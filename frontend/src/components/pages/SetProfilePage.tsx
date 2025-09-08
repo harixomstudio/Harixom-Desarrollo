@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
+import { useToast } from "../ui/Toast"
+
+
+
 interface UserProfile {
   name: string;
   email: string;
@@ -15,6 +19,8 @@ interface UserProfile {
 export default function SetProfilePage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const { showToast } = useToast();
 
   const [profile, setProfile] = useState<UserProfile>({
     name: "",
@@ -66,7 +72,7 @@ export default function SetProfilePage() {
     setLoading(true);
     const token = localStorage.getItem("access_token");
     if (!token) {
-      alert("No estás logueado");
+      showToast("No estás logueado");
       setLoading(false);
       return;
     }
@@ -107,7 +113,7 @@ export default function SetProfilePage() {
 
       console.log("Respuesta del backend:", res.data);
 
-      alert("Perfil actualizado!");
+      showToast("Perfil actualizado!", "success");
       navigate({ to: "/Profile" });
     } catch (err: any) {
       // 👇 Aquí el log detallado
@@ -116,7 +122,7 @@ export default function SetProfilePage() {
       } else {
         console.error("Error inesperado:", err);
       }
-      alert("Error al actualizar perfil");
+      showToast("Error al actualizar perfil");
     } finally {
       setLoading(false);
     }

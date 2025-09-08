@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import axios from "axios";
+import { useToast } from "../ui/Toast";
 
 interface ProfileProps {
   username: string;
@@ -14,10 +15,12 @@ interface ProfileProps {
 }
 
 export default function Profile(props: ProfileProps) {
-  const [cards, setCards] = React.useState(props.cards || []);
+  const { showToast } = useToast();
 
+  const [cards, setCards] = React.useState(props.cards || []);
   const [activeTab, setActiveTab] = React.useState(0);
   const tabs = props.tabs || ["Home", "Commissions", "Muro"];
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState<number | null>(null); // Estado para el modal de eliminación
 
   // Estados para edición de Commissions
   const [editing, setEditing] = React.useState(false);
@@ -41,16 +44,45 @@ export default function Profile(props: ProfileProps) {
     },
   ]);
 
+  const handleDeletePublication = async (id: number) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/publications/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      // Actualiza el estado de las cards sin recargar
+      setCards((prev) => prev.filter((c) => c.id !== id));
+      showToast("¡Publicación eliminada!", "success");
+    } catch (error) {
+      console.error("Error al eliminar la publicación:", error);
+      showToast("No se pudo eliminar la publicación.", "error");
+    } finally {
+      setDeleteModalOpen(null);
+    }
+  };
+
   return (
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen">
       <div className="w-full flex flex-col">
         {/* Banner */}
         <div className="relative mb-10">
           <div className="rounded-xl h-100 flex relative overflow-hidden w-full">
-
             <div className="flex relative w-full h-full items-center justify-center">
-              <img src={props.bannerPicture} alt="" className="w-full h-full object-cover" />
-              {props.bannerPicture === "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" ?  <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">Change banner</h2> : ''}
+              <img
+                src={props.bannerPicture}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+              {props.bannerPicture ===
+              "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" ? (
+                <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">
+                  Change banner
+                </h2>
+              ) : (
+                ""
+              )}
             </div>
 
             {/* Edit icon */}
@@ -103,11 +135,11 @@ export default function Profile(props: ProfileProps) {
           {tabs.map((tab, i) => (
             <button
               key={tab}
-
-              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
+              className={`pb-4 font-semibold text-xl px-5 ${
+                activeTab === i
                   ? "text-pink-400 border-b-2 border-pink-400"
                   : "text-gray-200"
-                }`}
+              }`}
               onClick={() => setActiveTab(i)}
             >
               {tab}
@@ -235,52 +267,47 @@ export default function Profile(props: ProfileProps) {
             // Posts (Cards)
 
             <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
-
               {cards.length ? (
                 cards.map((card) => (
                   <div
                     key={card.id}
-
-                    className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative "
-
+                    className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative"
                   >
                     {/* Botón eliminar */}
                     <button
-                      onClick={async () => {
-                        if (!card.id)
-                          return alert("Esta publicación no tiene ID");
-                        if (
-                          confirm(
-                            "¿Seguro que deseas eliminar esta publicación?"
-                          )
-                        ) {
-                          try {
-                            await axios.delete(
-                              `http://127.0.0.1:8000/api/publications/${card.id}`,
-                              {
-                                headers: {
-                                  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                                },
-                              }
-                            );
-
-                            // Actualiza el estado de las cards sin recargar
-                            setCards((prev) =>
-                              prev.filter((c) => c.id !== card.id)
-                            );
-                          } catch (error) {
-                            console.error(
-                              "Error al eliminar la publicación:",
-                              error
-                            );
-                            alert("No se pudo eliminar la publicación.");
-                          }
-                        }
-                      }}
+                      onClick={() => setDeleteModalOpen(card.id)}
                       className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 text-white text-xs px-2 py-1 rounded"
                     >
                       ✕
                     </button>
+
+                    {/* Modal de confirmación */}
+                    {deleteModalOpen === card.id && (
+                      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                        <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
+                          <h2 className="text-white text-lg font-semibold mb-4">
+                            ¿Estás seguro de que deseas eliminar esta
+                            publicación?
+                          </h2>
+                          <div className="flex justify-end gap-4 mt-4">
+                            <button
+                              className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
+                              onClick={() => setDeleteModalOpen(null)}
+                            >
+                              Cancelar
+                            </button>
+                            <button
+                              className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
+                              onClick={() =>
+                                handleDeletePublication(card.id)
+                              }
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {card.image ? (
                       <img
@@ -299,7 +326,7 @@ export default function Profile(props: ProfileProps) {
                   </div>
                 ))
               ) : (
-                <p className="text-gray-400 text-sm text-center col-span-3 ">
+                <p className="text-gray-400 text-sm text-center col-span-3">
                   No hay posts aún.
                 </p>
               )}

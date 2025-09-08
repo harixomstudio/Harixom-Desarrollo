@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useToast } from "../ui/Toast";
 
 interface Publication {
   id: number;
@@ -13,30 +14,30 @@ interface FeedPageProps {
 }
 
 export default function FeedPage({ publications }: FeedPageProps) {
+  const { showToast } = useToast();
+
+  const [isModalOpen, setIsModalOpen] = useState<number | null>(null); // Controla qué publicación tiene el modal abierto
+  const [currentComment, setCurrentComment] = useState(""); // Texto del comentario
+  const [comments, setComments] = useState<{ [key: number]: string[] }>({}); // Comentarios por publicación
   const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
   const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
-  const [comments, setComments] = useState<{ [key: number]: string[] }>({});
 
-  //Likes
   const toggleLike = async (id: number) => {
     try {
       const res = await fetch(`http://localhost:8000/api/like/${id}`, {
         method: "POST",
         headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // o como manejes el token
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      
       const data = await res.json();
       setLikes((prev) => ({ ...prev, [id]: data.liked }));
     } catch (err) {
       console.error(err);
     }
   };
-  console.log(toggleLike);
 
-  //Follows
   const toggleFollow = async (userId: number) => {
     try {
       const res = await fetch(`http://localhost:8000/api/follow/${userId}`, {
@@ -53,9 +54,11 @@ export default function FeedPage({ publications }: FeedPageProps) {
     }
   };
 
-  //Comments
   const addComment = async (id: number, text: string) => {
-    if (!text.trim()) return;
+    if (!text.trim()) {
+      showToast("El comentario no puede estar vacío", "error");
+      return;
+    }
     try {
       const res = await fetch(`http://localhost:8000/api/comment/${id}`, {
         method: "POST",
@@ -69,19 +72,18 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
       setComments((prev) => ({
         ...prev,
-        [id]: [
-          ...(prev[id] || []),
-          `${data.comment.user.name}: ${data.comment.comment}`,
-        ],
+        [id]: [...(prev[id] || []), `${data.comment.user.name}: ${data.comment.comment}`],
       }));
+      showToast("¡Comentario publicado!", "success");
     } catch (err) {
       console.error(err);
+      showToast("Error al publicar el comentario", "error");
     }
   };
 
   return (
     <div className="bg-stone-950 min-h-screen p-10">
-      <div className="columns-4 gap-6 max-xl:columns-3 max-lg:columns-2 max-md:columns-1 ">
+      <div className="columns-4 gap-6 max-xl:columns-3 max-lg:columns-2 max-md:columns-1">
         {publications.map((pub) => (
           <div
             key={pub.id}
@@ -142,14 +144,11 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
                 </button>
 
-                {/* Comentar */}
+                {/* Botón para abrir el modal */}
                 <button
                   className="text-white opacity-80"
                   title="Comentar"
-                  onClick={async () => {
-                    const comment = prompt("Escribe tu comentario:");
-                    if (comment) await addComment(pub.id, comment);
-                  }}
+                  onClick={() => setIsModalOpen(pub.id)}
                 >
                   <svg
                     width="24"
@@ -164,6 +163,48 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 </button>
               </div>
             </div>
+
+            {/* Modal */}
+            {isModalOpen === pub.id && (
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
+                  <h2 className="text-white text-lg font-semibold mb-4">Escribe tu comentario:</h2>
+                  <textarea
+                    value={currentComment}
+                    onChange={(e) => setCurrentComment(e.target.value)}
+                    placeholder="Escribe tu comentario..."
+                    className="w-full bg-stone-900 text-gray-200 p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-stone-700 shadow-md placeholder:text-pink-300"
+                    rows={3}
+                  />
+                  <div className="flex justify-end gap-4 mt-4">
+                    <button
+                      className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
+                      onClick={() => {
+                        setIsModalOpen(null);
+                        setCurrentComment("");
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
+                      onClick={async () => {
+                        if (currentComment.trim()) {
+                          await addComment(pub.id, currentComment);
+                          setIsModalOpen(null);
+                          setCurrentComment("");
+                          showToast("¡Comentario publicado!", "success");
+                        } else {
+                          showToast("El comentario no puede estar vacío", "error");
+                        }
+                      }}
+                    >
+                      Publicar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Nombre del autor y descripción */}
             <div className="px-2 py-1">

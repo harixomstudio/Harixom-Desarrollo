@@ -1,6 +1,8 @@
-import * as React from "react";
+
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from ".././components/helpers/config";
+
+import { useToast } from "../components/ui/Toast"
 
 interface NavProps {
   list: string[];
@@ -8,6 +10,9 @@ interface NavProps {
 }
 
 export default function Nav(props: NavProps) {
+
+  const { showToast } = useToast();
+
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
@@ -27,11 +32,11 @@ export default function Nav(props: NavProps) {
       );
 
       localStorage.removeItem("access_token");
-      alert("Sesión cerrada exitosamente");
+      showToast("Sesión cerrada exitosamente", "success");
       navigate({ to: "/" }); // 👈 redirige al Landing
     } catch (err) {
       console.error("Error al cerrar sesión:", err);
-      alert("Error al cerrar sesión");
+      showToast("Error al cerrar sesión", "error");
     }
   };
 
