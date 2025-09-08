@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
+import { useToast } from "../ui/Toast";
+
 interface ResetPasswordProps {
   title: string;
   password: string;
@@ -10,6 +12,8 @@ interface ResetPasswordProps {
 }
 
 export default function ResetPassword(props: ResetPasswordProps) {
+  const { showToast } = useToast();
+
   const navigate = useNavigate();
   const search = useSearch({ from: "/ResetPassword" as any });
   const { token, email } = search as { token: string; email: string };
@@ -22,7 +26,7 @@ export default function ResetPassword(props: ResetPasswordProps) {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden");
+      showToast("Las contraseñas no coinciden", "error");
       return;
     }
 
@@ -36,11 +40,14 @@ export default function ResetPassword(props: ResetPasswordProps) {
         password_confirmation: confirmPassword,
       });
 
-      alert(response.data.message || "Contraseña cambiada con éxito");
+      showToast(response.data.message || "Contraseña cambiada con éxito");
       navigate({ to: "/Login" });
     } catch (error: any) {
       console.error(error);
-      alert(error.response?.data?.error || "Error al cambiar la contraseña");
+      showToast(
+        error.response?.data?.error || "Error al cambiar la contraseña",
+        "error"
+      );
     } finally {
       setLoading(false);
     }

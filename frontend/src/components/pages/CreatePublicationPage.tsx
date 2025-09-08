@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
+import { useToast } from "../ui/Toast";
+
 interface CreatePublicationProps {
   title: string;
   description?: string;
@@ -18,6 +20,8 @@ export default function CreatePublicationPage({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const { showToast } = useToast();
 
   const categoryOptions = [
     "Digital Art",
@@ -41,7 +45,7 @@ export default function CreatePublicationPage({
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("access_token");
-    if (!token) return alert("No estás logueado");
+    if (!token) return showToast("No estás logueado", "error");
 
     const formData = new FormData();
     formData.append("description", desc);
@@ -57,14 +61,14 @@ export default function CreatePublicationPage({
         },
       });
       console.log("Publicación creada:", res.data);
-      alert("Publicación creada correctamente");
+      showToast("Publicación creada correctamente", "success");
       setDesc("");
       setCat("");
       setSelectedImage(null);
       setPreviewUrl(null); // Limpiamos el preview
     } catch (err: any) {
       console.error("Error al crear publicación:", err);
-      alert("Error al crear publicación");
+      showToast("Error al crear publicación", "error");
     } finally {
       setLoading(false);
     }
@@ -77,7 +81,9 @@ export default function CreatePublicationPage({
           <Link
             to="/Profile"
             className="font-bold bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-2.5 "
-          >←</Link>
+          >
+            ←
+          </Link>
         </div>
 
         <div className="flex flex-col items-center justify-center h-full ">
@@ -109,7 +115,9 @@ export default function CreatePublicationPage({
 
             {/* Input de descripción */}
             <div className="w-full">
-              <label className="text-gray-400 text-sm mb-1 block">Description</label>
+              <label className="text-gray-400 text-sm mb-1 block">
+                Description
+              </label>
               <input
                 type="text"
                 value={desc}
@@ -121,7 +129,9 @@ export default function CreatePublicationPage({
 
             {/* Select de categoría */}
             <div className="w-full">
-              <label className="text-gray-400 text-sm mb-1 block">Category</label>
+              <label className="text-gray-400 text-sm mb-1 block">
+                Category
+              </label>
               <select
                 value={cat}
                 onChange={(e) => setCat(e.target.value)}

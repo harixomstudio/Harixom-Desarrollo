@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import TermsAndConditions from "../components/pages/TermsAndConditions";
+import TermsAndConditions from "../components/pages/TermsAndConditionsPage";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 

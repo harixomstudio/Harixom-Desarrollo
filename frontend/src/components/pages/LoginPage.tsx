@@ -3,6 +3,8 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 import TermsAndConditions from "./TermsAndConditions";
 
+import { useToast } from "../ui/Toast";
+
 interface LoginProps {
   title: string;
   email: string;
@@ -17,6 +19,8 @@ interface UserForm {
 }
 
 export default function Login(props: LoginProps) {
+  const { showToast } = useToast();
+
   const [user, setUser] = useState<UserForm>({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -42,11 +46,14 @@ export default function Login(props: LoginProps) {
     } catch (error: any) {
       setLoading(false);
       if (error.response) {
-        alert(`Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`);
+        showToast(
+          `Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`,
+          "error"
+        );
       } else if (error.request) {
-        alert("No se recibió respuesta del servidor.");
+        showToast("No se recibió respuesta del servidor.", "error");
       } else {
-        alert(`Error inesperado: ${error.message}`);
+        showToast(`Error inesperado: ${error.message}`, "error");
       }
     }
   };

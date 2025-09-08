@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
+import { useToast } from "../ui/Toast";
+
 interface RegisterProps {
   title: string;
   name: string;
@@ -24,6 +26,8 @@ interface UserForm {
 }
 
 export default function Register(props: RegisterProps) {
+  const { showToast } = useToast();
+
   const [user, setUser] = useState<UserForm>({
     name: "",
     email: "",
@@ -39,7 +43,10 @@ export default function Register(props: RegisterProps) {
 
   const navigate = useNavigate();
 
-  const handleFileChange = (field: "profile_picture" | "banner_picture", file: File | null) => {
+  const handleFileChange = (
+    field: "profile_picture" | "banner_picture",
+    file: File | null
+  ) => {
     setUser({ ...user, [field]: file });
   };
 
@@ -56,7 +63,7 @@ export default function Register(props: RegisterProps) {
     setLoading(true);
 
     if (user.password !== user.confirmPassword) {
-      alert("Las contraseñas no coinciden");
+      showToast("Las contraseñas no coinciden", "error");
       setLoading(false);
       return;
     }
@@ -80,13 +87,16 @@ export default function Register(props: RegisterProps) {
       setLoading(false);
       if (error.response) {
         console.error("Backend error response:", error.response);
-        alert(`Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`);
+        showToast(
+          `Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`,
+          "error"
+        );
       } else if (error.request) {
         console.error("No response from server:", error.request);
-        alert("No se recibió respuesta del servidor.");
+        showToast("No se recibió respuesta del servidor.", "error");
       } else {
         console.error("Error inesperado:", error.message);
-        alert(`Error inesperado: ${error.message}`);
+        showToast(`Error inesperado: ${error.message}`, "error");
       }
     }
   };
@@ -102,32 +112,70 @@ export default function Register(props: RegisterProps) {
       <div className="relative z-10 flex lg:w-3/4">
         <div className="hidden md:flex w-1/2 flex-col items-center justify-center text-center p-8">
           <p className="text-lg text-white">Welcome to</p>
-          <h1 className="mt-4 text-5xl md:text-7xl text-pink-500" style={{ fontFamily: "Starstruck" }}>
+          <h1
+            className="mt-4 text-5xl md:text-7xl text-pink-500"
+            style={{ fontFamily: "Starstruck" }}
+          >
             HARIXOM
           </h1>
         </div>
 
         <div className="w-full md:w-1/2 bg-gray-200 opacity-90 p-10 py-25 px-15 flex flex-col justify-center rounded-3xl">
-          <h2 className="text-2xl font-bold text-center mb-6 text-black">{props.title}</h2>
+          <h2 className="text-2xl font-bold text-center mb-6 text-black">
+            {props.title}
+          </h2>
 
           <form className="flex flex-col gap-4" onSubmit={registerNewUser}>
-            {(["name", "email", "phone", "address", "password", "confirmPassword"] as const).map((field) => (
+            {(
+              [
+                "name",
+                "email",
+                "phone",
+                "address",
+                "password",
+                "confirmPassword",
+              ] as const
+            ).map((field) => (
               <div key={field}>
-                <label className="block text-sm mb-1 text-gray-700">{props[field]}</label>
+                <label className="block text-sm mb-1 text-gray-700">
+                  {props[field]}
+                </label>
                 <div className="relative">
                   <input
-                    type={field === "confirmPassword" ? (showConfirmPassword ? "text" : "password") : field === "password" ? (showPassword ? "text" : "password") : "text"}
+                    type={
+                      field === "confirmPassword"
+                        ? showConfirmPassword
+                          ? "text"
+                          : "password"
+                        : field === "password"
+                          ? showPassword
+                            ? "text"
+                            : "password"
+                          : "text"
+                    }
                     value={user[field]}
-                    onChange={(e) => setUser({ ...user, [field]: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, [field]: e.target.value })
+                    }
                     className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
                   />
                   {(field === "confirmPassword" || field === "password") && (
                     <button
                       type="button"
-                      onClick={field === "confirmPassword" ? toggleConfirmPasswordVisibility : togglePasswordVisibility}
+                      onClick={
+                        field === "confirmPassword"
+                          ? toggleConfirmPasswordVisibility
+                          : togglePasswordVisibility
+                      }
                       className="absolute right-3 top-1/2 transform -translate-y-1/2"
                     >
-                      {field === "confirmPassword" ? (showConfirmPassword ? "🙈" : "👁️") : showPassword ? "🙈" : "👁️"}
+                      {field === "confirmPassword"
+                        ? showConfirmPassword
+                          ? "🙈"
+                          : "👁️"
+                        : showPassword
+                          ? "🙈"
+                          : "👁️"}
                     </button>
                   )}
                 </div>
@@ -137,7 +185,9 @@ export default function Register(props: RegisterProps) {
             <button
               type="submit"
               className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-pink-400 to-blue-400"
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-pink-400 to-blue-400"
               }`}
               disabled={loading}
             >

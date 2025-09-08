@@ -1,7 +1,6 @@
-import type React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import Profile from "../components/pages/Profile";
+import Profile from "../components/pages/ProfilePage";
 
 export const Route = createFileRoute("/Profile")({
   component: ProfileRoute,
@@ -24,12 +23,14 @@ function ProfileRoute() {
       const json = await response.json();
 
       // Mapear posts para asegurarnos de que cada uno tenga un id
-      const postsWithId = (json.user.posts || []).map((post: any, index: number) => ({
-        id: post.id ?? index, // si no hay id, usamos el índice como fallback
-        description: post.description,
-        image: post.image,
-        created_at: post.created_at,
-      }));
+      const postsWithId = (json.user.posts || []).map(
+        (post: any, index: number) => ({
+          id: post.id ?? index, // si no hay id, usamos el índice como fallback
+          description: post.description,
+          image: post.image,
+          created_at: post.created_at,
+        })
+      );
 
       return {
         ...json,
@@ -42,9 +43,16 @@ function ProfileRoute() {
     enabled: !!token,
   });
 
-  if (!token) return <p className="text-white text-center mt-10">No estás logueado.</p>;
-  if (isLoading) return <p className="text-white text-center mt-10">Loading...</p>;
-  if (error) return <p className="text-red-500 text-center mt-10">{(error as Error).message}</p>;
+  if (!token)
+    return <p className="text-white text-center mt-10">No estás logueado.</p>;
+  if (isLoading)
+    return <p className="text-white text-center mt-10">Loading...</p>;
+  if (error)
+    return (
+      <p className="text-red-500 text-center mt-10">
+        {(error as Error).message}
+      </p>
+    );
 
   const user = data?.user;
 

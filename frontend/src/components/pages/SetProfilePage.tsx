@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
+import { useToast } from "../ui/Toast";
+
 interface UserProfile {
   name: string;
   email: string;
@@ -15,6 +17,8 @@ interface UserProfile {
 export default function SetProfilePage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const { showToast } = useToast();
 
   const [profile, setProfile] = useState<UserProfile>({
     name: "",
@@ -40,12 +44,17 @@ export default function SetProfilePage() {
       .catch((err) => console.error(err));
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "profile" | "banner") => {
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "profile" | "banner"
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
       if (type === "profile") setProfileFile(file);
@@ -55,7 +64,8 @@ export default function SetProfilePage() {
       reader.onloadend = () => {
         setProfile((prev) => ({
           ...prev,
-          [type === "profile" ? "profile_picture" : "banner_picture"]: reader.result as string,
+          [type === "profile" ? "profile_picture" : "banner_picture"]:
+            reader.result as string,
         }));
       };
       reader.readAsDataURL(file);
@@ -66,7 +76,7 @@ export default function SetProfilePage() {
     setLoading(true);
     const token = localStorage.getItem("access_token");
     if (!token) {
-      alert("No estás logueado");
+      showToast("No estás logueado");
       setLoading(false);
       return;
     }
@@ -80,14 +90,24 @@ export default function SetProfilePage() {
 
     if (profileFile) {
       formData.append("profile_picture", profileFile);
-      console.log("Archivo de perfil:", profileFile.name, profileFile.size, profileFile.type);
+      console.log(
+        "Archivo de perfil:",
+        profileFile.name,
+        profileFile.size,
+        profileFile.type
+      );
     } else {
       console.log("No hay archivo de perfil seleccionado");
     }
 
     if (bannerFile) {
       formData.append("banner_picture", bannerFile);
-      console.log("Archivo de banner:", bannerFile.name, bannerFile.size, bannerFile.type);
+      console.log(
+        "Archivo de banner:",
+        bannerFile.name,
+        bannerFile.size,
+        bannerFile.type
+      );
     } else {
       console.log("No hay archivo de banner seleccionado");
     }
@@ -98,16 +118,20 @@ export default function SetProfilePage() {
     });
 
     try {
-      const res = await axiosRequest.post("/user/profile?_method=PUT", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axiosRequest.post(
+        "/user/profile?_method=PUT",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       console.log("Respuesta del backend:", res.data);
 
-      alert("Perfil actualizado!");
+      showToast("Perfil actualizado!", "success");
       navigate({ to: "/Profile" });
     } catch (err: any) {
       // 👇 Aquí el log detallado
@@ -116,7 +140,7 @@ export default function SetProfilePage() {
       } else {
         console.error("Error inesperado:", err);
       }
-      alert("Error al actualizar perfil");
+      showToast("Error al actualizar perfil");
     } finally {
       setLoading(false);
     }
@@ -127,8 +151,19 @@ export default function SetProfilePage() {
       {/* Banner */}
       <div className="relative w-3/4 h-50 rounded-xl overflow-hidden mb-6">
         <div className="flex relative w-full h-full items-center justify-center">
-          <img src={profile.banner_picture} alt="Banner" className="w-full h-full object-cover" />
-          {profile.banner_picture === "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" ? <h2 className="absolute text-5xl max-lg:text-3xl max-xl:text-4xl duration-500 font-berkshire text-pink-400">Change banner</h2> : ""}
+          <img
+            src={profile.banner_picture}
+            alt="Banner"
+            className="w-full h-full object-cover"
+          />
+          {profile.banner_picture ===
+          "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" ? (
+            <h2 className="absolute text-5xl max-lg:text-3xl max-xl:text-4xl duration-500 font-berkshire text-pink-400">
+              Change banner
+            </h2>
+          ) : (
+            ""
+          )}
         </div>
 
         <input
@@ -150,7 +185,10 @@ export default function SetProfilePage() {
       <div className="flex flex-col items-center gap-4 w-3/4">
         <div className="relative">
           <img
-            src={profile.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
+            src={
+              profile.profile_picture ||
+              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+            }
             alt="Perfil"
             className="w-32 h-32 rounded-full border-4 border-white object-cover"
           />
