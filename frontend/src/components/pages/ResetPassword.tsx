@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
-import { useToast } from "../ui/Toast"
+import { useToast } from "../ui/Toast";
 
 interface ResetPasswordProps {
   title: string;
@@ -12,8 +12,7 @@ interface ResetPasswordProps {
 }
 
 export default function ResetPassword(props: ResetPasswordProps) {
-
-   const { showToast } = useToast();
+  const { showToast } = useToast();
 
   const navigate = useNavigate();
   const search = useSearch({ from: "/ResetPassword" as any });
@@ -45,7 +44,10 @@ export default function ResetPassword(props: ResetPasswordProps) {
       navigate({ to: "/Login" });
     } catch (error: any) {
       console.error(error);
-      showToast(error.response?.data?.error || "Error al cambiar la contraseña", "error");
+      showToast(
+        error.response?.data?.error || "Error al cambiar la contraseña",
+        "error"
+      );
     } finally {
       setLoading(false);
     }

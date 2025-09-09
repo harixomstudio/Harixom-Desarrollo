@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
 
-import { useToast } from "../ui/Toast"
+import { useToast } from "../ui/Toast";
 
 interface CreatePublicationProps {
   title: string;
@@ -81,7 +81,9 @@ export default function CreatePublicationPage({
           <Link
             to="/Profile"
             className="font-bold bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-2.5 "
-          >←</Link>
+          >
+            ←
+          </Link>
         </div>
 
         <div className="flex flex-col items-center justify-center h-full ">
@@ -113,7 +115,9 @@ export default function CreatePublicationPage({
 
             {/* Input de descripción */}
             <div className="w-full">
-              <label className="text-gray-400 text-sm mb-1 block">Description</label>
+              <label className="text-gray-400 text-sm mb-1 block">
+                Description
+              </label>
               <input
                 type="text"
                 value={desc}
@@ -125,7 +129,9 @@ export default function CreatePublicationPage({
 
             {/* Select de categoría */}
             <div className="w-full">
-              <label className="text-gray-400 text-sm mb-1 block">Category</label>
+              <label className="text-gray-400 text-sm mb-1 block">
+                Category
+              </label>
               <select
                 value={cat}
                 onChange={(e) => setCat(e.target.value)}

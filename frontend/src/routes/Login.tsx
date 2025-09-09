@@ -1,5 +1,3 @@
-
-import type React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import Login from "../components/pages/Login";
 
@@ -17,5 +15,4 @@ function LoginRoute() {
       link="Sign Up"
     />
   );
-
 }

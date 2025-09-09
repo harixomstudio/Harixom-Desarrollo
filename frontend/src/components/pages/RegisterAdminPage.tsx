@@ -57,9 +57,7 @@ export default function Register(props: RegisterProps) {
 
           {/* Address */}
           <div>
-            <label className="block text-sm text-black">
-              {props.address}
-            </label>
+            <label className="block text-sm text-black">{props.address}</label>
             <input
               type="text"
               className="w-full px-3 py-2 border-b border-gray-500 bg-transparent text-black focus:outline-none"
@@ -68,9 +66,7 @@ export default function Register(props: RegisterProps) {
 
           {/* Password */}
           <div>
-            <label className="block text-sm text-black">
-              {props.password}
-            </label>
+            <label className="block text-sm text-black">{props.password}</label>
             <input
               type="password"
               className="w-full px-3 py-2 border-b border-gray-500 bg-transparent text-black focus:outline-none"
