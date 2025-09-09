@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
-import TermsAndConditions from "./TermsAndConditions";
+import TermsAndConditionsPage from "./TermsAndConditionsPage";
 
 import { useToast } from "../ui/Toast";
 
@@ -67,7 +67,7 @@ export default function Login(props: LoginProps) {
 
   if (showTerms) {
     return (
-      <TermsAndConditions
+      <TermsAndConditionsPage
         title="Términos y Condiciones"
         onAccept={handleAcceptTerms}
       />

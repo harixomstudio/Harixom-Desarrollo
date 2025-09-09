@@ -65,7 +65,7 @@ const footer = {
     "https://www.tiktok.com/@harixom2025",
     "https://youtube.com/@harixom_2025",
   ],
-  contacts: ["1234 6548", "info@gmail.com", "1234 6548", "info@gmail.com"],
+  contacts: ["+506 8394 7941", "harixomstudios@gmail.com"],
   linksContacts: [""],
 };
 

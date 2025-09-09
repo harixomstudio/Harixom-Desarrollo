@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import AIChallenge from "../components/pages/AIChallengePage";
+import AIChallengePage from "../components/pages/AIChallengePage";
 
 export const Route = createFileRoute("/AIChallenge")({
-  component: AIChallenge,
+  component: AIChallengePage,
 });
 
 function RouteComponent() {
