@@ -72,7 +72,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
       setComments((prev) => ({
         ...prev,
-        [id]: [...(prev[id] || []), `${data.comment.user.name}: ${data.comment.comment}`],
+        [id]: [
+          ...(prev[id] || []),
+          `${data.comment.user.name}: ${data.comment.comment}`,
+        ],
       }));
       showToast("¡Comentario publicado!", "success");
     } catch (err) {
@@ -110,7 +113,13 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   className="relative flex items-center justify-center text-white opacity-80 w-6 h-6 hover:scale-115"
                   title={follows[pub.id] ? "Siguiendo" : "Seguir"}
                   onClick={() => toggleFollow(pub.id!)}
-                  onClickCapture={() => setFollows(pub.id ? { ...follows, [pub.id]: !follows[pub.id] } : { ...follows, [pub.id]: true })}
+                  onClickCapture={() =>
+                    setFollows(
+                      pub.id
+                        ? { ...follows, [pub.id]: !follows[pub.id] }
+                        : { ...follows, [pub.id]: true }
+                    )
+                  }
                 >
                   {pub.user_profile_picture && (
                     <img
@@ -128,20 +137,40 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
                 {/* Like */}
                 <button
-                  className="text-white opacity-80 hover:scale-110" title="Like" onClick={() => toggleLike(pub.id)} onClickCapture={() => setLikes(pub.id ? { ...likes, [pub.id]: !likes[pub.id] } : { ...likes, [pub.id]: true })} >
+                  className="text-white opacity-80 hover:scale-110"
+                  title="Like"
+                  onClick={() => toggleLike(pub.id)}
+                  onClickCapture={() =>
+                    setLikes(
+                      pub.id
+                        ? { ...likes, [pub.id]: !likes[pub.id] }
+                        : { ...likes, [pub.id]: true }
+                    )
+                  }
+                >
                   {likes[pub.id] ? (
-
-                    <svg width="24" height="24" fill="red" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg
+                      width="24"
+                      height="24"
+                      fill="red"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M12 21s-1-.5-2-1.5S5 14 5 10.5 8 5 12 8s7-2 7 2.5-5 9-5 9-1 1-2 1z" />
                     </svg>
-
                   ) : (
-
-                    <svg width="24" height="24" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg
+                      width="24"
+                      height="24"
+                      fill="none"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M12 21s-1-.5-2-1.5S5 14 5 10.5 8 5 12 8s7-2 7 2.5-5 9-5 9-1 1-2 1z" />
                     </svg>
                   )}
-
                 </button>
 
                 {/* Botón para abrir el modal */}
@@ -168,7 +197,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
             {isModalOpen === pub.id && (
               <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                 <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
-                  <h2 className="text-white text-lg font-semibold mb-4">Escribe tu comentario:</h2>
+                  <h2 className="text-white text-lg font-semibold mb-4">
+                    Escribe tu comentario:
+                  </h2>
                   <textarea
                     value={currentComment}
                     onChange={(e) => setCurrentComment(e.target.value)}
@@ -195,7 +226,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                           setCurrentComment("");
                           showToast("¡Comentario publicado!", "success");
                         } else {
-                          showToast("El comentario no puede estar vacío", "error");
+                          showToast(
+                            "El comentario no puede estar vacío",
+                            "error"
+                          );
                         }
                       }}
                     >

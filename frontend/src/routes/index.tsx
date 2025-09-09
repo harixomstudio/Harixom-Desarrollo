@@ -1,4 +1,3 @@
-
 import { createFileRoute } from "@tanstack/react-router";
 import Home from "../components/pages/Index";
 
@@ -7,11 +6,5 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeRoute() {
-  return (
-    <Home
-      subtitle="“Tu arte, tu espacio protegido”"
-      title="HARIXOM"
-    />
-  );
-
+  return <Home subtitle="“Tu arte, tu espacio protegido”" title="HARIXOM" />;
 }

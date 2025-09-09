@@ -1,8 +1,7 @@
-
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from ".././components/helpers/config";
 
-import { useToast } from "../components/ui/Toast"
+import { useToast } from "../components/ui/Toast";
 
 interface NavProps {
   list: string[];
@@ -10,7 +9,6 @@ interface NavProps {
 }
 
 export default function Nav(props: NavProps) {
-
   const { showToast } = useToast();
 
   const location = useLocation();

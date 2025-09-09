@@ -1,4 +1,3 @@
-import type React from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
@@ -57,9 +56,7 @@ export default function Home(props: HomeProps) {
         {/* Subtítulo con animación distinta */}
         <p
           className={`mt-6 text-lg md:text-2xl transition-all duration-1000 ease-in-out ${
-            animate
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 -translate-x-10"
+            animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
           }`}
           style={{
             transitionDelay: `${letters.length * 100 + 300}ms`,

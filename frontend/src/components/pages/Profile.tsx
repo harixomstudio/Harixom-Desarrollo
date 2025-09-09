@@ -20,7 +20,9 @@ export default function Profile(props: ProfileProps) {
   const [cards, setCards] = React.useState(props.cards || []);
   const [activeTab, setActiveTab] = React.useState(0);
   const tabs = props.tabs || ["Home", "Commissions", "Muro"];
-  const [deleteModalOpen, setDeleteModalOpen] = React.useState<number | null>(null); // Estado para el modal de eliminación
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState<number | null>(
+    null
+  ); // Estado para el modal de eliminación
 
   // Estados para edición de Commissions
   const [editing, setEditing] = React.useState(false);
@@ -298,9 +300,7 @@ export default function Profile(props: ProfileProps) {
                             </button>
                             <button
                               className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
-                              onClick={() =>
-                                handleDeletePublication(card.id)
-                              }
+                              onClick={() => handleDeletePublication(card.id)}
                             >
                               Eliminar
                             </button>

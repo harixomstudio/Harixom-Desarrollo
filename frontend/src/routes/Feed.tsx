@@ -25,9 +25,16 @@ function RouteComponent() {
     enabled: !!token,
   });
 
-  if (!token) return <p className="text-white text-center mt-10">No estás logueado.</p>;
-  if (isLoading) return <p className="text-white text-center mt-10">Loading...</p>;
-  if (error) return <p className="text-red-500 text-center mt-10">{(error as Error).message}</p>;
+  if (!token)
+    return <p className="text-white text-center mt-10">No estás logueado.</p>;
+  if (isLoading)
+    return <p className="text-white text-center mt-10">Loading...</p>;
+  if (error)
+    return (
+      <p className="text-red-500 text-center mt-10">
+        {(error as Error).message}
+      </p>
+    );
 
   // Ordena de más reciente a más antiguo
   const sortedPublications = (data || []).sort(
