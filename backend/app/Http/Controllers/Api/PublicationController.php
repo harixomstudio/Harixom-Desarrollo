@@ -7,34 +7,40 @@ use App\Models\Publication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Upload\UploadApi;
+
+Configuration::instance('cloudinary://175261732836894:2Cofi1fGKc6rmC1-ELQKZjxKCuw@duxccowqf?secure=true');
 
 class PublicationController extends Controller
 {
 
     public function index()
-{
-    $publications = Publication::with('user')
-        ->orderBy('created_at', 'desc')
-        ->get()
-        ->map(function ($pub) {
-            return [
-                'id' => $pub->id,
-                'description' => $pub->description,
-                'category' => $pub->category,
-                'image' => $pub->image,
-                'created_at' => $pub->created_at,
-                'user_name' => $pub->user ? $pub->user->name : 'Usuario',
-                'user_profile_picture' => $pub->user ? $pub->user->profilePicturePath() : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-            ];
-        });
+    {
+        $publications = Publication::with('user')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($pub) {
+                return [
+                    'id' => $pub->id,
+                    'description' => $pub->description,
+                    'category' => $pub->category,
+                    'image' => $pub->image,
+                    'created_at' => $pub->created_at,
+                    'user_name' => $pub->user ? $pub->user->name : 'Usuario',
+                    'user_profile_picture' => $pub->user ? $pub->user->profilePicturePath() : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+                ];
+            });
 
-    return response()->json([
-        'publications' => $publications
-    ]);
-}
+        return response()->json([
+            'publications' => $publications
+        ]);
+    }
 
     public function store(Request $request)
     {
+        $upload = new UploadApi();
+
         $request->validate([
             'description' => 'nullable|string|max:1000',
             'category' => 'nullable|string|max:255',
@@ -44,12 +50,17 @@ class PublicationController extends Controller
         $imageUrl = null;
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_publication_' . $file->getClientOriginalName();
-            
-            $file->move(public_path('images/publications'), $filename);
-            
-            $imageUrl = url('images/publications/' . $filename);
+            $result = $upload->upload(
+                $request->file('image')->getRealPath(),
+                [
+                    'folder' => 'Harixom/Publications', // carpeta en tu cuenta de Cloudinary
+                    'use_filename' => true,
+                    'unique_filename' => true,
+                    'overwrite' => true
+                ]
+            );
+            $imageUrl = $result['secure_url']; // URL segura https://res.cloudinary.com/...
+
         }
 
         $publication = Publication::create([
@@ -64,32 +75,32 @@ class PublicationController extends Controller
             'message' => 'Publicación creada correctamente',
             'publication' => $publication
         ]);
-    } 
+    }
 
     //Funcion destroy
     public function destroy($id)
-{
-    $publication = Publication::find($id);
+    {
+        $publication = Publication::find($id);
 
-    if (!$publication) {
-        return response()->json(['error' => 'Publicación no encontrada'], 404);
-    }
-
-    // Validar propietario
-    if ($publication->user_id !== Auth::id()) {
-        return response()->json(['error' => 'No autorizado'], 403);
-    }
-
-    // Eliminar imagen si existe
-    if ($publication->image) {
-        $filePath = public_path('images/publications/' . basename($publication->image));
-        if (file_exists($filePath)) {
-            unlink($filePath);
+        if (!$publication) {
+            return response()->json(['error' => 'Publicación no encontrada'], 404);
         }
+
+        // Validar propietario
+        if ($publication->user_id !== Auth::id()) {
+            return response()->json(['error' => 'No autorizado'], 403);
+        }
+
+        // Eliminar imagen si existe
+        if ($publication->image) {
+            $filePath = public_path(basename($publication->image));
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+
+        $publication->delete();
+
+        return response()->json(['message' => 'Publicación eliminada correctamente']);
     }
-
-    $publication->delete();
-
-    return response()->json(['message' => 'Publicación eliminada correctamente']);
-}
 }

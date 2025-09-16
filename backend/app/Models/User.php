@@ -85,14 +85,15 @@ public function comments() {
     public function profilePicturePath()
 {
     return $this->profile_picture 
-        ? asset('images/users/'.$this->profile_picture)
+        ? asset($this->profile_picture)
         : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 }
 
+    
 public function bannerPicturePath()
 {
     return $this->banner_picture 
-        ? asset('images/users/'.$this->banner_picture)
+        ? asset($this->banner_picture)
         : 'https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80';
 }
 }
