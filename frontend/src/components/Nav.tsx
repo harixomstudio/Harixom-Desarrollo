@@ -41,8 +41,9 @@ export default function Nav(props: NavProps) {
   return (
     <section>
       <div className="flex items-center justify-between bg-gray-800 p-4">
-        <div className="text-white text-3xl font-bold">
-          <a href="/Landing">Harixom</a>
+        <div className="text-pink-500 text-2xl pl-12"
+  style={{ fontFamily: "Starstruck" }}>
+          <a className="" href="/Landing">Harixom</a>
         </div>
 
         <nav>

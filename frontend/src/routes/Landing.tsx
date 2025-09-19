@@ -17,22 +17,22 @@ const links2 = ["", "", ""];
 
 const rankImg = ["circles.svg", "circles.svg", "circles.svg", "circles.svg"];
 const rankingArtist = [
-  "circles.svg",
-  "circles.svg",
-  "circles.svg",
-  "circles.svg",
+  "ARCANE FINAL.jpg",
+  "evelyn.png",
+  "reshiram.jpg",
+  "ebal.jpeg",
 ];
 const ArtistName = [
-  "Ed Sheeran",
-  "ebal adadadadadsdadadadsadasdasdasdaa",
+  "Arcane",
+  "Evelyn Barrantes",
   "isaac",
-  "evelyn",
+  "Ebal Seemann",
 ];
 const artName = [
-  "thecircles",
+  "Arcane Fanart",
   "thecirclessvg",
   "circlessvg",
-  "acirclessvg44sdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdsfsdfsdfsfsdf",
+  "Casa Creepy",
 ];
 const linksArt = ["", "", "", "", "", "", "", "", "", ""];
 
@@ -72,16 +72,16 @@ const footer = {
 function RouteComponent() {
   return (
     <Landing
-      banner="banner.svg"
+      banner="Banner-final.svg"
       altBanner="a"
       categoriesUp={categoriesUp}
       links={links}
       categoriesDown={categoriesDown}
       links2={links2}
-      imgApp="details.svg"
+      imgApp="canva.svg"
       imgAppAlt="a"
-      descriptionApp="About the Harixom"
-      textApp="Harixom is an innovative application designed for artists to share and monetize their artwork in a safe and professional environment. The platform ensures full copyright protection, preventing any possibility of image theft or unauthorized use. Artists can freely upload all kinds of creative content—such as paintings, digital art, music, photography, and more—while maintaining ownership of their work. In addition, Harixom provides opportunities for commercialization, allowing creators to earn money through their art."
+      descriptionApp="Create, connect, and grow!"
+      textApp="Welcome to Harixom, the social network for artists that offers a safe space to share your work, connect with other creators, and find a home for your art. Your talent deserves to be seen and valued."
       rankImg={rankImg}
       rankingArtist={rankingArtist}
       ArtistName={ArtistName}
