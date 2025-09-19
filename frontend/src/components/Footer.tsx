@@ -21,7 +21,7 @@ export default function Footer(props: FooterProps) {
           {/* the footer of the app */}
           <div className="flex flex-col items-center justify-center max-lg:items-center ">
             <h4 className="font-semibold pb-15 max-lg:pb-10">
-              {props.titlePage}{" "}
+             
             </h4>
              <div className="text-pink-500 text-3xl pl-10"
   style={{ fontFamily: "Starstruck" }}>
