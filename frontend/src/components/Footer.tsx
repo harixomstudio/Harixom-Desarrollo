@@ -14,19 +14,19 @@ interface FooterProps {
 
 export default function Footer(props: FooterProps) {
   return (
-    <footer className="flex flex-col items-center  w-full py-20">
-      <section className="flex  w-full text-3xl max-lg:text-xl max-xl:text-xl py-40 max-lg:items-cente bg-[#141414]">
+    <footer className="flex flex-col items-center  w-full py-20"
+      style={{ fontFamily: "monserrat" }}>
+      <section className="flex  w-full text-3xl max-lg:text-xl max-xl:text-xl py-10 max-lg:items-cente bg-[#141414]">
         <div className="flex justify-between items-baseline w-full max-lg:flex-col max-lg:items-center max-lg:gap-20 px-15 ">
           {/* the footer of the app */}
           <div className="flex flex-col items-center justify-center max-lg:items-center ">
             <h4 className="font-semibold pb-15 max-lg:pb-10">
               {props.titlePage}{" "}
             </h4>
-            <img
-              src={props.logo}
-              alt={props.altLogo}
-              className="w-25 h-25 max-lg:w-20 max-lg:h-20 rounded-xl object-cover"
-            />
+             <div className="text-pink-500 text-3xl pl-10"
+  style={{ fontFamily: "Starstruck" }}>
+          <a className="" href="/Landing">Harixom</a>
+        </div>
           </div>
 
           {/* the products of the app */}
@@ -51,7 +51,7 @@ export default function Footer(props: FooterProps) {
                   <img
                     src={socialMedia}
                     alt=""
-                    className="hover:scale-110 duration-600 w-20 h-20 max-lg:w-15 max-lg:h-15 object-cover  rounded-full"
+                    className="hover:scale-110 duration-600 w-15 h-15 max-lg:w-15 max-lg:h-15 object-cover  rounded-full"
                   />
                 </Link>
               ))}
@@ -73,7 +73,7 @@ export default function Footer(props: FooterProps) {
         </div>
       </section>
 
-      <p className="w-full text-center bg-[#141414] pb-15">
+      <p className="w-full text-center text-xl bg-[#141414] p-3">
         © 2025 {props.titlePage}. All rights reserved
       </p>
     </footer>

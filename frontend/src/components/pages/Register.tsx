@@ -102,7 +102,7 @@ export default function Register(props: RegisterProps) {
   };
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center bg-stone-950">
+    <section className="relative flex min-h-screen items-center justify-center bg-stone-950 p-10">
       <img
         src="/circles.svg"
         alt="circles background"
@@ -112,20 +112,34 @@ export default function Register(props: RegisterProps) {
       <div className="relative z-10 flex lg:w-3/4">
         <div className="hidden md:flex w-1/2 flex-col items-center justify-center text-center p-8">
           <p className="text-lg text-white">Welcome to</p>
-          <h1
-            className="mt-4 text-5xl md:text-7xl text-pink-500"
-            style={{ fontFamily: "Starstruck" }}
-          >
-            HARIXOM
-          </h1>
+                    <h1
+  className="mt-10 text-5xl md:text-7xl text-pink-500 flex gap-1"
+  style={{ fontFamily: "Starstruck" }}
+>
+  {"HARIXOM".split("").map((char, i) => (
+    <span
+      key={i}
+      className="inline-block animate-bounce"
+      style={{
+        animationDelay: `${i * 0.2}s`,
+        animationDuration: "1.5s",
+        animationIterationCount: "infinite",
+        animationTimingFunction: "ease-in-out",
+        display: "inline-block",
+      }}
+    >
+      {char}
+    </span>
+  ))}
+</h1>
         </div>
 
-        <div className="w-full md:w-1/2 bg-gray-200 opacity-90 p-10 py-25 px-15 flex flex-col justify-center rounded-3xl">
+        <div className="w-full md:w-1/2 bg-gray-200 opacity-90 px-10 py-4 flex flex-col justify-center rounded-3xl">
           <h2 className="text-2xl font-bold text-center mb-6 text-black">
             {props.title}
           </h2>
 
-          <form className="flex flex-col gap-4" onSubmit={registerNewUser}>
+          <form className="flex flex-col gap-2" onSubmit={registerNewUser}>
             {(
               [
                 "name",
