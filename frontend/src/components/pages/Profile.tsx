@@ -5,8 +5,8 @@ import { useToast } from "../ui/Toast";
 
 interface ProfileProps {
   username: string;
-  followers: number;
-  followings: number;
+  followers: { id: number; name: string; profile_picture?: string }[];
+  followings: { id: number; name: string; profile_picture?: string }[];
   address: string;
   description: string;
   profilePicture?: string;
@@ -18,6 +18,9 @@ interface ProfileProps {
 
 export default function Profile(props: ProfileProps) {
   const { showToast } = useToast();
+
+  const [showFollowers, setShowFollowers] = React.useState(false);
+  const [showFollowings, setShowFollowings] = React.useState(false);
 
   const [cards, setCards] = React.useState(props.cards || []);
   const [activeTab, setActiveTab] = React.useState(0);
@@ -128,9 +131,48 @@ export default function Profile(props: ProfileProps) {
           </div>
           <div className="flex gap-35 text-gray-400 text-lg mb-1">
             <span>{props.address}</span>
-            <span>{props.followers}</span>
-            <span>{props.followings}</span>
+            <span className="cursor-pointer hover:text-pink-400" onClick={() => setShowFollowers(true)}>
+              {props.followers.length}
+            </span>
+            <span className="cursor-pointer hover:text-pink-400" onClick={() => setShowFollowings(true)}>
+              {props.followings.length}
+            </span>
           </div>
+
+          {showFollowers && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
+                <h3 className="text-pink-400 font-bold mb-4">Followers</h3>
+                <ul>
+                  {props.followers.map(f => (
+                    <li key={f.id} className="text-gray-200 mb-2 flex items-center gap-2">
+                      <img src={f.profile_picture} className="w-6 h-6 rounded-full" />
+                      {f.name}
+                    </li>
+                  ))}
+                </ul>
+                <button className="mt-4 px-4 py-2 bg-pink-500 text-white rounded" onClick={() => setShowFollowers(false)}>Close</button>
+              </div>
+            </div>
+          )}
+
+          {showFollowings && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
+                <h3 className="text-pink-400 font-bold mb-4">Followings</h3>
+                <ul>
+                  {props.followings.map(f => (
+                    <li key={f.id} className="text-gray-200 mb-2 flex items-center gap-2">
+                      <img src={f.profile_picture} className="w-6 h-6 rounded-full" />
+                      {f.name}
+                    </li>
+                  ))}
+                </ul>
+                <button className="mt-4 px-4 py-2 bg-pink-500 text-white rounded" onClick={() => setShowFollowings(false)}>Close</button>
+              </div>
+            </div>
+          )}
+
           <p className="text-gray-300 text-sm mt-2 py-10">
             {props.description}
           </p>
@@ -142,8 +184,8 @@ export default function Profile(props: ProfileProps) {
             <button
               key={tab}
               className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
-                  ? "text-pink-400 border-b-2 border-pink-400"
-                  : "text-gray-200"
+                ? "text-pink-400 border-b-2 border-pink-400"
+                : "text-gray-200"
                 }`}
               onClick={() => setActiveTab(i)}
             >
@@ -271,32 +313,32 @@ export default function Profile(props: ProfileProps) {
           ) : activeTab === 3 ? (
             // 🔹 Tab Me gustas
             <div className="w-full max-w-4xl mx-auto">
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {props.likes?.length ? (
-        props.likes.map((like: any) => (
-          <div
-            key={like.id}
-            className="bg-stone-800 rounded-lg p-4 flex flex-col items-center"
-          >
-            {like.image ? (
-              <img
-                src={like.image}
-                alt={`Post ${like.id}`}
-                className="w-24 h-24 rounded-lg object-cover mb-2"
-              />
-            ) : (
-              <div className="w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center text-gray-300 mb-2">
-                No Image
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {props.likes?.length ? (
+                  props.likes.map((like: any) => (
+                    <div
+                      key={like.id}
+                      className="bg-stone-800 rounded-lg p-4 flex flex-col items-center"
+                    >
+                      {like.image ? (
+                        <img
+                          src={like.image}
+                          alt={`Post ${like.id}`}
+                          className="w-24 h-24 rounded-lg object-cover mb-2"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center text-gray-300 mb-2">
+                          No Image
+                        </div>
+                      )}
+                      <p className="text-gray-200 text-sm text-center">{like.description}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm col-span-4 text-center">No hay likes aún.</p>
+                )}
               </div>
-            )}
-            <p className="text-gray-200 text-sm text-center">{like.description}</p>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-400 text-sm col-span-4 text-center">No hay likes aún.</p>
-      )}
-    </div>
-  </div>
+            </div>
           ) : (
             // Posts (Cards)
 

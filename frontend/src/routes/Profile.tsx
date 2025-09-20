@@ -32,6 +32,17 @@ function ProfileRoute() {
     enabled: !!token,
   });
 
+  const { data: followsData } = useQuery({
+  queryKey: ["userFollows"],
+  queryFn: async () => {
+    const { data } = await axios.get("http://127.0.0.1:8000/api/user/follows", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data;
+  },
+  enabled: !!token,
+});
+
   if (!token) return <p className="text-white text-center mt-10">No estás logueado.</p>;
   if (isLoading) return <p className="text-white text-center mt-10">Loading...</p>;
   if (error) return <p className="text-red-500 text-center mt-10">{(error as Error).message}</p>;
@@ -45,14 +56,14 @@ function ProfileRoute() {
   return (
     <Profile
       username={user?.name || "Usuario"}
-      followers={user?.followers || 0}
-      followings={user?.followings || 0} 
+      followers={followsData?.followers || []}
+      followings={followsData?.followings || []} 
       address={user?.address || ""}
       description={user?.description || ""}
       profilePicture={user?.profile_picture}
       bannerPicture={user?.banner_picture}
       cards={sortedCards}
-      likes={likesData || []} // ⚡ Aquí pasamos los likes
+      likes={likesData || []}
     />
   );
 }

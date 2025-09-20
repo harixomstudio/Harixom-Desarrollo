@@ -98,26 +98,56 @@ public function userLikes()
     ]);
 }
 
+public function userFollows()
+{
+    $user = auth()->user();
+    if (!$user) {
+        return response()->json(['error' => 'No autenticado'], 401);
+    }
+
+    // Obtener los usuarios que sigue
+    $followings = $user->follows()->with('following')->get()->map(function($follow) {
+        return [
+            'id' => $follow->following->id,
+            'name' => $follow->following->name,
+            'profile_picture' => $follow->following->profile_picture
+        ];
+    });
+
+    // Obtener los usuarios que lo siguen (followers)
+    $followers = $user->followers()->with('follower')->get()->map(function($follow) {
+        return [
+            'id' => $follow->follower->id,
+            'name' => $follow->follower->name,
+            'profile_picture' => $follow->follower->profile_picture
+        ];
+    });
+
+    return response()->json([
+        'followings' => $followings,
+        'followers' => $followers
+    ]);
+}
 
     //Funcion para dejar un comentario
     public function addComment(Request $request, $publicationId)
-    {
-        $request->validate(['comment' => 'required|string|max:500']);
+{
+    $user = auth()->user(); // Usuario logueado
+    $request->validate(['comment' => 'required|string|max:500']);
 
-        // Guardar comentario sin usuario
-        $comment = Comment::create([
-            'user_id' => null,
-            'publication_id' => $publicationId,
-            'comment' => $request->comment
-        ]);
+    $comment = Comment::create([
+        'user_id' => $user->id,
+        'publication_id' => $publicationId,
+        'comment' => $request->comment
+    ]);
 
-        return response()->json([
-            'comment' => [
-                'user' => ['name' => 'Anonimo'],
-                'comment' => $comment->comment
-            ]
-        ]);
-    }
+    return response()->json([
+        'comment' => [
+            'user' => ['name' => $user ? $user->name : 'Anonimo'],
+            'comment' => $comment->comment
+        ]
+    ]);
+}
 }
 
 

@@ -11,6 +11,7 @@ interface Publication {
   user_profile_picture?: string; // URL de la foto del usuario
   total_likes?: number;
   user_id?: number;
+  is_following?: boolean;
 }
 
 interface FeedPageProps {
@@ -45,9 +46,37 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const [hideFollow, setHideFollow] = useState<{ [key: number]: boolean }>({});
 
   React.useEffect(() => {
-    if (userLikes) {
-      setLikes(userLikes);
-    }
+    // Inicializar likes
+    if (userLikes) setLikes(userLikes);
+
+    // Inicializar follows
+    const fetchFollows = async () => {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:8000/api/user/follows",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        const newFollows: { [key: number]: boolean } = {};
+        const newHideFollow: { [key: number]: boolean } = {};
+
+        publications.forEach(pub => {
+          if (pub.user_id) {
+            const isFollowing = data.followings.some((f: any) => f.id === pub.user_id);
+            newFollows[pub.user_id] = isFollowing;
+            newHideFollow[pub.user_id] = isFollowing;
+          }
+        });
+
+        setFollows(newFollows);
+        setHideFollow(newHideFollow);
+
+      } catch (err) {
+        console.error("Error cargando follows:", err);
+      }
+    };
+
+    fetchFollows();
 
     const counts: { [key: number]: number } = {};
     publications.forEach(pub => {
@@ -86,6 +115,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
         }
       );
       setFollows((prev) => ({ ...prev, [userId]: data.following }));
+      setHideFollow(prev => ({ ...prev, [userId]: data.following }));
     } catch (err) {
       console.error(err);
       showToast("Error al seguir", "error");
@@ -93,35 +123,37 @@ export default function FeedPage({ publications }: FeedPageProps) {
   };
 
   const addComment = async (id: number, text: string) => {
-    if (!text.trim()) {
-      showToast("El comentario no puede estar vacío", "error");
-      return;
-    }
-    try {
-      const res = await fetch(`http://localhost:8000/api/comment/${id}`, {
-        method: "POST",
-        credentials: 'include',
+  if (!text.trim()) {
+    showToast("El comentario no puede estar vacío", "error");
+    return;
+  }
+
+  try {
+    const { data } = await axios.post(
+      `http://localhost:8000/api/comment/${id}`,
+      { comment: text },
+      {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ comment: text }),
-      });
-      const data = await res.json();
+      }
+    );
 
-      setComments((prev) => ({
-        ...prev,
-        [id]: [
-          ...(prev[id] || []),
-          `${data.comment.user.name}: ${data.comment.comment}`,
-        ],
-      }));
-      showToast("¡Comentario publicado!", "success");
-    } catch (err) {
-      console.error(err);
-      showToast("Error al publicar el comentario", "error");
-    }
-  };
+    setComments((prev) => ({
+      ...prev,
+      [id]: [
+        ...(prev[id] || []),
+        `${data.comment.user.name}: ${data.comment.comment}`,
+      ],
+    }));
+
+    showToast("¡Comentario publicado!", "success");
+  } catch (err) {
+    console.error(err);
+    showToast("Error al publicar el comentario", "error");
+  }
+};
 
   return (
     <div className="bg-stone-950 min-h-screen p-10">
@@ -167,25 +199,23 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 </button>
 
                 {/* Botón Seguir/Ya seguido */}
-                <div
-                  className={`absolute top-5 right-0 transform transition-all duration-500 ease-in-out ${follows[pub.id] || hideFollow[pub.id] ? "opacity-0 scale-70 pointer-events-none" : "opacity-100 scale-70"
-                    }`}
-                >
-                  <button
-                    className="text-pink-500 hover:scale-110 text-lg font-semibold px-2 rounded-full bg-white"
-                    title="Seguir"
-                    onClick={() => {
-                      if (pub.user_id) {
-                        toggleFollow(pub.user_id);
-                        setHideFollow(prev => ({ ...prev, [pub.user_id!]: true }));
-                      } else {
-                        console.error("Esta publicación no tiene user_id");
-                      }
-                    }}
+                {pub.user_id && (
+                  <div
+                    className={` absolute top-5 right-0 transform transition-all duration-500 ease-in-out ${hideFollow[pub.user_id]  ? "opacity-0 scale-0 pointer-events-none" : "opacity-100 scale-70"
+                      }`}
                   >
-                    +
-                  </button>
-                </div>
+                    <button
+                      className="text-pink-500 hover:scale-110 text-lg font-semibold px-2 rounded-full bg-white"
+                      title="Seguir"
+                      onClick={() => {
+                        setHideFollow(prev => ({ ...prev, [pub.user_id!]: true }));
+                        toggleFollow(pub.user_id!);
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
 
                 {/* Like */}
                 <button
