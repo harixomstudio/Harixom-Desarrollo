@@ -25,29 +25,24 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('/publications/{id}', [PublicationController::class, 'destroy']);
 
     // Rutas para likes
-Route::post('/like/{publication}', [InteractionController::class, 'toggleLike']);
-Route::get('/user/likes', [InteractionController::class, 'userLikes']);
+    Route::post('/like/{publication}', [InteractionController::class, 'toggleLike']);
+    Route::get('/user/likes', [InteractionController::class, 'userLikes']);
 
-// Rutas para seguidores
-Route::post('/follow/{user}', [InteractionController::class, 'toggleFollow']);
-Route::post('/follow/{userId}', [InteractionController::class, 'toggleFollow']);
+    // Rutas para seguidores
+    Route::get('user/follows', [InteractionController::class, 'userFollows']);
+    Route::post('/follow/{user}', [InteractionController::class, 'toggleFollow']);
+    Route::post('/follow/{userId}', [InteractionController::class, 'toggleFollow']);
+
+    // Rutas para comentarios
+    Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
 
 //Rutas para mensajes
 
 //Rutas para notificaciones
 
-
 });
 
-// Rutas para comentarios
-Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
-
-
-
-
-
-
-// Rutas de IA sin auth si quieres que cualquiera pueda usarlo
+// Rutas de IA sin auth
 Route::post('ia/challenge', [AIController::class, 'getChallenge']);
 
 //Rutas de reset password
