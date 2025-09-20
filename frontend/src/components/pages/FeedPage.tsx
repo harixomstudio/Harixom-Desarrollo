@@ -12,6 +12,7 @@ interface Publication {
   total_likes?: number;
   user_id?: number;
   is_following?: boolean;
+  category?: string;
 }
 
 interface FeedPageProps {
@@ -123,37 +124,37 @@ export default function FeedPage({ publications }: FeedPageProps) {
   };
 
   const addComment = async (id: number, text: string) => {
-  if (!text.trim()) {
-    showToast("El comentario no puede estar vacío", "error");
-    return;
-  }
+    if (!text.trim()) {
+      showToast("El comentario no puede estar vacío", "error");
+      return;
+    }
 
-  try {
-    const { data } = await axios.post(
-      `http://localhost:8000/api/comment/${id}`,
-      { comment: text },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    try {
+      const { data } = await axios.post(
+        `http://localhost:8000/api/comment/${id}`,
+        { comment: text },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    setComments((prev) => ({
-      ...prev,
-      [id]: [
-        ...(prev[id] || []),
-        `${data.comment.user.name}: ${data.comment.comment}`,
-      ],
-    }));
+      setComments((prev) => ({
+        ...prev,
+        [id]: [
+          ...(prev[id] || []),
+          `${data.comment.user.name}: ${data.comment.comment}`,
+        ],
+      }));
 
-    showToast("¡Comentario publicado!", "success");
-  } catch (err) {
-    console.error(err);
-    showToast("Error al publicar el comentario", "error");
-  }
-};
+      showToast("¡Comentario publicado!", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("Error al publicar el comentario", "error");
+    }
+  };
 
   return (
     <div className="bg-stone-950 min-h-screen p-10">
@@ -201,7 +202,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 {/* Botón Seguir/Ya seguido */}
                 {pub.user_id && (
                   <div
-                    className={` absolute top-5 right-0 transform transition-all duration-500 ease-in-out ${hideFollow[pub.user_id]  ? "opacity-0 scale-0 pointer-events-none" : "opacity-100 scale-70"
+                    className={` absolute top-5 right-0 transform transition-all duration-500 ease-in-out ${hideFollow[pub.user_id] ? "opacity-0 scale-0 pointer-events-none" : "opacity-100 scale-70"
                       }`}
                   >
                     <button
@@ -318,11 +319,12 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
             {/* Nombre del autor y descripción */}
             <div className="px-2 py-1">
-              <span className="text-xs text-gray-200 font-semibold">
-                {pub.user_name || "Usuario"}
+              <span className="text-xs text-gray-200 font-semibold flex justify-between">
+                <p>{pub.user_name || "Usuario"}</p>
+                
+                <p>{pub.category || "Sin categoría"}</p>
               </span>
               <p className="text-gray-300 text-xs mt-1">{pub.description}</p>
-
               {/* Comentarios */}
               {comments[pub.id]?.length > 0 && (
                 <div className="mt-1 text-xs text-gray-400">
