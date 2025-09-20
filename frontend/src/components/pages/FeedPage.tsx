@@ -1,5 +1,7 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useToast } from "../ui/Toast";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 interface Publication {
   id: number;
@@ -7,6 +9,8 @@ interface Publication {
   image?: string;
   user_name?: string;
   user_profile_picture?: string; // URL de la foto del usuario
+  total_likes?: number;
+  user_id?: number;
 }
 
 interface FeedPageProps {
@@ -14,43 +18,77 @@ interface FeedPageProps {
 }
 
 export default function FeedPage({ publications }: FeedPageProps) {
+  const token = localStorage.getItem("access_token");
   const { showToast } = useToast();
+
+  const { data: userLikes } = useQuery({
+    queryKey: ["userLikes"],
+    queryFn: async () => {
+      const { data } = await axios.get("http://127.0.0.1:8000/api/user/likes", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const likesMap: { [key: number]: boolean } = {};
+      data.likes.forEach((like: any) => {
+        likesMap[like.id] = true;
+      });
+      return likesMap;
+    },
+    staleTime: 1000 * 60,
+  });
 
   const [isModalOpen, setIsModalOpen] = useState<number | null>(null); // Controla qué publicación tiene el modal abierto
   const [currentComment, setCurrentComment] = useState(""); // Texto del comentario
   const [comments, setComments] = useState<{ [key: number]: string[] }>({}); // Comentarios por publicación
   const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
+  const [likesCount, setLikesCount] = useState<{ [key: number]: number }>({});
   const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
+  const [hideFollow, setHideFollow] = useState<{ [key: number]: boolean }>({});
+
+  React.useEffect(() => {
+    if (userLikes) {
+      setLikes(userLikes);
+    }
+
+    const counts: { [key: number]: number } = {};
+    publications.forEach(pub => {
+      counts[pub.id] = pub.total_likes || 0;
+    });
+    setLikesCount(counts);
+  }, [userLikes, publications]);
 
   const toggleLike = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/like/${id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await res.json();
-      setLikes((prev) => ({ ...prev, [id]: data.liked }));
-    } catch (err) {
-      console.error(err);
+      const { data } = await axios.post(
+        `http://localhost:8000/api/like/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(data);///////////////////////////////////////
+      setLikes(prev => ({ ...prev, [id]: data.liked }));
+      setLikesCount(prev => ({ ...prev, [id]: data.total_likes }));
+    } catch (error) {
+      console.error(error);
+      showToast("Error al hacer like", "error");
     }
   };
 
   const toggleFollow = async (userId: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/follow/${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await res.json();
+      const { data } = await axios.post(
+        `http://localhost:8000/api/follow/${userId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setFollows((prev) => ({ ...prev, [userId]: data.following }));
     } catch (err) {
       console.error(err);
+      showToast("Error al seguir", "error");
     }
   };
 
@@ -62,9 +100,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
     try {
       const res = await fetch(`http://localhost:8000/api/comment/${id}`, {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ comment: text }),
       });
@@ -107,46 +146,52 @@ export default function FeedPage({ publications }: FeedPageProps) {
               )}
 
               {/* Iconos */}
-              <div className="absolute bottom-3 right-3 flex flex-col items-end gap-2 bg-stone-950 p-2 rounded-2xl ">
-                {/* Follow */}
+              <div className="absolute bottom-3 right-3 flex flex-col gap-2 p-2 rounded-2xl ">
+
+                {/* Perfil */}
                 <button
-                  className="relative flex items-center justify-center text-white opacity-80 w-6 h-6 hover:scale-115"
-                  title={follows[pub.id] ? "Siguiendo" : "Seguir"}
-                  onClick={() => toggleFollow(pub.id!)}
-                  onClickCapture={() =>
-                    setFollows(
-                      pub.id
-                        ? { ...follows, [pub.id]: !follows[pub.id] }
-                        : { ...follows, [pub.id]: true }
-                    )
-                  }
+                  className="w-8 h-8 rounded-full overflow-hidden border-2 border-black transition-transform duration-300 hover:scale-110"
+                  title={`Ir al perfil de ${pub.user_name}`}
+                  onClick={() => {
+                    showToast("Redirigir al perfil aún no implementado", "info");
+                  }}
                 >
-                  {pub.user_profile_picture && (
-                    <img
-                      src={pub.user_profile_picture}
-                      alt={pub.user_name}
-                      className="w-6 h-6 rounded-full border-2 border-black transition-all duration-300"
-                    />
-                  )}
-                  {!follows[pub.id] && (
-                    <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
-                      +
-                    </span>
-                  )}
+                  <img
+                    src={
+                      pub.user_profile_picture ||
+                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                    }
+                    alt={pub.user_name}
+                    className="w-full h-full object-cover"
+                  />
                 </button>
+
+                {/* Botón Seguir/Ya seguido */}
+                <div
+                  className={`absolute top-5 right-0 transform transition-all duration-500 ease-in-out ${follows[pub.id] || hideFollow[pub.id] ? "opacity-0 scale-70 pointer-events-none" : "opacity-100 scale-70"
+                    }`}
+                >
+                  <button
+                    className="text-pink-500 hover:scale-110 text-lg font-semibold px-2 rounded-full bg-white"
+                    title="Seguir"
+                    onClick={() => {
+                      if (pub.user_id) {
+                        toggleFollow(pub.user_id);
+                        setHideFollow(prev => ({ ...prev, [pub.user_id!]: true }));
+                      } else {
+                        console.error("Esta publicación no tiene user_id");
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
 
                 {/* Like */}
                 <button
-                  className="text-white opacity-80 hover:scale-110"
+                  className="text-white opacity-80 hover:scale-110 flex flex-col items-center"
                   title="Like"
                   onClick={() => toggleLike(pub.id)}
-                  onClickCapture={() =>
-                    setLikes(
-                      pub.id
-                        ? { ...likes, [pub.id]: !likes[pub.id] }
-                        : { ...likes, [pub.id]: true }
-                    )
-                  }
                 >
                   {likes[pub.id] ? (
                     <svg
@@ -171,6 +216,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                       <path d="M12 21s-1-.5-2-1.5S5 14 5 10.5 8 5 12 8s7-2 7 2.5-5 9-5 9-1 1-2 1z" />
                     </svg>
                   )}
+                  <span className="text-xs mt-1">{likesCount[pub.id] || 0}</span>
                 </button>
 
                 {/* Botón para abrir el modal */}

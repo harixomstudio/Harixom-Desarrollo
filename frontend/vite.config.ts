@@ -10,4 +10,9 @@ export default defineConfig({
     TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
     react()
   ],
+  server: {
+    proxy: {
+      '/api': 'http://127.0.0.1:8000',
+    },
+  },
 })
