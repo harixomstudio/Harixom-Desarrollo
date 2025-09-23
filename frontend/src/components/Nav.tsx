@@ -31,7 +31,7 @@ export default function Nav(props: NavProps) {
 
       localStorage.removeItem("access_token");
       showToast("Sesión cerrada exitosamente", "success");
-      navigate({ to: "/" }); // 👈 redirige al Landing
+      navigate({ to: "/" }); 
     } catch (err) {
       console.error("Error al cerrar sesión:", err);
       showToast("Error al cerrar sesión", "error");
@@ -40,9 +40,10 @@ export default function Nav(props: NavProps) {
 
   return (
     <section>
-      <div className="flex items-center justify-between bg-gray-800 p-4">
-        <div className="text-white text-3xl font-bold">
-          <a href="/Landing">Harixom</a>
+      <div className="flex items-center justify-between bg-[#151515] p-4">
+        <div className="text-pink-500 text-2xl pl-12"
+  style={{ fontFamily: "Starstruck" }}>
+          <a className="" href="/Landing">Harixom</a>
         </div>
 
         <nav>
@@ -65,7 +66,7 @@ export default function Nav(props: NavProps) {
                 </button>
               ) : (
                 <a
-                  className="text-black font-bold bg-[#F778BD] py-1 px-9 rounded-2xl border-rose-300 border-2"
+                  className="text-black font-bold bg-[#8936D2] py-1 px-9 rounded-2xl border-[#A39FF6] border-2"
                   href="/Profile"
                 >
                   Profile

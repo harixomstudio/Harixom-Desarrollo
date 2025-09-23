@@ -53,7 +53,6 @@ export default function Home(props: HomeProps) {
           ))}
         </h1>
 
-        {/* Subtítulo con animación distinta */}
         <p
           className={`mt-6 text-lg md:text-2xl transition-all duration-1000 ease-in-out ${
             animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"

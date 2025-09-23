@@ -19,12 +19,12 @@ function RootComponent() {
     "/ForgotPassword",
     "/ResetPassword",
     "/SetProfile",
-    "/CreatePublication",
     "/Terms",
   ].includes(currentPath);
 
   const listEvents = ["Events", "Workshop", "AI Challenges"];
   const referenceEvents = ["/Events", "/Workshops", "/AIChallenge"];
+  {/*SE OCULTA EL NAV DE EVENTOS */}
   const hideEventsNav = [
     "/Feed",
     "/Login",
@@ -36,6 +36,13 @@ function RootComponent() {
     "/Profile",
     "/SetProfile",
     "/CreatePublication",
+    "/DigitalArt",
+    "/Animation",
+    "/Sculture",
+    "/Paint",
+    "/3d",
+    "/StreetArt",
+    "/Photography",
   ].includes(currentPath);
 
   return (

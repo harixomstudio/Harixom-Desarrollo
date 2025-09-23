@@ -10,12 +10,6 @@ use App\Http\Controllers\Api\InteractionController;
 use App\Http\Controllers\Api\AIController;
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::get('user', function (Request $request) {
-        return [
-            'user' => UserResource::make($request->user()),
-            'access_token' => $request->bearerToken(),
-        ];
-    });
     // Obtener perfil del usuario logueado
     Route::get('/user', [UserController::class, 'profile']);
 
@@ -30,25 +24,26 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/publications', [PublicationController::class, 'index']);
     Route::delete('/publications/{id}', [PublicationController::class, 'destroy']);
 
-//Rutas para comentarios
-Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
+    // Rutas para likes
+    Route::post('/like/{publication}', [InteractionController::class, 'toggleLike']);
+    Route::get('/user/likes', [InteractionController::class, 'userLikes']);
 
-//Rutas para likes
-Route::post('/like/{publication}', [InteractionController::class, 'toggleLike']);
+    // Rutas para seguidores
+    Route::get('user/follows', [InteractionController::class, 'userFollows']);
+    Route::post('/follow/{user}', [InteractionController::class, 'toggleFollow']);
+    Route::post('/follow/{userId}', [InteractionController::class, 'toggleFollow']);
 
-//Rutas para seguidores
-Route::post('/follow/{user}', [InteractionController::class, 'toggleFollow']);
+    // Rutas para comentarios
+    Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
 
 //Rutas para mensajes
 
 //Rutas para notificaciones
 
-
 });
 
-// Rutas de IA sin auth si quieres que cualquiera pueda usarlo
+// Rutas de IA sin auth
 Route::post('ia/challenge', [AIController::class, 'getChallenge']);
-
 
 //Rutas de reset password
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
