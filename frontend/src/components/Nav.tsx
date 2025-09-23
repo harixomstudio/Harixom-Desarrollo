@@ -40,6 +40,7 @@ export default function Nav(props: NavProps) {
 
   return (
     <section>
+
       <div className="flex items-center justify-between bg-[#151515] p-4">
         <div className="text-pink-500 text-2xl pl-12"
   style={{ fontFamily: "Starstruck" }}>

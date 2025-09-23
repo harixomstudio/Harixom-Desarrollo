@@ -1,4 +1,6 @@
+
 import React, { useState } from "react";
+
 import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -189,6 +191,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   {/* Placeholder */}
                 </div>
               )}
+
             </div>
             {/* Footer estilo Instagram */}
             <div className="flex flex-row justify-between items-center px-4 py-5 bg-[#151515]">
@@ -210,6 +213,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     <path d="M12 21s-1-.5-2-1.5S5 14 5 10.5 8 5 12 8s7-2 7 2.5-5 9-5 9-1 1-2 1z" />
                   </svg>
                   <span className="text-xs">{likesCount[pub.id] || 0}</span>
+
                 </button>
                 {/* Botón comentario */}
                 <button
@@ -298,6 +302,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 </div>
               </div>
             )}
+
+
           </div>
         ))}
       </div>
