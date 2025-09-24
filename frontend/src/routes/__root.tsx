@@ -38,6 +38,10 @@ function RootComponent() {
     "/CreatePublication",
     "/DigitalArt",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+    "/TraditionalArt",
+>>>>>>> Stashed changes
 =======
     "/TraditionalArt",
 >>>>>>> Stashed changes

@@ -12,6 +12,7 @@ const categoriesUp = [
   "icon-traditional.svg",
 ];
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const categoriesUpNames = [
   "Digital Art",
   "Animatión",
@@ -41,6 +42,10 @@ const categoriesDownColors = [
   "#FDD519", // naranja
   "#FA6063", // rojo
 ];
+=======
+const links = ["/DigitalArt", "/Animation", "/Sculture", "/TraditionalArt"];
+const categoriesDown = ["icon-3d.svg", "icon-streetart.svg", "icon-foto.svg"];
+>>>>>>> Stashed changes
 =======
 const links = ["/DigitalArt", "/Animation", "/Sculture", "/TraditionalArt"];
 const categoriesDown = ["icon-3d.svg", "icon-streetart.svg", "icon-foto.svg"];
@@ -97,9 +102,8 @@ const footer = {
     "https://www.tiktok.com/@harixom2025",
     "https://youtube.com/@harixom_2025",
   ],
-   contacts: ["+506 8394 7941", "harixonstudio@gmail.com"],
-   linksContacts: ["https://wa.me/50683947941", "mailto:harixonstudio@gmail.com"],
-
+  contacts: ["+506 8394 7941", "harixonstudio@gmail.com"],
+  linksContacts: [""],
 };
 
 function RouteComponent() {
@@ -108,12 +112,8 @@ function RouteComponent() {
       banner="Banner-final.svg"
       altBanner="a"
       categoriesUp={categoriesUp}
-      categoriesUpNames={categoriesUpNames}
-      categoriesUpColors={categoriesUpColors}
       links={links}
       categoriesDown={categoriesDown}
-      categoriesDownNames={categoriesDownNames}
-      categoriesDownColors={categoriesDownColors}
       links2={links2}
       imgApp="canva.svg"
       imgAppAlt="a"

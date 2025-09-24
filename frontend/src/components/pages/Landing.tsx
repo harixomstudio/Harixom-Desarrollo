@@ -20,12 +20,6 @@ interface LandingProps {
   banner: string;
   altBanner: string;
 
-  categoriesUpNames: string[];
-  categoriesDownNames: string[];
-
-  categoriesUpColors: string[];
-  categoriesDownColors: string[];
-
   categoriesUp: string[];
   links: string[];
   categoriesDown: string[];
@@ -153,44 +147,29 @@ export default function Landing(props: LandingProps) {
               </span>
             ))}
           </h2>
-<div className="flex justify-between pt-5 gap-43"  style={{ fontFamily: "Monserrat" }}>
-  {props.categoriesUp.map((categoriesUp, number) => (
-    <Link to={props.links[number]} key={number} className="flex flex-col items-center gap-2">
-      <img
-        src={categoriesUp}
-        alt={`Image ${number}`}
-        className="w-30 h-30 max-xl:w-22 max-xl:h-22 duration-600 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
-      />
-      <span
-        className="text-center text-xl max-lg:text-sm font-medium"
-        style={{ color: props.categoriesUpColors[number] }}
-      >
-        {props.categoriesUpNames[number]}
-      </span>
-    </Link>
-  ))}
-</div>
 
-<div className="flex justify-between gap-40"  style={{ fontFamily: "Monserrat" }}>
-  {props.categoriesDown.map((categoriesDown, number) => (
-    <Link to={props.links2[number]} key={number} className="flex flex-col items-center gap-2">
-      <img
-        src={categoriesDown}
-        alt={`Image ${number}`}
-        className="w-30 h-30 duration-600 max-xl:w-22 max-xl:h-22 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
-      />
-      <span
-        className="text-center text-xl max-lg:text-sm font-medium"
-        style={{ color: props.categoriesDownColors[number] }}
-      >
-        {props.categoriesDownNames[number]}
-      </span>
-    </Link>
-  ))}
-</div>
-
-
-
+          <div className="flex justify-between pt-5 gap-43">
+            {props.categoriesUp.map((categoriesUp, number) => (
+              <Link to={props.links[number]} key={number}>
+                <img
+                  src={categoriesUp}
+                  alt={`Image ${number}`}
+                  className="w-30 h-30 max-xl:w-22 max-xl:h-22 duration-600 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
+                />
+              </Link>
+            ))}
+          </div>
+          <div className="flex justify-between gap-40">
+            {props.categoriesDown.map((categoriesDown, number) => (
+              <Link to={props.links2[number]} key={number}>
+                <img
+                  src={categoriesDown}
+                  alt={`Image ${number}`}
+                  className="w-30 h-30 duration-600 max-xl:w-22 max-xl:h-22 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
+                />
+              </Link>
+            ))}
+          </div>
         </section>
 
         {/* app section */}
@@ -231,20 +210,6 @@ export default function Landing(props: LandingProps) {
             >
               {props.textApp}
             </p>
-  
-             <div className="flex justify-center items-center py-5 ">
-               {/* Botón animado */}
-          <Link
-            to="/CreatePublication"
-            className="px-30  py-3 text-xl font-semibold rounded-full bg-gradient-to-r from-pink-800 to-pink-400 hover:scale-115 transition-transform duration-500 shadow-lg animate-float text-white "
-            style={{ fontFamily: "Monserrat" }}
-          >
-            Create your publication!
-          </Link>
-
-          </div>
-      
-
           </div>
         </section>
 

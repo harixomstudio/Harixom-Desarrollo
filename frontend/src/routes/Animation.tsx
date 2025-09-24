@@ -1,91 +1,55 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react';
 import CategoriesPage from '../components/pages/CategoriesPage';
+=======
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import FeedPage from "../components/pages/FeedPage";
+>>>>>>> Stashed changes
 
-export const Route = createFileRoute('/Animation')({
+export const Route = createFileRoute("/Animation")({
   component: RouteComponent,
-})
-
-const initialPublications = [
-  {
-    id: 1,
-    image: 'https://media.istockphoto.com/id/1151510034/vector/seagull-flying-animation-sequence-cartoon-vector.webp?b=1&s=612x612&w=0&k=20&c=U6Ofyie33WY1vo_Q2VDgziH1dwc9e2hSJpXfef1clTg=',
-    user_name: 'Artist 1',
-    category: 'Animation',
-    description: 'Description for publication 1',
-    liked: false,
-    likesCount: 0,
-  },
-  {
-    id: 2,
-    image: 'https://media.istockphoto.com/id/1156045856/vector/earth-globe-animate-spinning-vector-illustration.webp?b=1&s=612x612&w=0&k=20&c=-Kp8Zv8VKaXrZ-hggKLUfNuLpxnN-i402CgmWX7WO_M=',
-    user_name: 'Artist 2',
-    category: 'Animation',
-    description: 'Description for publication 2',
-    liked: false,
-    likesCount: 0,
-  },
-  {
-    id: 3,
-    image: 'https://via.placeholder.com/150',
-    user_name: 'Artist 3',
-    category: 'Animation',
-    description: 'Description for publication 3',
-    liked: false,
-    likesCount: 0,
-  },
-  {
-    id: 4,
-    image: 'https://via.placeholder.com/150',
-    user_name: 'Artist 4',
-    category: 'Animation',
-    description: 'Description for publication 4',
-    liked: false,
-    likesCount: 0,
-  },
-  
-];
+});
 
 function RouteComponent() {
-  const [publications, setPublications] = useState(initialPublications);
+  const token = localStorage.getItem("access_token");
 
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["allPublications"],
+    queryFn: async () => {
+      const response = await fetch("http://127.0.0.1:8000/api/publications", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+      if (!response.ok) throw new Error("Error al obtener las publicaciones");
+      const json = await response.json();
+      return json.publications; // Ajusta según tu Resource
+    },
+    enabled: !!token,
+  });
 
-  const handleLike = (id: number) => {
-    setPublications((prev) =>
-      prev.map((pub) =>
-        pub.id === id ? { ...pub, liked: !pub.liked } : pub
-      )
+  if (!token)
+    return <p className="text-white text-center mt-10">No estás logueado.</p>;
+  if (isLoading)
+    return <p className="text-white text-center mt-10">Loading...</p>;
+  if (error)
+    return (
+      <p className="text-red-500 text-center mt-10">
+        {(error as Error).message}
+      </p>
     );
-  };
 
-  const handleComment = (id: number) => {
-    // 
-  };
-
-  return (
-    <section className="min-h-screen bg-stone-950 p-10">
-      <div className="flex items-center gap-3 mb-8">
-        <img
-          src="./public/icon-animacion.svg" 
-          alt="animacion Icon"
-          className="w-15 h-15 mt-2"
-        />
-        <span className="text-[#A39FF6] text-4xl font-bold">Animation</span>
-      </div>
-      <div className="grid grid-cols-4 gap-4">
-        {publications.map((pub) => (
-          <CategoriesPage
-            key={pub.id}
-            publication={pub}
-            onLike={handleLike}
-            onComment={handleComment}
-          />
-        ))}
-      </div>
-    </section>
+  // Ordena de más reciente a más antiguo
+  const sortedPublications = (data || []).sort(
+    (a: { created_at: string }, b: { created_at: string }) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
 
+<<<<<<< Updated upstream
 =======
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -131,11 +95,16 @@ function RouteComponent() {
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
 
+=======
+>>>>>>> Stashed changes
   const animationPublications = sortedPublications.filter(
     (pub: { category?: string }) =>
       pub.category?.toLowerCase() === "Animation".toLowerCase()
   );
 
   return <FeedPage publications={animationPublications} />;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
