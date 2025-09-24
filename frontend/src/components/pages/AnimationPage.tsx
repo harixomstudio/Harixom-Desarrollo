@@ -3,7 +3,7 @@ import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-interface Publication {
+interface AnimationPublication {
   id: number;
   description: string;
   image?: string;
@@ -16,11 +16,11 @@ interface Publication {
   category?: string;
 }
 
-interface FeedPageProps {
-  publications: Publication[];
+interface AnimationPageProps {
+  animationPublications: AnimationPublication[];
 }
 
-export default function FeedPage({ publications }: FeedPageProps) {
+export default function AnimationPage({ animationPublications }: AnimationPageProps) {
   const token = localStorage.getItem("access_token");
   const { showToast } = useToast();
 
@@ -81,7 +81,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
         const newFollows: { [key: number]: boolean } = {};
         const newHideFollow: { [key: number]: boolean } = {};
 
-        publications.forEach((pub) => {
+        animationPublications.forEach((pub) => {
           if (pub.user_id) {
             const isFollowing = data.followings.some(
               (f: any) => f.id === pub.user_id
@@ -102,17 +102,17 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
     // Inicializar comentarios y likes
     const initialComments: { [key: number]: string[] } = {};
-    publications.forEach((pub) => {
+    animationPublications.forEach((pub) => {
       initialComments[pub.id] = Array(pub.total_comments || 0).fill("");
     });
     setComments(initialComments);
 
     const counts: { [key: number]: number } = {};
-    publications.forEach((pub) => {
+    animationPublications.forEach((pub) => {
       counts[pub.id] = pub.total_likes || 0;
     });
     setLikesCount(counts);
-  }, [userLikes, publications, token]);
+  }, [userLikes, animationPublications, token]);
 
   // Evita renderizar publicaciones hasta conocer el usuario actual
   if (currentUserId === null) {
@@ -203,15 +203,16 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   return (
     <div className="bg-stone-950 min-h-screen p-10">
+      <div className="flex items-center gap-3 mb-8">
         <img
           src="./public/icon-animacion.svg" 
           alt="animacion Icon"
           className="w-15 h-15 mt-2"
         />
         <span className="text-[#A39FF6] text-4xl font-bold">Animation</span>
-      
+      </div>
       <div className="grid grid-cols-4 gap-6">
-        {publications.map((pub) => (
+        {animationPublications.map((pub) => (
           <div
             key={pub.id}
             className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px]"

@@ -3,7 +3,7 @@ import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-interface DigitalArtPublication {
+interface PhotographyPublication {
   id: number;
   description: string;
   image?: string;
@@ -16,11 +16,11 @@ interface DigitalArtPublication {
   category?: string;
 }
 
-interface DigitalArtPageProps {
-  digitalArtPublications: DigitalArtPublication[];
+interface PhotographyPageProps {
+  photographyPublications: PhotographyPublication[];
 }
 
-export default function FeedPage({ digitalArtPublications }: DigitalArtPageProps) {
+export default function FeedPage({ photographyPublications }: PhotographyPageProps) {
   const token = localStorage.getItem("access_token");
   const { showToast } = useToast();
 
@@ -81,7 +81,7 @@ export default function FeedPage({ digitalArtPublications }: DigitalArtPageProps
         const newFollows: { [key: number]: boolean } = {};
         const newHideFollow: { [key: number]: boolean } = {};
 
-        digitalArtPublications.forEach((pub) => {
+        photographyPublications.forEach((pub) => {
           if (pub.user_id) {
             const isFollowing = data.followings.some(
               (f: any) => f.id === pub.user_id
@@ -102,17 +102,17 @@ export default function FeedPage({ digitalArtPublications }: DigitalArtPageProps
 
     // Inicializar comentarios y likes
     const initialComments: { [key: number]: string[] } = {};
-    digitalArtPublications.forEach((pub) => {
+    photographyPublications.forEach((pub) => {
       initialComments[pub.id] = Array(pub.total_comments || 0).fill("");
     });
     setComments(initialComments);
 
     const counts: { [key: number]: number } = {};
-    digitalArtPublications.forEach((pub) => {
+    photographyPublications.forEach((pub) => {
       counts[pub.id] = pub.total_likes || 0;
     });
     setLikesCount(counts);
-  }, [userLikes, digitalArtPublications, token]);
+  }, [userLikes, photographyPublications, token]);
 
   // Evita renderizar publicaciones hasta conocer el usuario actual
   if (currentUserId === null) {
@@ -203,17 +203,16 @@ export default function FeedPage({ digitalArtPublications }: DigitalArtPageProps
 
   return (
     <div className="bg-stone-950 min-h-screen p-10">
-        <div className="flex items-center gap-3 mb-8">
-          <img
-          src="./public/icon-digitalart.svg" 
-          alt="Digital Art Icon"
+      <div className="flex items-center gap-3 mb-8">
+        <img
+          src="./public/icon-foto.svg" 
+          alt="animacion Icon"
           className="w-15 h-15 mt-2"
         />
-        <span className="text-pink-400 text-4xl font-bold">Digital Art</span>
-      
-        </div>
+        <span className="text-[#ff6161] text-4xl font-bold">Photography</span>
+      </div>
       <div className="grid grid-cols-4 gap-6">
-        {digitalArtPublications.map((pub) => (
+        {photographyPublications.map((pub) => (
           <div
             key={pub.id}
             className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px]"

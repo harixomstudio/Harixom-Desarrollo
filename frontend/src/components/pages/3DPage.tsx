@@ -3,7 +3,7 @@ import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-interface Publication {
+interface Art3DPublication {
   id: number;
   description: string;
   image?: string;
@@ -16,11 +16,11 @@ interface Publication {
   category?: string;
 }
 
-interface FeedPageProps {
-  publications: Publication[];
+interface Art3DPageProps {
+  art3DPublications: Art3DPublication[];
 }
 
-export default function FeedPage({ publications }: FeedPageProps) {
+export default function Art3DFeedPage({ art3DPublications }: Art3DPageProps) {
   const token = localStorage.getItem("access_token");
   const { showToast } = useToast();
 
@@ -81,7 +81,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
         const newFollows: { [key: number]: boolean } = {};
         const newHideFollow: { [key: number]: boolean } = {};
 
-        publications.forEach((pub) => {
+        art3DPublications.forEach((pub) => {
           if (pub.user_id) {
             const isFollowing = data.followings.some(
               (f: any) => f.id === pub.user_id
@@ -102,17 +102,17 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
     // Inicializar comentarios y likes
     const initialComments: { [key: number]: string[] } = {};
-    publications.forEach((pub) => {
+    art3DPublications.forEach((pub) => {
       initialComments[pub.id] = Array(pub.total_comments || 0).fill("");
     });
     setComments(initialComments);
 
     const counts: { [key: number]: number } = {};
-    publications.forEach((pub) => {
+    art3DPublications.forEach((pub) => {
       counts[pub.id] = pub.total_likes || 0;
     });
     setLikesCount(counts);
-  }, [userLikes, publications, token]);
+  }, [userLikes, art3DPublications, token]);
 
   // Evita renderizar publicaciones hasta conocer el usuario actual
   if (currentUserId === null) {
@@ -212,7 +212,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
         <span className="text-[#DBFF4F] text-4xl font-bold">3D art</span>
       </div>
       <div className="grid grid-cols-4 gap-6">
-        {publications.map((pub) => (
+        {art3DPublications.map((pub) => (
           <div
             key={pub.id}
             className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px]"

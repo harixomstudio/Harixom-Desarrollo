@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import FeedPage from "../components/pages/FeedPage";
+import TraditionalArtPage from "../components/pages/TraditionalArtPage";
 
 export const Route = createFileRoute("/TraditionalArt")({
   component: RouteComponent,
@@ -47,5 +47,5 @@ function RouteComponent() {
       pub.category?.toLowerCase() === "Traditional Art".toLowerCase()
   );
 
-  return <FeedPage publications={traditionalArtPublications} />;
+  return <TraditionalArtPage traditionalArtPublications={traditionalArtPublications} />;
 }
