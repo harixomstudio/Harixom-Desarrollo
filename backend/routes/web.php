@@ -17,3 +17,12 @@ Route::middleware(AdminMiddleware::class)->group(function(){
     Route::get('/admin/users/create', [AdminController::class, 'create'])->name('createUser');
     Route::post('/admin/users', [App\Http\Controllers\Api\UserController::class, 'store'])->name('storeUser');
 });
+
+
+Route::get('/event', function () {return view('Events.indexEvent');})->name('event');
+Route::get('/createEvent', function () {return view('Events.createEvent');})->name('createEvent');
+Route::get('/updateEvent', function () {return view('Events.updateEvent');})->name('updateEvent');
+
+Route::get('/taller', function () {return view('Talleres.indexTaller');})->name('taller');
+Route::get('/createTaller', function () {return view('Talleres.createTaller');})->name('createTaller');
+Route::get('/updateTaller', function () {return view('Talleres.updateTaller');})->name('updateTaller');
