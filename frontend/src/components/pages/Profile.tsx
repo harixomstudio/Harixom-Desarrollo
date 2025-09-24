@@ -13,7 +13,7 @@ interface ProfileProps {
   bannerPicture?: string;
   tabs?: string[];
   cards: { id: number; description: string; image?: string }[];
-  likes: [];
+  likes: any[];
 }
 
 export default function Profile(props: ProfileProps) {
@@ -27,9 +27,10 @@ export default function Profile(props: ProfileProps) {
   const tabs = props.tabs || ["Home", "Commissions", "Feed", "Favorites"];
   const [deleteModalOpen, setDeleteModalOpen] = React.useState<number | null>(
     null
-  ); // Estado para el modal de eliminación
+  );
 
-  // Estados para edición de Commissions
+  const [favorites, setFavorites] = React.useState(props.likes || []);
+
   const [editing, setEditing] = React.useState(false);
   const [services, setServices] = React.useState(
     "Fnasarts\nSibek\nMecha\nMega\nCore"
@@ -41,7 +42,6 @@ export default function Profile(props: ProfileProps) {
     "El pago completo se hace primero.\nUna vez realizado el dibujo se empezará.\nNo se aceptan reembolsos."
   );
 
-  // Estados para el muro
   const [newComment, setNewComment] = React.useState("");
   const [comments, setComments] = React.useState([
     {
@@ -58,8 +58,6 @@ export default function Profile(props: ProfileProps) {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-
-      // Actualiza el estado de las cards sin recargar
       setCards((prev) => prev.filter((c) => c.id !== id));
       showToast("¡Publicación eliminada!", "success");
     } catch (error) {
@@ -70,10 +68,35 @@ export default function Profile(props: ProfileProps) {
     }
   };
 
+  const handleToggleLike = async (postId: number) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const { data } = await axios.post(
+        `http://127.0.0.1:8000/api/like/${postId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // Actualizar favoritos localmente
+      if (data.liked) {
+        setFavorites((prev) => [...prev, data.post]); // agrega si liked
+      } else {
+        setFavorites((prev) => prev.filter((f) => f.id !== postId)); // elimina si deslike
+      }
+      showToast(data.liked ? "Like agregado" : "Like eliminado", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("No se pudo actualizar el like", "error");
+    }
+  };
+
+  React.useEffect(() => {
+    setFavorites(props.likes || []);
+  }, [props.likes]);
+
   return (
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen">
       <div className="w-full flex flex-col">
-        {/* Banner */}
+        {/* Banner y Avatar */}
         <div className="relative mb-10">
           <div className="rounded-xl h-100 flex relative overflow-hidden w-full">
             <div className="flex relative w-full h-full items-center justify-center">
@@ -83,16 +106,12 @@ export default function Profile(props: ProfileProps) {
                 className="w-full h-full object-cover"
               />
               {props.bannerPicture ===
-                "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" ? (
-                <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">
-                  Change banner
-                </h2>
-              ) : (
-                ""
-              )}
+                "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" && (
+                  <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">
+                    Change banner
+                  </h2>
+                )}
             </div>
-
-            {/* Edit icon */}
             <div className="absolute right-8 bottom-8 cursor-pointer">
               <Link to="/SetProfile">
                 <svg
@@ -108,7 +127,6 @@ export default function Profile(props: ProfileProps) {
                 </svg>
               </Link>
             </div>
-            {/* Avatar */}
             <div className="absolute left-5 bottom-2">
               <img
                 src={
@@ -131,51 +149,79 @@ export default function Profile(props: ProfileProps) {
           </div>
           <div className="flex gap-35 text-gray-400 text-lg mb-1">
             <span>{props.address}</span>
-            <span className="cursor-pointer hover:text-pink-400" onClick={() => setShowFollowers(true)}>
+            <span
+              className="cursor-pointer hover:text-pink-400"
+              onClick={() => setShowFollowers(true)}
+            >
               {props.followers.length}
             </span>
-            <span className="cursor-pointer hover:text-pink-400" onClick={() => setShowFollowings(true)}>
+            <span
+              className="cursor-pointer hover:text-pink-400"
+              onClick={() => setShowFollowings(true)}
+            >
               {props.followings.length}
             </span>
           </div>
 
+          {/* Followers Modal */}
           {showFollowers && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
                 <h3 className="text-pink-400 font-bold mb-4">Followers</h3>
                 <ul>
-                  {props.followers.map(f => (
-                    <li key={f.id} className="text-gray-200 mb-2 flex items-center gap-2">
-                      <img src={f.profile_picture} className="w-6 h-6 rounded-full" />
+                  {props.followers.map((f) => (
+                    <li
+                      key={f.id}
+                      className="text-gray-200 mb-2 flex items-center gap-2"
+                    >
+                      <img
+                        src={f.profile_picture}
+                        className="w-6 h-6 rounded-full"
+                      />
                       {f.name}
                     </li>
                   ))}
                 </ul>
-                <button className="mt-4 px-4 py-2 bg-pink-500 text-white rounded" onClick={() => setShowFollowers(false)}>Close</button>
+                <button
+                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  onClick={() => setShowFollowers(false)}
+                >
+                  Close
+                </button>
               </div>
             </div>
           )}
 
+          {/* Followings Modal */}
           {showFollowings && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
                 <h3 className="text-pink-400 font-bold mb-4">Followings</h3>
                 <ul>
-                  {props.followings.map(f => (
-                    <li key={f.id} className="text-gray-200 mb-2 flex items-center gap-2">
-                      <img src={f.profile_picture} className="w-6 h-6 rounded-full" />
+                  {props.followings.map((f) => (
+                    <li
+                      key={f.id}
+                      className="text-gray-200 mb-2 flex items-center gap-2"
+                    >
+                      <img
+                        src={f.profile_picture}
+                        className="w-6 h-6 rounded-full"
+                      />
                       {f.name}
                     </li>
                   ))}
                 </ul>
-                <button className="mt-4 px-4 py-2 bg-pink-500 text-white rounded" onClick={() => setShowFollowings(false)}>Close</button>
+                <button
+                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  onClick={() => setShowFollowings(false)}
+                >
+                  Close
+                </button>
               </div>
             </div>
           )}
 
-          <p className="text-gray-300 text-sm mt-2 py-10">
-            {props.description}
-          </p>
+          <p className="text-gray-300 text-sm mt-2 py-10">{props.description}</p>
         </div>
 
         {/* Tabs */}
@@ -194,11 +240,11 @@ export default function Profile(props: ProfileProps) {
           ))}
         </div>
 
-        {/* Contenido dinámico según tab */}
+        {/* Contenido */}
         <div className="w-full flex flex-col py-10 px-6">
           {activeTab === 1 ? (
+            /* Commissions tab */
             <>
-              {/* Botón de edición */}
               <div className="flex justify-end mb-6">
                 <button
                   onClick={() => setEditing(!editing)}
@@ -208,9 +254,7 @@ export default function Profile(props: ProfileProps) {
                 </button>
               </div>
 
-              {/* Vista o formulario */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Servicios */}
                 <div className="bg-stone-800 rounded-lg p-6 text-gray-200">
                   <h3 className="text-pink-400 font-bold text-lg mb-4">
                     Services
@@ -222,17 +266,12 @@ export default function Profile(props: ProfileProps) {
                       className="w-full bg-stone-900 text-sm text-gray-100 p-2 rounded resize-none h-40"
                     />
                   ) : (
-                    <ul className="space-y-2 text-sm whitespace-pre-line">
-                      {services}
-                    </ul>
+                    <pre className="text-sm whitespace-pre-line">{services}</pre>
                   )}
                 </div>
 
-                {/* Precios */}
                 <div className="bg-stone-800 rounded-lg p-6 text-gray-200">
-                  <h3 className="text-pink-400 font-bold text-lg mb-4">
-                    Price
-                  </h3>
+                  <h3 className="text-pink-400 font-bold text-lg mb-4">Price</h3>
                   {editing ? (
                     <textarea
                       value={prices}
@@ -240,13 +279,10 @@ export default function Profile(props: ProfileProps) {
                       className="w-full bg-stone-900 text-sm text-gray-100 p-2 rounded resize-none h-40"
                     />
                   ) : (
-                    <ul className="space-y-2 text-sm whitespace-pre-line">
-                      {prices}
-                    </ul>
+                    <pre className="text-sm whitespace-pre-line">{prices}</pre>
                   )}
                 </div>
 
-                {/* Términos */}
                 <div className="bg-stone-800 rounded-lg p-6 text-gray-200">
                   <h3 className="text-pink-400 font-bold text-lg mb-4">
                     Terms and Conditions
@@ -258,17 +294,14 @@ export default function Profile(props: ProfileProps) {
                       className="w-full bg-stone-900 text-sm text-gray-100 p-2 rounded resize-none h-40"
                     />
                   ) : (
-                    <ul className="space-y-2 text-sm whitespace-pre-line">
-                      {terms}
-                    </ul>
+                    <pre className="text-sm whitespace-pre-line">{terms}</pre>
                   )}
                 </div>
               </div>
             </>
           ) : activeTab === 2 ? (
-            // Muro
+            /* Feed tab */
             <div className="w-full max-w-4xl mx-auto">
-              {/* Caja de comentario */}
               <div className="mb-6">
                 <textarea
                   value={newComment}
@@ -295,7 +328,6 @@ export default function Profile(props: ProfileProps) {
                 </div>
               </div>
 
-              {/* Lista de comentarios */}
               <div className="space-y-4">
                 {comments.map((comment, i) => (
                   <div
@@ -311,15 +343,21 @@ export default function Profile(props: ProfileProps) {
               </div>
             </div>
           ) : activeTab === 3 ? (
-            // 🔹 Tab Me gustas
+            /* Favorites tab */
             <div className="w-full max-w-4xl mx-auto">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {props.likes?.length ? (
-                  props.likes.map((like: any) => (
+                {favorites.length ? (
+                  favorites.map((like: any) => (
                     <div
                       key={like.id}
-                      className="bg-stone-800 rounded-lg p-4 flex flex-col items-center"
+                      className="relative bg-stone-800 rounded-lg p-4 flex flex-col items-center"
                     >
+                      <button
+                        onClick={() => handleToggleLike(like.id)}
+                        className="absolute top-2 right-2 bg-pink-400 hover:bg-pink-500 text-white text-xs px-2 py-1 rounded"
+                      >
+                        ✕
+                      </button>
                       {like.image ? (
                         <img
                           src={like.image}
@@ -335,13 +373,14 @@ export default function Profile(props: ProfileProps) {
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-400 text-sm col-span-4 text-center">No hay likes aún.</p>
+                  <p className="text-gray-400 text-sm col-span-4 text-center">
+                    No hay likes aún.
+                  </p>
                 )}
               </div>
             </div>
           ) : (
-            // Posts (Cards)
-
+            /* Home tab - Posts */
             <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
               {cards.length ? (
                 cards.map((card) => (
@@ -349,7 +388,6 @@ export default function Profile(props: ProfileProps) {
                     key={card.id}
                     className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative"
                   >
-                    {/* Botón eliminar */}
                     <button
                       onClick={() => setDeleteModalOpen(card.id)}
                       className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 text-white text-xs px-2 py-1 rounded"
@@ -357,13 +395,11 @@ export default function Profile(props: ProfileProps) {
                       ✕
                     </button>
 
-                    {/* Modal de confirmación */}
                     {deleteModalOpen === card.id && (
                       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                         <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
                           <h2 className="text-white text-lg font-semibold mb-4">
-                            ¿Estás seguro de que deseas eliminar esta
-                            publicación?
+                            ¿Estás seguro de que deseas eliminar esta publicación?
                           </h2>
                           <div className="flex justify-end gap-4 mt-4">
                             <button
@@ -409,7 +445,7 @@ export default function Profile(props: ProfileProps) {
         </div>
       </div>
 
-      {/* Botón flotante para crear publicación */}
+      {/* Botón flotante */}
       <Link
         to="/CreatePublication"
         className="fixed bottom-6 right-6 bg-pink-500 hover:bg-pink-600 text-white text-lg font-bold py-3 px-5 rounded-full shadow-lg transition-all duration-300"

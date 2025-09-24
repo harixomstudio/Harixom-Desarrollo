@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
+import { Route as TraditionalArtRouteImport } from './routes/TraditionalArt'
 import { Route as TermsRouteImport } from './routes/Terms'
 import { Route as StreetArtRouteImport } from './routes/StreetArt'
 import { Route as SetProfileRouteImport } from './routes/SetProfile'
@@ -42,6 +43,11 @@ const WorkshopsRoute = WorkshopsRouteImport.update({
 const UserRegisterRoute = UserRegisterRouteImport.update({
   id: '/UserRegister',
   path: '/UserRegister',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TraditionalArtRoute = TraditionalArtRouteImport.update({
+  id: '/TraditionalArt',
+  path: '/TraditionalArt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/SetProfile': typeof SetProfileRoute
   '/StreetArt': typeof StreetArtRoute
   '/Terms': typeof TermsRoute
+  '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
 }
@@ -204,6 +211,7 @@ export interface FileRoutesByTo {
   '/SetProfile': typeof SetProfileRoute
   '/StreetArt': typeof StreetArtRoute
   '/Terms': typeof TermsRoute
+  '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
 }
@@ -231,6 +239,7 @@ export interface FileRoutesById {
   '/SetProfile': typeof SetProfileRoute
   '/StreetArt': typeof StreetArtRoute
   '/Terms': typeof TermsRoute
+  '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
 }
@@ -259,6 +268,7 @@ export interface FileRouteTypes {
     | '/SetProfile'
     | '/StreetArt'
     | '/Terms'
+    | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
   fileRoutesByTo: FileRoutesByTo
@@ -285,6 +295,7 @@ export interface FileRouteTypes {
     | '/SetProfile'
     | '/StreetArt'
     | '/Terms'
+    | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
   id:
@@ -311,6 +322,7 @@ export interface FileRouteTypes {
     | '/SetProfile'
     | '/StreetArt'
     | '/Terms'
+    | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
   fileRoutesById: FileRoutesById
@@ -338,6 +350,7 @@ export interface RootRouteChildren {
   SetProfileRoute: typeof SetProfileRoute
   StreetArtRoute: typeof StreetArtRoute
   TermsRoute: typeof TermsRoute
+  TraditionalArtRoute: typeof TraditionalArtRoute
   UserRegisterRoute: typeof UserRegisterRoute
   WorkshopsRoute: typeof WorkshopsRoute
 }
@@ -356,6 +369,13 @@ declare module '@tanstack/react-router' {
       path: '/UserRegister'
       fullPath: '/UserRegister'
       preLoaderRoute: typeof UserRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/TraditionalArt': {
+      id: '/TraditionalArt'
+      path: '/TraditionalArt'
+      fullPath: '/TraditionalArt'
+      preLoaderRoute: typeof TraditionalArtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/Terms': {
@@ -538,6 +558,7 @@ const rootRouteChildren: RootRouteChildren = {
   SetProfileRoute: SetProfileRoute,
   StreetArtRoute: StreetArtRoute,
   TermsRoute: TermsRoute,
+  TraditionalArtRoute: TraditionalArtRoute,
   UserRegisterRoute: UserRegisterRoute,
   WorkshopsRoute: WorkshopsRoute,
 }

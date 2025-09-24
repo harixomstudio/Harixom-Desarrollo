@@ -1,6 +1,4 @@
-
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -185,16 +183,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
       const { data } = await axios.post(
         `http://localhost:8000/api/comment/${id}`,
         { comment: text },
-<<<<<<< Updated upstream
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-=======
         { headers: { Authorization: `Bearer ${token}` } }
->>>>>>> Stashed changes
       );
 
       setComments((prev) => ({
@@ -222,12 +211,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
           >
             {/* Imagen */}
             <div className="relative w-full h-[340px] aspect-square flex items-center justify-center">
-<<<<<<< Updated upstream
-              {/* Avatar y nombre sobre la imagen */}
-              <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
-                <img
-                  src={pub.user_profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
-=======
               {/* Avatar y nombre */}
               <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
                 <img
@@ -235,7 +218,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     pub.user_profile_picture ||
                     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                   }
->>>>>>> Stashed changes
                   alt={pub.user_name}
                   className="w-8 h-8 rounded-full border-2 border-white object-cover"
                 />
@@ -243,10 +225,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   {pub.user_name || "ArtistUser"}
                 </span>
               </div>
-<<<<<<< Updated upstream
-              {/* Imagen principal */}
-=======
->>>>>>> Stashed changes
               {pub.image ? (
                 <img
                   src={pub.image}
@@ -254,32 +232,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   className="w-full h-full object-cover"
                 />
               ) : (
-<<<<<<< Updated upstream
-                <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
-                  {/* Placeholder */}
-                </div>
-=======
                 <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs" />
->>>>>>> Stashed changes
               )}
             </div>
 
-<<<<<<< Updated upstream
-            </div>
-            {/* Footer estilo Instagram */}
-            <div className="flex flex-row justify-between items-center px-4 py-5 bg-[#151515]">
-              <div className="flex flex-row gap-5 items-center">
-                {/* Botón like */}
-                <button
-                  className={`opacity-80 flex flex-row items-center gap-1 ${likes[pub.id] ? "text-red-500" : "text-gray-300"}`}
-                  title="Like"
-                  onClick={() => toggleLike(pub.id)}
-                >
-                  <svg
-                    width="28"
-                    height="28"
-                    fill={likes[pub.id] ? "red" : "none"}
-=======
             {/* Footer */}
             <div className="flex flex-row justify-between items-center px-4 py-5 bg-[#151515]">
               <div className="flex flex-row gap-5 items-center">
@@ -316,52 +272,14 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     width="28"
                     height="28"
                     fill="none"
->>>>>>> Stashed changes
                     stroke="white"
                     strokeWidth="2"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M12 21s-1-.5-2-1.5S5 14 5 10.5 8 5 12 8s7-2 7 2.5-5 9-5 9-1 1-2 1z" />
-                  </svg>
-                  <span className="text-xs">{likesCount[pub.id] || 0}</span>
-
-                </button>
-                {/* Botón comentario */}
-                <button
-                  className="text-gray-300 opacity-80 flex flex-row items-center gap-1"
-                  title="Comentar"
-                  onClick={() => setIsModalOpen(pub.id)}
-                >
-                  <svg width="28" height="28" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
                   <span className="text-xs">{comments[pub.id]?.length || 0}</span>
                 </button>
-<<<<<<< Updated upstream
-                {/* Botón seguir */}
-                <button
-                  className={`opacity-80 flex items-center justify-center ${follows[pub.user_id!] ? "text-pink-500" : "text-gray-300"}`}
-                  title={follows[pub.user_id!] ? "Siguiendo" : "Seguir"}
-                  onClick={() => toggleFollow(pub.user_id!)}
-                >
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke={follows[pub.user_id!] ? "#ec4899" : "white"}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="16" />
-                    <line x1="8" y1="12" x2="16" y2="12" />
-                  </svg>
-                </button>
-                {/* Categoría */}
-                <span className="ml-17  text-gray-300 font-bold">
-=======
 
                 {/* Seguir (oculto si es el mismo user) */}
                 {pub.user_id !== undefined &&
@@ -408,28 +326,19 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   )}
                 {/* Categoría */}
                 <span className="ml-17 text-gray-300 font-bold">
->>>>>>> Stashed changes
                   {pub.category}
                 </span>
               </div>
             </div>
-<<<<<<< Updated upstream
-            {/* Nombre de la obra debajo de los botones */}
-=======
 
             {/* Descripción */}
->>>>>>> Stashed changes
             <div className="px-4 pb-6">
               <span className="text-base text-white font-bold block">
                 {pub.description || "Sin título"}
               </span>
             </div>
-<<<<<<< Updated upstream
-            {/* Modal de comentarios */}
-=======
 
             {/* Modal comentarios */}
->>>>>>> Stashed changes
             {isModalOpen === pub.id && (
               <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                 <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96 max-h-[80vh] flex flex-col">
@@ -479,7 +388,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                           await fetchComments(pub.id);
                           setCurrentComment("");
                         } else {
-                          showToast("El comentario no puede estar vacío", "error");
+                          showToast(
+                            "El comentario no puede estar vacío",
+                            "error"
+                          );
                         }
                       }}
                     >
@@ -489,11 +401,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 </div>
               </div>
             )}
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
           </div>
         ))}
       </div>
