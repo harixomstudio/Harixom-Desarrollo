@@ -92,8 +92,9 @@ const footer = {
     "https://www.tiktok.com/@harixom2025",
     "https://youtube.com/@harixom_2025",
   ],
-  contacts: ["+506 8394 7941", "harixonstudio@gmail.com"],
-  linksContacts: [""],
+   contacts: ["+506 8394 7941", "harixonstudio@gmail.com"],
+   linksContacts: ["https://wa.me/50683947941", "mailto:harixonstudio@gmail.com"],
+
 };
 
 function RouteComponent() {
