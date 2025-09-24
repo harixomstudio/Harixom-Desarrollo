@@ -231,6 +231,20 @@ export default function Landing(props: LandingProps) {
             >
               {props.textApp}
             </p>
+  
+             <div className="flex justify-center items-center py-5 ">
+               {/* Botón animado */}
+          <Link
+            to="/CreatePublication"
+            className="px-30  py-3 text-xl font-semibold rounded-full bg-gradient-to-r from-pink-800 to-pink-400 hover:scale-115 transition-transform duration-500 shadow-lg animate-float text-white "
+            style={{ fontFamily: "Monserrat" }}
+          >
+            Create your publication!
+          </Link>
+
+          </div>
+      
+
           </div>
         </section>
 
