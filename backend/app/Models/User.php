@@ -78,6 +78,15 @@ public function followers() {
     return $this->hasMany(Follow::class, 'following_id');
 }
 
+// Dentro del modelo Follow:
+public function following() {
+    return $this->belongsTo(User::class, 'following_id');
+}
+
+public function follower() {
+    return $this->belongsTo(User::class, 'user_id');
+}
+
 public function comments() {
     return $this->hasMany(Comment::class);
 }

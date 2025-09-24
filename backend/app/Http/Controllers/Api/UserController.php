@@ -63,10 +63,12 @@ class UserController extends Controller
 
         $user = User::create($data);
 
+
         return response()->json([
             'user' => new UserResource($user),
             'message' => 'Usuario creado correctamente.'
         ], 201);
+
     }
 
     //Funcion auth
