@@ -11,8 +11,35 @@ const categoriesUp = [
   "icon-sculture.svg",
   "icon-traditional.svg",
 ];
+const categoriesUpNames = [
+  "Arte Digital",
+  "Animación",
+  "Escultura",
+  "Tradicional",
+];
+const categoriesUpColors = [
+  "#FFAFEE", // rosa
+  "#A39FF6", // morado
+  "#96E2FF", // celeste
+  "#1AFB9B", // turquesa
+];
 const links = ["", "", "", ""];
-const categoriesDown = ["icon-3d.svg", "icon-streetart.svg", "icon-foto.svg"];
+
+const categoriesDown = [
+  "icon-3d.svg",
+  "icon-streetart.svg",
+  "icon-foto.svg",
+];
+const categoriesDownNames = [
+  "3D",
+  "Street Art",
+  "Fotografía",
+];
+const categoriesDownColors = [
+  "#D6FF39", // verde
+  "#FDD519", // naranja
+  "#FA6063", // rojo
+];
 const links2 = ["", "", ""];
 
 const rankImg = ["circles.svg", "circles.svg", "circles.svg", "circles.svg"];
@@ -75,8 +102,12 @@ function RouteComponent() {
       banner="Banner-final.svg"
       altBanner="a"
       categoriesUp={categoriesUp}
+      categoriesUpNames={categoriesUpNames}
+      categoriesUpColors={categoriesUpColors}
       links={links}
       categoriesDown={categoriesDown}
+      categoriesDownNames={categoriesDownNames}
+      categoriesDownColors={categoriesDownColors}
       links2={links2}
       imgApp="canva.svg"
       imgAppAlt="a"
