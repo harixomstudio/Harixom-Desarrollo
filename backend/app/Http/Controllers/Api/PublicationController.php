@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Publication;
 use App\Models\Follow;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -33,6 +34,7 @@ class PublicationController extends Controller
                     'user_name' => $pub->user ? $pub->user->name : 'Usuario',
                     'user_profile_picture' => $pub->user ? $pub->user->profilePicturePath() : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                     'total_likes' => $pub->likes_count,
+                    'total_comments' => $pub->comments_count,
                 ];
             });
 

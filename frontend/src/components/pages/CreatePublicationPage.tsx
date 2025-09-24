@@ -25,14 +25,12 @@ export default function CreatePublicationPage({
 
   const categoryOptions = [
     "Digital Art",
-    "Art",
-    "Animation 3d",
     "Animation",
     "Sculture",
-    "Painting",
+    "Traditional Art",
+    "3D Art",
+    "Street Art",
     "Photography",
-    "StreetArt",
-    "Traditional",
   ];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,12 +86,12 @@ export default function CreatePublicationPage({
 
         <div className="flex flex-col items-center justify-center h-full ">
           <div className="mb-8 text-center">
-            <h2 className="text-2xl font-bold text-pink-500">{title}</h2>
+            <h2 className="text-2xl font-bold text-pink-400">{title}</h2>
           </div>
 
           <div className="w-full max-w-xl flex flex-col items-center gap-8">
             {/* Selector de imagen */}
-            <div className="w-full bg-gray-700 rounded-lg flex items-center justify-center text-white cursor-pointer relative overflow-hidden">
+            <div className="w-full bg-gray-400 rounded-lg flex items-center justify-center text-white cursor-pointer relative overflow-hidden">
               <label className="w-full flex items-center justify-center relative">
                 {selectedImage && previewUrl ? (
                   <img
@@ -123,7 +121,7 @@ export default function CreatePublicationPage({
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder="Add description"
-                className="w-full bg-stone-800 text-gray-300 p-3 rounded-lg border border-stone-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="w-full bg-stone-950 text-gray-300 p-3 rounded-lg border-b-2 border-stone-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
               />
             </div>
 
@@ -135,7 +133,7 @@ export default function CreatePublicationPage({
               <select
                 value={cat}
                 onChange={(e) => setCat(e.target.value)}
-                className="w-full bg-stone-800 text-gray-300 p-3 rounded-lg border border-stone-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="w-full bg-stone-950 text-gray-300 p-3 rounded-lg border-b-2 border-stone-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
               >
                 <option value="" disabled>
                   Select category
@@ -154,7 +152,7 @@ export default function CreatePublicationPage({
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full py-3 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-400 hover:shadow-lg disabled:opacity-50"
+                className="w-full py-3 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-300 hover:shadow-lg disabled:opacity-50"
               >
                 {loading ? "Creando..." : "Create"}
               </button>

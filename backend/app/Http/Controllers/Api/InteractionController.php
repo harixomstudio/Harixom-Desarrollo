@@ -148,6 +148,24 @@ public function userFollows()
         ]
     ]);
 }
+
+public function getComments($publicationId)
+{
+    $comments = Comment::with('user') // para traer info del usuario
+        ->where('publication_id', $publicationId)
+        ->orderBy('created_at', 'asc')
+        ->get();
+
+    return response()->json([
+        'comments' => $comments->map(function ($comment) {
+            return [
+                'user' => ['name' => $comment->user->name],
+                'comment' => $comment->comment,
+                'created_at' => $comment->created_at->diffForHumans(),
+            ];
+        })
+    ]);
+}
 }
 
 

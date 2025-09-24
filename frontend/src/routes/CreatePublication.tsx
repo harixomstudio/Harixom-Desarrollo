@@ -10,7 +10,7 @@ function RouteComponent() {
     <CreatePublicationPage
       title="Create Publication"
       description="Mi primera publicación"
-      category="Art"
+      category="Digital Art"
     />
   );
 }

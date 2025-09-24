@@ -11,6 +11,7 @@ const categoriesUp = [
   "icon-sculture.svg",
   "icon-traditional.svg",
 ];
+<<<<<<< Updated upstream
 const categoriesUpNames = [
   "Digital Art",
   "Animatión",
@@ -40,6 +41,10 @@ const categoriesDownColors = [
   "#FDD519", // naranja
   "#FA6063", // rojo
 ];
+=======
+const links = ["/DigitalArt", "/Animation", "/Sculture", "/TraditionalArt"];
+const categoriesDown = ["icon-3d.svg", "icon-streetart.svg", "icon-foto.svg"];
+>>>>>>> Stashed changes
 const links2 = ["/3d", "/StreetArt", "/Photography"];
 
 const rankImg = ["circles.svg", "circles.svg", "circles.svg", "circles.svg"];
