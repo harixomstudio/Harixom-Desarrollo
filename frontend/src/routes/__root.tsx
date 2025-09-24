@@ -37,14 +37,7 @@ function RootComponent() {
     "/SetProfile",
     "/CreatePublication",
     "/DigitalArt",
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
     "/TraditionalArt",
->>>>>>> Stashed changes
-=======
-    "/TraditionalArt",
->>>>>>> Stashed changes
     "/Animation",
     "/Sculture",
     "/Paint",
