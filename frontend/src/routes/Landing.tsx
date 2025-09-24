@@ -12,10 +12,10 @@ const categoriesUp = [
   "icon-traditional.svg",
 ];
 const categoriesUpNames = [
-  "Arte Digital",
-  "Animación",
-  "Escultura",
-  "Tradicional",
+  "Digital Art",
+  "Animatión",
+  "Sculture",
+  "Traditional",
 ];
 const categoriesUpColors = [
   "#FFAFEE", // rosa
@@ -23,7 +23,7 @@ const categoriesUpColors = [
   "#96E2FF", // celeste
   "#1AFB9B", // turquesa
 ];
-const links = ["", "", "", ""];
+const links = ["/DigitalArt", "/Animation", "/Sculture", "Traditional"];
 
 const categoriesDown = [
   "icon-3d.svg",
@@ -33,14 +33,14 @@ const categoriesDown = [
 const categoriesDownNames = [
   "3D",
   "Street Art",
-  "Fotografía",
+  "Photography",
 ];
 const categoriesDownColors = [
   "#D6FF39", // verde
   "#FDD519", // naranja
   "#FA6063", // rojo
 ];
-const links2 = ["", "", ""];
+const links2 = ["/3d", "/StreetArt", "/Photography"];
 
 const rankImg = ["circles.svg", "circles.svg", "circles.svg", "circles.svg"];
 const rankingArtist = [
