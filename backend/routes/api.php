@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Api\PublicationController;
 use App\Http\Controllers\Api\InteractionController;
 use App\Http\Controllers\Api\AIController;
+use App\Http\Controllers\Api\EventApiController;
+use App\Http\Controllers\Api\TallerApiController;
 
 Route::middleware('auth:sanctum')->group(function(){
     // Obtener perfil del usuario logueado
@@ -37,12 +39,17 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
     Route::get('/comment/{publication}', [InteractionController::class, 'getComments']);
 
-
+    
 //Rutas para mensajes
 
 //Rutas para notificaciones
 
 });
+
+//Rutas para eventos y talleres
+    Route::get('/events', [EventApiController::class, 'index']);
+    Route::get('/tallers', [TallerApiController::class, 'index']);
+
 
 // Rutas de IA sin auth
 Route::post('ia/challenge', [AIController::class, 'getChallenge']);
