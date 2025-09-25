@@ -42,19 +42,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach( ['Taller'] as $taller)
-                        <tr class="bg-stone-800 cursor-pointer user-row">
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+@foreach($tallers as $index => $taller)
+<tr class="bg-stone-800 cursor-pointer taller-row" data-taller-id="{{ $taller->id }}">
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $index+1 }}</td>
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->mode }}</td>
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->dateStart }}</td>
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->timeStart }}</td>
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->duration }}</td>
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->title }}</td>
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->description }}</td>
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->contributor }}</td>
+</tr>
+@endforeach
+</tbody>
                 </table>
             </div>
         </div>
@@ -69,12 +69,10 @@
         </a>
 
         <!-- Update  -->
-        <form action="{{ route('updateTaller') }}">
-            @csrf
-            <button class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-400 hover:scale-110 transform duration-300">
-                Update Taller
-            </button>
-        </form>
+        <a id="updateBtn"
+   class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-400 hover:scale-110 transform duration-300 opacity-50 pointer-events-none">
+   Update Taller
+</a>
 
         <!-- Delete  -->
         <form id="disableForm" action="" method="POST">
@@ -103,28 +101,28 @@
 </body>
 
 <script>
-    const deleteBtn = document.getElementById("deleteBtn");
-    const confirmModal = document.getElementById("confirmModal");
-    const cancelBtn = document.getElementById("cancelBtn");
-    const confirmBtn = document.getElementById("confirmBtn");
-    const disableForm = document.getElementById("disableForm");
+let selectedEventId = null;
+const updateBtn = document.getElementById('updateBtn');
 
-    // Mostrar el modal
-    deleteBtn.addEventListener("click", () => {
-        confirmModal.classList.remove("hidden");
-        confirmModal.classList.add("flex"); // para centrar con flex
-    });
+document.querySelectorAll('.taller-row').forEach(row => {
+    row.addEventListener('click', function() {
+        selectedEventId = this.dataset.eventId;
 
-    // Cancelar
-    cancelBtn.addEventListener("click", () => {
-        confirmModal.classList.add("hidden");
-        confirmModal.classList.remove("flex");
-    });
+        // remarcar fila
+        document.querySelectorAll('.event-row').forEach(r => r.classList.remove('bg-stone-600'));
+        this.classList.add('bg-stone-600');
 
-    // Confirmar eliminación
-    confirmBtn.addEventListener("click", () => {
-        disableForm.submit();
+        // activar enlace
+        updateBtn.href = "/updateTaller/" + selectedEventId;
+        updateBtn.classList.remove('opacity-50', 'pointer-events-none');
+
+        deleteBtn.classList.remove('opacity-50', 'pointer-events-none');
+        document.getElementById('disableTallerId').value = selectedEventId;
     });
+});
+
+// deshabilitar botón por defecto
+updateBtn.classList.add('opacity-50', 'pointer-events-none');
+deleteBtn.classList.add('opacity-50', 'pointer-events-none')
 </script>
-
 </html>

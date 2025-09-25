@@ -99,7 +99,20 @@
         </button>
     </form>
 </div>
-
+<div class="w-full max-w-4xl mx-auto flex justify-between mt-12 px-2">
+    <form action="{{ route('event') }}" method="GET">
+        @csrf
+        <button type="submit" class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-400 hover:shadow-lg">
+            Events CRUD
+        </button>
+    </form>
+    <form action="{{ route('taller') }}" method="GET">
+        @csrf
+        <button type="submit" class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-400 hover:shadow-lg">
+            Tallers CRUD
+        </button>
+    </form>
+    </div>
 </body>
         <script>
     let selectedUserId = null;

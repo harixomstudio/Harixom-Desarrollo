@@ -42,19 +42,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach( ['Events'] as $event)
-                        <tr class="bg-stone-800 cursor-pointer user-row">
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event }}</td>
-                            <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+    @foreach($events as $index => $event)
+    <tr class="bg-stone-800 cursor-pointer event-row" data-event-id="{{ $event->id }}">
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $index + 1 }}</td>
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->type }}</td>
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->dateStart }}</td>
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->timeStart }}</td>
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->title }}</td>
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->description }}</td>
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->dateEnd }}</td>
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->timeEnd }}</td>
+    </tr>
+    @endforeach
+</tbody>
                 </table>
             </div>
         </div>
@@ -63,28 +63,54 @@
     
     <div class="w-full max-w-4xl mx-auto flex justify-between mt-12 px-2">
         <!-- Create  -->
-        <a href="{{ route('createEvent') }}"
-            class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-teal-300 to-green-300 hover:scale-110 transform duration-300 border-2 border-teal-300">
-            Create Event
-        </a>
+        <a href="{{ route('createEvent') }}" 
+   class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-teal-300 to-green-300 hover:scale-110 transform duration-300 border-2 border-teal-300">
+   Create Event
+</a>
+        
 
         <!-- Update  -->
-        <form action="{{ route('updateEvent') }}" >
-            @csrf
-            <button class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-400 hover:scale-110 transform duration-300">
-                Update Event
-            </button>
-        </form>
+         <a id="updateBtn"
+   href="#"
+   class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-400 hover:scale-110 transform duration-300">
+   Update Event
+</a>
 
         <!-- Delete  -->
-        <form id="disableForm" action="" method="POST">
-            @csrf
-            <input type="hidden" name="event_id" id="disableEventId">
-            <button type="submit" class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-red-500 to-pink-400 hover:scale-110 transform duration-300">
-                Delete Event
-            </button>
-        </form>
+        <form id="disableForm" action="{{ route('deleteEvent') }}" method="POST">
+    @csrf
+    <input type="hidden" name="event_id" id="disableEventId">
+    <button type="submit" 
+        id="deleteBtn"
+        class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-red-500 to-pink-400 hover:scale-110 transform duration-300 opacity-50 pointer-events-none">
+        Delete Event
+    </button>
+</form>
     </div>
 </body>
+<script>
+let selectedEventId = null;
+const updateBtn = document.getElementById('updateBtn');
 
+document.querySelectorAll('.event-row').forEach(row => {
+    row.addEventListener('click', function() {
+        selectedEventId = this.dataset.eventId;
+
+        // remarcar fila
+        document.querySelectorAll('.event-row').forEach(r => r.classList.remove('bg-stone-600'));
+        this.classList.add('bg-stone-600');
+
+        // activar enlace
+        updateBtn.href = "/updateEvent/" + selectedEventId;
+        updateBtn.classList.remove('opacity-50', 'pointer-events-none');
+
+        deleteBtn.classList.remove('opacity-50', 'pointer-events-none');
+        document.getElementById('disableEventId').value = selectedEventId;
+    });
+});
+
+// deshabilitar botón por defecto
+updateBtn.classList.add('opacity-50', 'pointer-events-none');
+deleteBtn.classList.add('opacity-50', 'pointer-events-none')
+</script>
 </html>
