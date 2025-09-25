@@ -14,60 +14,66 @@ interface FooterProps {
 
 export default function Footer(props: FooterProps) {
   return (
-    <footer className="flex flex-col items-center  w-full py-20"
-      style={{ fontFamily: "monserrat" }}>
-      <section className="flex  w-full text-3xl max-lg:text-xl max-xl:text-xl py-10 max-lg:items-cente bg-[#141414]">
-        <div className="flex justify-between items-baseline w-full max-lg:flex-col max-lg:items-center max-lg:gap-20 px-15 ">
-          {/* the footer of the app */}
-          <div className="flex flex-col items-center justify-center max-lg:items-center ">
-            <h4 className="font-semibold pb-15 max-lg:pb-10">
-             
-            </h4>
-             <div className="text-pink-500 text-3xl pl-10"
-  style={{ fontFamily: "Starstruck" }}>
-          <a className="" href="/Landing">Harixom</a>
-        </div>
+    <footer
+      className="flex flex-col items-center w-full py-20"
+      style={{ fontFamily: "monserrat" }}
+    >
+      <section className="flex w-full text-3xl max-lg:text-xl max-xl:text-xl py-10 max-lg:items-center bg-[#141414]">
+        <div className="flex justify-between items-baseline w-full max-lg:flex-col max-lg:items-center max-lg:gap-20 px-15">
+          {/* Logo and title */}
+          <div className="flex flex-col items-center justify-center max-lg:items-center">
+            <h4 className="font-semibold pb-15 max-lg:pb-10"></h4>
+            <div
+              className="text-pink-500 text-3xl pl-10"
+              style={{ fontFamily: "Starstruck" }}
+            >
+              <a className="" href="/Landing">Harixom</a>
+            </div>
           </div>
 
-          {/* the products of the app */}
+          {/* Products */}
           <div className="flex flex-col items-start justify-center">
             <h4 className="font-semibold pb-15 max-lg:pb-5">Products</h4>
-            {props.products.map((products, number) => (
+            {props.products.map((product, index) => (
               <Link
-                to={props.linksProducts[number]}
-                className=" hover:scale-110 duration-600 hover:text-[#FA6063] pb-5 max-lg:pb-2"
+                key={index}
+                to={props.linksProducts[index]}
+                className="hover:scale-110 duration-600 hover:text-[#FA6063] pb-5 max-lg:pb-2"
               >
-                <li>{products}</li>
+                <li>{product}</li>
               </Link>
             ))}
           </div>
 
-          {/* the social networks of the app */}
+          {/* Social Media */}
           <div className="flex flex-col items-center justify-center max-lg:items-start">
             <h4 className="font-semibold pb-15 max-lg:pb-5">Social Medias</h4>
             <div className="grid grid-cols-2 gap-5">
-              {props.socialMedias.map((socialMedia, number) => (
-                <Link to={props.linksSocialMedia[number]}>
+              {props.socialMedias.map((socialMedia, index) => (
+                <Link key={index} to={props.linksSocialMedia[index]}>
                   <img
                     src={socialMedia}
                     alt=""
-                    className="hover:scale-110 duration-600 w-15 h-15 max-lg:w-15 max-lg:h-15 object-cover  rounded-full"
+                    className="hover:scale-110 duration-600 w-15 h-15 max-lg:w-15 max-lg:h-15 object-cover rounded-full"
                   />
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* the contats of the app */}
-          <div className="flex flex-col items-start justify-center ">
+          {/* Contacts */}
+          <div className="flex flex-col items-start justify-center">
             <h4 className="font-semibold pb-15 max-lg:pb-10">Contacts</h4>
-            {props.contacts.map((contacts, number) => (
-              <Link
-                to={props.linksContacts[number]}
-                className=" hover:scale-110 duration-600 hover:text-[#FA6063] pb-5 max-lg:pb-2 "
+            {props.contacts.map((contact, index) => (
+              <a
+                key={index}
+                href={props.linksContacts[index]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:scale-110 duration-600 hover:text-[#FA6063] pb-5 max-lg:pb-2"
               >
-                <li>{contacts}</li>
-              </Link>
+                <li>{contact}</li>
+              </a>
             ))}
           </div>
         </div>
