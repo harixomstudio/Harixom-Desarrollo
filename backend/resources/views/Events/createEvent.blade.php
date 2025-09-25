@@ -14,8 +14,8 @@
 
         <div class="w-full h-full bg-[#2c2c2c] rounded-[4rem] p-40 ">
             <h1 class="text-8xl font-semibold mb-16 text-pink-500">Create a event</h1>
-            <form action="{{route('createEvent')}}" method="POST">
-                @csrf
+            <form action="{{ route('storeEvent') }}" method="POST">
+    @csrf
                 @method('POST')
 
                 <div class="flex flex-col">

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Requests\AuthAdminRequest;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\TallerController;
 
 
 Route::get('/', [AdminController::class, 'login'])->name('admin.login');
@@ -16,13 +18,31 @@ Route::middleware(AdminMiddleware::class)->group(function(){
     Route::post('/admin/users/{id}/disable', [AdminController::class, 'disable'])->name('admin.users.disable');
     Route::get('/admin/users/create', [AdminController::class, 'create'])->name('createUser');
     Route::post('/admin/users', [App\Http\Controllers\Api\UserController::class, 'store'])->name('storeUser');
+
+    // Mostrar index de eventos
+    Route::get('/event', [EventController::class, 'index'])->name('event');
+
+    // Crear evento
+    Route::get('/createEvent', function () {return view('Events.createEvent');})->name('createEvent'); 
+    Route::post('/createEvent', [EventController::class, 'store'])->name('storeEvent'); 
+
+    // Editar evento
+    Route::get('/updateEvent/{id}', [EventController::class, 'edit'])->name('updateEvent');
+    Route::post('/updateEvent/{id}', [EventController::class, 'update'])->name('updateEventAction'); 
+
+    // Eliminar evento
+    Route::post('/deleteEvent', [EventController::class, 'destroy'])->name('deleteEvent');
+
+Route::get('/taller', [TallerController::class, 'index'])->name('taller');
+
+Route::get('/createTaller', function () { return view('Talleres.createTaller'); })->name('createTaller');
+Route::post('/createTaller', [TallerController::class, 'store'])->name('storeTaller');
+
+Route::get('/updateTaller/{id}', [TallerController::class, 'edit'])->name('updateTaller');
+Route::put('/updateTaller/{id}', [TallerController::class, 'update'])->name('updateTallerAction');
+
+Route::post('/deleteTaller', [TallerController::class, 'destroy'])->name('deleteTaller');
 });
 
 
-Route::get('/event', function () {return view('Events.indexEvent');})->name('event');
-Route::get('/createEvent', function () {return view('Events.createEvent');})->name('createEvent');
-Route::get('/updateEvent', function () {return view('Events.updateEvent');})->name('updateEvent');
 
-Route::get('/taller', function () {return view('Talleres.indexTaller');})->name('taller');
-Route::get('/createTaller', function () {return view('Talleres.createTaller');})->name('createTaller');
-Route::get('/updateTaller', function () {return view('Talleres.updateTaller');})->name('updateTaller');
