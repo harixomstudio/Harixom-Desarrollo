@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
 use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
+use App\Models\Like;
+use App\Models\Follow;
 
 Configuration::instance('cloudinary://175261732836894:2Cofi1fGKc6rmC1-ELQKZjxKCuw@duxccowqf?secure=true');
 
@@ -119,9 +121,6 @@ class UserController extends Controller
         $upload = new UploadApi();
         $user = $request->user();
 
-        Log::info("Usuario autenticado", $user->toArray());
-        Log::info("Request completo", $request->all());
-
         $data = $request->validate([
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users,email,' . $user->id,
@@ -132,12 +131,10 @@ class UserController extends Controller
             'banner_picture' => 'nullable|image|max:4096',
         ]);
 
-        Log::info("Datos validados", $data);
 
         // Manejo de archivos
         if ($request->hasFile('profile_picture')) {
-            Log::info("Nueva imagen de perfil recibida", ['file' => $request->file('profile_picture')->getClientOriginalName()]);
-
+           
             if ($user->profile_picture) {
                 @unlink(public_path($user->profile_picture));
             }
@@ -150,16 +147,13 @@ class UserController extends Controller
             ]);
 
             $data['profile_picture'] = $result['secure_url'];
-            Log::info("Nueva imagen de perfil guardada", ['new' => $result['secure_url']]);
-        }
+            }
 
         if ($request->hasFile('banner_picture')) {
-            Log::info("Nuevo banner recibido", ['file' => $request->file('banner_picture')->getClientOriginalName()]);
-
+            
             if ($user->banner_picture) {
                 @unlink(public_path($user->banner_picture));
-                Log::info("Banner anterior eliminado", ['old' => $user->banner_picture]);
-            }
+                }
 
          
             $result = $upload->upload($request->file('banner_picture')->getRealPath(), [
@@ -171,8 +165,6 @@ class UserController extends Controller
 
         $data['banner_picture'] = $result['secure_url'];
         }
-
-        Log::info("Antes de actualizar", $user->toArray());
 
         $user->fill($data);
         $user->save();
@@ -193,4 +185,81 @@ class UserController extends Controller
             'message' => 'La sesión ha sido cerrada exitosamente.'
         ]);
     }
+
+
+    //Funciones para perfil ajeno
+    public function showGuest($id)
+{
+    $user = User::with(['posts' => function($query){
+        $query->orderBy('created_at', 'desc');
+    }])->findOrFail($id);
+
+    $authUser = auth()->user();
+    $isFollowing = false;
+
+    if ($authUser) {
+        $isFollowing = $authUser->follows()->where('following_id', $id)->exists();
+    }
+
+    $followers = Follow::with('follower')
+    ->where('following_id', $id)
+    ->get()
+    ->map(fn($f) => [
+        'id' => $f->follower->id,
+        'name' => $f->follower->name,
+        'profile_picture' => $f->follower->profile_picture
+    ]);
+
+$followings = Follow::with('following')
+    ->where('follower_id', $id)
+    ->get()
+    ->map(fn($f) => [
+        'id' => $f->following->id,
+        'name' => $f->following->name,
+        'profile_picture' => $f->following->profile_picture
+    ]);
+
+    return response()->json([
+        'user' => $user,
+        'isFollowing' => $isFollowing,
+        'followers' => $followers,
+        'followings' => $followings,
+    ]);
+}
+
+    // Likes del usuario
+    public function guestLikes($id)
+    {
+        $likes = Like::with('publication')
+            ->where('user_id', $id)
+            ->get()
+            ->map(function($like){
+                return $like->publication;
+            });
+
+        return response()->json([
+            'likes' => $likes
+        ]);
+    }
+
+    // Followers y followings
+    public function guestFollows($id)
+    {
+        $followers = Follow::with('follower')
+            ->where('following_id', $id)
+            ->get()
+            ->map(fn($f) => $f->follower);
+
+        $followings = Follow::with('following')
+            ->where('follower_id', $id)
+            ->get()
+            ->map(fn($f) => $f->following);
+
+        return response()->json([
+            'followers' => $followers,
+            'followings' => $followings,
+        ]);
+    }
+
+    
 }

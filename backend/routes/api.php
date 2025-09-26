@@ -46,6 +46,11 @@ Route::middleware('auth:sanctum')->group(function(){
 
 });
 
+Route::middleware('auth:sanctum')->get('/users/{id}', [UserController::class, 'showGuest']);
+Route::get('/users/{id}/likes', [UserController::class, 'guestLikes']);
+Route::get('/users/{id}/follows', [UserController::class, 'guestFollows']);
+Route::get('/follow/{user}/check', [InteractionController::class, 'checkFollow']);
+
 //Rutas para eventos y talleres
     Route::get('/events', [EventApiController::class, 'index']);
     Route::get('/tallers', [TallerApiController::class, 'index']);
