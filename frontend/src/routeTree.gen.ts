@@ -19,9 +19,9 @@ import { Route as ScultureRouteImport } from './routes/Sculture'
 import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
 import { Route as RegisterAdminRouteImport } from './routes/RegisterAdmin'
 import { Route as RegisterRouteImport } from './routes/Register'
+import { Route as ProfileGuestRouteImport } from './routes/ProfileGuest'
 import { Route as ProfileRouteImport } from './routes/Profile'
 import { Route as PhotographyRouteImport } from './routes/Photography'
-import { Route as PaintRouteImport } from './routes/Paint'
 import { Route as LoginRouteImport } from './routes/Login'
 import { Route as LandingRouteImport } from './routes/Landing'
 import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
@@ -85,6 +85,11 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/Register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileGuestRoute = ProfileGuestRouteImport.update({
+  id: '/ProfileGuest',
+  path: '/ProfileGuest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/Profile',
   path: '/Profile',
@@ -93,11 +98,6 @@ const ProfileRoute = ProfileRouteImport.update({
 const PhotographyRoute = PhotographyRouteImport.update({
   id: '/Photography',
   path: '/Photography',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PaintRoute = PaintRouteImport.update({
-  id: '/Paint',
-  path: '/Paint',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -174,9 +174,9 @@ export interface FileRoutesByFullPath {
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
-  '/Paint': typeof PaintRoute
   '/Photography': typeof PhotographyRoute
   '/Profile': typeof ProfileRoute
+  '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
@@ -201,9 +201,9 @@ export interface FileRoutesByTo {
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
-  '/Paint': typeof PaintRoute
   '/Photography': typeof PhotographyRoute
   '/Profile': typeof ProfileRoute
+  '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
@@ -229,9 +229,9 @@ export interface FileRoutesById {
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
-  '/Paint': typeof PaintRoute
   '/Photography': typeof PhotographyRoute
   '/Profile': typeof ProfileRoute
+  '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
@@ -258,9 +258,9 @@ export interface FileRouteTypes {
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
-    | '/Paint'
     | '/Photography'
     | '/Profile'
+    | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
     | '/ResetPassword'
@@ -285,9 +285,9 @@ export interface FileRouteTypes {
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
-    | '/Paint'
     | '/Photography'
     | '/Profile'
+    | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
     | '/ResetPassword'
@@ -312,9 +312,9 @@ export interface FileRouteTypes {
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
-    | '/Paint'
     | '/Photography'
     | '/Profile'
+    | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
     | '/ResetPassword'
@@ -340,9 +340,9 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LandingRoute: typeof LandingRoute
   LoginRoute: typeof LoginRoute
-  PaintRoute: typeof PaintRoute
   PhotographyRoute: typeof PhotographyRoute
   ProfileRoute: typeof ProfileRoute
+  ProfileGuestRoute: typeof ProfileGuestRoute
   RegisterRoute: typeof RegisterRoute
   RegisterAdminRoute: typeof RegisterAdminRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -427,6 +427,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ProfileGuest': {
+      id: '/ProfileGuest'
+      path: '/ProfileGuest'
+      fullPath: '/ProfileGuest'
+      preLoaderRoute: typeof ProfileGuestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/Profile': {
       id: '/Profile'
       path: '/Profile'
@@ -439,13 +446,6 @@ declare module '@tanstack/react-router' {
       path: '/Photography'
       fullPath: '/Photography'
       preLoaderRoute: typeof PhotographyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/Paint': {
-      id: '/Paint'
-      path: '/Paint'
-      fullPath: '/Paint'
-      preLoaderRoute: typeof PaintRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/Login': {
@@ -548,9 +548,9 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LandingRoute: LandingRoute,
   LoginRoute: LoginRoute,
-  PaintRoute: PaintRoute,
   PhotographyRoute: PhotographyRoute,
   ProfileRoute: ProfileRoute,
+  ProfileGuestRoute: ProfileGuestRoute,
   RegisterRoute: RegisterRoute,
   RegisterAdminRoute: RegisterAdminRoute,
   ResetPasswordRoute: ResetPasswordRoute,

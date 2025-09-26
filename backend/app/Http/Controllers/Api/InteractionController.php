@@ -65,9 +65,6 @@ public function userLikes()
 {
     $user = auth()->user();
     if (!$user) {
-        Log::info('Usuario autenticado: ' . $user->id);
-    Log::info('Intentando seguir a usuario: ' . $userId);
-        Log::warning("Usuario no autenticado intentando seguir");
         return response()->json(['error' => 'No autenticado'], 401);
     }
 
@@ -95,6 +92,16 @@ public function userLikes()
 
     return response()->json([
         'following' => $following
+    ]);
+}
+
+public function checkFollow($userId)
+{
+    $user = auth()->user();
+    $exists = $user->follows()->where('following_id', $userId)->exists();
+
+    return response()->json([
+        'following' => $exists
     ]);
 }
 

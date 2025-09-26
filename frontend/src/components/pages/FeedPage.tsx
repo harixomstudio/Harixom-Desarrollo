@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -23,6 +24,7 @@ interface FeedPageProps {
 export default function FeedPage({ publications }: FeedPageProps) {
   const token = localStorage.getItem("access_token");
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   // Estados principales
   const [isModalOpen, setIsModalOpen] = useState<number | null>(null);
@@ -219,9 +221,25 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                   }
                   alt={pub.user_name}
-                  className="w-8 h-8 rounded-full border-2 border-white object-cover"
+                  className="w-8 h-8 rounded-full border-2 border-white object-cover cursor-pointer"
+                  onClick={() => {
+                    if (pub.user_id === currentUserId) {
+                      navigate({ to: "/Profile" });
+                    } else {
+                      navigate({ to: "/ProfileGuest", search: { userId: pub.user_id } });
+                    }
+                  }}
                 />
-                <span className="text-white font-semibold text-sm drop-shadow">
+                <span
+                  className="text-white font-semibold text-sm drop-shadow hover:text-pink-400 cursor-pointer"
+                  onClick={() => {
+                    if (pub.user_id === currentUserId) {
+                      navigate({ to: "/Profile" });
+                    } else {
+                      navigate({ to: "/ProfileGuest", search: { userId: pub.user_id } });
+                    }
+                  }}
+                >
                   {pub.user_name || "ArtistUser"}
                 </span>
               </div>
