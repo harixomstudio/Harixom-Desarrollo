@@ -124,7 +124,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+\d{1,3}\d{4,14}$/'],
             'address' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:500',
             'profile_picture' => 'nullable|image|max:2048',

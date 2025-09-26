@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function(){
 
 //Rutas para notificaciones
 
+
+
 });
 
 Route::middleware('auth:sanctum')->get('/users/{id}', [UserController::class, 'showGuest']);

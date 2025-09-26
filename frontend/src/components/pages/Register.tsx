@@ -36,6 +36,7 @@ export default function Register(props: RegisterProps) {
     password: "",
     confirmPassword: "",
   });
+  const [phoneError, setPhoneError] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -43,19 +44,21 @@ export default function Register(props: RegisterProps) {
 
   const navigate = useNavigate();
 
-  const handleFileChange = (
-    field: "profile_picture" | "banner_picture",
-    file: File | null
-  ) => {
-    setUser({ ...user, [field]: file });
-  };
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  const validatePhone = (value: string) => {
+    const regex = /^\+\d{1,3}\d{4,14}$/;
+    if (value && !regex.test(value)) {
+      setPhoneError("Debe iniciar con + y contener solo números");
+    } else {
+      setPhoneError("");
+    }
   };
 
   const registerNewUser = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -112,26 +115,26 @@ export default function Register(props: RegisterProps) {
       <div className="relative z-10 flex lg:w-3/4">
         <div className="hidden md:flex w-1/2 flex-col items-center justify-center text-center p-8">
           <p className="text-lg text-white">Welcome to</p>
-                    <h1
-  className="mt-10 text-5xl md:text-7xl text-pink-500 flex gap-1"
-  style={{ fontFamily: "Starstruck" }}
->
-  {"HARIXOM".split("").map((char, i) => (
-    <span
-      key={i}
-      className="inline-block animate-bounce"
-      style={{
-        animationDelay: `${i * 0.2}s`,
-        animationDuration: "1.5s",
-        animationIterationCount: "infinite",
-        animationTimingFunction: "ease-in-out",
-        display: "inline-block",
-      }}
-    >
-      {char}
-    </span>
-  ))}
-</h1>
+          <h1
+            className="mt-10 text-5xl md:text-7xl text-pink-500 flex gap-1"
+            style={{ fontFamily: "Starstruck" }}
+          >
+            {"HARIXOM".split("").map((char, i) => (
+              <span
+                key={i}
+                className="inline-block animate-bounce"
+                style={{
+                  animationDelay: `${i * 0.2}s`,
+                  animationDuration: "1.5s",
+                  animationIterationCount: "infinite",
+                  animationTimingFunction: "ease-in-out",
+                  display: "inline-block",
+                }}
+              >
+                {char}
+              </span>
+            ))}
+          </h1>
         </div>
 
         <div className="w-full md:w-1/2 bg-gray-200 opacity-90 px-10 py-4 flex flex-col justify-center rounded-3xl">
@@ -155,24 +158,31 @@ export default function Register(props: RegisterProps) {
                   {props[field]}
                 </label>
                 <div className="relative">
+                  
                   <input
                     type={
-                      field === "confirmPassword"
+                      field === "password"
+                        ? showPassword
+                          ? "text"
+                          : "password"
+                        : field === "confirmPassword"
                         ? showConfirmPassword
                           ? "text"
                           : "password"
-                        : field === "password"
-                          ? showPassword
-                            ? "text"
-                            : "password"
-                          : "text"
+                        : "text"
                     }
                     value={user[field]}
-                    onChange={(e) =>
-                      setUser({ ...user, [field]: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setUser({ ...user, [field]: e.target.value });
+                      if (field === "phone") validatePhone(e.target.value);
+                    }}
                     className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
                   />
+
+                  {/* Mostrar mensaje de error del teléfono */}
+                  {field === "phone" && phoneError && (
+                    <p className="text-red-500 text-sm mt-1">{phoneError}</p>
+                  )}
                   {(field === "confirmPassword" || field === "password") && (
                     <button
                       type="button"
@@ -198,11 +208,10 @@ export default function Register(props: RegisterProps) {
 
             <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-gradient-to-r from-pink-400 to-blue-400"
-              }`}
+                }`}
               disabled={loading}
             >
               {loading ? "Registering..." : "REGISTER"}
