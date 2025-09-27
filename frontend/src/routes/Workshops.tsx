@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import CardTallers from "../components/pages/CardTallersPage"; // 👈 cambia aquí
+import CardTallers from "../components/pages/CardTallersPage"; 
 
 export const Route = createFileRoute("/Workshops")({
   component: RouteComponent,

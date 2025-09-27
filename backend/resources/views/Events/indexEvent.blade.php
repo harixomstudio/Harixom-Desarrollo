@@ -79,18 +79,49 @@
         <!-- Delete  -->
         <form id="disableForm" action="{{ route('deleteEvent') }}" method="POST">
     @csrf
-    <input type="hidden" name="event_id" id="disableEventId">
-    <button type="submit" 
-        id="deleteBtn"
+    <input type="hidden" name="event_id" id="disableEventId"> 
+    <button type="button" id="deleteBtn"
         class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-red-500 to-pink-400 hover:scale-110 transform duration-300 opacity-50 pointer-events-none">
         Delete Event
     </button>
 </form>
+
+<!-- Back -->
+<a href="{{ route('admin.index') }}"
+   class="px-8 py-2 rounded-full font-semibold text-black bg-gradient-to-r from-yellow-300 to-orange-400 hover:scale-110 transform duration-300 border-2 border-yellow-400">
+   Back to Admin
+</a>
+
+<!-- Modal de confirmación -->
+<div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">¿Estás seguro?</h2>
+        <p class="text-gray-600 mb-6">Esta acción eliminará el evento seleccionado y no se puede deshacer.</p>
+        <div class="flex justify-around">
+            <button id="cancelDelete"
+                class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold">
+                Cancelar
+            </button>
+            <button id="confirmDelete"
+                class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white font-semibold">
+                Confirmar
+            </button>
+        </div>
     </div>
+</div>
+
 </body>
+
 <script>
 let selectedEventId = null;
 const updateBtn = document.getElementById('updateBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+const disableForm = document.getElementById('disableForm');
+
+// Modal elementos
+const confirmModal = document.getElementById('confirmModal');
+const confirmDelete = document.getElementById('confirmDelete');
+const cancelDelete = document.getElementById('cancelDelete');
 
 document.querySelectorAll('.event-row').forEach(row => {
     row.addEventListener('click', function() {
@@ -107,6 +138,22 @@ document.querySelectorAll('.event-row').forEach(row => {
         deleteBtn.classList.remove('opacity-50', 'pointer-events-none');
         document.getElementById('disableEventId').value = selectedEventId;
     });
+
+    deleteBtn.addEventListener('click', () => {
+    if (selectedEventId) {
+        confirmModal.classList.remove('hidden');
+    }
+});
+
+// cancelar
+cancelDelete.addEventListener('click', () => {
+    confirmModal.classList.add('hidden');
+});
+
+// confirmar
+confirmDelete.addEventListener('click', () => {
+    disableForm.submit();
+});
 });
 
 // deshabilitar botón por defecto
