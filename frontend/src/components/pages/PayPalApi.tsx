@@ -54,7 +54,7 @@ export default function PayPalButton(props: PayPalProps) {
         })
         .render(paypalRef.current);
     }
-  }, [props.value]); // 🔑 volver a ejecutar cuando cambie el valor
+  }, [props.value]);
 
   return <div ref={paypalRef}></div>;
 }

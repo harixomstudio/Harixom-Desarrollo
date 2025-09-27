@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import Profile from "../components/pages/Profile";
 import axios from "axios";
 import ProfileGuestPage from "../components/pages/ProfileGuestPage";
 

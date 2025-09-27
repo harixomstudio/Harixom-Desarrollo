@@ -17,7 +17,11 @@ export default function Nav(props: NavProps) {
   const token = localStorage.getItem("access_token");
 
   // Obtener la información del usuario desde el mismo endpoint que el Profile
-  const { data: profileData, isLoading, error } = useQuery({
+  const {
+    data: profileData,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["userProfileNav"],
     queryFn: async () => {
       const { data } = await axiosRequest.get("/api/user", {

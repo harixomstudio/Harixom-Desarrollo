@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -64,8 +64,6 @@ export default function FeedPage({ sculturePublications }: SculturePageProps) {
     };
     fetchCurrentUser();
   }, [token]);
-
-
 
   // Inicialización de likes, follows, comentarios
   useEffect(() => {
@@ -205,7 +203,7 @@ export default function FeedPage({ sculturePublications }: SculturePageProps) {
     <div className="bg-stone-950 min-h-screen p-10">
       <div className="flex items-center gap-3 mb-8">
         <img
-          src="./public/icon-sculture.svg" 
+          src="./public/icon-sculture.svg"
           alt="animacion Icon"
           className="w-15 h-15 mt-2"
         />
@@ -249,8 +247,9 @@ export default function FeedPage({ sculturePublications }: SculturePageProps) {
               <div className="flex flex-row gap-5 items-center">
                 {/* Like */}
                 <button
-                  className={`opacity-80 flex flex-row items-center gap-1 ${likes[pub.id] ? "text-red-500" : "text-gray-300"
-                    }`}
+                  className={`opacity-80 flex flex-row items-center gap-1 ${
+                    likes[pub.id] ? "text-red-500" : "text-gray-300"
+                  }`}
                   title="Like"
                   onClick={() => toggleLike(pub.id)}
                 >
@@ -286,52 +285,54 @@ export default function FeedPage({ sculturePublications }: SculturePageProps) {
                   >
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
-                  <span className="text-xs">{comments[pub.id]?.length || 0}</span>
+                  <span className="text-xs">
+                    {comments[pub.id]?.length || 0}
+                  </span>
                 </button>
 
                 {/* Seguir (oculto si es el mismo user) */}
-                {pub.user_id !== undefined &&
-                  pub.user_id !== currentUserId && (
-                    <button
-                      className={`opacity-80 flex items-center justify-center ${follows[pub.user_id] ? "text-green-500" : "text-gray-300"
-                        }`}
-                      title={follows[pub.user_id] ? "Siguiendo" : "Seguir"}
-                      onClick={() => toggleFollow(pub.user_id!)}
-                    >
-                      {follows[pub.user_id] ? (
-                        // ✅ Check
-                        <svg
-                          width="28"
-                          height="28"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="#db2a83ff"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <polyline points="17 9 11 17 6 13" />
-                        </svg>
-                      ) : (
-                        // ✚ Cruz
-                        <svg
-                          width="28"
-                          height="28"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <line x1="12" y1="7" x2="12" y2="17" />
-                          <line x1="7" y1="12" x2="17" y2="12" />
-                        </svg>
-                      )}
-                    </button>
-                  )}
+                {pub.user_id !== undefined && pub.user_id !== currentUserId && (
+                  <button
+                    className={`opacity-80 flex items-center justify-center ${
+                      follows[pub.user_id] ? "text-green-500" : "text-gray-300"
+                    }`}
+                    title={follows[pub.user_id] ? "Siguiendo" : "Seguir"}
+                    onClick={() => toggleFollow(pub.user_id!)}
+                  >
+                    {follows[pub.user_id] ? (
+                      // ✅ Check
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#db2a83ff"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="17 9 11 17 6 13" />
+                      </svg>
+                    ) : (
+                      // ✚ Cruz
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="7" x2="12" y2="17" />
+                        <line x1="7" y1="12" x2="17" y2="12" />
+                      </svg>
+                    )}
+                  </button>
+                )}
                 {/* Categoría */}
                 <span className="ml-17 text-gray-300 font-bold">
                   {pub.category}

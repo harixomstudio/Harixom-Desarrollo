@@ -15,29 +15,29 @@ export default function AIChallenge() {
     setChallenge("");
 
     try {
-  const token = localStorage.getItem("access_token");
-  const response = await axios.post(
-    "http://127.0.0.1:8000/api/ia/challenge",
-    { specialty },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
+      const token = localStorage.getItem("access_token");
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/ia/challenge",
+        { specialty },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      console.log("Respuesta completa del backend:", response.data);
+
+      setChallenge(response.data.challenge);
+    } catch (err: any) {
+      console.error("Error en React:", err);
+      setError(
+        err.response?.data?.error
+          ? `${err.response.data.error}${err.response.data.details ? "\n" + err.response.data.details : ""}`
+          : "Error al obtener el reto."
+      );
     }
-  );
-
-  console.log("Respuesta completa del backend:", response.data);
-
-  setChallenge(response.data.challenge);
-} catch (err: any) {
-  console.error("Error en React:", err);
-  setError(
-    err.response?.data?.error
-      ? `${err.response.data.error}${err.response.data.details ? "\n" + err.response.data.details : ""}`
-      : "Error al obtener el reto."
-  );
-}
   };
 
   return (

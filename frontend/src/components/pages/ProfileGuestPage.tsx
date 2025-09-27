@@ -22,7 +22,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
   const authUser = JSON.parse(localStorage.getItem("auth_user") || "{}");
 
-
   const [showFollowers, setShowFollowers] = React.useState(false);
   const [showFollowings, setShowFollowings] = React.useState(false);
   const [followers, setFollowers] = React.useState(props.followers || []);
@@ -55,9 +54,12 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     const fetchGuestProfile = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const response = await axios.get(`http://127.0.0.1:8000/api/users/${props.userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/users/${props.userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const data = response.data;
         setFollowers(data.followers || []);
@@ -87,26 +89,38 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
       const token = localStorage.getItem("access_token");
       const url = `http://127.0.0.1:8000/api/follow/${props.userId}`;
 
-      const response = await axios.post(url, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       const newStatus = response.data.following;
       setIsFollowing(newStatus);
 
-      setFollowers(prev => {
+      setFollowers((prev) => {
         if (newStatus) {
-          return [...prev, { id: authUser.id, name: authUser.name, profile_picture: authUser.profile_picture }];
+          return [
+            ...prev,
+            {
+              id: authUser.id,
+              name: authUser.name,
+              profile_picture: authUser.profile_picture,
+            },
+          ];
         } else {
-          return prev.filter(f => f.id !== authUser.id);
+          return prev.filter((f) => f.id !== authUser.id);
         }
       });
 
       showToast(
-        newStatus ? "Ahora sigues a este usuario" : "Dejaste de seguir a este usuario",
+        newStatus
+          ? "Ahora sigues a este usuario"
+          : "Dejaste de seguir a este usuario",
         "success"
       );
-
     } catch (error) {
       console.error(error);
       showToast("Error al actualizar el seguimiento", "error");
@@ -120,11 +134,18 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         <div className="relative mb-10">
           <div className="rounded-xl h-100 flex relative overflow-hidden w-full">
             <div className="flex relative w-full h-full items-center justify-center">
-              <img src={props.bannerPicture} alt="" className="w-full h-full object-cover" />
+              <img
+                src={props.bannerPicture}
+                alt=""
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="absolute left-5 bottom-2">
               <img
-                src={props.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
+                src={
+                  props.profilePicture ||
+                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                }
                 alt="Avatar"
                 className="w-42 h-42 rounded-full border-5 border-stone-950 object-cover"
               />
@@ -140,8 +161,11 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
             <span>Followings</span>
             <button
               onClick={handleToggleFollow}
-              className={`px-4 py-2 rounded-full text-white font-semibold transition-all ${isFollowing ? "bg-gray-600 hover:bg-gray-700" : "bg-pink-500 hover:bg-pink-600"
-                }`}
+              className={`px-4 py-2 rounded-full text-white font-semibold transition-all ${
+                isFollowing
+                  ? "bg-gray-600 hover:bg-gray-700"
+                  : "bg-pink-500 hover:bg-pink-600"
+              }`}
             >
               {isFollowing ? "Unfollow" : "Follow"}
             </button>
@@ -149,10 +173,16 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
           <div className="flex gap-35 text-gray-400 text-lg mb-1">
             <span>{props.address}</span>
-            <span className="cursor-pointer hover:text-pink-400" onClick={() => setShowFollowers(true)}>
+            <span
+              className="cursor-pointer hover:text-pink-400"
+              onClick={() => setShowFollowers(true)}
+            >
               {followers.length}
             </span>
-            <span className="cursor-pointer hover:text-pink-400" onClick={() => setShowFollowings(true)}>
+            <span
+              className="cursor-pointer hover:text-pink-400"
+              onClick={() => setShowFollowings(true)}
+            >
               {props.followings.length}
             </span>
           </div>
@@ -164,13 +194,22 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                 <h3 className="text-pink-400 font-bold mb-4">Followers</h3>
                 <ul>
                   {followers.map((f) => (
-                    <li key={f.id} className="text-gray-200 mb-2 flex items-center gap-2">
-                      <img src={f.profile_picture} className="w-6 h-6 rounded-full" />
+                    <li
+                      key={f.id}
+                      className="text-gray-200 mb-2 flex items-center gap-2"
+                    >
+                      <img
+                        src={f.profile_picture}
+                        className="w-6 h-6 rounded-full"
+                      />
                       {f.name}
                     </li>
                   ))}
                 </ul>
-                <button className="mt-4 px-4 py-2 bg-pink-500 text-white rounded" onClick={() => setShowFollowers(false)}>
+                <button
+                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  onClick={() => setShowFollowers(false)}
+                >
                   Close
                 </button>
               </div>
@@ -184,20 +223,31 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                 <h3 className="text-pink-400 font-bold mb-4">Followings</h3>
                 <ul>
                   {props.followings.map((f) => (
-                    <li key={f.id} className="text-gray-200 mb-2 flex items-center gap-2">
-                      <img src={f.profile_picture} className="w-6 h-6 rounded-full" />
+                    <li
+                      key={f.id}
+                      className="text-gray-200 mb-2 flex items-center gap-2"
+                    >
+                      <img
+                        src={f.profile_picture}
+                        className="w-6 h-6 rounded-full"
+                      />
                       {f.name}
                     </li>
                   ))}
                 </ul>
-                <button className="mt-4 px-4 py-2 bg-pink-500 text-white rounded" onClick={() => setShowFollowings(false)}>
+                <button
+                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  onClick={() => setShowFollowings(false)}
+                >
                   Close
                 </button>
               </div>
             </div>
           )}
 
-          <p className="text-gray-300 text-sm mt-2 py-10">{props.description}</p>
+          <p className="text-gray-300 text-sm mt-2 py-10">
+            {props.description}
+          </p>
         </div>
 
         {/* Tabs */}
@@ -218,9 +268,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           {activeTab === 1 ? (
             /* Commissions tab */
             <>
-              <div className="flex justify-end mb-6">
-
-              </div>
+              <div className="flex justify-end mb-6"></div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-stone-800 rounded-lg p-6 text-gray-200">
@@ -239,7 +287,9 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                 </div>
 
                 <div className="bg-stone-800 rounded-lg p-6 text-gray-200">
-                  <h3 className="text-pink-400 font-bold text-lg mb-4">Price</h3>
+                  <h3 className="text-pink-400 font-bold text-lg mb-4">
+                    Price
+                  </h3>
 
                   <textarea
                     value={prices}
@@ -331,7 +381,9 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                           No Image
                         </div>
                       )}
-                      <p className="text-gray-200 text-sm text-center">{like.description}</p>
+                      <p className="text-gray-200 text-sm text-center">
+                        {like.description}
+                      </p>
                     </div>
                   ))
                 ) : (
