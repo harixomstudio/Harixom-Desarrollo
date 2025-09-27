@@ -52,6 +52,7 @@ function RootComponent() {
     "/3d",
     "/StreetArt",
     "/Photography",
+    "/ProfileGuest",
   ].includes(currentPath);
 
   return (
