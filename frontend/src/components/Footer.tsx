@@ -27,7 +27,9 @@ export default function Footer(props: FooterProps) {
               className="text-pink-500 text-3xl pl-10"
               style={{ fontFamily: "Starstruck" }}
             >
-              <a className="" href="/Landing">Harixom</a>
+              <a className="" href="/Landing">
+                Harixom
+              </a>
             </div>
           </div>
 

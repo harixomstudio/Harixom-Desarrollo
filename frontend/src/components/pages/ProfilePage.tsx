@@ -107,10 +107,10 @@ export default function Profile(props: ProfileProps) {
               />
               {props.bannerPicture ===
                 "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" && (
-                  <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">
-                    Change banner
-                  </h2>
-                )}
+                <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">
+                  Change banner
+                </h2>
+              )}
             </div>
             <div className="absolute right-8 bottom-8 cursor-pointer">
               <Link to="/SetProfile">
@@ -221,7 +221,9 @@ export default function Profile(props: ProfileProps) {
             </div>
           )}
 
-          <p className="text-gray-300 text-sm mt-2 py-10">{props.description}</p>
+          <p className="text-gray-300 text-sm mt-2 py-10">
+            {props.description}
+          </p>
         </div>
 
         {/* Tabs */}
@@ -229,10 +231,11 @@ export default function Profile(props: ProfileProps) {
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
-                ? "text-pink-400 border-b-2 border-pink-400"
-                : "text-gray-200"
-                }`}
+              className={`pb-4 font-semibold text-xl px-5 ${
+                activeTab === i
+                  ? "text-pink-400 border-b-2 border-pink-400"
+                  : "text-gray-200"
+              }`}
               onClick={() => setActiveTab(i)}
             >
               {tab}
@@ -266,12 +269,16 @@ export default function Profile(props: ProfileProps) {
                       className="w-full bg-stone-900 text-sm text-gray-100 p-2 rounded resize-none h-40"
                     />
                   ) : (
-                    <pre className="text-sm whitespace-pre-line">{services}</pre>
+                    <pre className="text-sm whitespace-pre-line">
+                      {services}
+                    </pre>
                   )}
                 </div>
 
                 <div className="bg-stone-800 rounded-lg p-6 text-gray-200">
-                  <h3 className="text-pink-400 font-bold text-lg mb-4">Price</h3>
+                  <h3 className="text-pink-400 font-bold text-lg mb-4">
+                    Price
+                  </h3>
                   {editing ? (
                     <textarea
                       value={prices}
@@ -369,7 +376,9 @@ export default function Profile(props: ProfileProps) {
                           No Image
                         </div>
                       )}
-                      <p className="text-gray-200 text-sm text-center">{like.description}</p>
+                      <p className="text-gray-200 text-sm text-center">
+                        {like.description}
+                      </p>
                     </div>
                   ))
                 ) : (
@@ -399,7 +408,8 @@ export default function Profile(props: ProfileProps) {
                       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                         <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
                           <h2 className="text-white text-lg font-semibold mb-4">
-                            ¿Estás seguro de que deseas eliminar esta publicación?
+                            ¿Estás seguro de que deseas eliminar esta
+                            publicación?
                           </h2>
                           <div className="flex justify-end gap-4 mt-4">
                             <button

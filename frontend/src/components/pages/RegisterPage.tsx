@@ -84,7 +84,7 @@ export default function Register(props: RegisterProps) {
       });
 
       setLoading(false);
-      alert(response.data.message);
+      showToast(response.data.message, "success");
       navigate({ to: "/Login" });
     } catch (error: any) {
       setLoading(false);
@@ -158,7 +158,6 @@ export default function Register(props: RegisterProps) {
                   {props[field]}
                 </label>
                 <div className="relative">
-                  
                   <input
                     type={
                       field === "password"
@@ -166,10 +165,10 @@ export default function Register(props: RegisterProps) {
                           ? "text"
                           : "password"
                         : field === "confirmPassword"
-                        ? showConfirmPassword
-                          ? "text"
-                          : "password"
-                        : "text"
+                          ? showConfirmPassword
+                            ? "text"
+                            : "password"
+                          : "text"
                     }
                     value={user[field]}
                     onChange={(e) => {
@@ -208,10 +207,11 @@ export default function Register(props: RegisterProps) {
 
             <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
+                loading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-gradient-to-r from-pink-400 to-blue-400"
-                }`}
+              }`}
               disabled={loading}
             >
               {loading ? "Registering..." : "REGISTER"}

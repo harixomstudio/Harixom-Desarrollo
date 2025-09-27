@@ -1,5 +1,3 @@
-
-
 import { Link } from "@tanstack/react-router";
 import Footer from "../Footer";
 import { useInView } from "./useInView"; // ajusta la ruta si es necesario
@@ -73,7 +71,6 @@ export default function Landing(props: LandingProps) {
   );
 
   return (
-    
     <>
       {styleTag}
       <main className="pt-12 w-full bg-[#141414] text-white">
@@ -81,9 +78,9 @@ export default function Landing(props: LandingProps) {
         <div className="relative w-full h-1.5 overflow-hidden bottom-12">
           <div className="absolute w-full h-full bg-gradient-to-r from-pink-300 via-pink-800 to-pink-300 animate-gradient" />
         </div>
-  <style
-    dangerouslySetInnerHTML={{
-      __html: `
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
         @keyframes fadeIn {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
@@ -103,12 +100,11 @@ export default function Landing(props: LandingProps) {
           animation: float 2.5s ease-in-out infinite;
         }
       `,
-    }}
-  />
-
+          }}
+        />
 
         {/* banner img */}
-        
+
         <div className="relative w-full h-[70vh] max-lg:h-[40vh] px-15 max-lg:px-5">
           <img
             className="w-full h-full rounded-3xl object-cover"
@@ -153,44 +149,55 @@ export default function Landing(props: LandingProps) {
               </span>
             ))}
           </h2>
-<div className="flex justify-between pt-5 gap-43"  style={{ fontFamily: "Monserrat" }}>
-  {props.categoriesUp.map((categoriesUp, number) => (
-    <Link to={props.links[number]} key={number} className="flex flex-col items-center gap-2">
-      <img
-        src={categoriesUp}
-        alt={`Image ${number}`}
-        className="w-30 h-30 max-xl:w-22 max-xl:h-22 duration-600 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
-      />
-      <span
-        className="text-center text-xl max-lg:text-sm font-medium"
-        style={{ color: props.categoriesUpColors[number] }}
-      >
-        {props.categoriesUpNames[number]}
-      </span>
-    </Link>
-  ))}
-</div>
+          <div
+            className="flex justify-between pt-5 gap-43"
+            style={{ fontFamily: "Monserrat" }}
+          >
+            {props.categoriesUp.map((categoriesUp, number) => (
+              <Link
+                to={props.links[number]}
+                key={number}
+                className="flex flex-col items-center gap-2"
+              >
+                <img
+                  src={categoriesUp}
+                  alt={`Image ${number}`}
+                  className="w-30 h-30 max-xl:w-22 max-xl:h-22 duration-600 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
+                />
+                <span
+                  className="text-center text-xl max-lg:text-sm font-medium"
+                  style={{ color: props.categoriesUpColors[number] }}
+                >
+                  {props.categoriesUpNames[number]}
+                </span>
+              </Link>
+            ))}
+          </div>
 
-<div className="flex justify-between gap-40"  style={{ fontFamily: "Monserrat" }}>
-  {props.categoriesDown.map((categoriesDown, number) => (
-    <Link to={props.links2[number]} key={number} className="flex flex-col items-center gap-2">
-      <img
-        src={categoriesDown}
-        alt={`Image ${number}`}
-        className="w-30 h-30 duration-600 max-xl:w-22 max-xl:h-22 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
-      />
-      <span
-        className="text-center text-xl max-lg:text-sm font-medium"
-        style={{ color: props.categoriesDownColors[number] }}
-      >
-        {props.categoriesDownNames[number]}
-      </span>
-    </Link>
-  ))}
-</div>
-
-
-
+          <div
+            className="flex justify-between gap-40"
+            style={{ fontFamily: "Monserrat" }}
+          >
+            {props.categoriesDown.map((categoriesDown, number) => (
+              <Link
+                to={props.links2[number]}
+                key={number}
+                className="flex flex-col items-center gap-2"
+              >
+                <img
+                  src={categoriesDown}
+                  alt={`Image ${number}`}
+                  className="w-30 h-30 duration-600 max-xl:w-22 max-xl:h-22 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
+                />
+                <span
+                  className="text-center text-xl max-lg:text-sm font-medium"
+                  style={{ color: props.categoriesDownColors[number] }}
+                >
+                  {props.categoriesDownNames[number]}
+                </span>
+              </Link>
+            ))}
+          </div>
         </section>
 
         {/* app section */}
@@ -209,7 +216,9 @@ export default function Landing(props: LandingProps) {
               src={props.imgApp}
               alt={props.imgAppAlt}
               className={`w-2/3 object-contain transition-all duration-1000 ease-out ${
-                appVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                appVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
               }`}
             />
           </div>
@@ -217,7 +226,9 @@ export default function Landing(props: LandingProps) {
           <div className="relative z-10 flex flex-col w-1/2 text-justify justify-center gap-10 max-lg:gap-5 max-lg:w-full max-lg:items-center">
             <h2
               className={`text-5xl max-lg:text-3xl font-bold transition-all duration-1000 ease-out ${
-                appVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                appVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
               }`}
               style={{ fontFamily: "Monserrat" }}
             >
@@ -225,35 +236,31 @@ export default function Landing(props: LandingProps) {
             </h2>
             <p
               className={`text-2xl max-lg:text-lg pr-10 transition-all duration-1000 ease-out ${
-                appVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                appVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
               }`}
               style={{ fontFamily: "Monserrat" }}
             >
               {props.textApp}
             </p>
-  
-             <div className="flex justify-center items-center py-5 ">
-               {/* Botón animado */}
-          <Link
-            to="/CreatePublication"
-            className="px-30  py-3 text-xl font-semibold rounded-full bg-gradient-to-r from-pink-800 to-pink-400 hover:scale-115 transition-transform duration-500 shadow-lg animate-float text-white "
-            style={{ fontFamily: "Monserrat" }}
-          >
-            Create your publication!
-          </Link>
 
-          </div>
-      
-
+            <div className="flex justify-center items-center py-5 ">
+              {/* Botón animado */}
+              <Link
+                to="/CreatePublication"
+                className="px-30  py-3 text-xl font-semibold rounded-full bg-gradient-to-r from-pink-800 to-pink-400 hover:scale-115 transition-transform duration-500 shadow-lg animate-float text-white "
+                style={{ fontFamily: "Monserrat" }}
+              >
+                Create your publication!
+              </Link>
+            </div>
           </div>
         </section>
 
+        {/* artists ranking */}
 
-
-    {/* artists ranking */}
-
-  <section className="flex flex-col items-center justify-center gap-25 py-50 max-lg:gap-10 max-lg:py-30">
-
+        <section className="flex flex-col items-center justify-center gap-25 py-50 max-lg:gap-10 max-lg:py-30">
           <h2
             className="text-5xl md:text-7xl text-pink-300 flex gap-1"
             style={{ fontFamily: "Monserrat" }}
@@ -275,60 +282,59 @@ export default function Landing(props: LandingProps) {
             ))}
           </h2>
 
-<div className="grid grid-cols-2 gap-10 w-full px-15 max-lg:grid-cols-1 max-lg:px-5">
-  {props.rankingArtist.map((rankingArtist, number) => (
-        <Link
-          to={props.linksArt[number]}
-          key={number}
-          className="flex flex-col items-center gap-10 hover:scale-105 duration-500">
+          <div className="grid grid-cols-2 gap-10 w-full px-15 max-lg:grid-cols-1 max-lg:px-5">
+            {props.rankingArtist.map((rankingArtist, number) => (
+              <Link
+                to={props.linksArt[number]}
+                key={number}
+                className="flex flex-col items-center gap-10 hover:scale-105 duration-500"
+              >
+                <div className="relative w-lg h-100 rounded-xl overflow-hidden">
+                  <img
+                    src={rankingArtist}
+                    alt={`Obra ${number}`}
+                    className="w-full h-full object-cover"
+                  />
 
-          <div className="relative w-lg h-100 rounded-xl overflow-hidden">
-            <img
-              src={rankingArtist}
-              alt={`Obra ${number}`}
-              className="w-full h-full object-cover" />
+                  {/* Avatar del artista */}
+                  <img
+                    src={props.rankImg[number]}
+                    alt={`Avatar ${number}`}
+                    className="absolute bottom-4 left-4 w-12 h-12 rounded-full border-2 border-white object-cover"
+                  />
 
-           {/* Avatar del artista */}
-            <img
-             src={props.rankImg[number]}
-             alt={`Avatar ${number}`}
-             className="absolute bottom-4 left-4 w-12 h-12 rounded-full border-2 border-white object-cover"/>
+                  {/* Íconos de interacción */}
+                  <div className="absolute bottom-4 right-4 flex text-white text-xl">
+                    <button className="hover:scale-110 duration-200">❤️</button>
+                  </div>
+                </div>
 
-           {/* Íconos de interacción */}
-             <div className="absolute bottom-4 right-4 flex text-white text-xl">
-               <button className="hover:scale-110 duration-200">❤️</button>
-               
-             </div>
-           </div>
-
-           {/* Texto descriptivo */}
-           <div className="text-center text-white text-lg">
-             <h4>Artista: {props.ArtistName[number]}</h4>
-             <p>Obra: {props.artName[number]}</p>
-           </div>
-         </Link>
-  ))}
-</div>
+                {/* Texto descriptivo */}
+                <div className="text-center text-white text-lg">
+                  <h4>Artista: {props.ArtistName[number]}</h4>
+                  <p>Obra: {props.artName[number]}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
 
-
-{/* Feed section */}
-<section
-  className="relative flex flex-col items-center justify-center text-center w-full h-screen text-white px-5"
-  style={{
-    backgroundImage: "url('fondolila.png')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
-         {/* Título central */}
-         <h2
-         className="text-6xl max-lg:text-4xl font-bold mb-20 animate-fade-in text-black"
-         style={{ fontFamily: "Monserrat" }} >
-         Get to know our artists through the Feed!!
-         </h2>
- 
-
+        {/* Feed section */}
+        <section
+          className="relative flex flex-col items-center justify-center text-center w-full h-screen text-white px-5"
+          style={{
+            backgroundImage: "url('fondolila.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          {/* Título central */}
+          <h2
+            className="text-6xl max-lg:text-4xl font-bold mb-20 animate-fade-in text-black"
+            style={{ fontFamily: "Monserrat" }}
+          >
+            Get to know our artists through the Feed!!
+          </h2>
 
           {/* Botón animado */}
           <Link
@@ -338,10 +344,9 @@ export default function Landing(props: LandingProps) {
           >
             GO!
           </Link>
-</section>
+        </section>
 
         <Footer {...props.footer} />
-
       </main>
     </>
   );
