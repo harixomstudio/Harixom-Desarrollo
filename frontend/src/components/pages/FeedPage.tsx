@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import WatermarkedImage from "../ui/WaterMarkedImage";
 
 interface Publication {
   id: number;
@@ -244,9 +245,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 </span>
               </div>
               {pub.image ? (
-                <img
+                <WatermarkedImage
                   src={pub.image}
                   alt={pub.description}
+                  watermarkText="PROPIEDAD DE HARIXOM"
                   className="w-full h-full object-cover"
                 />
               ) : (
