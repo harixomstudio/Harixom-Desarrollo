@@ -11,6 +11,14 @@ function RootComponent() {
   const location = useLocation();
   const currentPath = location.pathname;
 
+  React.useEffect(() => { // Deshabilitar el menu contextual para no poner copiar, ni inspeccionar
+    const handleContextMenu = (e: MouseEvent) => e.preventDefault();
+    document.addEventListener("contextmenu", handleContextMenu);
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
+
   // Rutas donde NO quieres mostrar el Nav
   const hideNav = [
     "/",
@@ -24,7 +32,7 @@ function RootComponent() {
 
   const listEvents = ["Events", "Workshop", "AI Challenges"];
   const referenceEvents = ["/Events", "/Workshops", "/AIChallenge"];
-  {/*SE OCULTA EL NAV DE EVENTOS */}
+  {/*SE OCULTA EL NAV DE EVENTOS */ }
   const hideEventsNav = [
     "/Feed",
     "/Login",
@@ -44,7 +52,6 @@ function RootComponent() {
     "/3d",
     "/StreetArt",
     "/Photography",
-    "/ProfileGuest",
   ].includes(currentPath);
 
   return (
