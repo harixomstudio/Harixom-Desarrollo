@@ -17,7 +17,6 @@ class Taller extends Model
         'title',
         'place',
         'duration',
-        'place',
         'description',
     ];
 }
