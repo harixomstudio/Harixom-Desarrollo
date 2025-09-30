@@ -129,6 +129,9 @@ class UserController extends Controller
             'description' => 'nullable|string|max:500',
             'profile_picture' => 'nullable|image|max:2048',
             'banner_picture' => 'nullable|image|max:4096',
+            'services' => 'nullable|string',
+            'prices' => 'nullable|string',
+            'terms' => 'nullable|string',
         ]);
 
 

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import Profile from "../components/pages/ProfilePage";
 import axios from "axios";
+import React from "react";
 
 export const Route = createFileRoute("/Profile")({
   component: ProfileRoute,
@@ -33,15 +34,16 @@ function ProfileRoute() {
   });
 
   const { data: followsData } = useQuery({
-  queryKey: ["userFollows"],
-  queryFn: async () => {
-    const { data } = await axios.get("http://127.0.0.1:8000/api/user/follows", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return data;
-  },
-  enabled: !!token,
-});
+    queryKey: ["userFollows"],
+    queryFn: async () => {
+      const { data } = await axios.get("http://127.0.0.1:8000/api/user/follows", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return data;
+    },
+    enabled: !!token,
+  });
+
 
   if (!token) return <p className="text-white text-center mt-10">No estás logueado.</p>;
   if (isLoading) return <p className="text-white text-center mt-10">Loading...</p>;
@@ -57,13 +59,16 @@ function ProfileRoute() {
     <Profile
       username={user?.name || "Usuario"}
       followers={followsData?.followers || []}
-      followings={followsData?.followings || []} 
+      followings={followsData?.followings || []}
       address={user?.address || ""}
       description={user?.description || ""}
       profilePicture={user?.profile_picture}
       bannerPicture={user?.banner_picture}
       cards={sortedCards}
       likes={likesData || []}
+      services={user?.services ?? ""}   
+  prices={user?.prices ?? ""}
+  terms={user?.terms ?? ""}
     />
   );
 }

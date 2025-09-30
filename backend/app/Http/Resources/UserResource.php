@@ -24,6 +24,9 @@ class UserResource extends JsonResource
             'profile_picture' => $this->profilePicturePath(),
             'banner_picture' => $this->bannerPicturePath(),
             'is_active' => $this->is_active,
+            'services' => $this->services,
+            'prices' => $this->prices,
+            'terms' => $this->terms,
             'profile_completed' => $this->profile_completed,
             'posts' => $this->posts()->get()->map(function ($post) {
     return [
