@@ -29,6 +29,9 @@ class User extends Authenticatable
         'banner_picture',
         'description',
         'is_active',
+        'services',   
+        'prices',     
+        'terms', 
     ];
 
     public function isActive()

@@ -14,6 +14,9 @@ interface ProfileProps {
   tabs?: string[];
   cards: { id: number; description: string; image?: string }[];
   likes: any[];
+  services: string;
+  prices: string;
+  terms: string;
 }
 
 export default function Profile(props: ProfileProps) {
@@ -21,26 +24,19 @@ export default function Profile(props: ProfileProps) {
 
   const [showFollowers, setShowFollowers] = React.useState(false);
   const [showFollowings, setShowFollowings] = React.useState(false);
-
   const [cards, setCards] = React.useState(props.cards || []);
+  const [favorites, setFavorites] = React.useState(props.likes || []);
+  const [followers, setFollowers] = React.useState(props.followers || []);
+  const [followings, setFollowings] = React.useState(props.followings || []);
   const [activeTab, setActiveTab] = React.useState(0);
   const tabs = props.tabs || ["Home", "Commissions", "Feed", "Favorites"];
   const [deleteModalOpen, setDeleteModalOpen] = React.useState<number | null>(
     null
   );
-
-  const [favorites, setFavorites] = React.useState(props.likes || []);
-
   const [editing, setEditing] = React.useState(false);
-  const [services, setServices] = React.useState(
-    "Fnasarts\nSibek\nMecha\nMega\nCore"
-  );
-  const [prices, setPrices] = React.useState(
-    "Chibi: $10\nHalf body: $15\nFull body: $25"
-  );
-  const [terms, setTerms] = React.useState(
-    "El pago completo se hace primero.\nUna vez realizado el dibujo se empezará.\nNo se aceptan reembolsos."
-  );
+  const [services, setServices] = React.useState<string>(props.services ?? "");
+  const [prices, setPrices] = React.useState<string>(props.prices ?? "");
+  const [terms, setTerms] = React.useState<string>(props.terms ?? "");
 
   const [newComment, setNewComment] = React.useState("");
   const [comments, setComments] = React.useState([
@@ -50,6 +46,12 @@ export default function Profile(props: ProfileProps) {
         "I have no idea how to bookmark, click circle to something idk. Right...",
     },
   ]);
+
+  React.useEffect(() => setCards(props.cards || []), [props.cards]);
+  React.useEffect(() => setFavorites(props.likes || []), [props.likes]);
+  React.useEffect(() => setFollowers(props.followers || []), [props.followers]);
+  React.useEffect(() => setFollowings(props.followings || []), [props.followings]);
+  
 
   const handleDeletePublication = async (id: number) => {
     try {
@@ -76,7 +78,6 @@ export default function Profile(props: ProfileProps) {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Actualizar favoritos localmente
       if (data.liked) {
         setFavorites((prev) => [...prev, data.post]); // agrega si liked
       } else {
@@ -89,9 +90,28 @@ export default function Profile(props: ProfileProps) {
     }
   };
 
-  React.useEffect(() => {
-    setFavorites(props.likes || []);
-  }, [props.likes]);
+  const handleSaveChanges = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      await axios.put(
+        "http://127.0.0.1:8000/api/user/profile",
+        {
+          services,
+          prices,
+          terms,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      showToast("Commissions guardadas correctamente", "success");
+      setEditing(false);
+    } catch (error) {
+      console.error(error);
+      showToast("Error al guardar commissions", "error");
+    }
+  };
+
 
   return (
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen">
@@ -250,7 +270,7 @@ export default function Profile(props: ProfileProps) {
             <>
               <div className="flex justify-end mb-6">
                 <button
-                  onClick={() => setEditing(!editing)}
+                  onClick={editing ? handleSaveChanges : () => setEditing(true)}
                   className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-full transition-all"
                 >
                   {editing ? "Save Changes" : "Edit"}

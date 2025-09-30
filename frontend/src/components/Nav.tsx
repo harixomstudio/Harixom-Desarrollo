@@ -24,7 +24,11 @@ export default function Nav(props: NavProps) {
   } = useQuery({
     queryKey: ["userProfileNav"],
     queryFn: async () => {
+<<<<<<< Updated upstream
       const { data } = await axiosRequest.get("/api/user", {
+=======
+      const { data } = await axiosRequest.get("/user", {
+>>>>>>> Stashed changes
         headers: { Authorization: `Bearer ${token}` },
       });
       return data;
