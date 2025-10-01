@@ -5,6 +5,12 @@ export const Route = createFileRoute("/Landing")({
   component: RouteComponent,
 });
 
+const banners = [
+  "banner1.svg",
+  "banner2.svg",
+  "banner3.svg",
+];
+
 const categoriesUp = [
   "icon-digitalart.svg",
   "icon-animacion.svg",
@@ -95,12 +101,14 @@ const footer = {
    contacts: ["+506 8394 7941", "harixonstudio@gmail.com"],
    linksContacts: ["https://wa.me/50683947941", "mailto:harixonstudio@gmail.com"],
 
+
+   
 };
 
 function RouteComponent() {
   return (
     <Landing
-      banner="Banner-final.svg"
+      banners={banners}
       altBanner="a"
       categoriesUp={categoriesUp}
       categoriesUpNames={categoriesUpNames}
