@@ -114,7 +114,8 @@ export default function Profile(props: ProfileProps) {
 
 
   return (
-    <section className="relative flex items-center justify-center bg-stone-950 min-h-screen">
+    <section className="relative flex items-center justify-center bg-stone-950 min-h-screen"
+     style={{ fontFamily: "Monserrat" }}>
       <div className="w-full flex flex-col">
         {/* Banner y Avatar */}
         <div className="relative mb-10">
@@ -160,34 +161,54 @@ export default function Profile(props: ProfileProps) {
           </div>
         </div>
 
-        {/* Info */}
-        <div className="pl-10 mt-2 mb-6">
-          <div className="flex gap-25 text-white font-semibold text-2xl">
-            <span>{props.username}</span>
-            <span>Followers</span>
-            <span>Followings</span>
-          </div>
-          <div className="flex gap-35 text-gray-400 text-lg mb-1">
-            <span>{props.address}</span>
-            <span
-              className="cursor-pointer hover:text-pink-400"
-              onClick={() => setShowFollowers(true)}
-            >
-              {props.followers.length}
-            </span>
-            <span
-              className="cursor-pointer hover:text-pink-400"
-              onClick={() => setShowFollowings(true)}
-            >
-              {props.followings.length}
-            </span>
-          </div>
+
+{/* Info */}
+<div className="flex flex-col pl-10 text-white mt-6 mb-10">
+  {/* Username */}
+  <span className="text-3xl font-bold mb-2">{props.username}</span>
+
+     <Link
+            to="/DigitalArt"
+            className="absolute right-6 py-4 px-7 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10"
+            style={{ fontFamily: "Monserrat" }}
+          >
+          $
+          </Link>
+
+  {/* Description */}
+  <span className="text-gray-400 text-lg mb-6">{props.address}</span>
+
+  {/* Followers & Followings  */}
+  <div className="flex gap-20 text-white font-semibold text-xl mb-2">
+    <span
+      className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
+      onClick={() => setShowFollowers(true)}
+    >
+      <span>Followers</span>
+      <span className="text-gray-300 text-lg font-normal">
+        {props.followers.length}
+      </span>
+    </span>
+    <span
+      className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
+      onClick={() => setShowFollowings(true)}
+    >
+      <span>Followings</span>
+      <span className="text-gray-300 text-md font-normal">
+        {props.followings.length}
+      </span>
+    </span>
+
+    
+  </div>
+
+
 
           {/* Followers Modal */}
           {showFollowers && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-4">Followers</h3>
+                <h3 className="text-pink-400 font-bold mb-6">Followers</h3>
                 <ul>
                   {props.followers.map((f) => (
                     <li
@@ -478,7 +499,7 @@ export default function Profile(props: ProfileProps) {
       {/* Botón flotante */}
       <Link
         to="/CreatePublication"
-        className="fixed bottom-6 right-6 bg-pink-500 hover:bg-pink-600 text-white text-lg font-bold py-3 px-5 rounded-full shadow-lg transition-all duration-300"
+        className="fixed bottom-6 right-6 bg-pink-500 hover:bg-pink-600 text-white text-lg font-bold py-5 px-7 rounded-full shadow-lg transition-all duration-300"
       >
         +
       </Link>

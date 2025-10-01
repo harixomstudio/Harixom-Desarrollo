@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import Footer from "../Footer";
-import { useInView } from "./useInView"; // ajusta la ruta si es necesario
+import { useInView } from "./useInView";
+import { useState, useEffect } from "react";
 
 interface FooterProps {
   titlePage: string;
@@ -15,7 +16,7 @@ interface FooterProps {
 }
 
 interface LandingProps {
-  banner: string;
+  banners: string[];
   altBanner: string;
 
   categoriesUpNames: string[];
@@ -51,6 +52,21 @@ export default function Landing(props: LandingProps) {
 
   const { ref: appRef, inView: appVisible } = useInView({ threshold: 0.3 });
 
+  const [current, setCurrent] = useState(0);
+  const total = props.banners.length;
+
+  useEffect(() => {
+  const timer = setInterval(() => {
+    setCurrent((prev) => (prev + 1) % total);
+  }, 60000); 
+
+
+  return () => clearInterval(timer);
+}, [total]);
+
+  const nextSlide = () => setCurrent((prev) => (prev + 1) % total);
+  const prevSlide = () => setCurrent((prev) => (prev - 1 + total) % total);
+
   const styleTag = (
     <style
       dangerouslySetInnerHTML={{
@@ -65,6 +81,46 @@ export default function Landing(props: LandingProps) {
             background-size: 200% 200%;
             animation: gradientFlow 4s ease infinite;
           }
+
+          @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+          }
+
+          .animate-fade-in {
+            animation: fadeIn 1.5s ease-out forwards;
+          }
+
+          .animate-float {
+            animation: float 2.5s ease-in-out infinite;
+          }
+
+          @keyframes paintStroke {
+            0% { transform: translateX(-100%) scaleX(0.8); opacity: 0; }
+            60% { opacity: 1; }
+            100% { transform: translateX(0) scaleX(1); opacity: 1; }
+          }
+
+
+@keyframes fadeText {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-paint-stroke {
+  animation: paintStroke 1.5s ease-out forwards;
+}
+
+.animate-fade-text {
+  animation: fadeText 1.2s ease-out 1.6s forwards;
+  opacity: 0;
+}
         `,
       }}
     />
@@ -78,54 +134,113 @@ export default function Landing(props: LandingProps) {
         <div className="relative w-full h-1.5 overflow-hidden bottom-12">
           <div className="absolute w-full h-full bg-gradient-to-r from-pink-300 via-pink-800 to-pink-300 animate-gradient" />
         </div>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-        @keyframes fadeIn {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
 
-        @keyframes float {
-          0% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
-          100% { transform: translateY(0); }
-        }
+        {/* Carrusel */}
+        <div className="relative w-full h-[70vh] max-lg:h-[40vh] overflow-hidden text-black">
+          <div
+            className="flex transition-transform duration-[1800ms] ease-in-out h-full w-full gap-"
+            style={{ transform: `translateX(-${current * 100}%)` }}
+          >
 
-        .animate-fade-in {
-          animation: fadeIn 1.5s ease-out forwards;
-        }
 
-        .animate-float {
-          animation: float 2.5s ease-in-out infinite;
-        }
-      `,
-          }}
-        />
 
-        {/* banner img */}
 
-        <div className="relative w-full h-[70vh] max-lg:h-[40vh] px-15 max-lg:px-5">
-          <img
-            className="w-full h-full rounded-3xl object-cover"
-            src={props.banner}
-            alt={props.altBanner}
-          />
-          <div className="absolute inset-0 flex items-center justify-center bottom-75 flex-col">
-            <h1
-              className="text-black text-5xl max-lg:text-5xl font-bold"
-              style={{ fontFamily: "Monserrat" }}
-            >
-              Canvas Flow
-            </h1>
-            <h2
-              className="text-black text-3xl max-lg:text-3xl p-2"
-              style={{ fontFamily: "Monserrat" }}
-            >
-              Unleash Your Inner Artist
-            </h2>
+            {/* Banner 1 */}
+            <div className="min-w-full h-full relative flex items-center justify-center">
+              <img
+                src={props.banners[0]}
+                alt={props.altBanner}
+                className="absolute w-full h-full object-cover "
+              />
+              <div className="z-10 text-center pb-48">
+                <h1 className="text-black text-5xl max-lg:text-4xl font-bold" style={{ fontFamily: "Monserrat" }}>
+                  Canvas Flow
+                </h1>
+                <h2 className="text-black text-3xl max-lg:text-xl p-2" style={{ fontFamily: "Monserrat" }}>
+                  Unleash Your Inner Artist
+                </h2>
+              </div>
+            </div>
+
+
+
+            {/* Banner 2 */}
+            <div className="min-w-full h-full relative flex items-center justify-center">
+              <img
+                src={props.banners[1]}
+                alt={props.altBanner}
+                className="absolute w-full h-full object-cover "
+              />
+              <div className="z-10 text-center flex flex-col items-center gap-5 pt-10">
+                <h1 className="text-black text-5xl max-lg:text-4xl font-bold" style={{ fontFamily: "Monserrat" }}>
+                  Participate in incredible Events
+                </h1>
+                <h2 className="text-black text-3xl max-lg:text-xl" style={{ fontFamily: "Monserrat" }}>
+                  Discover the power of creativity
+                </h2>
+                <Link
+                  to="/Events"
+                  className="mt-2 px-20 py-3 bg-purple-500 text-black text-2xl font-semibold rounded-full hover:bg-purple-600 transition duration-300"
+                  style={{ fontFamily: "Monserrat" }}
+                >
+                  Join
+                </Link>
+              </div>
+            </div>
+
+
+           {/* Banner 3 */}
+            <div className="min-w-full h-full relative flex items-center justify-center">
+              <img
+                src={props.banners[2]}
+                alt={props.altBanner}
+                className="absolute w-full h-full object-cover"
+              />
+              <div className="relative z-10 w-full flex items-center justify-center">
+                <img
+                  src="pincelada.svg"
+                  alt="Pincelada"
+                  className={`absolute max-w-[1000px] h-auto ${current === 2 ? "animate-paint-stroke" : ""}`}
+                  style={{ animationFillMode: "forwards" }}
+                />
+                <h2
+                  className={`absolute text-black text-4xl max-lg:text-xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
+                  style={{ fontFamily: "Monserrat" }}
+                >
+                  Get inspired and Create your own Art
+                </h2>
+        
+           {/* Botón animado */}
+          <Link
+            to="/DigitalArt"
+            className="absolute top-10 px-20 py-2 bg-blue-600 text-2xl font-bold rounded-full hover:scale-125 transition z-10"
+            style={{ fontFamily: "Monserrat" }}
+          >
+            GO!
+          </Link>
+                
+              </div>
+            </div>
+
+
           </div>
+
+          {/* Flechas de navegación */}
+          <button
+            onClick={prevSlide}
+            className="absolute top-1/2 left-5 transform -translate-y-1/2 text-pink-400 text-6xl font-bold hover:scale-125 transition z-10"
+          >
+            ‹
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute top-1/2 right-5 transform -translate-y-1/2 text-pink-400 text-6xl font-bold hover:scale-125 transition z-10"
+          >
+            ›
+          </button>
         </div>
+
+
 
         {/* categories section */}
         <section className="flex flex-col items-center justify-center gap-20 pt-30 pb-45 max-lg:gap-10 max-lg:py-30 px-15 max-lg:px-5">
@@ -162,7 +277,7 @@ export default function Landing(props: LandingProps) {
                 <img
                   src={categoriesUp}
                   alt={`Image ${number}`}
-                  className="w-30 h-30 max-xl:w-22 max-xl:h-22 duration-600 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
+                  className="w-30 h-30 max-xl:w-22 max-xl:h-22 duration-600 max-lg:w-15 max-lg:h-15 hover:scale-115 hover:shadow-lg shadow-black"
                 />
                 <span
                   className="text-center text-xl max-lg:text-sm font-medium"
@@ -187,7 +302,7 @@ export default function Landing(props: LandingProps) {
                 <img
                   src={categoriesDown}
                   alt={`Image ${number}`}
-                  className="w-30 h-30 duration-600 max-xl:w-22 max-xl:h-22 max-lg:w-15 max-lg:h-15 hover:scale-150 hover:shadow-lg shadow-black"
+                  className="w-30 h-30 duration-600 max-xl:w-22 max-xl:h-22 max-lg:w-15 max-lg:h-15 hover:scale-115 hover:shadow-lg shadow-black"
                 />
                 <span
                   className="text-center text-xl max-lg:text-sm font-medium"
@@ -258,6 +373,9 @@ export default function Landing(props: LandingProps) {
           </div>
         </section>
 
+
+
+
         {/* artists ranking */}
 
         <section className="flex flex-col items-center justify-center gap-25 py-50 max-lg:gap-10 max-lg:py-30">
@@ -295,6 +413,10 @@ export default function Landing(props: LandingProps) {
                     alt={`Obra ${number}`}
                     className="w-full h-full object-cover"
                   />
+
+
+
+
 
                   {/* Avatar del artista */}
                   <img
