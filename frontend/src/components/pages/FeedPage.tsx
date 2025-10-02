@@ -117,7 +117,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   // Evita renderizar publicaciones hasta conocer el usuario actual
   if (currentUserId === null) {
-    return <div className="text-white p-10">Cargando feed...</div>;
+    return (
+      <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
+        <div className="flex space-x-3">
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce "></div>
+        </div>
+      </div>
+    );
   }
 
   // Funciones
