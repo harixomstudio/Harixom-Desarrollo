@@ -36,6 +36,17 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
   const [hideFollow, setHideFollow] = useState<{ [key: number]: boolean }>({});
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [selectedPublication, setSelectedPublication] =
+    useState<Publication | null>(null);
+
+  // Funciones para abrir y cerrar el modal
+  const openModal = (publication: Publication) => {
+    setSelectedPublication(publication);
+  };
+
+  const closeModal = () => {
+    setSelectedPublication(null);
+  };
 
   // Likes del usuario logueado
   const { data: userLikes } = useQuery({
@@ -120,9 +131,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
     return (
       <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
         <div className="flex space-x-3">
-          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
-          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce "></div>
+          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce "></div>
         </div>
       </div>
     );
@@ -217,9 +228,13 @@ export default function FeedPage({ publications }: FeedPageProps) {
           <div
             key={pub.id}
             className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px]"
+            onClick={() => openModal(pub)}
           >
             {/* Imagen */}
-            <div className="relative w-full h-[340px] aspect-square flex items-center justify-center">
+            <div
+              className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer"
+              onClick={() => openModal(pub)} // Solo abrir el modal al hacer clic en la imagen
+            >
               {/* Avatar y nombre */}
               <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
                 <img
@@ -229,7 +244,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   }
                   alt={pub.user_name}
                   className="w-8 h-8 rounded-full border-2 border-white object-cover cursor-pointer"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (pub.user_id === currentUserId) {
                       navigate({ to: "/Profile" });
                     } else {
@@ -240,9 +256,11 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     }
                   }}
                 />
+
                 <span
                   className="text-white font-semibold text-sm drop-shadow hover:text-pink-400 cursor-pointer"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (pub.user_id === currentUserId) {
                       navigate({ to: "/Profile" });
                     } else {
@@ -257,10 +275,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 </span>
               </div>
               {pub.image ? (
-                <WatermarkedImage
+                <img
                   src={pub.image}
                   alt={pub.description}
-                  watermarkText="PROPIEDAD DE HARIXOM"
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -277,7 +294,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     likes[pub.id] ? "text-red-500" : "text-gray-300"
                   }`}
                   title="Like"
-                  onClick={() => toggleLike(pub.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleLike(pub.id);
+                  }}
                 >
                   <svg
                     width="28"
@@ -296,7 +316,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 <button
                   className="text-gray-300 opacity-80 flex flex-row items-center gap-1"
                   title="Comentar"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setIsModalOpen(pub.id);
                     fetchComments(pub.id);
                   }}
@@ -323,7 +344,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                       follows[pub.user_id] ? "text-green-500" : "text-gray-300"
                     }`}
                     title={follows[pub.user_id] ? "Siguiendo" : "Seguir"}
-                    onClick={() => toggleFollow(pub.user_id!)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFollow(pub.user_id!);
+                    }}
                   >
                     {follows[pub.user_id] ? (
                       // ✅ Check
@@ -377,7 +401,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             {isModalOpen === pub.id && (
               <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                 <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96 max-h-[80vh] flex flex-col">
-                  <h2 className="text-white text-lg font-semibold mb-4">
+                  <h2 className="text-white text-lg font-semibold mb-4" onClick={(e) => e.stopPropagation()}>
                     Comentarios
                   </h2>
                   <div className="flex-1 overflow-y-auto mb-4 space-y-2">
@@ -386,12 +410,13 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         <div
                           key={i}
                           className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           {comment}
                         </div>
                       ))
                     ) : (
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-gray-400 text-sm" onClick={(e) => e.stopPropagation()}>
                         No hay comentarios aún
                       </p>
                     )}
@@ -404,11 +429,13 @@ export default function FeedPage({ publications }: FeedPageProps) {
                       focus:outline-none focus:ring-2 focus:ring-pink-400 
                       border border-stone-700 shadow-md placeholder:text-pink-300"
                     rows={3}
+                    onClick={(e) => e.stopPropagation()}
                   />
                   <div className="flex justify-end gap-4 mt-4">
                     <button
                       className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setIsModalOpen(null);
                         setCurrentComment("");
                       }}
@@ -417,7 +444,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     </button>
                     <button
                       className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
-                      onClick={async () => {
+                      onClick={async (e) => {
+                        e.stopPropagation();
                         if (currentComment.trim()) {
                           await addComment(pub.id, currentComment);
                           await fetchComments(pub.id);
@@ -439,6 +467,53 @@ export default function FeedPage({ publications }: FeedPageProps) {
           </div>
         ))}
       </div>
+      {/* Modal */}
+      {selectedPublication && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex">
+            {/* Imagen a la izquierda */}
+            <div className="w-2/3 h-full flex items-center justify-center">
+              {selectedPublication.image ? (
+                <img
+                  src={selectedPublication.image}
+                  alt={selectedPublication.description}
+                  className="w-100px h-full object-cover rounded-lg"
+                  
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
+                  Sin imagen
+                </div>
+              )}
+            </div>
+
+            {/* Información a la derecha */}
+            <div className="w-1/3 flex flex-col-2 justify-between pl-10">
+              <div>
+                <h2 className="text-white text-3xl font-bold">
+                  {selectedPublication.user_name || "Usuario desconocido"}
+                </h2>
+                <p className="text-gray-300 mt-10 text-2xl">
+                  {selectedPublication.description}
+                </p>
+                <div className="mt-8 flex gap-5">
+                  <span className="px-4 py-2 bg-pink-500 text-white rounded-full text-xl">
+                    {selectedPublication.category || "Sin categoría"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Botón para cerrar */}
+              <button
+                className="mt-139 px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 self-start text-lg"
+                onClick={closeModal}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
