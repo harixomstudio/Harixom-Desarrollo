@@ -474,11 +474,11 @@ export default function FeedPage({ publications }: FeedPageProps) {
             {/* Imagen a la izquierda */}
             <div className="w-2/3 h-full flex items-center justify-center">
               {selectedPublication.image ? (
-                <img
+                <WatermarkedImage
                   src={selectedPublication.image}
                   alt={selectedPublication.description}
                   className="w-100px h-full object-cover rounded-lg"
-                  
+                  watermarkText={`Propiedad de ${selectedPublication.user_name || "Usuario desconocido"}`}
                 />
               ) : (
                 <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
