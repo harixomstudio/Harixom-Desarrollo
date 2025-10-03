@@ -13,50 +13,40 @@ export function addWatermark(imageUrl: string, watermarkText: string): Promise<s
         return;
       }
 
-      // Configurar el tamaño fijo del canvas
-      const canvasWidth = 340; // Ajusta según el tamaño deseado
-      const canvasHeight = 340; // Ajusta según el tamaño deseado
-      canvas.width = canvasWidth;
-      canvas.height = canvasHeight;
+      // Configurar el tamaño del canvas según la imagen original
+      canvas.width = img.width;
+      canvas.height = img.height;
 
-      // Escalar la imagen para que ocupe todo el espacio del canvas
-      const imgAspectRatio = img.width / img.height;
-      const canvasAspectRatio = canvasWidth / canvasHeight;
+      // Dibujar la imagen original en el canvas
+      ctx.drawImage(img, 0, 0, img.width, img.height);
 
-      let scaledWidth, scaledHeight, offsetX, offsetY;
+      // Configurar el estilo del texto
+      const fontSize = Math.floor(img.width * 0.05); // Tamaño del texto (5% del ancho de la imagen)
+      ctx.font = `${fontSize}px Arial`;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)"; // Texto blanco con transparencia
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
 
-      if (imgAspectRatio > canvasAspectRatio) {
-        // Imagen horizontal: ajusta al ancho del canvas
-        scaledWidth = canvasWidth;
-        scaledHeight = canvasWidth / imgAspectRatio;
-        offsetX = 0;
-        offsetY = (canvasHeight - scaledHeight) / 2;
-      } else {
-        // Imagen vertical: ajusta al alto del canvas
-        scaledWidth = canvasHeight * imgAspectRatio;
-        scaledHeight = canvasHeight;
-        offsetX = (canvasWidth - scaledWidth) / 2;
-        offsetY = 0;
+      // Calcular el espacio entre las marcas de agua
+      const textWidth = ctx.measureText(watermarkText).width;
+      const textHeight = fontSize * 1.5; // Altura del texto con un poco de espacio
+      const offsetX = textWidth + 110; // Espaciado horizontal
+      const offsetY = textHeight + 100; // Espaciado vertical
+
+      // Rotar el contexto para inclinar el texto
+      const angle = -Math.PI / 6; // Ángulo de inclinación (-30 grados)
+      ctx.save(); // Guardar el estado del contexto
+      ctx.translate(canvas.width / 2, canvas.height / 2); // Mover el origen al centro del canvas
+      ctx.rotate(angle); // Rotar el contexto
+
+      // Dibujar el texto repetidamente en un patrón de mosaico
+      for (let y = -canvas.height; y < canvas.height; y += offsetY) {
+        for (let x = -canvas.width; x < canvas.width; x += offsetX) {
+          ctx.fillText(watermarkText, x, y);
+        }
       }
 
-      // Dibujar la imagen escalada en el canvas
-      ctx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
-
-      // Configurar el estilo del fondo negro y texto
-      const textHeight = 20; // Altura del fondo negro
-      const textX = offsetX; // Posición izquierda del fondo negro
-      const textY = offsetY + scaledHeight - textHeight; // Posición superior del fondo negro
-      const textWidth = scaledWidth; // Ancho del fondo negro
-
-      // Dibujar el fondo negro sobre la imagen
-      ctx.fillStyle = "rgba(0, 0, 0, 0.8)"; // Fondo negro semitransparente
-      ctx.fillRect(textX, textY, textWidth, textHeight);
-
-      // Dibujar el texto sobre el fondo negro
-      ctx.font = "12px Arial"; // Tamaño y fuente del texto
-      ctx.fillStyle = "white"; // Color blanco para el texto
-      ctx.textAlign = "center";
-      ctx.fillText(watermarkText, textX + textWidth / 2, textY + textHeight - 5); // Texto centrado verticalmente
+      ctx.restore(); // Restaurar el estado original del contexto
 
       // Convertir el canvas a una URL de imagen
       resolve(canvas.toDataURL("image/png"));
