@@ -2,7 +2,14 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+interface Message {
+  id?: number;
+  user: string;
+  profile_picture?: string;
+  message: string;
+}
 
 interface ProfileProps {
   username: string;
@@ -18,65 +25,82 @@ interface ProfileProps {
   services: string;
   prices: string;
   terms: string;
+  userId: number;
 }
 
 export default function Profile(props: ProfileProps) {
   const { showToast } = useToast();
 
-  const [showFollowers, setShowFollowers] = React.useState(false);
-  const [showFollowings, setShowFollowings] = React.useState(false);
-  const [cards, setCards] = React.useState(props.cards || []);
-  const [favorites, setFavorites] = React.useState(props.likes || []);
-  const [followers, setFollowers] = React.useState(props.followers || []);
-  const [followings, setFollowings] = React.useState(props.followings || []);
-  const [activeTab, setActiveTab] = React.useState(0);
-  const tabs = props.tabs || ["Home", "Commissions", "Feed", "Favorites"];
-  const [deleteModalOpen, setDeleteModalOpen] = React.useState<number | null>(
-    null
-  );
-  const [editing, setEditing] = React.useState(false);
-  const [services, setServices] = React.useState<string>(props.services ?? "");
-  const [prices, setPrices] = React.useState<string>(props.prices ?? "");
-  const [terms, setTerms] = React.useState<string>(props.terms ?? "");
+  // Hooks para UI
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowings, setShowFollowings] = useState(false);
+  const [cards, setCards] = useState(props.cards || []);
+  const [favorites, setFavorites] = useState(props.likes || []);
+  const [followers, setFollowers] = useState(props.followers || []);
+  const [followings, setFollowings] = useState(props.followings || []);
+  const [activeTab, setActiveTab] = useState(0);
+  const tabs = props.tabs || ["Home", "Commissions", "Messages", "Favorites"];
+  const [deleteModalOpen, setDeleteModalOpen] = useState<number | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [services, setServices] = useState<string>(props.services ?? "");
+  const [prices, setPrices] = useState<string>(props.prices ?? "");
+  const [terms, setTerms] = useState<string>(props.terms ?? "");
 
-  const [newComment, setNewComment] = React.useState("");
-  const [comments, setComments] = React.useState([
-    {
-      user: "usernameanon",
-      message:
-        "I have no idea how to bookmark, click circle to something idk. Right...",
-    },
-  ]);
+  // Hooks para mensajes
+  const [newMessage, setNewMessage] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
 
+  // Hooks para comisiones y modales
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [commissionText, setCommissionText] = useState("");
   const [buttonPosition, setButtonPosition] = useState({ top: 450, left: 1000 });
-
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect(); // Obtener la posición del botón
+    const rect = e.currentTarget.getBoundingClientRect();
     setButtonPosition({
-      top: rect.top + window.scrollY + rect.height + 200, // Posición vertical (debajo del botón)
-      left: rect.left + window.scrollX, // Posición horizontal (alineada al botón)
+      top: rect.top + window.scrollY + rect.height + 200,
+      left: rect.left + window.scrollX,
     });
-    setIsModalOpen(true); // Abrir el modal
+    setIsModalOpen(true);
   };
-
-  {
-    /** Constante para cerrar las comisiones **/
-  }
   const handleSendCommission = () => {
     console.log("Comisión enviada:", commissionText);
-    setIsModalOpen(false); // Cerrar el modal después de enviar
+    setIsModalOpen(false);
   };
 
-  React.useEffect(() => setCards(props.cards || []), [props.cards]);
-  React.useEffect(() => setFavorites(props.likes || []), [props.likes]);
-  React.useEffect(() => setFollowers(props.followers || []), [props.followers]);
-  React.useEffect(
+
+  const token = localStorage.getItem("access_token");
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        if (!token) return;
+        const { data } = await axios.get(
+          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const mapped = data.map((msg: any) => ({
+          id: msg.id,
+          user: msg.from_user.name,
+          profile_picture: msg.from_user.profile_picture,
+          message: msg.message,
+        }));
+        setMessages(mapped);
+      } catch (err) {
+        console.error("Error fetching messages:", err);
+      }
+    };
+    fetchMessages();
+  }, [props.userId, token]);
+
+  useEffect(() => setCards(props.cards || []), [props.cards]);
+  useEffect(() => setFavorites(props.likes || []), [props.likes]);
+  useEffect(() => setFollowers(props.followers || []), [props.followers]);
+  useEffect(
     () => setFollowings(props.followings || []),
     [props.followings]
   );
 
+  // Funciones
   const handleDeletePublication = async (id: number) => {
     try {
       await axios.delete(`http://127.0.0.1:8000/api/publications/${id}`, {
@@ -136,6 +160,44 @@ export default function Profile(props: ProfileProps) {
     }
   };
 
+  const handleSendMessage = async () => {
+    try {
+      if (!token || !newMessage.trim()) return;
+      const { data } = await axios.post(
+        `http://127.0.0.1:8000/api/profile/messages`,
+        { to_user_id: props.userId, message: newMessage },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const msg = {
+        id: data.data.id,
+        user: data.data.from_user.name,
+        profile_picture: data.data.from_user.profile_picture,
+        message: data.data.message,
+      };
+      setMessages((prev) => [msg, ...prev]);
+      setNewMessage("");
+      showToast("Mensaje enviado", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("No se pudo enviar el mensaje", "error");
+    }
+  };
+
+  // Función para eliminar mensaje
+  const handleDeleteMessage = async (id: number) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/profile/messages/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMessages((prev) => prev.filter((m) => m.id !== id));
+      showToast("Mensaje eliminado", "success");
+    } catch (err) {
+      console.error("Error al eliminar mensaje:", err);
+      showToast("No se pudo eliminar el mensaje", "error");
+    }
+  };
+
   return (
     <section
       className="relative flex items-center justify-center bg-stone-950 min-h-screen"
@@ -153,10 +215,10 @@ export default function Profile(props: ProfileProps) {
               />
               {props.bannerPicture ===
                 "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80" && (
-                <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">
-                  Change banner
-                </h2>
-              )}
+                  <h2 className="absolute max-lg:text-3xl max-xl:text-4xl duration-500 transform text-6xl font-berkshire text-pink-400">
+                    Change banner
+                  </h2>
+                )}
             </div>
             <div className="absolute right-8 bottom-8 cursor-pointer">
               <Link to="/SetProfile">
@@ -201,40 +263,40 @@ export default function Profile(props: ProfileProps) {
           </button>
 
           {/* Modal flotante */}
-      {isModalOpen && (
-        <div
-          className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
-          style={{
-            top: buttonPosition.top, // Posición vertical dinámica
-            left: buttonPosition.left, // Posición horizontal dinámica
-          }}
-        >
-          <h2 className="text-pink-400 text-lg font-semibold mb-4">
-            Escribe tu comisión
-          </h2>
-          <textarea
-            value={commissionText}
-            onChange={(e) => setCommissionText(e.target.value)}
-            placeholder="Describe tu comisión..."
-            className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
-            rows={5}
-          />
-          <div className="flex justify-end gap-4 mt-4">
-            <button
-              className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-              onClick={() => setIsModalOpen(false)} // Cerrar el modal
+          {isModalOpen && (
+            <div
+              className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
+              style={{
+                top: buttonPosition.top, // Posición vertical dinámica
+                left: buttonPosition.left, // Posición horizontal dinámica
+              }}
             >
-              Cerrar
-            </button>
-            <button
-              className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-              onClick={handleSendCommission} // Enviar la comisión
-            >
-              Enviar
-            </button>
-          </div>
-        </div>
-      )}
+              <h2 className="text-pink-400 text-lg font-semibold mb-4">
+                Escribe tu comisión
+              </h2>
+              <textarea
+                value={commissionText}
+                onChange={(e) => setCommissionText(e.target.value)}
+                placeholder="Describe tu comisión..."
+                className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
+                rows={5}
+              />
+              <div className="flex justify-end gap-4 mt-4">
+                <button
+                  className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
+                  onClick={() => setIsModalOpen(false)} // Cerrar el modal
+                >
+                  Cerrar
+                </button>
+                <button
+                  className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
+                  onClick={handleSendCommission} // Enviar la comisión
+                >
+                  Enviar
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Description */}
           <span className="text-gray-400 text-lg mb-6">{props.address}</span>
@@ -329,11 +391,10 @@ export default function Profile(props: ProfileProps) {
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl px-5 ${
-                activeTab === i
-                  ? "text-pink-400 border-b-2 border-pink-400"
-                  : "text-gray-200"
-              }`}
+              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
+                ? "text-pink-400 border-b-2 border-pink-400"
+                : "text-gray-200"
+                }`}
               onClick={() => setActiveTab(i)}
             >
               {tab}
@@ -405,46 +466,47 @@ export default function Profile(props: ProfileProps) {
               </div>
             </>
           ) : activeTab === 2 ? (
-            /* Feed tab */
+            /* Messages tab */
             <div className="w-full max-w-4xl mx-auto">
               <div className="mb-6">
                 <textarea
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Write message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Write a message..."
                   className="w-full bg-stone-800 text-gray-200 p-4 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-500"
                   rows={3}
                 />
                 <div className="flex justify-end mt-2">
                   <button
-                    onClick={() => {
-                      if (newComment.trim()) {
-                        setComments([
-                          { user: props.username, message: newComment },
-                          ...comments,
-                        ]);
-                        setNewComment("");
-                      }
-                    }}
+                    onClick={handleSendMessage}
                     className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-full transition-all"
                   >
-                    Publish
+                    Send
                   </button>
                 </div>
               </div>
-
               <div className="space-y-4">
-                {comments.map((comment, i) => (
-                  <div
-                    key={i}
-                    className="bg-stone-800 p-4 rounded-lg text-gray-200"
-                  >
-                    <p className="text-sm font-semibold text-pink-400">
-                      {comment.user}
-                    </p>
-                    <p className="text-sm mt-1">{comment.message}</p>
-                  </div>
-                ))}
+                {messages.length ? (
+                  messages.map((msg) => (
+                    <div key={msg.id} className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2">
+                      {msg.profile_picture && (
+                        <img src={msg.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} className="w-10 h-10 rounded-full" />
+                      )}
+                      <div>
+                        <p className="text-sm font-semibold text-pink-400">{msg.user}</p>
+                        <p className="text-sm mt-1">{msg.message}</p>
+                      </div>
+                      <button
+                        className="absolute top-6 right-3 bg-pink-400 hover:bg-pink-500 text-white text-xs px-2 py-1 rounded"
+                        onClick={() => handleDeleteMessage(msg.id!)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm text-center">No messages yet.</p>
+                )}
               </div>
             </div>
           ) : activeTab === 3 ? (

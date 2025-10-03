@@ -10,14 +10,14 @@ use App\Http\Controllers\Api\InteractionController;
 use App\Http\Controllers\Api\AIController;
 use App\Http\Controllers\Api\EventApiController;
 use App\Http\Controllers\Api\TallerApiController;
+use App\Http\Controllers\Api\ProfileMessageController;
 
 Route::middleware('auth:sanctum')->group(function(){
+    //Rutas de perfil
     // Obtener perfil del usuario logueado
     Route::get('/user', [UserController::class, 'profile']);
-
     // Actualizar perfil
     Route::put('/user/profile', [UserController::class, 'updateProfile']);
-
     //Cerrar sesion
     Route::post('user/logout', [UserController::class, 'logout']);
 
@@ -39,32 +39,32 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
     Route::get('/comment/{publication}', [InteractionController::class, 'getComments']);
 
-    
-//Rutas para mensajes
+    //Rutas para mensajes del perfil
+    Route::get('/profile/{userId}/messages', [ProfileMessageController::class, 'index']);
+    Route::post('/profile/messages', [ProfileMessageController::class, 'store']);
+    Route::delete('/profile/messages/{profileMessage}', [ProfileMessageController::class, 'destroy']);
 
-//Rutas para notificaciones
+    //Rutas para notificaciones
+    //
 
-
-
+    //Rutas para visualizar otros perfiles ajenos
+    Route::middleware('auth:sanctum')->get('/users/{id}', [UserController::class, 'showGuest']);
+    Route::get('/users/{id}/likes', [UserController::class, 'guestLikes']);
+    Route::get('/users/{id}/follows', [UserController::class, 'guestFollows']);
+    Route::get('/follow/{user}/check', [InteractionController::class, 'checkFollow']);
 });
 
-Route::middleware('auth:sanctum')->get('/users/{id}', [UserController::class, 'showGuest']);
-Route::get('/users/{id}/likes', [UserController::class, 'guestLikes']);
-Route::get('/users/{id}/follows', [UserController::class, 'guestFollows']);
-Route::get('/follow/{user}/check', [InteractionController::class, 'checkFollow']);
-
-//Rutas para eventos y talleres
+    //Rutas para eventos y talleres
     Route::get('/events', [EventApiController::class, 'index']);
     Route::get('/tallers', [TallerApiController::class, 'index']);
 
+    // Rutas de IA sin auth
+    Route::post('ia/challenge', [AIController::class, 'getChallenge']);
 
-// Rutas de IA sin auth
-Route::post('ia/challenge', [AIController::class, 'getChallenge']);
+    //Rutas de reset password
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
+    Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 
-//Rutas de reset password
-Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
-Route::post('/reset-password', [PasswordResetController::class, 'reset']);
-
-//Rutas de los Usuarios
-Route::post('user/register', [UserController::class, 'store']);
-Route::post('user/login', [UserController::class, 'auth']);
+    //Rutas de los Usuarios antes de autenticarse
+    Route::post('user/register', [UserController::class, 'store']);
+    Route::post('user/login', [UserController::class, 'auth']);

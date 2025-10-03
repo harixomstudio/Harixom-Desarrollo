@@ -47,6 +47,7 @@ function ProfileGuestRoute() {
     },
     enabled: !!token && !!guestUserId,
   });
+  
 
   if (!guestUserId) return <p className="text-white text-center mt-10">Usuario no especificado.</p>;
   if (isLoading) return <p className="text-white text-center mt-10">Loading...</p>;
