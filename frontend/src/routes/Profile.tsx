@@ -11,6 +11,7 @@ export const Route = createFileRoute("/Profile")({
 function ProfileRoute() {
   const token = localStorage.getItem("access_token");
 
+  // Query perfil
   const { data: profileData, isLoading, error } = useQuery({
     queryKey: ["userProfile"],
     queryFn: async () => {
@@ -22,6 +23,7 @@ function ProfileRoute() {
     enabled: !!token,
   });
 
+  // Query likes
   const { data: likesData } = useQuery({
     queryKey: ["userLikes"],
     queryFn: async () => {
@@ -33,6 +35,7 @@ function ProfileRoute() {
     enabled: !!token,
   });
 
+  // Query followers/followings
   const { data: followsData } = useQuery({
     queryKey: ["userFollows"],
     queryFn: async () => {
@@ -44,12 +47,20 @@ function ProfileRoute() {
     enabled: !!token,
   });
 
-
-  if (!token) return <p className="text-white text-center mt-10">No estás logueado.</p>;
-  if (isLoading) return <p className="text-white text-center mt-10">Loading...</p>;
-  if (error) return <p className="text-red-500 text-center mt-10">{(error as Error).message}</p>;
+  if (!token)
+    return <p className="text-white text-center mt-10">No estás logueado.</p>;
+  if (isLoading)
+    return <p className="text-white text-center mt-10">Loading...</p>;
+  if (error)
+    return (
+      <p className="text-red-500 text-center mt-10">
+        {(error as Error).message}
+      </p>
+    );
 
   const user = profileData.user;
+
+  // Ordenar posts del más reciente al más antiguo
   const sortedCards = (user?.posts || []).sort(
     (a: { created_at: string }, b: { created_at: string }) =>
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -66,9 +77,10 @@ function ProfileRoute() {
       bannerPicture={user?.banner_picture}
       cards={sortedCards}
       likes={likesData || []}
-      services={user?.services ?? ""}   
-  prices={user?.prices ?? ""}
-  terms={user?.terms ?? ""}
+      services={user?.services ?? ""}
+      prices={user?.prices ?? ""}
+      terms={user?.terms ?? ""}
+      userId={user?.id} // ⚡ Esto es clave para los mensajes
     />
   );
 }
