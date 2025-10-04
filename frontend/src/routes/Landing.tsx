@@ -48,25 +48,6 @@ const categoriesDownColors = [
 ];
 const links2 = ["/3d", "/StreetArt", "/Photography"];
 
-const rankImg = ["circles.svg", "circles.svg", "circles.svg", "circles.svg"];
-const rankingArtist = [
-  "ARCANE FINAL.jpg",
-  "evelyn.png",
-  "reshiram.jpg",
-  "ebal.jpeg",
-];
-const ArtistName = [
-  "Arcane",
-  "Evelyn Barrantes",
-  "isaac",
-  "Ebal Seemann",
-];
-const artName = [
-  "Arcane Fanart",
-  "thecirclessvg",
-  "circlessvg",
-  "Casa Creepy",
-];
 const linksArt = ["", "", "", "", "", "", "", "", "", ""];
 
 const commisionsCategories = [
@@ -122,10 +103,6 @@ function RouteComponent() {
       imgAppAlt="a"
       descriptionApp="Create, connect, and grow!"
       textApp="Welcome to Harixom, the social network for artists that offers a safe space to share your work, connect with other creators, and find a home for your art. Your talent deserves to be seen and valued."
-      rankImg={rankImg}
-      rankingArtist={rankingArtist}
-      ArtistName={ArtistName}
-      artName={artName}
       linksArt={linksArt}
       commisionsCategories={commisionsCategories}
       linksCommisions={linksCommisions}
