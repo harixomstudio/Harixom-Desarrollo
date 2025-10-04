@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 interface Event {
   id: number;
+  image?: string;
   type: string;
   title: string;
   description?: string;
@@ -26,7 +27,7 @@ export default function CardEvents({ events }: CardEventsProps) {
           >
             {/* Imagen de prueba */}
             <img
-              src="https://cdn.pixabay.com/photo/2023/03/16/08/42/camping-7856198_960_720.jpg"
+              src={event.image || "https://cdn.pixabay.com/photo/2023/03/16/08/42/camping-7856198_960_720.jpg"}
               alt={event.title}
               className="w-full h-40 object-cover"
             />
@@ -51,7 +52,8 @@ export default function CardEvents({ events }: CardEventsProps) {
               </div>
 
               <Link
-                to={`/events/${event.id}` as any}
+                to="/EventsDetail"
+                search={{ eventId: event.id.toString() }}
                 className="mt-auto block text-center rounded-full bg-purple-600 text-white font-semibold py-2 text-base transition hover:bg-purple-500"
               >
                 Más info

@@ -11,7 +11,7 @@ class EventController extends Controller
     // Mostrar todos los eventos
     public function index()
     {
-        $events = Event::all(); // o tu lógica
+        $events = Event::all(); 
         return view('Events.indexEvent', compact('events'));
     }
 
@@ -26,17 +26,15 @@ class EventController extends Controller
             'description' => 'required|string',
             'dateEnd' => 'required|date',
             'timeEnd' => 'required',
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        Event::create([
-    'type' => $data['type'],
-    'title' => $data['title'],
-    'description' => $data['description'],
-    'dateStart' => $data['dateStart'],
-    'timeStart' => $data['timeStart'],
-    'dateEnd' => $data['dateEnd'],
-    'timeEnd' => $data['timeEnd'],
-]);
+       if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('events', 'public'); 
+            $data['image'] = $imagePath;
+        }       
+
+        Event::create($data);
 
         return redirect()->route('event')->with('success', 'Event created successfully!');
     }
@@ -59,17 +57,18 @@ class EventController extends Controller
             'description' => 'required|string',
             'dateEnd' => 'required|date',
             'timeEnd' => 'required',
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        $event->update([
-            'type' => $data['type'],
-            'dateStart' => $data['dateStart'],
-            'timeStart' => $data['timeStart'],
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'dateEnd' => $data['dateEnd'],
-            'timeEnd' => $data['timeEnd'],
-        ]);
+        if ($request->hasFile('image')) {
+            // Borrar la imagen anterior si existe
+            if ($event->image) {
+                Storage::disk('public')->delete($event->image);
+            }
+            $data['image'] = $request->file('image')->store('events', 'public');
+        }
+
+        $event->update($data);
 
         return redirect()->route('event')->with('success', 'Event updated successfully!');
     }
@@ -78,6 +77,12 @@ class EventController extends Controller
     public function destroy(Request $request)
     {
         $event = Event::findOrFail($request->event_id);
+
+        // Borrar imagen asociada
+        if ($event->image) {
+            Storage::disk('public')->delete($event->image);
+        }
+
         $event->delete();
 
         return redirect()->route('event')->with('success', 'Event deleted successfully!');

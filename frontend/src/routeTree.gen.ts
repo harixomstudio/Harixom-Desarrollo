@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkshopsDetailRouteImport } from './routes/WorkshopsDetail'
 import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
 import { Route as TraditionalArtRouteImport } from './routes/TraditionalArt'
@@ -26,6 +27,7 @@ import { Route as LoginRouteImport } from './routes/Login'
 import { Route as LandingRouteImport } from './routes/Landing'
 import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
+import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
 import { Route as EventsRouteImport } from './routes/Events'
 import { Route as DigitalArtRouteImport } from './routes/DigitalArt'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
@@ -35,6 +37,11 @@ import { Route as AIChallengeRouteImport } from './routes/AIChallenge'
 import { Route as R3dRouteImport } from './routes/3d'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WorkshopsDetailRoute = WorkshopsDetailRouteImport.update({
+  id: '/WorkshopsDetail',
+  path: '/WorkshopsDetail',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkshopsRoute = WorkshopsRouteImport.update({
   id: '/Workshops',
   path: '/Workshops',
@@ -120,6 +127,11 @@ const FeedRoute = FeedRouteImport.update({
   path: '/Feed',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsDetailRoute = EventsDetailRouteImport.update({
+  id: '/EventsDetail',
+  path: '/EventsDetail',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsRoute = EventsRouteImport.update({
   id: '/Events',
   path: '/Events',
@@ -170,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/CreatePublication': typeof CreatePublicationRoute
   '/DigitalArt': typeof DigitalArtRoute
   '/Events': typeof EventsRoute
+  '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
@@ -187,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
+  '/WorkshopsDetail': typeof WorkshopsDetailRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -197,6 +211,7 @@ export interface FileRoutesByTo {
   '/CreatePublication': typeof CreatePublicationRoute
   '/DigitalArt': typeof DigitalArtRoute
   '/Events': typeof EventsRoute
+  '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
@@ -214,6 +229,7 @@ export interface FileRoutesByTo {
   '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
+  '/WorkshopsDetail': typeof WorkshopsDetailRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -225,6 +241,7 @@ export interface FileRoutesById {
   '/CreatePublication': typeof CreatePublicationRoute
   '/DigitalArt': typeof DigitalArtRoute
   '/Events': typeof EventsRoute
+  '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
@@ -242,6 +259,7 @@ export interface FileRoutesById {
   '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
+  '/WorkshopsDetail': typeof WorkshopsDetailRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -254,6 +272,7 @@ export interface FileRouteTypes {
     | '/CreatePublication'
     | '/DigitalArt'
     | '/Events'
+    | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
@@ -271,6 +290,7 @@ export interface FileRouteTypes {
     | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
+    | '/WorkshopsDetail'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -281,6 +301,7 @@ export interface FileRouteTypes {
     | '/CreatePublication'
     | '/DigitalArt'
     | '/Events'
+    | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
@@ -298,6 +319,7 @@ export interface FileRouteTypes {
     | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
+    | '/WorkshopsDetail'
   id:
     | '__root__'
     | '/'
@@ -308,6 +330,7 @@ export interface FileRouteTypes {
     | '/CreatePublication'
     | '/DigitalArt'
     | '/Events'
+    | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
@@ -325,6 +348,7 @@ export interface FileRouteTypes {
     | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
+    | '/WorkshopsDetail'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -336,6 +360,7 @@ export interface RootRouteChildren {
   CreatePublicationRoute: typeof CreatePublicationRoute
   DigitalArtRoute: typeof DigitalArtRoute
   EventsRoute: typeof EventsRoute
+  EventsDetailRoute: typeof EventsDetailRoute
   FeedRoute: typeof FeedRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LandingRoute: typeof LandingRoute
@@ -353,10 +378,18 @@ export interface RootRouteChildren {
   TraditionalArtRoute: typeof TraditionalArtRoute
   UserRegisterRoute: typeof UserRegisterRoute
   WorkshopsRoute: typeof WorkshopsRoute
+  WorkshopsDetailRoute: typeof WorkshopsDetailRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/WorkshopsDetail': {
+      id: '/WorkshopsDetail'
+      path: '/WorkshopsDetail'
+      fullPath: '/WorkshopsDetail'
+      preLoaderRoute: typeof WorkshopsDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/Workshops': {
       id: '/Workshops'
       path: '/Workshops'
@@ -476,6 +509,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/EventsDetail': {
+      id: '/EventsDetail'
+      path: '/EventsDetail'
+      fullPath: '/EventsDetail'
+      preLoaderRoute: typeof EventsDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/Events': {
       id: '/Events'
       path: '/Events'
@@ -544,6 +584,7 @@ const rootRouteChildren: RootRouteChildren = {
   CreatePublicationRoute: CreatePublicationRoute,
   DigitalArtRoute: DigitalArtRoute,
   EventsRoute: EventsRoute,
+  EventsDetailRoute: EventsDetailRoute,
   FeedRoute: FeedRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LandingRoute: LandingRoute,
@@ -561,6 +602,7 @@ const rootRouteChildren: RootRouteChildren = {
   TraditionalArtRoute: TraditionalArtRoute,
   UserRegisterRoute: UserRegisterRoute,
   WorkshopsRoute: WorkshopsRoute,
+  WorkshopsDetailRoute: WorkshopsDetailRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

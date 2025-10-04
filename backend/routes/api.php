@@ -56,7 +56,9 @@ Route::middleware('auth:sanctum')->group(function(){
 
     //Rutas para eventos y talleres
     Route::get('/events', [EventApiController::class, 'index']);
+    Route::get('/events/{id}', [EventApiController::class, 'show']);
     Route::get('/tallers', [TallerApiController::class, 'index']);
+    Route::get('/tallers/{id}', [TallerApiController::class, 'show']);
 
     // Rutas de IA sin auth
     Route::post('ia/challenge', [AIController::class, 'getChallenge']);

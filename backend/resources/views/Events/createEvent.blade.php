@@ -14,7 +14,7 @@
 
         <div class="w-full h-full bg-[#2c2c2c] rounded-[4rem] p-40 ">
             <h1 class="text-8xl font-semibold mb-16 text-pink-500">Create a event</h1>
-            <form action="{{ route('storeEvent') }}" method="POST">
+            <form action="{{ route('storeEvent') }}" method="POST" enctype="multipart/form-data">
     @csrf
                 @method('POST')
 
@@ -49,6 +49,8 @@
                         <h3 class="mb-4 text-4xl font-semibold ">Time End</h3>
                         <input class="w-full mb-10 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" type="time" name="timeEnd" value="{{ old('timeEnd')}}" />
                     </div>
+                        <h3 class="mb-4 text-4xl font-semibold">Image</h3>
+                        <input type="file" name="image" class="mb-20 text-white">
 
                     <button type="submit" class="text-4xl w-1/4 bg-[#48e1ec] hover:bg-[#3ab9c2] duration-300 text-black font-semibold py-6 rounded-full">Create Event</button>
                 </div>

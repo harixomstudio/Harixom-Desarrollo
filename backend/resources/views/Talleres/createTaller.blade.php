@@ -16,7 +16,7 @@
             <h1 class="text-8xl font-semibold mb-16 text-pink-500">Create a Taller</h1>
 
             <!-- IMPORTANTE: usa la ruta correcta -->
-            <form action="{{ route('storeTaller') }}" method="POST">
+            <form action="{{ route('storeTaller') }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('POST')
 
@@ -72,6 +72,9 @@
                     <h3 class="mb-4 text-4xl font-semibold">Description</h3>
                     <textarea class="mb-20 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" 
                               name="description">{{ old('description') }}</textarea>
+
+                              <h3 class="mb-4 text-4xl font-semibold">Image</h3>
+                        <input type="file" name="image" class="mb-20 text-white">
 
                     <!-- Submit -->
                     <button type="submit" 

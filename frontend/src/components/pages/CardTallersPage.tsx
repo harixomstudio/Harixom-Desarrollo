@@ -7,6 +7,7 @@ interface Taller {
   timeStart: string;
   duration?: string;
   place: string;
+  image?: string;
   title: string;
   description: string;
   contributor?: string;
@@ -59,11 +60,12 @@ export default function CardTallers({ tallers }: CardTallersProps) {
               </div>
 
               <Link
-                to={`/tallers/${taller.id}` as any}
-                className="mt-auto block text-center rounded-full bg-blue-600 text-white font-semibold py-2 text-base transition hover:bg-blue-500"
-              >
-                Ver más
-              </Link>
+  to="/WorkshopsDetail"
+  search={{ tallerId: taller.id.toString() }}
+  className="mt-auto block text-center rounded-full bg-blue-600 text-white font-semibold py-2 text-base transition hover:bg-blue-500"
+>
+  Ver más
+</Link>
             </div>
           </div>
         ))}

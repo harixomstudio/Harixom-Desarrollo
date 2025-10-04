@@ -32,6 +32,7 @@
                     <thead>
                         <tr class="bg-stone-900">
                             <th class="border border-stone-700 px-4 py-2 text-white font-semibold">#</th>
+                            <th class="border border-stone-700 px-4 py-2 text-white font-semibold">Image</th>
                             <th class="border border-stone-700 px-4 py-2 text-white font-semibold">Type</th>
                             <th class="border border-stone-700 px-4 py-2 text-white font-semibold">Launch Date</th>
                             <th class="border border-stone-700 px-4 py-2 text-white font-semibold">Start Time</th>
@@ -45,6 +46,7 @@
 @foreach($tallers as $index => $taller)
 <tr class="bg-stone-800 cursor-pointer taller-row" data-taller-id="{{ $taller->id }}">
     <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $index+1 }}</td>
+    <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center"><img src="{{ asset('storage/' . $taller->image) }}" alt="{{ $taller->title }}"></td>
     <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->mode }}</td>
     <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->dateStart }}</td>
     <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $taller->timeStart }}</td>

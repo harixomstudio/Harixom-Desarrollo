@@ -14,6 +14,7 @@ class Taller extends Model
         'dateStart',
         'timeStart',
         'contributor',
+        'image',
         'title',
         'place',
         'duration',
