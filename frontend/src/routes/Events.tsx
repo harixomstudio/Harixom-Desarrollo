@@ -15,6 +15,7 @@ function RouteComponent() {
       .then((data) => {
         const formatted = data.map((event: any) => ({
           id: event.id,
+          Image: event.image,
           title: event.title,
           description: event.description,
           dateStart: event.dateStart,

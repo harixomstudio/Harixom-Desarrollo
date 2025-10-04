@@ -32,6 +32,7 @@
                     <thead>
                         <tr class="bg-stone-900">
                             <th class="border border-stone-700 px-4 py-2 text-white font-semibold">#</th>
+                            <th class="border border-stone-700 px-4 py-2 text-white font-semibold">Image</th>
                             <th class="border border-stone-700 px-4 py-2 text-white font-semibold">Type</th>
                             <th class="border border-stone-700 px-4 py-2 text-white font-semibold">Launch Date</th>
                             <th class="border border-stone-700 px-4 py-2 text-white font-semibold">Start Time</th>
@@ -45,6 +46,7 @@
     @foreach($events as $index => $event)
     <tr class="bg-stone-800 cursor-pointer event-row" data-event-id="{{ $event->id }}">
         <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $index + 1 }}</td>
+        <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center"><img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->title }}"></td>
         <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->type }}</td>
         <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->dateStart }}</td>
         <td class="border border-stone-700 px-4 py-3 text-gray-300 text-center">{{ $event->timeStart }}</td>

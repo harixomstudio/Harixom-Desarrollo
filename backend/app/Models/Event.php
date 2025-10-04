@@ -13,9 +13,10 @@ class Event extends Model
         'type',
         'title',
         'description',
+        'image',
         'dateStart',
         'timeStart',
         'dateEnd',
-        'timeEnd',
+        'timeEnd', 
     ];
 }

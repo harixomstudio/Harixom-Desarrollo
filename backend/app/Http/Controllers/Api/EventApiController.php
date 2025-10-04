@@ -12,4 +12,15 @@ class EventApiController extends Controller
     {
         return response()->json(Event::all());
     }
+
+    public function show($id)
+{
+    $event = Event::find($id);
+
+    if (!$event) {
+        return response()->json(['message' => 'Evento no encontrado'], 404);
+    }
+
+    return response()->json($event, 200);
+}
 }
