@@ -44,16 +44,8 @@ function RootComponent() {
     "/Profile",
     "/SetProfile",
     "/CreatePublication",
-    "/DigitalArt",
-    "/TraditionalArt",
-    "/Animation",
-    "/Sculture",
-    "/Paint",
-    "/3d",
-    "/StreetArt",
-    "/Photography",
     "/ProfileGuest",
-  ].includes(currentPath);
+  ].includes(currentPath) || currentPath.startsWith("/Categories/");
 
   return (
     <React.Fragment>
