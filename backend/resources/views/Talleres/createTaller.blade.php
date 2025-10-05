@@ -74,16 +74,31 @@
                               name="description">{{ old('description') }}</textarea>
 
                               <h3 class="mb-4 text-4xl font-semibold">Image</h3>
-                        <input type="file" name="image" class="mb-20 text-white">
+<input type="file" name="image" id="tallerImageInput" class="mb-20 text-white">
 
                     <!-- Submit -->
                     <button type="submit" 
-                            class="text-4xl w-1/4 bg-[#48e1ec] hover:bg-[#3ab9c2] duration-300 text-black font-semibold py-6 rounded-full">
-                        Create Taller
-                    </button>
+        class="text-4xl w-1/4 bg-[#48e1ec] hover:bg-[#3ab9c2] duration-300 text-black font-semibold py-6 rounded-full">
+    Create Taller
+</button>
                 </div>
             </form>
         </div>
     </main>
+    <script>
+  const form = document.querySelector('form');
+  const imageInput = document.getElementById('tallerImageInput');
+
+  form.addEventListener('submit', (e) => {
+    const file = imageInput.files[0];
+    if (file) {
+      const maxSize = 3 * 1024 * 1024; // 3 MB en bytes
+      if (file.size > maxSize) {
+        e.preventDefault(); // Evita que el formulario se envíe
+        alert('La imagen no puede superar 3MB');
+      }
+    }
+  });
+</script>
 </body>
 </html>

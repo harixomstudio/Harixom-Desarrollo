@@ -45,17 +45,33 @@
                         <input type="time" name="timeEnd" value="{{ $event->timeEnd }}" class="w-full mb-10 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" />
                     </div>
                     <h3 class="mb-4 text-4xl font-semibold">Image</h3>
-                        @if($event->image)
-                    <img src="{{ asset('storage/'.$event->image) }}" alt="Current Image" class="w-64 mb-4">
-                        @endif
-                    <input type="file" name="image" class="mb-20 text-white">
+@if($event->image)
+  <img src="{{ asset('storage/'.$event->image) }}" alt="Current Image" class="w-64 mb-4">
+@endif
+<input type="file" name="image" id="updateEventImageInput" class="mb-20 text-white">
 
-                    <button type="submit" class="text-4xl w-1/4 bg-[#48e1ec] hover:bg-[#3ab9c2] duration-300 text-black font-semibold py-6 rounded-full">Edit Event</button>
+<button type="submit" class="text-4xl w-1/4 bg-[#48e1ec] hover:bg-[#3ab9c2] duration-300 text-black font-semibold py-6 rounded-full">Edit Event</button>
+
                 </div>
             </form>
         </div>
     </main>
 
+    <script>
+  const form = document.querySelector('form');
+  const imageInput = document.getElementById('updateEventImageInput');
+
+  form.addEventListener('submit', (e) => {
+    const file = imageInput.files[0];
+    if (file) {
+      const maxSize = 3 * 1024 * 1024; // 3 MB en bytes
+      if (file.size > maxSize) {
+        e.preventDefault(); // Evita que se envíe el formulario
+        alert('La imagen no puede superar 3MB');
+      }
+    }
+  });
+</script>
 
 </body>
 

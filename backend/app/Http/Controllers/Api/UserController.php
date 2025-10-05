@@ -127,7 +127,7 @@ class UserController extends Controller
             'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+\d{1,3}\d{4,14}$/'],
             'address' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:500',
-            'profile_picture' => 'nullable|image|max:2048',
+            'profile_picture' => 'nullable|image|max:3072',
             'banner_picture' => 'nullable|image|max:4096',
             'services' => 'nullable|string',
             'prices' => 'nullable|string',

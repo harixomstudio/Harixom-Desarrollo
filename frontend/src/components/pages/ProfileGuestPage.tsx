@@ -34,7 +34,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [cards, setCards] = useState(props.cards || []);
   const [favorites, setFavorites] = useState(props.likes || []);
   const [activeTab, setActiveTab] = useState(0);
-  const tabs = props.tabs || ["Home", "Commissions", "Feed", "Favorites"];
+  const tabs = props.tabs || ["Home", "Commissions", "Messages", "Favorites"];
 
   // Commissions
   const [services, setServices] = useState("");
