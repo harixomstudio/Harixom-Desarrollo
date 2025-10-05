@@ -261,7 +261,8 @@ export default function Landing(props: LandingProps) {
 
                 {/* Botón animado */}
                 <Link
-                  to="/DigitalArt"
+                  to="/Categories/$name"
+                  params={{ name: "Digital Art" }}
                   className="absolute top-10 px-20 py-2 bg-blue-600 text-2xl font-bold rounded-full hover:scale-125 transition z-10"
                   style={{ fontFamily: "Monserrat" }}
                 >

@@ -1,13 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import FeedPage from "../components/pages/FeedPage";
+import Categories from "../components/pages/Categories";
 
-export const Route = createFileRoute("/Feed")({
+export const Route = createFileRoute("/Categories/$name")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const token = localStorage.getItem("access_token");
+  const { name } = useParams({ from: "/Categories/$name" });
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["allPublications"],
@@ -50,5 +51,26 @@ function RouteComponent() {
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
 
-  return <FeedPage publications={sortedPublications} />;
+  const categoryPublications = sortedPublications.filter(
+    (pub: { category?: string }) =>
+      pub.category?.toLowerCase() === name.toLowerCase()
+  );
+  const categoryConfig: Record<string, { style: string; icon: string; alt: string }> = {
+    "Photography": { style: "text-[#ff6161]", icon: "../public/icon-foto.svg", alt: "Photography icon", },
+    "3d": { style: "text-[#DBFF4F]", icon: "../icon-3d.svg", alt: "3D category icon", },
+    "Animation": { style: "text-[#A39FF6]", icon: "../public/icon-animacion.svg", alt: "Animation icon", },
+    "Sculpture": { style: "text-[#9fe2f6]", icon: "../public/icon-sculture.svg", alt: "Sculpture icon", },
+    "Traditional": { style: "text-[#61ffa3]", icon: "../public/icon-traditional.svg", alt: "Traditional art icon", },
+    "Street Art": { style: "text-[#fddb1a]", icon: "../public/icon-streetart.svg", alt: "Street art icon",},
+    "Digital Art": { style: "text-pink-400", icon: "../public/icon-digitalart.svg", alt: "Digital art icon", }, };
+
+     const category = categoryConfig[name as keyof typeof categoryConfig];
+
+  return <Categories
+    title={name}
+    style={category.style}
+    icon={category.icon}
+    altIcon={category.alt}
+    categoriesPublications={categoryPublications}
+  />;
 }

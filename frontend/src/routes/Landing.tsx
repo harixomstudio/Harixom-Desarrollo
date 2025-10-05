@@ -29,7 +29,7 @@ const categoriesUpColors = [
   "#96E2FF", // celeste
   "#1AFB9B", // turquesa
 ];
-const links = ["/DigitalArt", "/Animation", "/Sculture", "Traditional"];
+const links = ["/Categories/Digital Art", "/Categories/Animation", "/Categories/Sculpture", "/Categories/Traditional"];
 
 const categoriesDown = [
   "icon-3d.svg",
@@ -46,7 +46,7 @@ const categoriesDownColors = [
   "#FDD519", // naranja
   "#FA6063", // rojo
 ];
-const links2 = ["/3d", "/StreetArt", "/Photography"];
+const links2 = ["/Categories/3d", "/Categories/Street Art", "/Categories/Photography"];
 
 const linksArt = ["", "", "", "", "", "", "", "", "", ""];
 

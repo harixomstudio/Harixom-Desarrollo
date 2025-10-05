@@ -12,30 +12,24 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkshopsDetailRouteImport } from './routes/WorkshopsDetail'
 import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
-import { Route as TraditionalArtRouteImport } from './routes/TraditionalArt'
 import { Route as TermsRouteImport } from './routes/Terms'
-import { Route as StreetArtRouteImport } from './routes/StreetArt'
 import { Route as SetProfileRouteImport } from './routes/SetProfile'
-import { Route as ScultureRouteImport } from './routes/Sculture'
 import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
 import { Route as RegisterAdminRouteImport } from './routes/RegisterAdmin'
 import { Route as RegisterRouteImport } from './routes/Register'
 import { Route as ProfileGuestRouteImport } from './routes/ProfileGuest'
 import { Route as ProfileRouteImport } from './routes/Profile'
-import { Route as PhotographyRouteImport } from './routes/Photography'
 import { Route as LoginRouteImport } from './routes/Login'
 import { Route as LandingRouteImport } from './routes/Landing'
 import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
 import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
 import { Route as EventsRouteImport } from './routes/Events'
-import { Route as DigitalArtRouteImport } from './routes/DigitalArt'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
 import { Route as CreateAtivityRouteImport } from './routes/CreateAtivity'
-import { Route as AnimationRouteImport } from './routes/Animation'
 import { Route as AIChallengeRouteImport } from './routes/AIChallenge'
-import { Route as R3dRouteImport } from './routes/3d'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CategoriesNameRouteImport } from './routes/Categories.$name'
 
 const WorkshopsDetailRoute = WorkshopsDetailRouteImport.update({
   id: '/WorkshopsDetail',
@@ -52,29 +46,14 @@ const UserRegisterRoute = UserRegisterRouteImport.update({
   path: '/UserRegister',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TraditionalArtRoute = TraditionalArtRouteImport.update({
-  id: '/TraditionalArt',
-  path: '/TraditionalArt',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/Terms',
   path: '/Terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StreetArtRoute = StreetArtRouteImport.update({
-  id: '/StreetArt',
-  path: '/StreetArt',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SetProfileRoute = SetProfileRouteImport.update({
   id: '/SetProfile',
   path: '/SetProfile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ScultureRoute = ScultureRouteImport.update({
-  id: '/Sculture',
-  path: '/Sculture',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -100,11 +79,6 @@ const ProfileGuestRoute = ProfileGuestRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/Profile',
   path: '/Profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PhotographyRoute = PhotographyRouteImport.update({
-  id: '/Photography',
-  path: '/Photography',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -137,11 +111,6 @@ const EventsRoute = EventsRouteImport.update({
   path: '/Events',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DigitalArtRoute = DigitalArtRouteImport.update({
-  id: '/DigitalArt',
-  path: '/DigitalArt',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CreatePublicationRoute = CreatePublicationRouteImport.update({
   id: '/CreatePublication',
   path: '/CreatePublication',
@@ -152,19 +121,9 @@ const CreateAtivityRoute = CreateAtivityRouteImport.update({
   path: '/CreateAtivity',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AnimationRoute = AnimationRouteImport.update({
-  id: '/Animation',
-  path: '/Animation',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AIChallengeRoute = AIChallengeRouteImport.update({
   id: '/AIChallenge',
   path: '/AIChallenge',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const R3dRoute = R3dRouteImport.update({
-  id: '/3d',
-  path: '/3d',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -172,213 +131,176 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoriesNameRoute = CategoriesNameRouteImport.update({
+  id: '/Categories/$name',
+  path: '/Categories/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/3d': typeof R3dRoute
   '/AIChallenge': typeof AIChallengeRoute
-  '/Animation': typeof AnimationRoute
   '/CreateAtivity': typeof CreateAtivityRoute
   '/CreatePublication': typeof CreatePublicationRoute
-  '/DigitalArt': typeof DigitalArtRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
-  '/Photography': typeof PhotographyRoute
   '/Profile': typeof ProfileRoute
   '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
-  '/Sculture': typeof ScultureRoute
   '/SetProfile': typeof SetProfileRoute
-  '/StreetArt': typeof StreetArtRoute
   '/Terms': typeof TermsRoute
-  '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/3d': typeof R3dRoute
   '/AIChallenge': typeof AIChallengeRoute
-  '/Animation': typeof AnimationRoute
   '/CreateAtivity': typeof CreateAtivityRoute
   '/CreatePublication': typeof CreatePublicationRoute
-  '/DigitalArt': typeof DigitalArtRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
-  '/Photography': typeof PhotographyRoute
   '/Profile': typeof ProfileRoute
   '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
-  '/Sculture': typeof ScultureRoute
   '/SetProfile': typeof SetProfileRoute
-  '/StreetArt': typeof StreetArtRoute
   '/Terms': typeof TermsRoute
-  '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/3d': typeof R3dRoute
   '/AIChallenge': typeof AIChallengeRoute
-  '/Animation': typeof AnimationRoute
   '/CreateAtivity': typeof CreateAtivityRoute
   '/CreatePublication': typeof CreatePublicationRoute
-  '/DigitalArt': typeof DigitalArtRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
-  '/Photography': typeof PhotographyRoute
   '/Profile': typeof ProfileRoute
   '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
-  '/Sculture': typeof ScultureRoute
   '/SetProfile': typeof SetProfileRoute
-  '/StreetArt': typeof StreetArtRoute
   '/Terms': typeof TermsRoute
-  '/TraditionalArt': typeof TraditionalArtRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/3d'
     | '/AIChallenge'
-    | '/Animation'
     | '/CreateAtivity'
     | '/CreatePublication'
-    | '/DigitalArt'
     | '/Events'
     | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
-    | '/Photography'
     | '/Profile'
     | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
     | '/ResetPassword'
-    | '/Sculture'
     | '/SetProfile'
-    | '/StreetArt'
     | '/Terms'
-    | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/Categories/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/3d'
     | '/AIChallenge'
-    | '/Animation'
     | '/CreateAtivity'
     | '/CreatePublication'
-    | '/DigitalArt'
     | '/Events'
     | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
-    | '/Photography'
     | '/Profile'
     | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
     | '/ResetPassword'
-    | '/Sculture'
     | '/SetProfile'
-    | '/StreetArt'
     | '/Terms'
-    | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/Categories/$name'
   id:
     | '__root__'
     | '/'
-    | '/3d'
     | '/AIChallenge'
-    | '/Animation'
     | '/CreateAtivity'
     | '/CreatePublication'
-    | '/DigitalArt'
     | '/Events'
     | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
     | '/Landing'
     | '/Login'
-    | '/Photography'
     | '/Profile'
     | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
     | '/ResetPassword'
-    | '/Sculture'
     | '/SetProfile'
-    | '/StreetArt'
     | '/Terms'
-    | '/TraditionalArt'
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/Categories/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  R3dRoute: typeof R3dRoute
   AIChallengeRoute: typeof AIChallengeRoute
-  AnimationRoute: typeof AnimationRoute
   CreateAtivityRoute: typeof CreateAtivityRoute
   CreatePublicationRoute: typeof CreatePublicationRoute
-  DigitalArtRoute: typeof DigitalArtRoute
   EventsRoute: typeof EventsRoute
   EventsDetailRoute: typeof EventsDetailRoute
   FeedRoute: typeof FeedRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LandingRoute: typeof LandingRoute
   LoginRoute: typeof LoginRoute
-  PhotographyRoute: typeof PhotographyRoute
   ProfileRoute: typeof ProfileRoute
   ProfileGuestRoute: typeof ProfileGuestRoute
   RegisterRoute: typeof RegisterRoute
   RegisterAdminRoute: typeof RegisterAdminRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  ScultureRoute: typeof ScultureRoute
   SetProfileRoute: typeof SetProfileRoute
-  StreetArtRoute: typeof StreetArtRoute
   TermsRoute: typeof TermsRoute
-  TraditionalArtRoute: typeof TraditionalArtRoute
   UserRegisterRoute: typeof UserRegisterRoute
   WorkshopsRoute: typeof WorkshopsRoute
   WorkshopsDetailRoute: typeof WorkshopsDetailRoute
+  CategoriesNameRoute: typeof CategoriesNameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -404,13 +326,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/TraditionalArt': {
-      id: '/TraditionalArt'
-      path: '/TraditionalArt'
-      fullPath: '/TraditionalArt'
-      preLoaderRoute: typeof TraditionalArtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/Terms': {
       id: '/Terms'
       path: '/Terms'
@@ -418,25 +333,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/StreetArt': {
-      id: '/StreetArt'
-      path: '/StreetArt'
-      fullPath: '/StreetArt'
-      preLoaderRoute: typeof StreetArtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/SetProfile': {
       id: '/SetProfile'
       path: '/SetProfile'
       fullPath: '/SetProfile'
       preLoaderRoute: typeof SetProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/Sculture': {
-      id: '/Sculture'
-      path: '/Sculture'
-      fullPath: '/Sculture'
-      preLoaderRoute: typeof ScultureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ResetPassword': {
@@ -472,13 +373,6 @@ declare module '@tanstack/react-router' {
       path: '/Profile'
       fullPath: '/Profile'
       preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/Photography': {
-      id: '/Photography'
-      path: '/Photography'
-      fullPath: '/Photography'
-      preLoaderRoute: typeof PhotographyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/Login': {
@@ -523,13 +417,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/DigitalArt': {
-      id: '/DigitalArt'
-      path: '/DigitalArt'
-      fullPath: '/DigitalArt'
-      preLoaderRoute: typeof DigitalArtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/CreatePublication': {
       id: '/CreatePublication'
       path: '/CreatePublication'
@@ -544,25 +431,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateAtivityRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/Animation': {
-      id: '/Animation'
-      path: '/Animation'
-      fullPath: '/Animation'
-      preLoaderRoute: typeof AnimationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/AIChallenge': {
       id: '/AIChallenge'
       path: '/AIChallenge'
       fullPath: '/AIChallenge'
       preLoaderRoute: typeof AIChallengeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/3d': {
-      id: '/3d'
-      path: '/3d'
-      fullPath: '/3d'
-      preLoaderRoute: typeof R3dRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -572,37 +445,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/Categories/$name': {
+      id: '/Categories/$name'
+      path: '/Categories/$name'
+      fullPath: '/Categories/$name'
+      preLoaderRoute: typeof CategoriesNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  R3dRoute: R3dRoute,
   AIChallengeRoute: AIChallengeRoute,
-  AnimationRoute: AnimationRoute,
   CreateAtivityRoute: CreateAtivityRoute,
   CreatePublicationRoute: CreatePublicationRoute,
-  DigitalArtRoute: DigitalArtRoute,
   EventsRoute: EventsRoute,
   EventsDetailRoute: EventsDetailRoute,
   FeedRoute: FeedRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LandingRoute: LandingRoute,
   LoginRoute: LoginRoute,
-  PhotographyRoute: PhotographyRoute,
   ProfileRoute: ProfileRoute,
   ProfileGuestRoute: ProfileGuestRoute,
   RegisterRoute: RegisterRoute,
   RegisterAdminRoute: RegisterAdminRoute,
   ResetPasswordRoute: ResetPasswordRoute,
-  ScultureRoute: ScultureRoute,
   SetProfileRoute: SetProfileRoute,
-  StreetArtRoute: StreetArtRoute,
   TermsRoute: TermsRoute,
-  TraditionalArtRoute: TraditionalArtRoute,
   UserRegisterRoute: UserRegisterRoute,
   WorkshopsRoute: WorkshopsRoute,
   WorkshopsDetailRoute: WorkshopsDetailRoute,
+  CategoriesNameRoute: CategoriesNameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
