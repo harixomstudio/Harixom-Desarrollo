@@ -34,12 +34,23 @@ export default function CreatePublicationPage({
   ];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setSelectedImage(file);
-      setPreviewUrl(URL.createObjectURL(file)); // Creamos la URL temporal para preview
+  if (e.target.files && e.target.files.length > 0) {
+    const file = e.target.files[0];
+
+    // Validación de tamaño máximo 4 MB
+    const maxSize = 3 * 1024 * 1024; // 4 MB en bytes
+    if (file.size > maxSize) {
+      showToast("La imagen no puede superar los 4 MB.", "error");
+      e.target.value = ""; // limpiar input
+      setSelectedImage(null);
+      setPreviewUrl(null);
+      return;
     }
-  };
+
+    setSelectedImage(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  }
+};
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("access_token");

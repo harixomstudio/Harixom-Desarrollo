@@ -52,25 +52,39 @@ export default function SetProfilePage() {
   };
 
   const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: "profile" | "banner"
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (type === "profile") setProfileFile(file);
-      else setBannerFile(file);
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfile((prev) => ({
-          ...prev,
-          [type === "profile" ? "profile_picture" : "banner_picture"]:
-            reader.result as string,
-        }));
-      };
-      reader.readAsDataURL(file);
+  e: React.ChangeEvent<HTMLInputElement>,
+  type: "profile" | "banner"
+) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    const maxSize = type === "profile" ? 3 * 1024 * 1024 : 4 * 1024 * 1024; // bytes
+    if (file.size > maxSize) {
+      showToast(
+        `El archivo ${
+          type === "profile" ? "de perfil" : "de banner"
+        } no puede superar ${type === "profile" ? "3MB" : "4MB"}.`,
+        "error"
+      );
+      // Limpiar selección si excede
+      if (type === "profile") setProfileFile(null);
+      else setBannerFile(null);
+      return;
     }
-  };
+
+    if (type === "profile") setProfileFile(file);
+    else setBannerFile(file);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setProfile((prev) => ({
+        ...prev,
+        [type === "profile" ? "profile_picture" : "banner_picture"]:
+          reader.result as string,
+      }));
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
   const handleSave = async () => {
     setLoading(true);

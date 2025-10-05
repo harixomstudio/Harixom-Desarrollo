@@ -50,7 +50,7 @@ class PublicationController extends Controller
         $request->validate([
             'description' => 'nullable|string|max:1000',
             'category' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:3072',
         ]);
 
         $imageUrl = null;

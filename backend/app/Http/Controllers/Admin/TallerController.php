@@ -26,6 +26,7 @@ class TallerController extends Controller
             'place' => 'required|string',
             'description' => 'required|string',
             'contributor' => 'nullable|string',
+            'image' => 'nullable|image|max:3072',
         ]);
         Taller::create($data);
         return redirect()->route('taller')->with('success','Taller creado');
@@ -49,6 +50,7 @@ class TallerController extends Controller
             'place' => 'required|string',
             'description' => 'required|string',
             'contributor' => 'nullable|string',
+            'image' => 'nullable|image|max:3072',
         ]);
         $taller->update($data);
         return redirect()->route('taller')->with('success','Taller actualizado');

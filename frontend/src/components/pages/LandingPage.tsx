@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import Footer from "../Footer";
 import { useInView } from "./useInView";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 interface FooterProps {
   titlePage: string;
@@ -19,46 +20,41 @@ interface FooterProps {
 interface LandingProps {
   banners: string[];
   altBanner: string;
-
   categoriesUpNames: string[];
   categoriesDownNames: string[];
-
   categoriesUpColors: string[];
   categoriesDownColors: string[];
-
   categoriesUp: string[];
   links: string[];
   categoriesDown: string[];
   links2: string[];
-
   imgApp: string;
   imgAppAlt: string;
   descriptionApp: string;
   textApp: string;
-
   linksArt: string[];
-
   commisionsCategories: string[];
   linksCommisions: string[];
-
   footer?: FooterProps;
 }
 
+
 interface Publication {
   id: number;
-  user_id: number;
-  user_name: string;
-  user_profile_picture: string;
-  description: string;
-  image: string;
-  total_likes: number;
-  total_comments: number;
-  category: string;
-  created_at: string;
+  user_id?: number;
+  user_name?: string;
+  user_profile_picture?: string;
+  description?: string;
+  image?: string;
+  total_likes?: number;
+  total_comments?: number;
+  category?: string;
+  created_at?: string;
 }
 
 interface TopArtist {
-  id: number;
+  id: number; 
+  user_id: number; 
   artist_name: string;
   title: string;
   image: string;
@@ -69,7 +65,8 @@ interface TopArtist {
 export default function Landing(props: LandingProps) {
   if (!props.footer) return null;
 
-  const { ref: appRef, inView: appVisible } = useInView({ threshold: 0.3 });
+   const { ref: appRef, inView: appVisible } = useInView({ threshold: 0.3 });
+  const navigate = useNavigate();
 
   const [current, setCurrent] = useState(0);
   const total = props.banners.length;
@@ -91,18 +88,37 @@ export default function Landing(props: LandingProps) {
     enabled: !!token,
   });
 
-  // Tomamos los 4 con más likes
+  // ----- obtener currentUserId para redirigir a /Profile cuando corresponda -----
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  useEffect(() => {
+    if (!token) return;
+    (async () => {
+      try {
+        const { data } = await axios.get("http://127.0.0.1:8000/api/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCurrentUserId(data.user?.id ?? null);
+      } catch (err) {
+        // no crítico, solo log para depuración
+        console.log("No se pudo obtener current user:", err);
+      }
+    })();
+  }, [token]);
+
+  // Mapear la data de publicaciones a lo que necesitamos en el ranking
   const topArtists: TopArtist[] = (data || [])
-    .map(pub => ({
+    .map((pub) => ({
       id: pub.id,
-      artist_name: pub.user_name || "Desconocido",
-      title: pub.description,
-      image: pub.image,
-      likes: pub.total_likes || 0,
-      profile_picture: pub.user_profile_picture || "default-avatar.png", // por si no hay foto
+      user_id: pub.user_id ?? 0, // <-- clave: usamos user_id
+      artist_name: pub.user_name ?? "Desconocido",
+      title: pub.description ?? "",
+      image: pub.image ?? "",
+      likes: pub.total_likes ?? 0,
+      profile_picture: pub.user_profile_picture ?? "circles.svg",
     }))
     .sort((a, b) => b.likes - a.likes)
     .slice(0, 4);
+
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -420,19 +436,28 @@ export default function Landing(props: LandingProps) {
           </div>
         </section>
 
-
-
-
         {/* artists ranking */}
-
         <section className="flex flex-col items-center justify-center gap-25 py-50 max-lg:gap-10 max-lg:py-30">
-          <h2 className="text-5xl md:text-7xl text-pink-300 flex gap-1">Artists Ranking</h2>
+          <h2 className="text-5xl md:text-7xl text-pink-300 flex gap-1">
+            Artists Ranking
+          </h2>
+
           <div className="grid grid-cols-2 gap-10 w-full px-15 max-lg:grid-cols-1 max-lg:px-5">
-            {topArtists.map((artist: TopArtist, idx: number) => (
-              <Link
+            {topArtists.map((artist) => (
+              <div
                 key={artist.id}
-                to={props.linksArt[idx] || "#"}
-                className="flex flex-col items-center gap-10 hover:scale-105 duration-500"
+                onClick={() => {
+                  // navegar al perfil correcto usando artist.user_id
+                  if (artist.user_id && artist.user_id === currentUserId) {
+                    navigate({ to: "/Profile" });
+                  } else {
+                    navigate({
+                      to: "/ProfileGuest",
+                      search: { userId: artist.user_id },
+                    });
+                  }
+                }}
+                className="flex flex-col items-center gap-10 hover:scale-105 duration-500 cursor-pointer"
               >
                 <div className="relative w-lg h-100 rounded-xl overflow-hidden">
                   <img
@@ -441,7 +466,7 @@ export default function Landing(props: LandingProps) {
                     className="w-full h-full object-cover"
                   />
 
-                  {/* Foto de perfil real del artista */}
+                  {/* foto de perfil del artista */}
                   <img
                     src={artist.profile_picture}
                     alt={artist.artist_name}
@@ -449,16 +474,18 @@ export default function Landing(props: LandingProps) {
                   />
 
                   <div className="absolute bottom-4 right-4 flex text-white text-xl">
-                    <button className="hover:scale-110 duration-200">❤️{artist.likes}</button>
+                    <button className="hover:scale-110 duration-200">
+                      ❤️ {artist.likes}
+                    </button>
                   </div>
                 </div>
+
                 <div className="text-center text-white text-lg">
                   <h4>Artista: {artist.artist_name}</h4>
                   <p>Obra: {artist.title}</p>
                 </div>
-              </Link>
+              </div>
             ))}
-
           </div>
         </section>
 

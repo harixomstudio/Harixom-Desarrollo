@@ -26,7 +26,7 @@ class EventController extends Controller
             'description' => 'required|string',
             'dateEnd' => 'required|date',
             'timeEnd' => 'required',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:3072',
         ]);
 
        if ($request->hasFile('image')) {
@@ -57,7 +57,7 @@ class EventController extends Controller
             'description' => 'required|string',
             'dateEnd' => 'required|date',
             'timeEnd' => 'required',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:3072',
         ]);
 
         if ($request->hasFile('image')) {
