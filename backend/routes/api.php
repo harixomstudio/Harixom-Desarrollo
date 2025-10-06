@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\AIController;
 use App\Http\Controllers\Api\EventApiController;
 use App\Http\Controllers\Api\TallerApiController;
 use App\Http\Controllers\Api\ProfileMessageController;
+use App\Http\Controllers\Api\SearchController;
 
 Route::middleware('auth:sanctum')->group(function(){
     //Rutas de perfil
@@ -20,6 +21,9 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::put('/user/profile', [UserController::class, 'updateProfile']);
     //Cerrar sesion
     Route::post('user/logout', [UserController::class, 'logout']);
+
+    //Ruta para buscar
+    Route::get('/search', [SearchController::class, 'search']);
 
     //Rutas para publicaciones
     Route::post('/publications', [PublicationController::class, 'store']);
