@@ -65,7 +65,7 @@
   form.addEventListener('submit', (e) => {
     const file = imageInput.files[0];
     if (file) {
-      const maxSize = 2 * 1024 * 1024; // 3 MB en bytes
+      const maxSize = 3 * 1024 * 1024; // 3 MB en bytes
       if (file.size > maxSize) {
         e.preventDefault(); // Evita que el formulario se envíe
         alert('La imagen no puede superar 3MB');
