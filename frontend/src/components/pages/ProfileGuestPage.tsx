@@ -50,18 +50,18 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [commissionText, setCommissionText] = useState("");
 
   const [buttonPosition, setButtonPosition] = useState({ top: 450, left: 1000 });
-    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      setButtonPosition({
-        top: rect.top + window.scrollY + rect.height + 200,
-        left: rect.left + window.scrollX,
-      });
-      setIsModalOpen(true);
-    };
-    const handleSendCommission = () => {
-      console.log("Comisión enviada:", commissionText);
-      setIsModalOpen(false);
-    };
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setButtonPosition({
+      top: rect.top + window.scrollY + rect.height + 200,
+      left: rect.left + window.scrollX,
+    });
+    setIsModalOpen(true);
+  };
+  const handleSendCommission = () => {
+    console.log("Comisión enviada:", commissionText);
+    setIsModalOpen(false);
+  };
 
   const token = localStorage.getItem("access_token");
 
@@ -149,15 +149,11 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           </div>
         </div>
 
-        {/* Info */}
-        <div className="pl-10 mt-2 mb-6 text-white">
-          <div className="flex gap-10 items-center text-2xl font-semibold">
-            <span>{props.username}</span>
-            <span>Followers</span>
-            <span>Followings</span>
-          </div>
+        <div className="flex flex-col pl-10 text-white mt-6 mb-10">
+          {/* Username */}
+          <span className="text-3xl font-bold mb-2">{props.username}</span>
 
-{/* Botón flotante */}
+          {/* Botón flotante */}
           <button
             className="absolute right-6 py-4 px-7 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black"
             style={{ fontFamily: "Monserrat" }}
@@ -202,25 +198,138 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
             </div>
           )}
 
-          <div className="flex gap-35 text-gray-400 text-lg mb-1">
-            <span>{props.address}</span>
+          {/* Description */}
+          <span className="text-gray-400 text-lg mb-6">{props.address}</span>
+
+          {/* Followers & Followings  */}
+          <div className="flex gap-20 text-white font-semibold text-xl mb-2">
             <span
-              className="cursor-pointer hover:text-pink-400"
+              className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
               onClick={() => setShowFollowers(true)}
             >
-              {followers.length} 
+              <span>Followers</span>
+              <span className="text-gray-300 text-lg font-normal">
+                {props.followers.length}
+              </span>
             </span>
             <span
-              className="cursor-pointer hover:text-pink-400"
+              className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
               onClick={() => setShowFollowings(true)}
             >
-              {followings.length} 
+              <span>Followings</span>
+              <span className="text-gray-300 text-md font-normal">
+                {props.followings.length}
+              </span>
             </span>
           </div>
-          <p className="text-gray-300 text-sm mt-2 py-4">{props.description}</p>
+
+          {/* Followers Modal */}
+          {showFollowers && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
+                <h3 className="text-pink-400 font-bold mb-6">Followers</h3>
+                <ul>
+                  {props.followers.map((f) => (
+                    <li
+                      key={f.id}
+                      className="text-gray-200 mb-2 flex items-center gap-2"
+                    >
+                      <img
+                        src={f.profile_picture}
+                        className="w-6 h-6 rounded-full"
+                      />
+                      {f.name}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  onClick={() => setShowFollowers(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Followings Modal */}
+          {showFollowings && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
+                <h3 className="text-pink-400 font-bold mb-4">Followings</h3>
+                <ul>
+                  {props.followings.map((f) => (
+                    <li
+                      key={f.id}
+                      className="text-gray-200 mb-2 flex items-center gap-2"
+                    >
+                      <img
+                        src={f.profile_picture}
+                        className="w-6 h-6 rounded-full"
+                      />
+                      {f.name}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  onClick={() => setShowFollowings(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+
+          <p className="text-gray-300 text-sm mt-2 py-10">
+            {props.description}
+          </p>
         </div>
 
-        
+        {/* Botón flotante */}
+        <button
+          className="absolute right-6 py-4 px-7 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black"
+          style={{ fontFamily: "Monserrat" }}
+          onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
+        >
+          $
+        </button>
+
+        {/* Modal flotante */}
+        {isModalOpen && (
+          <div
+            className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
+            style={{
+              top: buttonPosition.top, // Posición vertical dinámica
+              left: buttonPosition.left, // Posición horizontal dinámica
+            }}
+          >
+            <h2 className="text-pink-400 text-lg font-semibold mb-4">
+              Escribe tu comisión
+            </h2>
+            <textarea
+              value={commissionText}
+              onChange={(e) => setCommissionText(e.target.value)}
+              placeholder="Describe tu comisión..."
+              className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
+              rows={5}
+            />
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
+                onClick={() => setIsModalOpen(false)} // Cerrar el modal
+              >
+                Cerrar
+              </button>
+              <button
+                className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
+                onClick={handleSendCommission} // Enviar la comisión
+              >
+                Enviar
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex gap-8 border-b border-gray-400 mb-8 px-4">
@@ -228,8 +337,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
             <button
               key={tab}
               className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
-                  ? "text-pink-400 border-b-2 border-pink-400"
-                  : "text-gray-200"
+                ? "text-pink-400 border-b-2 border-pink-400"
+                : "text-gray-200"
                 }`}
               onClick={() => setActiveTab(i)}
             >
@@ -374,6 +483,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           </div>
         )}
       </div>
-    </section>
+    </section >
   );
 }
