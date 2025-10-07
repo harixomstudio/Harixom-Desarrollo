@@ -275,10 +275,11 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 </span>
               </div>
               {pub.image ? (
-                <img
+                <WatermarkedImage
                   src={pub.image}
                   alt={pub.description}
-                  className="w-full h-full object-cover"
+                  className="w-100px h-full object-cover rounded-lg max-lg:w-4/5"
+                  watermarkText={`Propiedad de ${pub.user_name || "Usuario desconocido"}`}
                 />
               ) : (
                 <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs" />
@@ -401,7 +402,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
             {isModalOpen === pub.id && (
               <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                 <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96 max-h-[80vh] flex flex-col">
-                  <h2 className="text-white text-lg font-semibold mb-4" onClick={(e) => e.stopPropagation()}>
+                  <h2
+                    className="text-white text-lg font-semibold mb-4"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     Comentarios
                   </h2>
                   <div className="flex-1 overflow-y-auto mb-4 space-y-2">
@@ -416,7 +420,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         </div>
                       ))
                     ) : (
-                      <p className="text-gray-400 text-sm" onClick={(e) => e.stopPropagation()}>
+                      <p
+                        className="text-gray-400 text-sm"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         No hay comentarios aún
                       </p>
                     )}
@@ -505,7 +512,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
               {/* Botón para cerrar */}
               <button
-                className="absolute bottom-40 px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 self-start text-lg"
+                className="absolute bottom-20 right-30 px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
                 onClick={closeModal}
               >
                 Cerrar
