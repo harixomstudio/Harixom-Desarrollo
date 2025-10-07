@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -385,7 +385,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   </button>
                 )}
                 {/* Categoría */}
-                <span className="ml-17 text-gray-300 font-bold">
+                <span className="ml-10 text-gray-300 font-bold">
                   {pub.category}
                 </span>
               </div>
@@ -456,6 +456,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         if (currentComment.trim()) {
                           await addComment(pub.id, currentComment);
                           await fetchComments(pub.id);
+                          setIsModalOpen(null);
                           setCurrentComment("");
                         } else {
                           showToast(
@@ -474,7 +475,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
           </div>
         ))}
       </div>
-      {/* Modal */}
+      {/* Modal publicaciones en grande */}
       {selectedPublication && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
           <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:items-center">
@@ -504,9 +505,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   {selectedPublication.description}
                 </p>
                 <div className="mt-8 flex gap-5">
-                  <span className="px-4 py-2 bg-pink-500 text-white rounded-full text-xl">
+                  <Link
+                    to="/Categories/$name"
+                    params={{
+                      name: selectedPublication.category || "General"
+                    }}
+                    className="px-4 py-2 bg-pink-500 text-white rounded-full text-xl hover:scale-105 transition-transform"
+                  >
                     {selectedPublication.category || "Sin categoría"}
-                  </span>
+                  </Link>
                 </div>
               </div>
 
