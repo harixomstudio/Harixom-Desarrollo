@@ -18,16 +18,15 @@ export default function Footer(props: FooterProps) {
       className="flex flex-col items-center w-full py-20"
       style={{ fontFamily: "monserrat" }}
     >
-      <section className="flex w-full text-3xl max-lg:text-xl max-xl:text-xl py-10 max-lg:items-center bg-[#141414]">
-        <div className="flex justify-between items-baseline w-full max-lg:flex-col max-lg:items-center max-lg:gap-20 px-15">
+      <section className="flex w-full text-3xl max-lg:text-xl max-xl:text-xl py-10 max-lg:items-center bg-[#141414] ">
+        <div className="flex justify-between items-baseline w-full max-lg:flex-col max-lg:items-center max-lg:justify-center  max-lg:gap-20 px-15">
           {/* Logo and title */}
-          <div className="flex flex-col items-center justify-center max-lg:items-center">
-            <h4 className="font-semibold pb-15 max-lg:pb-10"></h4>
+          <div className="">
             <div
-              className="text-pink-500 text-3xl pl-10"
+              className="flex text-pink-500 text-3xl "
               style={{ fontFamily: "Starstruck" }}
             >
-              <a className="" href="/Landing">
+              <a className="flex max-lg:text-center" href="/Landing">
                 Harixom
               </a>
             </div>
@@ -35,7 +34,7 @@ export default function Footer(props: FooterProps) {
 
           {/* Products */}
           <div className="flex flex-col items-start justify-center">
-            <h4 className="font-semibold pb-15 max-lg:pb-5">Products</h4>
+            <h4 className="font-semibold pb-15 max-lg:pb-5 ">Products</h4>
             {props.products.map((product, index) => (
               <Link
                 key={index}
@@ -64,7 +63,7 @@ export default function Footer(props: FooterProps) {
           </div>
 
           {/* Contacts */}
-          <div className="flex flex-col items-start justify-center">
+          <div className="flex flex-col items-start justify-center pl-25">
             <h4 className="font-semibold pb-15 max-lg:pb-10">Contacts</h4>
             {props.contacts.map((contact, index) => (
               <a
@@ -72,7 +71,7 @@ export default function Footer(props: FooterProps) {
                 href={props.linksContacts[index]}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:scale-110 duration-600 hover:text-[#FA6063] pb-5 max-lg:pb-2"
+                className="hover:scale-110 duration-600 hover:text-[#FA6063] pb-5  max-lg:pb-2"
               >
                 <li>{contact}</li>
               </a>

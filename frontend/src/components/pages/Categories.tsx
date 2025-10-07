@@ -59,7 +59,7 @@ export default function Categories({ categoriesPublications, title, style, icon,
     useEffect(() => {
         const fetchCurrentUser = async () => {
             try {
-                const { data } = await axios.get("http://localhost:8000/api/user", {
+                const { data } = await axios.get("http://127.0.0.1:8000/api/user", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setCurrentUserId(data.user.id);
@@ -77,7 +77,7 @@ export default function Categories({ categoriesPublications, title, style, icon,
         const fetchFollows = async () => {
             try {
                 const { data } = await axios.get(
-                    "http://localhost:8000/api/user/follows",
+                    "http://127.0.0.1:8000/api/user/follows",
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
@@ -134,7 +134,7 @@ export default function Categories({ categoriesPublications, title, style, icon,
     const fetchComments = async (pubId: number) => {
         try {
             const { data } = await axios.get(
-                `http://localhost:8000/api/comment/${pubId}`,
+                `http://127.0.0.1:8000/api/comment/${pubId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
@@ -155,7 +155,7 @@ export default function Categories({ categoriesPublications, title, style, icon,
     const toggleLike = async (id: number) => {
         try {
             const { data } = await axios.post(
-                `http://localhost:8000/api/like/${id}`,
+                `http://127.0.0.1:8000/api/like/${id}`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -171,7 +171,7 @@ export default function Categories({ categoriesPublications, title, style, icon,
     const toggleFollow = async (userId: number) => {
         try {
             const { data } = await axios.post(
-                `http://localhost:8000/api/follow/${userId}`,
+                `http://127.0.0.1:8000/api/follow/${userId}`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -192,7 +192,7 @@ export default function Categories({ categoriesPublications, title, style, icon,
 
         try {
             const { data } = await axios.post(
-                `http://localhost:8000/api/comment/${id}`,
+                `http://127.0.0.1:8000/api/comment/${id}`,
                 { comment: text },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

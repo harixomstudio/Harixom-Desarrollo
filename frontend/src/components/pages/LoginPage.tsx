@@ -82,11 +82,11 @@ export default function Login(props: LoginProps) {
         className="absolute inset-0 w-full h-full object-cover opacity-20"
       />
 
-      <div className="relative z-10 flex lg:w-3/4">
-        <div className="md:flex w-1/2 flex-col items-center justify-center text-center p-8">
-          <p className="text-lg text-white">Welcome to</p>
+      <div className="relative z-10 flex w-3/4 max-lg:flex-col ">
+        <div className="md:flex w-1/2 flex-col items-center justify-center text-center p-8 max-lg:w-full">
+          <p className="text-lg text-white max-lg:justify-center">Welcome to</p>
           <h1
-            className="mt-10 text-5xl md:text-7xl text-pink-500 flex gap-1"
+            className="mt-10 text-5xl md:text-7xl text-pink-500 flex gap-1 max-lg:w-full max-lg:justify-center"
             style={{ fontFamily: "Starstruck" }}
           >
             {"HARIXOM".split("").map((char, i) => (
@@ -107,7 +107,7 @@ export default function Login(props: LoginProps) {
           </h1>
         </div>
 
-        <div className="w-full md:w-1/2 bg-gray-200 opacity-90 p-10 py-25 px-15 flex flex-col justify-center rounded-3xl">
+        <div className="w-full min-xl:w-1/2 bg-gray-200 opacity-90 p-10 py-25 px-15 flex flex-col justify-center rounded-3xl">
           <h2 className="text-2xl font-bold text-center mb-6 text-black">
             {props.title}
           </h2>

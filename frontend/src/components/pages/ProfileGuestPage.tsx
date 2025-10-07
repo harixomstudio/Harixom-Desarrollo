@@ -25,6 +25,7 @@ interface ProfileGuestProps {
 
 export default function ProfileGuestPage(props: ProfileGuestProps) {
   const { showToast } = useToast();
+  const authUser = JSON.parse(localStorage.getItem("auth_user") || "{}");
 
   // UI States
   const [showFollowers, setShowFollowers] = useState(false);
@@ -34,6 +35,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [cards, setCards] = useState(props.cards || []);
   const [favorites, setFavorites] = useState(props.likes || []);
   const [activeTab, setActiveTab] = useState(0);
+  const [isFollowing, setIsFollowing] = React.useState(false);
   const tabs = props.tabs || ["Home", "Commissions", "Messages", "Favorites"];
 
   // Commissions
@@ -64,6 +66,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   };
 
   const token = localStorage.getItem("access_token");
+
 
   // Fetch de perfil guest, comisiones y mensajes
   useEffect(() => {
@@ -122,6 +125,49 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     } catch (err) {
       console.error(err);
       showToast("No se pudo enviar el mensaje", "error");
+    }
+  };
+
+  const handleToggleFollow = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const url = `http://127.0.0.1:8000/api/follow/${props.userId}`;
+
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const newStatus = response.data.following;
+      setIsFollowing(newStatus);
+
+      setFollowers((prev) => {
+        if (newStatus) {
+          return [
+            ...prev,
+            {
+              id: authUser.id,
+              name: authUser.name,
+              profile_picture: authUser.profile_picture,
+            },
+          ];
+        } else {
+          return prev.filter((f) => f.id !== authUser.id);
+        }
+      });
+
+      showToast(
+        newStatus
+          ? "Ahora sigues a este usuario"
+          : "Dejaste de seguir a este usuario",
+        "success"
+      );
+    } catch (error) {
+      console.error(error);
+      showToast("Error al actualizar el seguimiento", "error");
     }
   };
 
@@ -221,6 +267,15 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                 {props.followings.length}
               </span>
             </span>
+            <button
+              onClick={handleToggleFollow}
+              className={`px-4 py-2 rounded-full text-white font-semibold transition-all ${isFollowing
+                ? "bg-gray-600 hover:bg-gray-700"
+                : "bg-pink-500 hover:bg-pink-600"
+                }`}
+            >
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>
           </div>
 
           {/* Followers Modal */}
@@ -285,15 +340,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
             {props.description}
           </p>
         </div>
-
-        {/* Botón flotante */}
-        <button
-          className="absolute right-6 py-4 px-7 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black"
-          style={{ fontFamily: "Monserrat" }}
-          onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
-        >
-          $
-        </button>
 
         {/* Modal flotante */}
         {isModalOpen && (
