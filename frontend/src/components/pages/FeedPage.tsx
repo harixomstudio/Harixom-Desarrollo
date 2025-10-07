@@ -68,7 +68,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8000/api/user", {
+        const { data } = await axios.get("http://127.0.0.1:8000/api/user", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCurrentUserId(data.user.id);
@@ -86,7 +86,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
     const fetchFollows = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:8000/api/user/follows",
+          "http://127.0.0.1:8000/api/user/follows",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -143,7 +143,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const fetchComments = async (pubId: number) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8000/api/comment/${pubId}`,
+        `http://127.0.0.1:8000/api/comment/${pubId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -164,7 +164,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const toggleLike = async (id: number) => {
     try {
       const { data } = await axios.post(
-        `http://localhost:8000/api/like/${id}`,
+        `http://127.0.0.1:8000/api/like/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -180,7 +180,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const toggleFollow = async (userId: number) => {
     try {
       const { data } = await axios.post(
-        `http://localhost:8000/api/follow/${userId}`,
+        `http://127.0.0.1:8000/api/follow/${userId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -201,7 +201,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
     try {
       const { data } = await axios.post(
-        `http://localhost:8000/api/comment/${id}`,
+        `http://127.0.0.1:8000/api/comment/${id}`,
         { comment: text },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -222,17 +222,17 @@ export default function FeedPage({ publications }: FeedPageProps) {
   };
 
   return (
-    <div className="bg-stone-950 min-h-screen p-10">
-      <div className="grid grid-cols-4 gap-6">
+    <div className="bg-stone-950 min-h-screen p-10 max-lg:">
+      <div className="grid grid-cols-4 gap-6 max-lg:grid-cols-1 max-lg:items-center">
         {publications.map((pub) => (
           <div
             key={pub.id}
-            className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px]"
+            className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px] max-lg:w-full max-lg:h-full"
             onClick={() => openModal(pub)}
           >
             {/* Imagen */}
             <div
-              className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer"
+              className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer "
               onClick={() => openModal(pub)} // Solo abrir el modal al hacer clic en la imagen
             >
               {/* Avatar y nombre */}
@@ -469,15 +469,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
       </div>
       {/* Modal */}
       {selectedPublication && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
+          <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:items-center">
             {/* Imagen a la izquierda */}
-            <div className="w-2/3 h-full flex items-center justify-center">
+            <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
               {selectedPublication.image ? (
                 <WatermarkedImage
                   src={selectedPublication.image}
                   alt={selectedPublication.description}
-                  className="w-100px h-full object-cover rounded-lg"
+                  className="w-100px h-full object-cover rounded-lg max-lg:w-4/5"
                   watermarkText={`Propiedad de ${selectedPublication.user_name || "Usuario desconocido"}`}
                 />
               ) : (
@@ -488,7 +488,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             </div>
 
             {/* Información a la derecha */}
-            <div className="w-1/3 flex flex-col-2 justify-between pl-10">
+            <div className="w-1/3 flex flex-col-2 justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-10">
               <div>
                 <h2 className="text-white text-3xl font-bold">
                   {selectedPublication.user_name || "Usuario desconocido"}
@@ -505,7 +505,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
               {/* Botón para cerrar */}
               <button
-                className="mt-139 px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 self-start text-lg"
+                className="absolute bottom-40 px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 self-start text-lg"
                 onClick={closeModal}
               >
                 Cerrar

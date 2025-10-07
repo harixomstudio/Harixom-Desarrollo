@@ -112,11 +112,11 @@ export default function Register(props: RegisterProps) {
         className="absolute inset-0 w-full h-full object-cover opacity-30"
       />
 
-      <div className="relative z-10 flex lg:w-3/4">
-        <div className="hidden md:flex w-1/2 flex-col items-center justify-center text-center p-8">
-          <p className="text-lg text-white">Welcome to</p>
+      <div className="relative z-10 flex lg:w-3/4 max-lg:flex-col ">
+        <div className="md:flex w-1/2 flex-col items-center justify-center text-center p-8 max-lg:w-full">
+          <p className="text-lg text-white max-lg:justify-center">Welcome to</p>
           <h1
-            className="mt-10 text-5xl md:text-7xl text-pink-500 flex gap-1"
+            className="mt-10 text-5xl md:text-7xl text-pink-500 flex gap-1 max-lg:w-full max-lg:justify-center"
             style={{ fontFamily: "Starstruck" }}
           >
             {"HARIXOM".split("").map((char, i) => (
