@@ -57,7 +57,7 @@ function RouteComponent() {
   );
   const categoryConfig: Record<string, { style: string; icon: string; alt: string }> = {
     "Photography": { style: "text-[#ff6161]", icon: "../public/icon-foto.svg", alt: "Photography icon", },
-    "3d": { style: "text-[#DBFF4F]", icon: "../icon-3d.svg", alt: "3D category icon", },
+    "3D Art": { style: "text-[#DBFF4F]", icon: "../icon-3d.svg", alt: "3D category icon", },
     "Animation": { style: "text-[#A39FF6]", icon: "../public/icon-animacion.svg", alt: "Animation icon", },
     "Sculpture": { style: "text-[#9fe2f6]", icon: "../public/icon-sculture.svg", alt: "Sculpture icon", },
     "Traditional": { style: "text-[#61ffa3]", icon: "../public/icon-traditional.svg", alt: "Traditional art icon", },
