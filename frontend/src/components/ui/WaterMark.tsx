@@ -1,4 +1,7 @@
-export function addWatermark(imageUrl: string, watermarkText: string): Promise<string> {
+export function addWatermark(
+  imageUrl: string,
+  watermarkText: string
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = "anonymous"; // Permite cargar imágenes externas
@@ -30,8 +33,9 @@ export function addWatermark(imageUrl: string, watermarkText: string): Promise<s
       // Calcular el espacio entre las marcas de agua
       const textWidth = ctx.measureText(watermarkText).width;
       const textHeight = fontSize * 1.5; // Altura del texto con un poco de espacio
-      const offsetX = textWidth + 110; // Espaciado horizontal
-      const offsetY = textHeight + 100; // Espaciado vertical
+      // Espaciado proporcional al tamaño de la imagen
+      const offsetX = textWidth + img.width * 0.15; // 15% del ancho de la imagen
+      const offsetY = textHeight + img.height * 0.1; // 10% del alto de la imagen
 
       // Rotar el contexto para inclinar el texto
       const angle = -Math.PI / 6; // Ángulo de inclinación (-30 grados)
