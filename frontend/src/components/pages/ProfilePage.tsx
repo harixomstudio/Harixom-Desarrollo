@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
 import { useState, useEffect } from "react";
 
 interface Message {
   id?: number;
+  userId: number;
   user: string;
   profile_picture?: string;
   message: string;
@@ -52,30 +53,37 @@ export default function Profile(props: ProfileProps) {
 
   // Hooks para comisiones y modales
 
-
+  const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        if (!token) return;
-        const { data } = await axios.get(
-          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        const mapped = data.map((msg: any) => ({
-          id: msg.id,
-          user: msg.from_user.name,
-          profile_picture: msg.from_user.profile_picture,
-          message: msg.message,
-        }));
-        setMessages(mapped);
-      } catch (err) {
-        console.error("Error fetching messages:", err);
-      }
-    };
-    fetchMessages();
-  }, [props.userId, token]);
+  if (!token) return;
+
+  const fetchMessages = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const mapped = data.map((msg: any) => ({
+        id: msg.id,
+        userId: msg.from_user.id,
+        user: msg.from_user.name,
+        profile_picture: msg.from_user.profile_picture,
+        message: msg.message,
+      }));
+      setMessages(mapped);
+    } catch (err) {
+      console.error("Error fetching messages:", err);
+    }
+  };
+
+  fetchMessages();
+
+  const interval = setInterval(fetchMessages, 30000);
+
+  return () => clearInterval(interval);
+}, [props.userId, token]);
 
   useEffect(() => setCards(props.cards || []), [props.cards]);
   useEffect(() => setFavorites(props.likes || []), [props.likes]);
@@ -156,6 +164,7 @@ export default function Profile(props: ProfileProps) {
 
       const msg = {
         id: data.data.id,
+        userId: data.data.from_user.id,
         user: data.data.from_user.name,
         profile_picture: data.data.from_user.profile_picture,
         message: data.data.message,
@@ -431,12 +440,45 @@ export default function Profile(props: ProfileProps) {
               <div className="space-y-4">
                 {messages.length ? (
                   messages.map((msg) => (
-                    <div key={msg.id} className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2">
+                    <div
+                      key={msg.id}
+                      className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
+                    >
                       {msg.profile_picture && (
-                        <img src={msg.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} className="w-10 h-10 rounded-full" />
+                        <img
+                          src={
+                            msg.profile_picture ||
+                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                          }
+                          className="w-10 h-10 rounded-full cursor-pointer"
+                          onClick={() => {
+                            if (msg.userId && msg.userId === props.userId) {
+                              navigate({ to: "/Profile" });
+                            } else {
+                              navigate({
+                                to: "/ProfileGuest",
+                                search: { userId: msg.userId },
+                              });
+                            }
+                          }}
+                        />
                       )}
                       <div>
-                        <p className="text-sm font-semibold text-pink-400">{msg.user}</p>
+                        <span
+                          className="text-sm font-semibold text-pink-400 cursor-pointer"
+                          onClick={() => {
+                            if (msg.userId && msg.userId === props.userId) {
+                              navigate({ to: "/Profile" });
+                            } else {
+                              navigate({
+                                to: "/ProfileGuest",
+                                search: { userId: msg.userId },
+                              });
+                            }
+                          }}
+                        >
+                          {msg.user}
+                        </span>
                         <p className="text-sm mt-1">{msg.message}</p>
                       </div>
                       <button

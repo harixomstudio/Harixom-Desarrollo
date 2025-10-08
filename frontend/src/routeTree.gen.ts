@@ -27,7 +27,6 @@ import { Route as FeedRouteImport } from './routes/Feed'
 import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
 import { Route as EventsRouteImport } from './routes/Events'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
-import { Route as CreateAtivityRouteImport } from './routes/CreateAtivity'
 import { Route as AIChallengeRouteImport } from './routes/AIChallenge'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CategoriesNameRouteImport } from './routes/Categories.$name'
@@ -122,11 +121,6 @@ const CreatePublicationRoute = CreatePublicationRouteImport.update({
   path: '/CreatePublication',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreateAtivityRoute = CreateAtivityRouteImport.update({
-  id: '/CreateAtivity',
-  path: '/CreateAtivity',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AIChallengeRoute = AIChallengeRouteImport.update({
   id: '/AIChallenge',
   path: '/AIChallenge',
@@ -146,7 +140,6 @@ const CategoriesNameRoute = CategoriesNameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
-  '/CreateAtivity': typeof CreateAtivityRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
@@ -170,7 +163,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
-  '/CreateAtivity': typeof CreateAtivityRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
@@ -195,7 +187,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
-  '/CreateAtivity': typeof CreateAtivityRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
@@ -221,7 +212,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/AIChallenge'
-    | '/CreateAtivity'
     | '/CreatePublication'
     | '/Events'
     | '/EventsDetail'
@@ -245,7 +235,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/AIChallenge'
-    | '/CreateAtivity'
     | '/CreatePublication'
     | '/Events'
     | '/EventsDetail'
@@ -269,7 +258,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/AIChallenge'
-    | '/CreateAtivity'
     | '/CreatePublication'
     | '/Events'
     | '/EventsDetail'
@@ -294,7 +282,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AIChallengeRoute: typeof AIChallengeRoute
-  CreateAtivityRoute: typeof CreateAtivityRoute
   CreatePublicationRoute: typeof CreatePublicationRoute
   EventsRoute: typeof EventsRoute
   EventsDetailRoute: typeof EventsDetailRoute
@@ -444,13 +431,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreatePublicationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/CreateAtivity': {
-      id: '/CreateAtivity'
-      path: '/CreateAtivity'
-      fullPath: '/CreateAtivity'
-      preLoaderRoute: typeof CreateAtivityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/AIChallenge': {
       id: '/AIChallenge'
       path: '/AIChallenge'
@@ -478,7 +458,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AIChallengeRoute: AIChallengeRoute,
-  CreateAtivityRoute: CreateAtivityRoute,
   CreatePublicationRoute: CreatePublicationRoute,
   EventsRoute: EventsRoute,
   EventsDetailRoute: EventsDetailRoute,

@@ -52,8 +52,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/commisions', [InteractionController::class, 'commisions']);
     Route::get('/user/commisions/{userId}', [InteractionController::class, 'index']);
 
-
-
     //Rutas para visualizar otros perfiles ajenos
     Route::middleware('auth:sanctum')->get('/users/{id}', [UserController::class, 'showGuest']);
     Route::get('/users/{id}/likes', [UserController::class, 'guestLikes']);

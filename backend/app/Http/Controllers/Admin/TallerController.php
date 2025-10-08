@@ -51,6 +51,7 @@ class TallerController extends Controller
             'description' => 'required|string',
             'contributor' => 'nullable|string',
             'image' => 'nullable|image|max:3072',
+
         ]);
         $taller->update($data);
         return redirect()->route('taller')->with('success','Taller actualizado');

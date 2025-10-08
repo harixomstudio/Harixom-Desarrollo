@@ -26,7 +26,8 @@ class AIController extends Controller
 ])->timeout(60)->post('https://api.openai.com/v1/responses', [
     'model' => 'gpt-4.1-mini',
     'input' => "
-Genera un reto creativo, diferente y emocionante para la especialidad '$specialty'.
+Genera un reto creativo, diferente y emocionante pero no imposible para la especialidad '$specialty'.
+
 Responde ÚNICAMENTE en formato JSON sin incluir texto adicional ni bloques de código.
 El formato debe ser exactamente este:
 
@@ -34,6 +35,7 @@ El formato debe ser exactamente este:
   \"reto\": \"Descripción breve del reto.\",
   \"pasos\": [\"Paso 1\", \"Paso 2\", \"Paso 3\"],
   \"nota\": \"No olvides utilizar el #RetoHarixom\"
+
 }
 ",
 ]);
@@ -48,11 +50,6 @@ El formato debe ser exactamente este:
                 ], 400);
             }
 
-            // Logueamos el campo que usamos para challenge
-            Log::info('Output text:', [
-                'output_text' => $data['output_text'] ?? null
-            ]);
-
             $challenge = $data['output'][0]['content'][0]['text'] ?? 'No se generó un reto';
 
             return response()->json([
@@ -61,7 +58,6 @@ El formato debe ser exactamente este:
 ]);
 
         } catch (\Exception $e) {
-            Log::error('Error al comunicarse con OpenAI:', ['exception' => $e]);
             return response()->json([
                 'error' => 'Error al comunicarse con OpenAI',
                 'details' => $e->getMessage(),

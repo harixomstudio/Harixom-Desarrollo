@@ -62,9 +62,7 @@ class UserController extends Controller
             $data['banner_picture'] = $result['secure_url']; 
         }
 
-
         $user = User::create($data);
-
 
         return response()->json([
             'user' => new UserResource($user),

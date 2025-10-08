@@ -88,7 +88,7 @@ function ProfileRoute() {
       services={user?.services ?? ""}
       prices={user?.prices ?? ""}
       terms={user?.terms ?? ""}
-      userId={user?.id} // ⚡ Esto es clave para los mensajes
+      userId={user?.id} 
     />
   );
 }

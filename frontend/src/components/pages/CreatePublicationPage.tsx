@@ -36,12 +36,17 @@ export default function CreatePublicationPage({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   if (e.target.files && e.target.files.length > 0) {
     const file = e.target.files[0];
+    console.log("Imagen seleccionada:", file);
 
-    // Validación de tamaño máximo 4 MB
-    const maxSize = 3 * 1024 * 1024; // 4 MB en bytes
+    const maxSize = 3 * 1024 * 1024;
     if (file.size > maxSize) {
-      showToast("La imagen no puede superar los 4 MB.", "error");
-      e.target.value = ""; // limpiar input
+
+      ///////////////////////////////////////////
+      console.log("Error: Imagen supera los 3MB");
+      //////////////////////////////////////
+
+      showToast("La imagen no puede superar los 3 MB.", "error");
+      e.target.value = "";
       setSelectedImage(null);
       setPreviewUrl(null);
       return;
@@ -52,36 +57,59 @@ export default function CreatePublicationPage({
   }
 };
 
-  const handleSubmit = async () => {
-    const token = localStorage.getItem("access_token");
-    if (!token) return showToast("No estás logueado", "error");
+const handleSubmit = async () => {
+  const token = localStorage.getItem("access_token");
+  if (!token) return showToast("No estás logueado", "error");
 
-    const formData = new FormData();
-    formData.append("description", desc);
-    formData.append("category", cat);
-    if (selectedImage) formData.append("image", selectedImage);
+  /////////////////////////////////////////
+  console.log("Preparando publicación:");
+  console.log("Descripción:", desc);
+  console.log("Categoría:", cat);
+  console.log("Imagen:", selectedImage);
+  ///////////////////////////////////////////
 
-    try {
-      setLoading(true);
-      const res = await axiosRequest.post("/publications", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Publicación creada:", res.data);
-      showToast("Publicación creada correctamente", "success");
-      setDesc("");
-      setCat("");
-      setSelectedImage(null);
-      setPreviewUrl(null); // Limpiamos el preview
-    } catch (err: any) {
-      console.error("Error al crear publicación:", err);
-      showToast("Error al crear publicación", "error");
-    } finally {
-      setLoading(false);
+  const formData = new FormData();
+  formData.append("description", desc);
+  formData.append("category", cat);
+  if (selectedImage) formData.append("image", selectedImage);
+
+  try {
+    setLoading(true);
+    const res = await axiosRequest.post("/publications", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    //////////////////////////////////////////////////
+    console.log("Respuesta del servidor:", res.data);
+    ////////////////////////////////////////
+    
+    showToast("Publicación creada correctamente", "success");
+    setDesc("");
+    setCat("");
+    setSelectedImage(null);
+    setPreviewUrl(null);
+  } catch (err: any) {
+
+    //////////////////////////////////////////////////
+    console.error("Error al crear publicación:", err);
+    /////////////////////////////////////////////
+
+    if (err.response) {
+      
+      ///////////////////////////////////////////////////
+      console.log("Error response data:", err.response.data);
+      console.log("Error response status:", err.response.status);
+      /////////////////////////////////////////////////////
+
     }
-  };
+    showToast("Error al crear publicación", "error");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section className=" min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')]">

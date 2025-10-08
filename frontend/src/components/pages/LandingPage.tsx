@@ -53,8 +53,8 @@ interface Publication {
 }
 
 interface TopArtist {
-  id: number; 
-  user_id: number; 
+  id: number;
+  user_id: number;
   artist_name: string;
   title: string;
   image: string;
@@ -65,7 +65,7 @@ interface TopArtist {
 export default function Landing(props: LandingProps) {
   if (!props.footer) return null;
 
-   const { ref: appRef, inView: appVisible } = useInView({ threshold: 0.3 });
+  const { ref: appRef, inView: appVisible } = useInView({ threshold: 0.3 });
   const navigate = useNavigate();
 
   const [current, setCurrent] = useState(0);
@@ -88,7 +88,6 @@ export default function Landing(props: LandingProps) {
     enabled: !!token,
   });
 
-  // ----- obtener currentUserId para redirigir a /Profile cuando corresponda -----
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   useEffect(() => {
     if (!token) return;
@@ -99,17 +98,15 @@ export default function Landing(props: LandingProps) {
         });
         setCurrentUserId(data.user?.id ?? null);
       } catch (err) {
-        // no crítico, solo log para depuración
         console.log("No se pudo obtener current user:", err);
       }
     })();
   }, [token]);
 
-  // Mapear la data de publicaciones a lo que necesitamos en el ranking
-  const topArtists: TopArtist[] = (data || [])
+   const topArtists: TopArtist[] = (data || [])
     .map((pub) => ({
       id: pub.id,
-      user_id: pub.user_id ?? 0, // <-- clave: usamos user_id
+      user_id: pub.user_id ?? 0, 
       artist_name: pub.user_name ?? "Desconocido",
       title: pub.description ?? "",
       image: pub.image ?? "",
@@ -207,9 +204,6 @@ export default function Landing(props: LandingProps) {
             style={{ transform: `translateX(-${current * 100}%)` }}
           >
 
-
-
-
             {/* Banner 1 */}
             <div className="min-w-full h-full relative flex items-center justify-center">
               <img
@@ -226,8 +220,6 @@ export default function Landing(props: LandingProps) {
                 </h2>
               </div>
             </div>
-
-
 
             {/* Banner 2 */}
             <div className="min-w-full h-full relative flex items-center justify-center">
@@ -252,7 +244,6 @@ export default function Landing(props: LandingProps) {
                 </Link>
               </div>
             </div>
-
 
             {/* Banner 3 */}
             <div className="min-w-full h-full relative flex items-center justify-center">
@@ -305,8 +296,6 @@ export default function Landing(props: LandingProps) {
             ›
           </button>
         </div>
-
-
 
         {/* categories section */}
         <section className="flex flex-col items-center justify-center gap-20 pt-30 pb-45 max-lg:gap-10 max-lg:py-30 px-15 max-lg:px-5">
@@ -447,7 +436,6 @@ export default function Landing(props: LandingProps) {
               <div
                 key={artist.id}
                 onClick={() => {
-                  // navegar al perfil correcto usando artist.user_id
                   if (artist.user_id && artist.user_id === currentUserId) {
                     navigate({ to: "/Profile" });
                   } else {

@@ -16,6 +16,7 @@ interface Publication {
   user_id?: number;
   is_following?: boolean;
   category?: string;
+  created_at?: string;
 }
 
 interface FeedPageProps {
@@ -125,6 +126,18 @@ export default function FeedPage({ publications }: FeedPageProps) {
     });
     setLikesCount(counts);
   }, [userLikes, publications, token]);
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("es-CR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  };
 
   // Evita renderizar publicaciones hasta conocer el usuario actual
   if (currentUserId === null) {
@@ -291,9 +304,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
               <div className="flex flex-row gap-5 items-center">
                 {/* Like */}
                 <button
-                  className={`opacity-80 flex flex-row items-center gap-1 ${
-                    likes[pub.id] ? "text-red-500" : "text-gray-300"
-                  }`}
+                  className={`opacity-80 flex flex-row items-center gap-1 ${likes[pub.id] ? "text-red-500" : "text-gray-300"
+                    }`}
                   title="Like"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -341,9 +353,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 {/* Seguir (oculto si es el mismo user) */}
                 {pub.user_id !== undefined && pub.user_id !== currentUserId && (
                   <button
-                    className={`opacity-80 flex items-center justify-center ${
-                      follows[pub.user_id] ? "text-green-500" : "text-gray-300"
-                    }`}
+                    className={`opacity-80 flex items-center justify-center ${follows[pub.user_id] ? "text-green-500" : "text-gray-300"
+                      }`}
                     title={follows[pub.user_id] ? "Siguiendo" : "Seguir"}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -501,6 +512,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 <h2 className="text-white text-3xl font-bold">
                   {selectedPublication.user_name || "Usuario desconocido"}
                 </h2>
+                <p className="text-gray-400 text-sm mt-2">
+                  {formatDate(selectedPublication.created_at)}
+                </p>
                 <p className="text-gray-300 mt-10 text-2xl">
                   {selectedPublication.description}
                 </p>

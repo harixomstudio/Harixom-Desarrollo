@@ -51,23 +51,49 @@ class PublicationController extends Controller
             'description' => 'nullable|string|max:1000',
             'category' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:3072',
+        ], [
+    'image.max' => 'La imagen no puede superar los 3 MB.',
+    'image.mimes' => 'El archivo debe ser una imagen (jpg, jpeg, png, gif).'
+
         ]);
 
         $imageUrl = null;
 
         if ($request->hasFile('image')) {
-            $result = $upload->upload(
-                $request->file('image')->getRealPath(),
-                [
-                    'folder' => 'Harixom/Publications', // carpeta en tu cuenta de Cloudinary
-                    'use_filename' => true,
-                    'unique_filename' => true,
-                    'overwrite' => true
-                ]
-            );
-            $imageUrl = $result['secure_url']; // URL segura https://res.cloudinary.com/...
+    $file = $request->file('image');
 
-        }
+    ////////////////////////////////////////////////////
+    \Log::info("Archivo recibido: " . $file->getClientOriginalName());
+    \Log::info("Tipo MIME: " . $file->getMimeType());
+    \Log::info("Tamaño: " . $file->getSize());
+    ////////////////////////////////////////////
+
+    try {
+        $result = $upload->upload(
+            $file->getRealPath(),
+            [
+                'folder' => 'Harixom/Publications',
+                'use_filename' => true,
+                'unique_filename' => true,
+                'overwrite' => true
+            ]
+        );
+        $imageUrl = $result['secure_url'];
+
+        ////////////////////////////////////////////////////////
+        \Log::info("Imagen subida correctamente a Cloudinary: " . $imageUrl);
+        //////////////////////////////////////////
+
+    } catch (\Exception $e) {
+        ///////////////////////////////////////////////////////////
+        \Log::error("Error al subir a Cloudinary: " . $e->getMessage());
+        /////////////////////////////////////
+        return response()->json([
+            'error' => 'No se pudo subir la imagen',
+            'details' => $e->getMessage()
+        ], 500);
+    }
+}
 
         $publication = Publication::create([
             'user_id' => Auth::id(),
