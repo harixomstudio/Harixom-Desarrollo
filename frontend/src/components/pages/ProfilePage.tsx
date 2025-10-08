@@ -57,33 +57,33 @@ export default function Profile(props: ProfileProps) {
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
-  if (!token) return;
+    if (!token) return;
 
-  const fetchMessages = async () => {
-    try {
-      const { data } = await axios.get(
-        `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const mapped = data.map((msg: any) => ({
-        id: msg.id,
-        userId: msg.from_user.id,
-        user: msg.from_user.name,
-        profile_picture: msg.from_user.profile_picture,
-        message: msg.message,
-      }));
-      setMessages(mapped);
-    } catch (err) {
-      console.error("Error fetching messages:", err);
-    }
-  };
+    const fetchMessages = async () => {
+      try {
+        const { data } = await axios.get(
+          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const mapped = data.map((msg: any) => ({
+          id: msg.id,
+          userId: msg.from_user.id,
+          user: msg.from_user.name,
+          profile_picture: msg.from_user.profile_picture,
+          message: msg.message,
+        }));
+        setMessages(mapped);
+      } catch (err) {
+        console.error("Error fetching messages:", err);
+      }
+    };
 
-  fetchMessages();
+    fetchMessages();
 
-  const interval = setInterval(fetchMessages, 30000);
+    const interval = setInterval(fetchMessages, 30000);
 
-  return () => clearInterval(interval);
-}, [props.userId, token]);
+    return () => clearInterval(interval);
+  }, [props.userId, token]);
 
   useEffect(() => setCards(props.cards || []), [props.cards]);
   useEffect(() => setFavorites(props.likes || []), [props.likes]);
@@ -278,24 +278,32 @@ export default function Profile(props: ProfileProps) {
           {/* Followers Modal */}
           {showFollowers && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-6">Followers</h3>
+              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto shadow-lg">
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followers</h3>
                 <ul>
                   {props.followers.map((f) => (
                     <li
                       key={f.id}
-                      className="text-gray-200 mb-2 flex items-center gap-2"
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        if (f.id === props.userId) {
+                          navigate({ to: "/Profile" });
+                        } else {
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                        }
+                      }}
                     >
                       <img
-                        src={f.profile_picture}
-                        className="w-6 h-6 rounded-full"
-                      />
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
                   onClick={() => setShowFollowers(false)}
                 >
                   Close
@@ -308,23 +316,31 @@ export default function Profile(props: ProfileProps) {
           {showFollowings && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-4">Followings</h3>
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followings</h3>
                 <ul>
                   {props.followings.map((f) => (
                     <li
                       key={f.id}
-                      className="text-gray-200 mb-2 flex items-center gap-2"
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        if (f.id === props.userId) {
+                          navigate({ to: "/Profile" });
+                        } else {
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                        }
+                      }}
                     >
                       <img
-                        src={f.profile_picture}
-                        className="w-6 h-6 rounded-full"
-                      />
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
                   onClick={() => setShowFollowings(false)}
                 >
                   Close
@@ -444,25 +460,20 @@ export default function Profile(props: ProfileProps) {
                       key={msg.id}
                       className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
                     >
-                      {msg.profile_picture && (
-                        <img
-                          src={
-                            msg.profile_picture ||
-                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                      <img
+                        src={
+                          msg.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        }
+                        className="w-10 h-10 rounded-full cursor-pointer"
+                        onClick={() => {
+                          if (msg.userId && msg.userId === props.userId) {
+                            navigate({ to: "/ProfileGuest", search: { userId: msg.userId } });
+                          } else {
+                            navigate({ to: "/Profile" });
                           }
-                          className="w-10 h-10 rounded-full cursor-pointer"
-                          onClick={() => {
-                            if (msg.userId && msg.userId === props.userId) {
-                              navigate({ to: "/Profile" });
-                            } else {
-                              navigate({
-                                to: "/ProfileGuest",
-                                search: { userId: msg.userId },
-                              });
-                            }
-                          }}
-                        />
-                      )}
+                        }}
+                      />
                       <div>
                         <span
                           className="text-sm font-semibold text-pink-400 cursor-pointer"
