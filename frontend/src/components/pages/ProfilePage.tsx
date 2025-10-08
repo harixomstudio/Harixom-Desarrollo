@@ -191,7 +191,7 @@ export default function Profile(props: ProfileProps) {
       <div className="w-full flex flex-col">
         {/* Banner y Avatar */}
         <div className="relative mb-10">
-          <div className="rounded-xl h-100flex relative overflow-hidden w-full">
+          <div className="rounded-xl h-100 flex relative overflow-hidden w-full">
             <div className="flex relative w-full h-full items-center justify-center">
               <img
                 src={props.bannerPicture}
