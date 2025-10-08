@@ -477,8 +477,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
       </div>
       {/* Modal publicaciones en grande */}
       {selectedPublication && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
-          <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:items-center">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen ">
+          <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-aut0 flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:mb-25 max-lg:items-center">
             {/* Imagen a la izquierda */}
             <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
               {selectedPublication.image ? (
@@ -519,7 +519,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
               {/* Botón para cerrar */}
               <button
-                className="absolute bottom-20 right-30 px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
+                className="absolute max-lg:translate-y-3/1 min-lg:bottom-30 min-lg:translate-x-3/1 px-10 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
                 onClick={closeModal}
               >
                 Cerrar

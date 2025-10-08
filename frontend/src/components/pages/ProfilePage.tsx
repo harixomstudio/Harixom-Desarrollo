@@ -51,22 +51,7 @@ export default function Profile(props: ProfileProps) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   // Hooks para comisiones y modales
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [commissionText, setCommissionText] = useState("");
-  const [buttonPosition, setButtonPosition] = useState({ top: 450, left: 1000 });
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setButtonPosition({
-      top: rect.top + window.scrollY + rect.height + 200,
-      left: rect.left + window.scrollX,
-    });
-    setIsModalOpen(true);
-  };
-  const handleSendCommission = () => {
-    console.log("Comisión enviada:", commissionText);
-    setIsModalOpen(false);
-  };
-
+ 
 
   const token = localStorage.getItem("access_token");
 
@@ -253,50 +238,8 @@ export default function Profile(props: ProfileProps) {
           {/* Username */}
           <span className="text-3xl font-bold mb-2">{props.username}</span>
 
-          {/* Botón flotante */}
-          <button
-            className="absolute right-6 py-4 px-7 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black"
-            style={{ fontFamily: "Monserrat" }}
-            onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
-          >
-            $
-          </button>
 
-          {/* Modal flotante */}
-          {isModalOpen && (
-            <div
-              className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
-              style={{
-                top: buttonPosition.top, // Posición vertical dinámica
-                left: buttonPosition.left, // Posición horizontal dinámica
-              }}
-            >
-              <h2 className="text-pink-400 text-lg font-semibold mb-4">
-                Escribe tu comisión
-              </h2>
-              <textarea
-                value={commissionText}
-                onChange={(e) => setCommissionText(e.target.value)}
-                placeholder="Describe tu comisión..."
-                className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
-                rows={5}
-              />
-              <div className="flex justify-end gap-4 mt-4">
-                <button
-                  className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                  onClick={() => setIsModalOpen(false)} // Cerrar el modal
-                >
-                  Cerrar
-                </button>
-                <button
-                  className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-                  onClick={handleSendCommission} // Enviar la comisión
-                >
-                  Enviar
-                </button>
-              </div>
-            </div>
-          )}
+          
 
           {/* Description */}
           <span className="text-gray-400 text-lg mb-6">{props.address}</span>
