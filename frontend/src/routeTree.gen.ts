@@ -21,6 +21,7 @@ import { Route as ProfileGuestRouteImport } from './routes/ProfileGuest'
 import { Route as ProfileRouteImport } from './routes/Profile'
 import { Route as LoginRouteImport } from './routes/Login'
 import { Route as LandingRouteImport } from './routes/Landing'
+import { Route as InboxRouteImport } from './routes/Inbox'
 import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
 import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
@@ -91,6 +92,11 @@ const LandingRoute = LandingRouteImport.update({
   path: '/Landing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InboxRoute = InboxRouteImport.update({
+  id: '/Inbox',
+  path: '/Inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/ForgotPassword',
   path: '/ForgotPassword',
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
+  '/Inbox': typeof InboxRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
+  '/Inbox': typeof InboxRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
+  '/Inbox': typeof InboxRoute
   '/Landing': typeof LandingRoute
   '/Login': typeof LoginRoute
   '/Profile': typeof ProfileRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
+    | '/Inbox'
     | '/Landing'
     | '/Login'
     | '/Profile'
@@ -241,6 +251,7 @@ export interface FileRouteTypes {
     | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
+    | '/Inbox'
     | '/Landing'
     | '/Login'
     | '/Profile'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/EventsDetail'
     | '/Feed'
     | '/ForgotPassword'
+    | '/Inbox'
     | '/Landing'
     | '/Login'
     | '/Profile'
@@ -288,6 +300,7 @@ export interface RootRouteChildren {
   EventsDetailRoute: typeof EventsDetailRoute
   FeedRoute: typeof FeedRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  InboxRoute: typeof InboxRoute
   LandingRoute: typeof LandingRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
@@ -389,6 +402,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/Inbox': {
+      id: '/Inbox'
+      path: '/Inbox'
+      fullPath: '/Inbox'
+      preLoaderRoute: typeof InboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ForgotPassword': {
       id: '/ForgotPassword'
       path: '/ForgotPassword'
@@ -464,6 +484,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsDetailRoute: EventsDetailRoute,
   FeedRoute: FeedRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  InboxRoute: InboxRoute,
   LandingRoute: LandingRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,

@@ -32,38 +32,24 @@ function RootComponent() {
 
   const listEvents = ["Events", "Workshop", "AI Challenges"];
   const referenceEvents = ["/Events", "/Workshops", "/AIChallenge"];
-  {/*SE OCULTA EL NAV DE EVENTOS */ }
-  const hideEventsNav = [
-    "/Feed",
-    "/Login",
-    "/Register",
-    "/RegisterAdmin",
-    "/ForgotPassword",
-    "/Landing",
-    "/",
-    "/Profile",
-    "/SetProfile",
-    "/CreatePublication",
-    "/ProfileGuest",
-  ].includes(currentPath) || currentPath.startsWith("/Categories/");
-
+ 
   return (
     <React.Fragment>
       {!hideNav && (
         <Nav
-          list={["Feed", "Create", "Events"]}
-          reference={["/Feed", "/CreatePublication", "/Events"]}
+          list={["Feed", "Create", "Events", "Inbox"]}
+          reference={["/Feed", "/CreatePublication", "/Events", "/Inbox"]}
         />
       )}
       {/* {!hideNav && <Nav list={[ 'About', 'Contact']} reference={['/about', '/contact']} />} */}
       <div className="flex min-h-screen">
-        {!hideEventsNav && (
+        {referenceEvents.includes(currentPath) && (
           <EventsNav
             listEvents={listEvents}
             referenceEvents={referenceEvents}
           />
         )}
-        <div className="flex-1">
+        <div className="flex-1 bg-stone-950">
           <Outlet />
         </div>
       </div>

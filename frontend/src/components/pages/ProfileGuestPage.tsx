@@ -37,6 +37,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = React.useState(false);
   const tabs = props.tabs || ["Home", "Commissions", "Messages", "Favorites"];
+  const [commitions, setCommitions] = useState<{ [key: number]: string[] }>({});
 
   // Commissions
   const [services, setServices] = useState("");
@@ -51,8 +52,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [commissionText, setCommissionText] = useState("");
 
-  const [buttonPosition, setButtonPosition] = useState({ top: 450, left: 1000 });
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const [, setButtonPosition] = useState({ top: 450, left: 1000 });
+  (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setButtonPosition({
       top: rect.top + window.scrollY + rect.height + 200,
@@ -60,9 +61,30 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     });
     setIsModalOpen(true);
   };
-  const handleSendCommission = () => {
-    console.log("Comisión enviada:", commissionText);
-    setIsModalOpen(false);
+
+  const handleSendCommission = async (toUserId: number) => {
+    try {
+      if (!commissionText.trim()) {
+        showToast("Escribe una comisión antes de enviar", "error");
+        return;
+      }
+      const { data } = await axios.post(
+        `http://127.0.0.1:8000/api/user/commisions`,
+        {
+          to_user_id: toUserId,
+          message: commissionText,
+          date: new Date().toISOString().split("T")[0],
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      showToast("Comisión enviada con éxito", "success");
+      setIsModalOpen(false);
+      setCommissionText("");
+    } catch (err) {
+      console.error(err);
+      showToast("Error al enviar la comisión", "error");
+    }
   };
 
   const token = localStorage.getItem("access_token");
@@ -171,6 +193,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     }
   };
 
+
   return (
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen">
       <div className="w-full flex flex-col">
@@ -195,60 +218,37 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           </div>
         </div>
 
-        <div className="flex flex-col pl-10 text-white mt-6 mb-10">
+        <div className="flex flex-col px-10 text-white mt-6 mb-10 w-full">
+
           {/* Username */}
-          <span className="text-3xl font-bold mb-2">{props.username}</span>
-
-          {/* Botón flotante */}
-          <button
-            className="absolute right-6 py-4 px-7 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black"
-            style={{ fontFamily: "Monserrat" }}
-            onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
-          >
-            $
-          </button>
-
-          {/* Modal flotante */}
-          {isModalOpen && (
-            <div
-              className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
-              style={{
-                top: buttonPosition.top, // Posición vertical dinámica
-                left: buttonPosition.left, // Posición horizontal dinámica
-              }}
+          <div className="flex items-center w-full gap-15">
+            <span className="text-3xl max-lg:text-2xl font-bold mb-2">{props.username}</span>
+            <button
+              onClick={handleToggleFollow}
+              className={`flex  px-6 py-2 rounded-full text-white font-semibold transition-all ${isFollowing
+                ? "bg-gray-600 hover:bg-gray-700"
+                : "bg-pink-500 hover:bg-pink-600"
+                }`}
             >
-              <h2 className="text-pink-400 text-lg font-semibold mb-4">
-                Escribe tu comisión
-              </h2>
-              <textarea
-                value={commissionText}
-                onChange={(e) => setCommissionText(e.target.value)}
-                placeholder="Describe tu comisión..."
-                className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
-                rows={5}
-              />
-              <div className="flex justify-end gap-4 mt-4">
-                <button
-                  className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                  onClick={() => setIsModalOpen(false)} // Cerrar el modal
-                >
-                  Cerrar
-                </button>
-                <button
-                  className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-                  onClick={handleSendCommission} // Enviar la comisión
-                >
-                  Enviar
-                </button>
-              </div>
-            </div>
-          )}
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>
+
+            {/* Botón flotante */}
+            <button
+              className="max-lg:px-5 py-3 px-6  bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black justify-start items-end text-center ml-auto"
+              style={{ fontFamily: "Monserrat" }}
+              onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
+            >
+              $
+            </button>
+
+          </div>
 
           {/* Description */}
-          <span className="text-gray-400 text-lg mb-6">{props.address}</span>
+          <span className="text-gray-400 text-lg mb-6 max-lg:text-sm">{props.address}</span>
 
           {/* Followers & Followings  */}
-          <div className="flex gap-20 text-white font-semibold text-xl mb-2">
+          <div className="flex gap-20 max-lg:gap-5 text-white font-semibold text-xl mb-2 max-lg:text-sm">
             <span
               className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
               onClick={() => setShowFollowers(true)}
@@ -263,19 +263,10 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
               onClick={() => setShowFollowings(true)}
             >
               <span>Followings</span>
-              <span className="text-gray-300 text-md font-normal">
+              <span className="text-gray-300 text-lg font-normal">
                 {props.followings.length}
               </span>
             </span>
-            <button
-              onClick={handleToggleFollow}
-              className={`px-4 py-2 rounded-full text-white font-semibold transition-all ${isFollowing
-                ? "bg-gray-600 hover:bg-gray-700"
-                : "bg-pink-500 hover:bg-pink-600"
-                }`}
-            >
-              {isFollowing ? "Unfollow" : "Follow"}
-            </button>
           </div>
 
           {/* Followers Modal */}
@@ -341,48 +332,12 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           </p>
         </div>
 
-        {/* Modal flotante */}
-        {isModalOpen && (
-          <div
-            className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
-            style={{
-              top: buttonPosition.top, // Posición vertical dinámica
-              left: buttonPosition.left, // Posición horizontal dinámica
-            }}
-          >
-            <h2 className="text-pink-400 text-lg font-semibold mb-4">
-              Escribe tu comisión
-            </h2>
-            <textarea
-              value={commissionText}
-              onChange={(e) => setCommissionText(e.target.value)}
-              placeholder="Describe tu comisión..."
-              className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
-              rows={5}
-            />
-            <div className="flex justify-end gap-4 mt-4">
-              <button
-                className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                onClick={() => setIsModalOpen(false)} // Cerrar el modal
-              >
-                Cerrar
-              </button>
-              <button
-                className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-                onClick={handleSendCommission} // Enviar la comisión
-              >
-                Enviar
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Tabs */}
-        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4">
+        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4 max-lg:gap-2">
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
+              className={`pb-4 font-semibold text-xl px-5 max-lg:text-sm ${activeTab === i
                 ? "text-pink-400 border-b-2 border-pink-400"
                 : "text-gray-200"
                 }`}
@@ -519,9 +474,14 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                   Cerrar
                 </button>
                 <button
+                  type="button"
                   className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-                  onClick={handleSendCommission}
-                >
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSendCommission(props.userId);
+                    setIsModalOpen(false)
+                    setCommissionText("");
+                  }}>
                   Enviar
                 </button>
               </div>
