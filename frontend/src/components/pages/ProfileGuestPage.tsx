@@ -94,69 +94,69 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
   // Fetch de perfil guest, comisiones y mensajes
   useEffect(() => {
-  if (!token) return;
+    if (!token) return;
 
-  const fetchGuestData = async () => {
-    try {
-      // Datos del perfil
-      const profileRes = await axios.get(
-        `http://127.0.0.1:8000/api/users/${props.userId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const data = profileRes.data;
-      setFollowers(data.followers || []);
-      setFollowings(data.followings || []);
-      setServices(data.user.services || "");
-      setPrices(data.user.prices || "");
-      setTerms(data.user.terms || "");
+    const fetchGuestData = async () => {
+      try {
+        // Datos del perfil
+        const profileRes = await axios.get(
+          `http://127.0.0.1:8000/api/users/${props.userId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const data = profileRes.data;
+        setFollowers(data.followers || []);
+        setFollowings(data.followings || []);
+        setServices(data.user.services || "");
+        setPrices(data.user.prices || "");
+        setTerms(data.user.terms || "");
 
-      // Mensajes
-      const messagesRes = await axios.get(
-        `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const mapped = messagesRes.data.map((msg: any) => ({
-        id: msg.id,
-        userId: msg.from_user.id,
-        user: msg.from_user.name,
-        profile_picture: msg.from_user.profile_picture,
-        message: msg.message,
-      }));
-      mapped.sort((a: any, b: any) => (b.id || 0) - (a.id || 0));
-      setMessages(mapped);
-    } catch (err) {
-      console.error("Error fetching guest profile:", err);
-    }
-  };
+        // Mensajes
+        const messagesRes = await axios.get(
+          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const mapped = messagesRes.data.map((msg: any) => ({
+          id: msg.id,
+          userId: msg.from_user.id,
+          user: msg.from_user.name,
+          profile_picture: msg.from_user.profile_picture,
+          message: msg.message,
+        }));
+        mapped.sort((a: any, b: any) => (b.id || 0) - (a.id || 0));
+        setMessages(mapped);
+      } catch (err) {
+        console.error("Error fetching guest profile:", err);
+      }
+    };
 
-  fetchGuestData();
+    fetchGuestData();
 
-  const interval = setInterval(async () => {
-    try {
-      const messagesRes = await axios.get(
-        `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const mapped = messagesRes.data.map((msg: any) => ({
-        id: msg.id,
-        userId: msg.from_user.id,
-        user: msg.from_user.name,
-        profile_picture: msg.from_user.profile_picture,
-        message: msg.message,
-      }));
-      mapped.sort((a: any, b: any) => (b.id || 0) - (a.id || 0));
-      setMessages((prev) => {
-        if (prev.length !== mapped.length) return mapped;
-        return prev;
-      });
-    } catch (err) {
-      console.error("Error fetching guest messages:", err);
-    }
-  }, 30000);
+    const interval = setInterval(async () => {
+      try {
+        const messagesRes = await axios.get(
+          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const mapped = messagesRes.data.map((msg: any) => ({
+          id: msg.id,
+          userId: msg.from_user.id,
+          user: msg.from_user.name,
+          profile_picture: msg.from_user.profile_picture,
+          message: msg.message,
+        }));
+        mapped.sort((a: any, b: any) => (b.id || 0) - (a.id || 0));
+        setMessages((prev) => {
+          if (prev.length !== mapped.length) return mapped;
+          return prev;
+        });
+      } catch (err) {
+        console.error("Error fetching guest messages:", err);
+      }
+    }, 30000);
 
-  // Cleanup
-  return () => clearInterval(interval);
-}, [props.userId, token]);
+    // Cleanup
+    return () => clearInterval(interval);
+  }, [props.userId, token]);
 
   // Enviar mensaje
   const handleSendMessage = async () => {
@@ -291,23 +291,32 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           {showFollowers && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-6">Followers</h3>
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followers</h3>
                 <ul>
                   {props.followers.map((f) => (
                     <li
                       key={f.id}
-                      className="text-gray-200 mb-2 flex items-center gap-2"
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        setShowFollowers(false);
+                        if (f.id === props.userId) {
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                        } else {
+                          navigate({ to: "/Profile" });
+                        }
+                      }}
                     >
                       <img
-                        src={f.profile_picture}
-                        className="w-6 h-6 rounded-full"
-                      />
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
                   onClick={() => setShowFollowers(false)}
                 >
                   Close
@@ -320,23 +329,33 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           {showFollowings && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-4">Followings</h3>
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followings</h3>
                 <ul>
                   {props.followings.map((f) => (
                     <li
                       key={f.id}
-                      className="text-gray-200 mb-2 flex items-center gap-2"
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        setShowFollowings(false); // Cierra el modal
+                        if (f.id === props.userId) {
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                        } else {
+
+                          navigate({ to: "/Profile" });
+                        }
+                      }}
                     >
                       <img
-                        src={f.profile_picture}
-                        className="w-6 h-6 rounded-full"
-                      />
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
                   onClick={() => setShowFollowings(false)}
                 >
                   Close
@@ -391,76 +410,70 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           ) : activeTab === 2 ? (
             // Feed / Messages
             <div className="w-full max-w-4xl mx-auto">
-        <div className="mb-6">
-          <textarea
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Write a message..."
-            className="w-full bg-stone-800 text-gray-200 p-4 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-500"
-            rows={3}
-          />
-          <div className="flex justify-end mt-2">
-            <button
-              onClick={handleSendMessage}
-              className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-full transition-all"
-            >
-              Send
-            </button>
-          </div>
-        </div>
-        <div className="space-y-4">
-          {messages.length ? (
-            messages.map((msg) => (
-              <div
-                key={msg.id}
-                className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
-              >
-                {msg.profile_picture && (
-                  <img
-                    src={
-                      msg.profile_picture ||
-                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                    }
-                    className="w-10 h-10 rounded-full cursor-pointer"
-                    onClick={() => {
-                      if (msg.userId && msg.userId === props.userId) {
-                        navigate({
-                          to: "/ProfileGuest",
-                          search: { userId: msg.userId },
-                        });
-                      } else {
-                        
-                        navigate({ to: "/Profile" });
-                      }
-                    }}
-                  />
-                )}
-                <div>
-                  <span
-                    className="text-sm font-semibold text-pink-400 cursor-pointer"
-                    onClick={() => {
-                      if (msg.userId && msg.userId === props.userId) {
-                        
-                        navigate({
-                          to: "/ProfileGuest",
-                          search: { userId: msg.userId },
-                        });
-                      } else {
-                        navigate({ to: "/Profile" });
-                      }
-                    }}
+              <div className="mb-6">
+                <textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Write a message..."
+                  className="w-full bg-stone-800 text-gray-200 p-4 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  rows={3}
+                />
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={handleSendMessage}
+                    className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-full transition-all"
                   >
-                    {msg.user}
-                  </span>
-                  <p className="text-sm mt-1">{msg.message}</p>
+                    Send
+                  </button>
                 </div>
               </div>
-            ))
-          ) : (
-            <p className="text-gray-400 text-sm text-center">No messages yet.</p>
-          )}
-        </div>
-      </div>
+              <div className="space-y-4">
+                {messages.length ? (
+                  messages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
+                    >
+                      <img
+                        src={
+                          msg.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        }
+                        className="w-10 h-10 rounded-full cursor-pointer"
+                        onClick={() => {
+                          if (msg.userId && msg.userId === props.userId) {
+                            navigate({ to: "/ProfileGuest", search: { userId: msg.userId } });
+                          } else {
+                            navigate({ to: "/Profile" });
+                          }
+                        }}
+                      />
+                      <div>
+                        <span
+                          className="text-sm font-semibold text-pink-400 cursor-pointer hover:text-pink-500"
+                          onClick={() => {
+                            if (msg.userId && msg.userId === props.userId) {
+
+                              navigate({
+                                to: "/ProfileGuest",
+                                search: { userId: msg.userId },
+                              });
+                            } else {
+                              navigate({ to: "/Profile" });
+                            }
+                          }}
+                        >
+                          {msg.user}
+                        </span>
+                        <p className="text-sm mt-1">{msg.message}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm text-center">No messages yet.</p>
+                )}
+              </div>
+            </div>
           ) : (
             // Home / Posts
             <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
