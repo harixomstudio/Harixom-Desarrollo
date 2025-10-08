@@ -51,7 +51,7 @@ export default function Profile(props: ProfileProps) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   // Hooks para comisiones y modales
- 
+
 
   const token = localStorage.getItem("access_token");
 
@@ -191,7 +191,7 @@ export default function Profile(props: ProfileProps) {
       <div className="w-full flex flex-col">
         {/* Banner y Avatar */}
         <div className="relative mb-10">
-          <div className="rounded-xl h-100 flex relative overflow-hidden w-full">
+          <div className="rounded-xl h-100flex relative overflow-hidden w-full">
             <div className="flex relative w-full h-full items-center justify-center">
               <img
                 src={props.bannerPicture}
@@ -227,7 +227,7 @@ export default function Profile(props: ProfileProps) {
                   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 }
                 alt="Avatar"
-                className="w-42 h-42 rounded-full border-5 border-stone-950 object-cover"
+                className="w-42 h-42 max-lg:w-25 max-lg:h-25 rounded-full border-5 border-stone-950 object-cover"
               />
             </div>
           </div>
@@ -236,16 +236,16 @@ export default function Profile(props: ProfileProps) {
         {/* Info */}
         <div className="flex flex-col pl-10 text-white mt-6 mb-10">
           {/* Username */}
-          <span className="text-3xl font-bold mb-2">{props.username}</span>
+          <span className="text-3xl max-lg:text-2xl font-bold mb-2">{props.username}</span>
 
 
-          
+
 
           {/* Description */}
           <span className="text-gray-400 text-lg mb-6">{props.address}</span>
 
           {/* Followers & Followings  */}
-          <div className="flex gap-20 text-white font-semibold text-xl mb-2">
+          <div className="flex gap-20 max-lg:gap-5 max-lg:text-sm text-white font-semibold text-xl mb-2">
             <span
               className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
               onClick={() => setShowFollowers(true)}
@@ -324,17 +324,17 @@ export default function Profile(props: ProfileProps) {
             </div>
           )}
 
-          <p className="text-gray-300 text-sm mt-2 py-10">
+          <p className="text-gray-300 text-sm mt-2 ">
             {props.description}
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4">
+        <div className="flex gap-8 border-b max-lg:gap-0 border-gray-400 mb-8 px-4">
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
+              className={`pb-4 font-semibold text-xl max-lg:text-sm px-5 ${activeTab === i
                 ? "text-pink-400 border-b-2 border-pink-400"
                 : "text-gray-200"
                 }`}
