@@ -41,7 +41,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [favorites, setFavorites] = useState(props.likes || []);
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = React.useState(false);
-  const tabs = props.tabs || ["Home", "Commissions", "Messages", "Favorites"];
+  const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
   const [commitions, setCommitions] = useState<{ [key: number]: string[] }>({});
 
   // Commissions
@@ -215,7 +215,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   };
 
   return (
-    <section className="relative flex items-center justify-center bg-stone-950 min-h-screen">
+    <section className="relative flex items-center justify-center bg-stone-950 min-h-screen"
+    style={{ fontFamily: "Monserrat" }}>
       <div className="w-full flex flex-col">
         {/* Banner y Avatar */}
         <div className="relative mb-10">

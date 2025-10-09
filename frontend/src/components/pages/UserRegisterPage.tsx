@@ -4,7 +4,8 @@ interface UserRegisterProps {
 
 export default function UserRegister(props: UserRegisterProps) {
   return (
-    <section className="min-h-screen bg-stone-950 p-8">
+    <section className="min-h-screen bg-stone-950 p-8"
+    style={{ fontFamily: "Monserrat" }}>
       {/* Título principal */}
       <div className="mb-8 pl-4">
         <h2

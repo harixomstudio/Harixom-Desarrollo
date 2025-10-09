@@ -196,313 +196,334 @@ export default function Landing(props: LandingProps) {
         <div className="relative w-full h-1.5 overflow-hidden bottom-12">
           <div className="absolute w-full h-full bg-gradient-to-r from-pink-300 via-pink-800 to-pink-300 animate-gradient" />
         </div>
+{/* Carrusel */}
+<div className="relative w-full h-[70vh] sm:h-[60vh] md:h-[65vh] lg:h-[70vh] overflow-hidden text-black">
+  <div
+    className="flex transition-transform duration-[1800ms] ease-in-out h-full w-full"
+    style={{ transform: `translateX(-${current * 100}%)` }}
+  >
+    {/* Banner 1 */}
+    <div className="min-w-full h-full relative flex items-center justify-center">
+      <img
+        src={props.banners[0]}
+        alt={props.altBanner}
+        className="absolute w-full h-full object-cover"
+      />
+      <div className="z-10 text-center pb-20 sm:pb-32 md:pb-40 lg:pb-48">
+        <h1 className="text-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold" style={{ fontFamily: "Monserrat" }}>
+          Canvas Flow
+        </h1>
+        <h2 className="text-black text-lg sm:text-xl md:text-2xl lg:text-3xl p-2" style={{ fontFamily: "Monserrat" }}>
+          Unleash Your Inner Artist
+        </h2>
+      </div>
+    </div>
 
-        {/* Carrusel */}
-        <div className="relative w-full h-[70vh] max-lg:h-[40vh] overflow-hidden text-black">
-          <div
-            className="flex transition-transform duration-[1800ms] ease-in-out h-full w-full gap-"
-            style={{ transform: `translateX(-${current * 100}%)` }}
-          >
-
-            {/* Banner 1 */}
-            <div className="min-w-full h-full relative flex items-center justify-center">
-              <img
-                src={props.banners[0]}
-                alt={props.altBanner}
-                className="absolute w-full h-full object-cover "
-              />
-              <div className="z-10 text-center pb-48">
-                <h1 className="text-black text-5xl max-lg:text-4xl font-bold" style={{ fontFamily: "Monserrat" }}>
-                  Canvas Flow
-                </h1>
-                <h2 className="text-black text-3xl max-lg:text-xl p-2" style={{ fontFamily: "Monserrat" }}>
-                  Unleash Your Inner Artist
-                </h2>
-              </div>
-            </div>
-
-            {/* Banner 2 */}
-            <div className="min-w-full h-full relative flex items-center justify-center">
-              <img
-                src={props.banners[1]}
-                alt={props.altBanner}
-                className="absolute w-full h-full object-cover "
-              />
-              <div className="z-10 text-center flex flex-col items-center gap-5 pt-10">
-                <h1 className="text-black text-5xl max-lg:text-4xl font-bold" style={{ fontFamily: "Monserrat" }}>
-                  Participate in incredible Events
-                </h1>
-                <h2 className="text-black text-3xl max-lg:text-xl" style={{ fontFamily: "Monserrat" }}>
-                  Discover the power of creativity
-                </h2>
-                <Link
-                  to="/Events"
-                  className="mt-2 px-20 py-3 bg-purple-500 text-black text-2xl font-semibold rounded-full hover:bg-purple-600 transition duration-300"
-                  style={{ fontFamily: "Monserrat" }}
-                >
-                  Join
-                </Link>
-              </div>
-            </div>
-
-            {/* Banner 3 */}
-            <div className="min-w-full h-full relative flex items-center justify-center">
-              <img
-                src={props.banners[2]}
-                alt={props.altBanner}
-                className="absolute w-full h-full object-cover"
-              />
-              <div className="relative z-10 w-full flex items-center justify-center">
-                <img
-                  src="pincelada.svg"
-                  alt="Pincelada"
-                  className={`absolute max-w-[1000px] h-auto ${current === 2 ? "animate-paint-stroke" : ""}`}
-                  style={{ animationFillMode: "forwards" }}
-                />
-                <h2
-                  className={`absolute text-black text-4xl max-lg:text-xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
-                  style={{ fontFamily: "Monserrat" }}
-                >
-                  Get inspired and Create your own Art
-                </h2>
-
-                {/* Botón animado */}
-                <Link
-                  to="/Categories/$name"
-                  params={{ name: "Digital Art" }}
-                  className="absolute top-10 px-20 py-2 bg-blue-600 text-2xl font-bold rounded-full hover:scale-125 transition z-10"
-                  style={{ fontFamily: "Monserrat" }}
-                >
-                  GO!
-                </Link>
-
-              </div>
-            </div>
-
-
-          </div>
-
-          {/* Flechas de navegación */}
-          <button
-            onClick={prevSlide}
-            className="absolute top-1/2 left-5 transform -translate-y-1/2 text-pink-400 text-6xl font-bold hover:scale-125 transition z-10"
-          >
-            ‹
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute top-1/2 right-5 transform -translate-y-1/2 text-pink-400 text-6xl font-bold hover:scale-125 transition z-10"
-          >
-            ›
-          </button>
-        </div>
-
-        {/* categories section */}
-        <section className="flex flex-col items-center justify-center gap-20 pt-30 pb-45 max-lg:gap-10 max-lg:py-30 px-15 max-lg:px-5">
-          <h2
-            className="text-5xl md:text-7xl text-pink-300 flex gap-1"
-            style={{ fontFamily: "Monserrat" }}
-          >
-            {"Categories".split("").map((char, i) => (
-              <span
-                key={i}
-                className="inline-block animate-bounce"
-                style={{
-                  animationDelay: `${i * 0.2}s`,
-                  animationDuration: "6.0s",
-                  animationIterationCount: "infinite",
-                  animationTimingFunction: "ease-in-out",
-                  display: "inline-block",
-                }}
-              >
-                {char}
-              </span>
-            ))}
-          </h2>
-          <div
-            className="flex justify-between pt-5 gap-43"
-            style={{ fontFamily: "Monserrat" }}
-          >
-            {props.categoriesUp.map((categoriesUp, number) => (
-              <Link
-                to={props.links[number]}
-                key={number}
-                className="flex flex-col items-center gap-2"
-              >
-                <img
-                  src={categoriesUp}
-                  alt={`Image ${number}`}
-                  className="w-30 h-30 max-xl:w-22 max-xl:h-22 duration-600 max-lg:w-15 max-lg:h-15 hover:scale-115 hover:shadow-lg shadow-black"
-                />
-                <span
-                  className="text-center text-xl max-lg:text-sm font-medium"
-                  style={{ color: props.categoriesUpColors[number] }}
-                >
-                  {props.categoriesUpNames[number]}
-                </span>
-              </Link>
-            ))}
-          </div>
-
-          <div
-            className="flex justify-between gap-40"
-            style={{ fontFamily: "Monserrat" }}
-          >
-            {props.categoriesDown.map((categoriesDown, number) => (
-              <Link
-                to={props.links2[number]}
-                key={number}
-                className="flex flex-col items-center gap-2"
-              >
-                <img
-                  src={categoriesDown}
-                  alt={`Image ${number}`}
-                  className="w-30 h-30 duration-600 max-xl:w-22 max-xl:h-22 max-lg:w-15 max-lg:h-15 hover:scale-115 hover:shadow-lg shadow-black"
-                />
-                <span
-                  className="text-center text-xl max-lg:text-sm font-medium"
-                  style={{ color: props.categoriesDownColors[number] }}
-                >
-                  {props.categoriesDownNames[number]}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* app section */}
-        <section
-          ref={appRef}
-          className="relative flex items-center py-30 bg-[#FFAFEE] text-black px-15 max-lg:flex-col max-lg:px-5 overflow-hidden"
+    {/* Banner 2 */}
+    <div className="min-w-full h-full relative flex items-center justify-center">
+      <img
+        src={props.banners[1]}
+        alt={props.altBanner}
+        className="absolute w-full h-full object-cover"
+      />
+      <div className="z-10 text-center flex flex-col items-center gap-5 pt-10">
+        <h1 className="text-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold" style={{ fontFamily: "Monserrat" }}>
+          Participate in incredible Events
+        </h1>
+        <h2 className="text-black text-lg sm:text-xl md:text-2xl lg:text-3xl" style={{ fontFamily: "Monserrat" }}>
+          Discover the power of creativity
+        </h2>
+        <Link
+          to="/Events"
+          className="mt-2 px-10 sm:px-16 md:px-20 py-2 sm:py-3 bg-purple-500 text-black text-lg sm:text-xl md:text-2xl font-semibold rounded-full hover:bg-purple-600 transition duration-300"
+          style={{ fontFamily: "Monserrat" }}
         >
+          Join
+        </Link>
+      </div>
+    </div>
+
+{/* Banner 3 */}
+<div className="min-w-full h-full relative flex items-center justify-center">
+  <img
+    src={props.banners[2]}
+    alt={props.altBanner}
+    className="absolute w-full h-full object-cover"
+  />
+
+  {/* Contenedor centrado */}
+  <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-4">
+    {/* Imagen pincelada con texto encima */}
+    <div className="relative w-full flex items-center justify-center">
+      <img
+        src="pincelada.svg"
+        alt="Pincelada"
+        className={`max-w-[90%] sm:max-w-[700px] md:max-w-[900px] h-auto ${current === 2 ? "animate-paint-stroke" : ""}`}
+        style={{ animationFillMode: "forwards" }}
+      />
+      <h2
+        className={`absolute inset-0 flex items-center justify-center text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
+        style={{ fontFamily: "Monserrat" }}
+      >
+        Get inspired and Create your own Art
+      </h2>
+    </div>
+
+    {/* Botón debajo */}
+    <Link
+      to="/Categories/$name"
+      params={{ name: "Digital Art" }}
+      className="mt-6 px-10 sm:px-16 md:px-20 py-2 bg-blue-600 text-lg sm:text-xl md:text-2xl font-bold rounded-full hover:scale-110 transition z-10"
+      style={{ fontFamily: "Monserrat" }}
+    >
+      GO!
+    </Link>
+  </div>
+</div>
+
+  </div>
+
+  {/* Flechas de navegación */}
+  <button
+    onClick={prevSlide}
+    className="absolute top-1/2 left-2 sm:left-5 transform -translate-y-1/2 text-pink-400 text-4xl sm:text-5xl md:text-6xl font-bold hover:scale-125 transition z-10"
+  >
+    ‹
+  </button>
+  <button
+    onClick={nextSlide}
+    className="absolute top-1/2 right-2 sm:right-5 transform -translate-y-1/2 text-pink-400 text-4xl sm:text-5xl md:text-6xl font-bold hover:scale-125 transition z-10"
+  >
+    ›
+  </button>
+</div>
+
+       {/* categories section */}
+<section className="flex flex-col items-center justify-center gap-20 pt-20 pb-32 px-4 sm:px-8 md:px-12 lg:px-20">
+  <h2
+    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-pink-300 flex gap-1"
+    style={{ fontFamily: "Monserrat" }}
+  >
+    {"Categories".split("").map((char, i) => (
+      <span
+        key={i}
+        className="inline-block animate-bounce"
+        style={{
+          animationDelay: `${i * 0.2}s`,
+          animationDuration: "6.0s",
+          animationIterationCount: "infinite",
+          animationTimingFunction: "ease-in-out",
+          display: "inline-block",
+        }}
+      >
+        {char}
+      </span>
+    ))}
+  </h2>
+
+  {/* Upper categories */}
+  <div className="flex flex-wrap justify-center gap-10 sm:gap-16 md:gap-30 pt-5" style={{ fontFamily: "Monserrat" }}>
+    {props.categoriesUp.map((categoriesUp, number) => (
+      <Link
+        to={props.links[number]}
+        key={number}
+        className="flex flex-col items-center gap-2"
+      >
+        <img
+          src={categoriesUp}
+          alt={`Image ${number}`}
+          className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
+        />
+        <span
+          className="text-center text-sm sm:text-base md:text-lg font-medium"
+          style={{ color: props.categoriesUpColors[number] }}
+        >
+          {props.categoriesUpNames[number]}
+        </span>
+      </Link>
+    ))}
+  </div>
+
+  {/* Lower categories */}
+  <div className="flex flex-wrap justify-center gap-10 sm:gap-16 md:gap-30" style={{ fontFamily: "Monserrat" }}>
+    {props.categoriesDown.map((categoriesDown, number) => (
+      <Link
+        to={props.links2[number]}
+        key={number}
+        className="flex flex-col items-center gap-2"
+      >
+        <img
+          src={categoriesDown}
+          alt={`Image ${number}`}
+          className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
+        />
+        <span
+          className="text-center text-sm sm:text-base md:text-lg font-medium"
+          style={{ color: props.categoriesDownColors[number] }}
+        >
+          {props.categoriesDownNames[number]}
+        </span>
+      </Link>
+    ))}
+  </div>
+</section>
+
+
+    {/* app section */}
+<section
+  ref={appRef}
+  className="relative flex flex-col lg:flex-row items-center py-20 bg-[#FFAFEE] text-black px-4 sm:px-8 md:px-12 lg:px-20 overflow-hidden"
+>
+  <img
+    src="Fondo-rosa.svg"
+    alt=""
+    className="absolute inset-0 w-full h-full object-cover z-0"
+  />
+
+  {/* Imagen de la app */}
+  <div className="relative flex justify-center items-center w-full lg:w-1/2 mb-10 lg:mb-0">
+    <img
+      src={props.imgApp}
+      alt={props.imgAppAlt}
+      className={`w-3/4 sm:w-2/3 object-contain transition-all duration-1000 ease-out ${appVisible
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 translate-y-10"
+        }`}
+    />
+  </div>
+
+  {/* Texto de la app */}
+  <div className="relative z-10 flex flex-col w-full lg:w-1/2 text-justify justify-center gap-8 sm:gap-10 items-center lg:items-start">
+    <h2
+      className={`text-3xl sm:text-4xl md:text-5xl font-bold text-center lg:text-left transition-all duration-1000 ease-out ${appVisible
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 translate-y-10"
+        }`}
+      style={{ fontFamily: "Monserrat" }}
+    >
+      {props.descriptionApp}
+    </h2>
+    <p
+      className={`text-base sm:text-lg md:text-xl lg:text-2xl text-center lg:text-left px-2 lg:px-0 transition-all duration-1000 ease-out ${appVisible
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 translate-y-10"
+        }`}
+      style={{ fontFamily: "Monserrat" }}
+    >
+      {props.textApp}
+    </p>
+
+    <div className="flex justify-center lg:justify-start items-center py-5">
+      <Link
+        to="/CreatePublication"
+        className="px-8 sm:px-12 md:px-16 py-3 text-base sm:text-lg md:text-xl font-semibold rounded-full bg-gradient-to-r from-pink-800 to-pink-400 hover:scale-110 transition-transform duration-500 shadow-lg animate-float text-white"
+        style={{ fontFamily: "Monserrat" }}
+      >
+        Create your publication!
+      </Link>
+    </div>
+  </div>
+</section>
+
+    {/* artists ranking */}
+<section className="flex flex-col items-center justify-center gap-16 py-20 px-4 sm:px-8 md:px-12 lg:px-20"
+ style={{ fontFamily: "Monserrat" }}>
+  <h2
+    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-pink-300 flex gap-1"
+    style={{ fontFamily: "Monserrat" }}
+  >
+    {"Artist        Ranking".split("").map((char, i) => (
+      <span
+        key={i}
+        className="inline-block animate-bounce"
+        style={{
+          animationDelay: `${i * 0.2}s`,
+          animationDuration: "7.0s",
+          animationIterationCount: "infinite",
+          animationTimingFunction: "ease-in-out",
+          display: "inline-block",
+        }}
+      >
+        {char}
+      </span>
+    ))}
+  </h2>
+
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full">
+    {topArtists.map((artist) => (
+      <div
+        key={artist.id}
+        onClick={() => {
+          if (artist.user_id && artist.user_id === currentUserId) {
+            navigate({ to: "/Profile" });
+          } else {
+            navigate({
+              to: "/ProfileGuest",
+              search: { userId: artist.user_id },
+            });
+          }
+        }}
+        className="flex flex-col items-center gap-6 sm:gap-10 hover:scale-105 duration-500 cursor-pointer"
+      >
+        <div className="relative w-full max-w-md aspect-square rounded-xl overflow-hidden">
           <img
-            src="Fondo-rosa.svg"
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover z-0"
+            src={artist.image}
+            alt={artist.title}
+            className="w-full h-full object-cover"
           />
 
-          <div className="relative flex justify-center items-center">
-            <img
-              src={props.imgApp}
-              alt={props.imgAppAlt}
-              className={`w-2/3 object-contain transition-all duration-1000 ease-out ${appVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-                }`}
-            />
+          {/* foto de perfil del artista */}
+          <img
+            src={artist.profile_picture}
+            alt={artist.artist_name}
+            className="absolute bottom-4 left-4 w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white object-cover"
+          />
+
+          <div className="absolute bottom-4 right-4 flex text-white text-lg sm:text-xl">
+            <button className="hover:scale-110 duration-200">
+              ❤️ {artist.likes}
+            </button>
           </div>
+        </div>
 
-          <div className="relative z-10 flex flex-col w-1/2 text-justify justify-center gap-10 max-lg:gap-5 max-lg:w-full max-lg:items-center">
-            <h2
-              className={`text-5xl max-lg:text-3xl font-bold transition-all duration-1000 ease-out ${appVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-                }`}
-              style={{ fontFamily: "Monserrat" }}
-            >
-              {props.descriptionApp}
-            </h2>
-            <p
-              className={`text-2xl max-lg:text-lg pr-10 transition-all duration-1000 ease-out ${appVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-                }`}
-              style={{ fontFamily: "Monserrat" }}
-            >
-              {props.textApp}
-            </p>
+        <div className="text-center text-white text-base sm:text-lg">
+          <h4>Artista: {artist.artist_name}</h4>
+          <p>Obra: {artist.title}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
 
-            <div className="flex justify-center items-center py-5 ">
-              {/* Botón animado */}
-              <Link
-                to="/CreatePublication"
-                className="px-30  py-3 text-xl font-semibold rounded-full bg-gradient-to-r from-pink-800 to-pink-400 hover:scale-115 transition-transform duration-500 shadow-lg animate-float text-white "
-                style={{ fontFamily: "Monserrat" }}
-              >
-                Create your publication!
-              </Link>
-            </div>
-          </div>
-        </section>
 
-        {/* artists ranking */}
-        <section className="flex flex-col items-center justify-center gap-25 py-50 max-lg:gap-10 max-lg:py-30">
-          <h2 className="text-5xl md:text-7xl text-pink-300 flex gap-1">
-            Artists Ranking
-          </h2>
+      {/* Feed section */}
+<section
+  className="relative flex flex-col items-center justify-center text-center w-full min-h-[80vh] sm:min-h-[90vh] lg:min-h-screen text-white px-4 sm:px-8 md:px-12"
+  style={{
+    backgroundImage: "url('fondolila.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+  {/* Título central */}
+  <h2
+    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-10 sm:mb-16 animate-fade-in text-black"
+    style={{ fontFamily: "Monserrat" }}
+  >
+    Get to know our artists through the Feed!!
+  </h2>
 
-          <div className="grid grid-cols-2 gap-10 w-full px-15 max-lg:grid-cols-1 max-lg:px-5">
-            {topArtists.map((artist) => (
-              <div
-                key={artist.id}
-                onClick={() => {
-                  if (artist.user_id && artist.user_id === currentUserId) {
-                    navigate({ to: "/Profile" });
-                  } else {
-                    navigate({
-                      to: "/ProfileGuest",
-                      search: { userId: artist.user_id },
-                    });
-                  }
-                }}
-                className="flex flex-col items-center gap-10 hover:scale-105 duration-500 cursor-pointer"
-              >
-                <div className="relative w-lg h-100 rounded-xl overflow-hidden">
-                  <img
-                    src={artist.image}
-                    alt={artist.title}
-                    className="w-full h-full object-cover"
-                  />
+  {/* Botón animado */}
+  <Link
+    to="/Feed"
+    className="px-8 sm:px-12 md:px-16 py-3 text-base sm:text-lg md:text-xl font-semibold rounded-full bg-gradient-to-r from-purple-800 to-purple-500 hover:scale-110 transition-transform duration-500 shadow-lg animate-float"
+    style={{ fontFamily: "Monserrat" }}
+  >
+    GO!
+  </Link>
+</section>
 
-                  {/* foto de perfil del artista */}
-                  <img
-                    src={artist.profile_picture}
-                    alt={artist.artist_name}
-                    className="absolute bottom-4 left-4 w-12 h-12 rounded-full border-2 border-white object-cover"
-                  />
-
-                  <div className="absolute bottom-4 right-4 flex text-white text-xl">
-                    <button className="hover:scale-110 duration-200">
-                      ❤️ {artist.likes}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="text-center text-white text-lg">
-                  <h4>Artista: {artist.artist_name}</h4>
-                  <p>Obra: {artist.title}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Feed section */}
-        <section
-          className="relative flex flex-col items-center justify-center text-center w-full h-screen text-white px-5"
-          style={{
-            backgroundImage: "url('fondolila.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          {/* Título central */}
-          <h2
-            className="text-6xl max-lg:text-4xl font-bold mb-20 animate-fade-in text-black"
-            style={{ fontFamily: "Monserrat" }}
-          >
-            Get to know our artists through the Feed!!
-          </h2>
-
-          {/* Botón animado */}
-          <Link
-            to="/Feed"
-            className="px-30 py-3 text-xl font-semibold rounded-full bg-gradient-to-r from-purple-800 to-purple-500 hover:scale-115 transition-transform duration-500 shadow-lg animate-float"
-            style={{ fontFamily: "Monserrat" }}
-          >
-            GO!
-          </Link>
-        </section>
 
         <Footer {...props.footer} />
       </main>

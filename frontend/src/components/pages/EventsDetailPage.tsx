@@ -16,7 +16,8 @@ interface EventDetailPageProps {
 
 export default function EventDetailPage({ event }: EventDetailPageProps) {
   return (
-    <div className="bg-black min-h-screen p-6 text-white flex flex-col items-center">
+    <div className="bg-black min-h-screen p-6 text-white flex flex-col items-center"
+    style={{ fontFamily: "Monserrat" }}>
       <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
       <img
         src={event.image || "https://cdn.pixabay.com/photo/2023/03/16/08/42/camping-7856198_960_720.jpg"}

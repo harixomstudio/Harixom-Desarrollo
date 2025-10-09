@@ -40,7 +40,7 @@ export default function Profile(props: ProfileProps) {
   const [followers, setFollowers] = useState(props.followers || []);
   const [followings, setFollowings] = useState(props.followings || []);
   const [activeTab, setActiveTab] = useState(0);
-  const tabs = props.tabs || ["Home", "Commissions", "Messages", "Favorites"];
+  const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
   const [deleteModalOpen, setDeleteModalOpen] = useState<number | null>(null);
   const [editing, setEditing] = useState(false);
   const [services, setServices] = useState<string>(props.services ?? "");
@@ -214,21 +214,24 @@ export default function Profile(props: ProfileProps) {
                   </h2>
                 )}
             </div>
-            <div className="absolute right-8 bottom-8 cursor-pointer">
-              <Link to="/SetProfile">
-                <svg
-                  width="100"
-                  height="56"
-                  viewBox="0 0 32 32"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                  className="text-gray-400 hover:text-pink-400"
-                  fill="none"
-                >
-                  <path d="M16 25h12M22 10.5l5.5 5.5-12.5 12.5H10.5v-5z" />
-                </svg>
-              </Link>
-            </div>
+
+
+          <div className="absolute right-8 bottom-8 z-20">
+  {/* Botón de editar perfil */}
+  <Link to="/SetProfile">
+    <div className="flex items-center gap-2 px-4 py-2 bg-pink-400 rounded-full hover:scale-105 transition duration-300 cursor-pointer">
+      <span className="text-black font-semibold text-base ">Edit Profile</span>
+      <img
+        src="/editar.png"
+        alt="Editar"
+        className="w-4 h-4"
+      />
+    </div>
+  </Link>
+</div>
+
+
+
             <div className="absolute left-5 bottom-2">
               <img
                 src={
@@ -434,6 +437,8 @@ export default function Profile(props: ProfileProps) {
               </div>
             </>
           ) : activeTab === 2 ? (
+
+
             /* Messages tab */
             <div className="w-full max-w-4xl mx-auto">
               <div className="mb-6">
