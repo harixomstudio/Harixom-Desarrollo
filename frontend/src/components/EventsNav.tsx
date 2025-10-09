@@ -9,7 +9,8 @@ export default function EventsNav(props: EventsNavProps) {
   const { location } = useRouterState();
 
   return (
-    <section className="w-56 bg-[#202020] text-white py-12 px-6 flex flex-col min-h-screen">
+    <section className="w-56 bg-[#202020] text-white py-12 px-6 flex flex-col min-h-screen"
+    style={{ fontFamily: "Monserrat" }}>
       <h2 className="text-xl font-bold mb-8 text-gray-300">Event Categories</h2>
       <nav className="space-y-6 w-full">
         <ul className="space-y-4">

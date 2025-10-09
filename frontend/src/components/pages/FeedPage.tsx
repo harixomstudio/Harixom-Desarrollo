@@ -235,7 +235,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
   };
 
   return (
-    <div className="bg-stone-950 min-h-screen p-10 max-lg:">
+    <div className="bg-stone-950 min-h-screen p-10 max-lg:"
+    style={{ fontFamily: "Monserrat" }}>
       <div className="grid grid-cols-4 gap-6 max-lg:grid-cols-1 max-lg:items-center">
         {publications.map((pub) => (
           <div
