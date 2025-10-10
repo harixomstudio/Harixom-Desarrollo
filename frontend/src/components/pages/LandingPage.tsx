@@ -197,7 +197,7 @@ export default function Landing(props: LandingProps) {
           <div className="absolute w-full h-full bg-gradient-to-r from-pink-300 via-pink-800 to-pink-300 animate-gradient" />
         </div>
 {/* Carrusel */}
-<div className="relative w-full h-[70vh] sm:h-[60vh] md:h-[65vh] lg:h-[70vh] overflow-hidden text-black">
+<div className="relative w-full h-[30vh] sm:h-[60vh] md:h-[65vh] lg:h-[70vh] overflow-hidden text-black">
   <div
     className="flex transition-transform duration-[1800ms] ease-in-out h-full w-full"
     style={{ transform: `translateX(-${current * 100}%)` }}
