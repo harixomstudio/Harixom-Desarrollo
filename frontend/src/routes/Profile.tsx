@@ -88,7 +88,8 @@ function ProfileRoute() {
       services={user?.services ?? ""}
       prices={user?.prices ?? ""}
       terms={user?.terms ?? ""}
-      userId={user?.id} 
+      userId={user?.id}
+      buyMeACoffee={user?.buymeacoffee_link || ""} 
     />
   );
 }

@@ -27,6 +27,7 @@ interface ProfileProps {
   prices: string;
   terms: string;
   userId: number;
+  buyMeACoffee?: string;
 }
 
 export default function Profile(props: ProfileProps) {
@@ -46,6 +47,8 @@ export default function Profile(props: ProfileProps) {
   const [services, setServices] = useState<string>(props.services ?? "");
   const [prices, setPrices] = useState<string>(props.prices ?? "");
   const [terms, setTerms] = useState<string>(props.terms ?? "");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [LinkText, setLinkText] = useState<string>(props.buyMeACoffee ?? "");
 
   // Hooks para mensajes
   const [newMessage, setNewMessage] = useState("");
@@ -92,6 +95,8 @@ export default function Profile(props: ProfileProps) {
     () => setFollowings(props.followings || []),
     [props.followings]
   );
+
+  useEffect(() => setLinkText(props.buyMeACoffee || ""), [props.buyMeACoffee]);
 
   // Funciones
   const handleDeletePublication = async (id: number) => {
@@ -192,6 +197,29 @@ export default function Profile(props: ProfileProps) {
     }
   };
 
+  const handleSendCoffee = async () => {
+    try {
+      if (!LinkText.trim()) {
+        showToast("Escribe un link antes de enviar", "error");
+        return;
+      }
+      const { data } = await axios.post(
+        `http://127.0.0.1:8000/api/user/update-coffee-link`,
+        {
+          buymeacoffee_link: LinkText
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      showToast("link guardado con éxito", "success");
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error(err);
+      showToast("Error al enviar el link", "error");
+    }
+  };
+
+
   return (
     <section
       className="relative flex items-center justify-center bg-stone-950 min-h-screen"
@@ -216,19 +244,19 @@ export default function Profile(props: ProfileProps) {
             </div>
 
 
-          <div className="absolute right-8 bottom-8 z-20">
-  {/* Botón de editar perfil */}
-  <Link to="/SetProfile">
-    <div className="flex items-center gap-2 px-4 py-2 bg-pink-400 rounded-full hover:scale-105 transition duration-300 cursor-pointer">
-      <span className="text-black font-semibold text-base ">Edit Profile</span>
-      <img
-        src="/editar.png"
-        alt="Editar"
-        className="w-4 h-4"
-      />
-    </div>
-  </Link>
-</div>
+            <div className="absolute right-8 bottom-8 z-20">
+              {/* Botón de editar perfil */}
+              <Link to="/SetProfile">
+                <div className="flex items-center gap-2 px-4 py-2 bg-pink-400 rounded-full hover:scale-105 transition duration-300 cursor-pointer">
+                  <span className="text-black font-semibold text-base ">Edit Profile</span>
+                  <img
+                    src="/editar.png"
+                    alt="Editar"
+                    className="w-4 h-4"
+                  />
+                </div>
+              </Link>
+            </div>
 
 
 
@@ -259,7 +287,7 @@ export default function Profile(props: ProfileProps) {
           {/* Followers & Followings  */}
           <div className="flex gap-20 max-lg:gap-5 max-lg:text-sm text-white font-semibold text-xl mb-2">
             <span
-              className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
+              className="cursor-pointer hover:text-pink-400 flex flex-col items-center duration-500"
               onClick={() => setShowFollowers(true)}
             >
               <span>Followers</span>
@@ -268,7 +296,7 @@ export default function Profile(props: ProfileProps) {
               </span>
             </span>
             <span
-              className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
+              className="cursor-pointer hover:text-pink-400 flex flex-col items-center duration-500"
               onClick={() => setShowFollowings(true)}
             >
               <span>Followings</span>
@@ -277,6 +305,8 @@ export default function Profile(props: ProfileProps) {
               </span>
             </span>
           </div>
+
+
 
           {/* Followers Modal */}
           {showFollowers && (
@@ -352,9 +382,66 @@ export default function Profile(props: ProfileProps) {
             </div>
           )}
 
-          <p className="text-gray-300 text-sm mt-2 ">
+          <p className="text-gray-300 text-sm my-3 ">
             {props.description}
           </p>
+
+
+          {/* Modal de buy a coffee */}
+          {isModalOpen && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-stone-800 rounded-lg border-gray-700 p-6 shadow-lg w-96 border">
+                <h2 className="text-white text-lg font-semibold mb-4">
+                  Escribe tu link de <a href="https://studio.buymeacoffee.com/dashboard" className="text-pink-400 underline underline-offset-2 animate-pulse">Buy Me A Coffee</a>
+                </h2>
+                <textarea
+                  value={LinkText}
+                  onChange={(e) => {
+                    let value = e.target.value.trim();
+                    const base = "buymeacoffee.com/";
+                    if (!value.startsWith(base)) {
+                      value = base + value;
+                    }
+                    setLinkText(value)
+                  }}
+                  placeholder="Escribe tu link de Buy Me A Coffee..."
+                  className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
+                  rows={2}
+                />
+                <div className="flex justify-end gap-4 mt-4">
+                  <button
+                    className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                    }}
+                  >
+                    Cerrar
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsModalOpen(false)
+                      handleSendCoffee();
+                    }}>
+                    Enviar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="flex items-center w-full">
+            {/* Link de buy a coffee */}
+            <a href={`https://${LinkText}`} className={` underline underline-offset-2 text-pink-400 w-fit hover:scale-105 duration-500`}>{LinkText}</a>
+
+            {/* Buy me a coffee button */}
+            <button
+              className="bg-[#96E2FF] hover:bg-[#62aecc] duration-500 text-black font-bold py-2 px-4 rounded-full ml-auto mr-8"
+              onClick={() => setIsModalOpen(true)}>
+              Buy me a coffee
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -364,7 +451,7 @@ export default function Profile(props: ProfileProps) {
               key={tab}
               className={`pb-4 font-semibold text-xl max-lg:text-sm px-5 ${activeTab === i
                 ? "text-pink-400 border-b-2 border-pink-400"
-                : "text-gray-200"
+                : "text-gray-200 hover:text-pink-400 duration-500"
                 }`}
               onClick={() => setActiveTab(i)}
             >
@@ -560,7 +647,7 @@ export default function Profile(props: ProfileProps) {
                   >
                     <button
                       onClick={() => setDeleteModalOpen(card.id)}
-                      className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 text-white text-xs px-2 py-1 rounded"
+                      className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 duration-500 text-white text-xs px-2 py-1 rounded"
                     >
                       ✕
                     </button>
@@ -619,7 +706,7 @@ export default function Profile(props: ProfileProps) {
       {/* Botón flotante */}
       <Link
         to="/CreatePublication"
-        className="fixed bottom-6 right-6 bg-pink-500 hover:bg-pink-600 text-white text-lg font-bold py-5 px-7 rounded-full shadow-lg transition-all duration-300"
+        className="fixed bottom-6 right-8 bg-pink-500 hover:bg-pink-600 text-white text-lg font-bold py-5 px-7 rounded-full shadow-lg transition-all duration-300"
       >
         +
       </Link>

@@ -20,7 +20,7 @@ export default function Home(props: HomeProps) {
   return (
     <section
       onClick={() => navigate({ to: "/Login" })}
-      className="relative flex min-h-screen items-center justify-center bg-stone-950 overflow-hidden cursor-pointer"
+      className="relative flex h-screen items-center justify-center bg-stone-950 overflow-hidden cursor-pointer "
     >
       {/* Fondo decorativo */}
       <img
@@ -33,17 +33,16 @@ export default function Home(props: HomeProps) {
       <div className="relative z-10 text-center text-white select-none flex flex-col items-center">
         {/* Título animado letra por letra */}
         <h1
-          className="mb-10 text-9xl  text-pink-500 flex gap-1"
+          className="mb-10 text-9xl text-pink-500 flex gap-1 max-lg:text-7xl max-[30rem]:text-5xl"
           style={{ fontFamily: "Starstruck" }}
         >
           {letters.map((char, i) => (
             <span
               key={i}
-              className={`inline-block transition-all duration-1000 ease-out ${
-                animate
-                  ? "opacity-100 translate-y-0 scale-100 rotate-0"
-                  : "opacity-0 translate-y-10 scale-50 rotate-12"
-              }`}
+              className={`inline-block transition-all duration-1000 ease-out ${animate
+                  ? "opacity-100 translate-y-0 scale-100 rotate-0 "
+                  : "opacity-0 translate-y-10 scale-50 rotate-12 "
+                }`}
               style={{
                 transitionDelay: `${i * 100}ms`,
               }}
@@ -54,9 +53,8 @@ export default function Home(props: HomeProps) {
         </h1>
 
         <p
-          className={`mt-6 text-lg md:text-2xl transition-all duration-1000 ease-in-out ${
-            animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
-          }`}
+          className={`mt-6 text-lg md:text-2xl transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+            }`}
           style={{
             transitionDelay: `${letters.length * 100 + 300}ms`,
           }}

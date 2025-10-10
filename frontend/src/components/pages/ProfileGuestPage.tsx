@@ -24,6 +24,7 @@ interface ProfileGuestProps {
   likes: any[];
   isFollowing?: boolean;
   userId: number;
+  buyMeACoffee?: string;
 }
 
 export default function ProfileGuestPage(props: ProfileGuestProps) {
@@ -182,6 +183,36 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
       showToast("No se pudo enviar el mensaje", "error");
     }
   };
+  React.useEffect(() => {
+    const fetchGuestProfile = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/users/${props.userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        const data = response.data;
+        setFollowers(data.followers || []);
+        setIsFollowing(!!data.isFollowing);
+      } catch (error) {
+        console.error("Error cargando perfil ajeno:", error);
+      }
+    };
+
+    fetchGuestProfile();
+  }, [props.userId]);
+  React.useEffect(() => {
+    setFavorites(props.likes || []);
+  }, [props.likes]);
+  React.useEffect(() => {
+    setFollowers(props.followers || []);
+  }, [props.followers]);
+  React.useEffect(() => {
+    setIsFollowing(!!props.isFollowing);
+  }, []);
 
   const handleToggleFollow = async () => {
     try {
@@ -216,7 +247,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
   return (
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen"
-    style={{ fontFamily: "Monserrat" }}>
+      style={{ fontFamily: "Monserrat" }}>
       <div className="w-full flex flex-col">
         {/* Banner y Avatar */}
         <div className="relative mb-10">
@@ -274,7 +305,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
             >
               <span>Followers</span>
               <span className="text-gray-300 text-lg font-normal">
-                {props.followers.length}
+                {followers.length}
               </span>
             </span>
             <span
@@ -283,7 +314,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
             >
               <span>Followings</span>
               <span className="text-gray-300 text-lg font-normal">
-                {props.followings.length}
+                {followings.length}
               </span>
             </span>
           </div>
@@ -368,6 +399,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           <p className="text-gray-300 text-sm mt-2 py-10">
             {props.description}
           </p>
+
+          <a href={`https://${props.buyMeACoffee}`} className={` underline underline-offset-2 text-pink-400 w-fit hover:scale-105 duration-500`}>{props.buyMeACoffee}</a>
         </div>
 
         {/* Tabs */}
