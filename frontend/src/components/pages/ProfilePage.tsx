@@ -300,7 +300,7 @@ export default function Profile(props: ProfileProps) {
               onClick={() => setShowFollowings(true)}
             >
               <span>Followings</span>
-              <span className="text-gray-300 text-md font-normal">
+              <span className="text-gray-300 text-lg font-normal">
                 {props.followings.length}
               </span>
             </span>
