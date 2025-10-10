@@ -137,7 +137,7 @@ export default function Register(props: RegisterProps) {
           </h1>
         </div>
 
-        <div className="w-full md:w-1/2 bg-gray-200 opacity-90 px-10 py-4 flex flex-col justify-center rounded-3xl">
+        <div className="w-full md:w-1/2 bg-gray-200 opacity-90 px-10 py-10 flex flex-col justify-center rounded-3xl">
           <h2 className="text-2xl font-bold text-center mb-6 text-black">
             {props.title}
           </h2>
@@ -191,14 +191,19 @@ export default function Register(props: RegisterProps) {
                           : togglePasswordVisibility
                       }
                       className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                    >
-                      {field === "confirmPassword"
-                        ? showConfirmPassword
-                          ? "🙈"
-                          : "👁️"
-                        : showPassword
-                          ? "🙈"
-                          : "👁️"}
+                    >   <img
+                        src={
+                          field === "confirmPassword"
+                            ? showConfirmPassword
+                              ? "ojociego.svg"
+                              : "ojoabierto.svg"
+                            : showPassword
+                              ? "ojociego.svg"
+                              : "ojoabierto.svg"
+                        }
+                        alt={field === "confirmPassword" ? "Confirmar contraseña" : "Contraseña"}
+                        className="w-6 h-6 transition-transform duration-200 hover:scale-110"
+                      />
                     </button>
                   )}
                 </div>
@@ -207,11 +212,10 @@ export default function Register(props: RegisterProps) {
 
             <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-pink-400 to-blue-400"
-              }`}
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-pink-400 to-blue-400"
+                }`}
               disabled={loading}
             >
               {loading ? "Registering..." : "REGISTER"}
@@ -222,7 +226,7 @@ export default function Register(props: RegisterProps) {
             <p className="text-gray-700">{props.text}</p>
             <Link
               to="/Login"
-              className="ml-1 font-semibold underline hover:scale-105 duration-200"
+              className="ml-1 font-semibold underline underline-offset-2 hover:scale-105 duration-200"
             >
               {props.link}
             </Link>
