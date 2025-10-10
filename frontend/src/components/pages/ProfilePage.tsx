@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
