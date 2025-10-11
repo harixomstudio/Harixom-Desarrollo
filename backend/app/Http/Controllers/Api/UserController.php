@@ -42,8 +42,6 @@ class UserController extends Controller
                 ]
 
             );
-            dd($upload);
-            dd($data);
             $data['profile_picture'] = $result['secure_url'];
         }
 

@@ -27,7 +27,7 @@ export default function CardEvents({ events }: CardEventsProps) {
           >
             {/* Imagen de prueba */}
             <img
-              src={event.image || "https://cdn.pixabay.com/photo/2023/03/16/08/42/camping-7856198_960_720.jpg"}
+              src={event.image}
               alt={event.title}
               className="w-full h-40 object-cover"
             />

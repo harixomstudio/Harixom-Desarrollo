@@ -28,7 +28,7 @@ export default function CardTallers({ tallers }: CardTallersProps) {
           >
             {/* Imagen de prueba */}
             <img
-              src="https://cdn.pixabay.com/photo/2023/03/16/08/42/camping-7856198_960_720.jpg"
+              src={taller.image}
               alt={taller.title}
               className="w-full h-40 object-cover"
             />
