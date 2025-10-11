@@ -273,11 +273,11 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         <div className="flex flex-col px-10 text-white mt-6 mb-10 w-full">
 
           {/* Username */}
-          <div className="flex items-center w-full gap-15">
-            <span className="text-3xl max-lg:text-2xl font-bold mb-2">{props.username}</span>
+          <div className="flex items-center w-full gap-15 max-lg:gap-5 max-[19rem]:gap-2 ">
+            <span className="text-3xl max-lg:text-2xl font-bold mb-2 max-[19rem]:text-xl">{props.username}</span>
             <button
               onClick={handleToggleFollow}
-              className={`px-4 py-2 rounded-full text-white font-semibold transition-all ${isFollowing ? "bg-gray-600 hover:bg-gray-700" : "bg-pink-500 hover:bg-pink-600"
+              className={`px-4 py-2  max-[19rem]:text-sm rounded-full text-white font-semibold transition-all ${isFollowing ? "bg-gray-600 hover:bg-gray-700" : "bg-pink-500 hover:bg-pink-600"
                 }`}
             >
               {isFollowing ? "Unfollow" : "Follow"}
@@ -285,7 +285,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
             {/* Botón flotante */}
             <button
-              className="max-lg:px-5 py-3 px-6  bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black justify-start items-end text-center ml-auto"
+              className="max-lg:text-xl py-3 px-6 max-[19rem]:px-4 max-[19rem]:py-2  bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black justify-start items-end text-center ml-auto"
               style={{ fontFamily: "Monserrat" }}
               onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
             >
@@ -404,13 +404,13 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4 max-lg:gap-2">
+        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4 max-lg:gap-2 max-md:gap-2 max-md:Items-center max-[19rem]:gap-1 ">
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl px-5 max-lg:text-sm ${activeTab === i
+              className={`pb-4 font-semibold text-xl px-5 max-lg:text-sm max-md:px-2 max-[19rem]:text-[0.6rem] max-[19rem]:px-1  ${activeTab === i
                 ? "text-pink-400 border-b-2 border-pink-400"
-                : "text-gray-200"
+                : "text-gray-200  hover:text-pink-400 duration-500"
                 }`}
               onClick={() => setActiveTab(i)}
             >
@@ -420,7 +420,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         </div>
 
         {/* Contenido */}
-        <div className="w-full flex flex-col py-10 px-6">
+        <div className="w-full flex flex-col py-10 px-6 ">
           {activeTab === 1 ? (
             // Commissions
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

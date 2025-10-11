@@ -247,7 +247,7 @@ export default function Profile(props: ProfileProps) {
               {/* Botón de editar perfil */}
               <Link to="/SetProfile">
                 <div className="flex items-center gap-2 px-4 py-2 bg-pink-400 rounded-full hover:scale-105 transition duration-300 cursor-pointer">
-                  <span className="text-black font-semibold text-base ">Edit Profile</span>
+                  <span className="text-black font-semibold text-base max-[19rem]:text-[0.6rem]">Edit Profile</span>
                   <img
                     src="/editar.png"
                     alt="Editar"
@@ -273,12 +273,18 @@ export default function Profile(props: ProfileProps) {
         </div>
 
         {/* Info */}
-        <div className="flex flex-col pl-10 text-white mt-6 mb-10">
-          {/* Username */}
-          <span className="text-3xl max-lg:text-2xl font-bold mb-2">{props.username}</span>
+        <div className="flex flex-col pl-10 text-white mt-6 mb-10 max-[19rem]:pl-5">
+          <div className="flex items-center mb-2">
+            {/* Username */}
+            <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}</span>
 
-
-
+            {/* Buy me a coffee button */}
+            <button
+              className="bg-[#96E2FF] hover:bg-[#62aecc] duration-500 text-black font-bold py-2 px-4 rounded-full ml-auto mr-8 max-[19rem]:text-[0.6rem]"
+              onClick={() => setIsModalOpen(true)}>
+              Buy me a coffee
+            </button>
+          </div>
 
           {/* Description */}
           <span className="text-gray-400 text-lg mb-6">{props.address}</span>
@@ -412,6 +418,7 @@ export default function Profile(props: ProfileProps) {
                     className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
                     onClick={() => {
                       setIsModalOpen(false);
+                      setLinkText("");
                     }}
                   >
                     Cerrar
@@ -432,23 +439,18 @@ export default function Profile(props: ProfileProps) {
           )}
           <div className="flex items-center w-full">
             {/* Link de buy a coffee */}
-            <a href={`https://${LinkText}`} className={` underline underline-offset-2 text-pink-400 w-fit hover:scale-105 duration-500`}>{LinkText}</a>
+            <a href={`https://${LinkText}`} className={` underline underline-offset-2 text-pink-400 w-fit hover:scale-105 duration-500 max-[19rem]:text-[0.6rem]`}>{LinkText}</a>
 
-            {/* Buy me a coffee button */}
-            <button
-              className="bg-[#96E2FF] hover:bg-[#62aecc] duration-500 text-black font-bold py-2 px-4 rounded-full ml-auto mr-8"
-              onClick={() => setIsModalOpen(true)}>
-              Buy me a coffee
-            </button>
+
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-8 border-b max-lg:gap-0 border-gray-400 mb-8 px-4">
+        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4 max-lg:gap-2 max-md:gap-2 max-md:Items-center max-[19rem]:gap-1 ">
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl max-lg:text-sm px-5 ${activeTab === i
+              className={`pb-4 font-semibold text-xl px-5 max-lg:text-sm max-md:px-2 max-[19rem]:text-[0.6rem] max-[19rem]:px-1 ${activeTab === i
                 ? "text-pink-400 border-b-2 border-pink-400"
                 : "text-gray-200 hover:text-pink-400 duration-500"
                 }`}
