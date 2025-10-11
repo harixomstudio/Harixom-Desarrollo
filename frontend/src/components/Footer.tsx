@@ -20,12 +20,12 @@ export default function Footer(props: FooterProps) {
     >
 
       <section className="flex w-full text-base max-md:text-base bg-[#141414]">
-        <div className="flex justify-between items-start w-full max-md:flex-col max-md:items-center px-35">
+        <div className="flex justify-between items-start w-full max-md:flex-col max-md:items-center px-35 max-md:gap-15">
           {/* Logo and title */}
-          <div className="flex flex-col items-center justify-center max-lg:items-center">
-            <h4 className="font-semibold pb-1 text-lg"></h4>
+          <div className="flex flex-col items-center justify-center max-lg:items-center max-md:w-full max-md:items-center">
+           
             <div
-              className="text-pink-500 text-3xl pl-4"
+              className="text-pink-500 text-3xl pl-4 max-md:pl-0"
 
               style={{ fontFamily: "Starstruck" }}
             >
@@ -36,7 +36,7 @@ export default function Footer(props: FooterProps) {
           </div>
 
           {/* Products */}
-          <div className="flex flex-col items-start justify-center">
+          <div className="flex flex-col items-start justify-center max-md:w-full max-md:items-center">
             <h5 className="font-semibold pb-4 text-lg">Products</h5>
             {props.products.map((product, index) => (
               <Link
@@ -50,7 +50,7 @@ export default function Footer(props: FooterProps) {
           </div>
 
           {/* Social Media */}
-          <div className="flex flex-col items-center justify-center max-lg:items-start">
+          <div className="flex flex-col items-center justify-center max-md:w-full max-md:items-center">
             <h5 className="font-semibold pb-4 text-lg">Social Medias</h5>
             <div className="grid grid-cols-2 gap-4">
               {props.socialMedias.map((socialMedia, index) => (
@@ -66,7 +66,7 @@ export default function Footer(props: FooterProps) {
           </div>
 
           {/* Contacts */}
-          <div className="flex flex-col items-start justify-center">
+          <div className="flex flex-col items-start justify-center max-md:w-full max-md:items-center">
             <h5 className="font-semibold pb-4 text-lg">Contacts</h5>
             {props.contacts.map((contact, index) => (
               <a
@@ -83,7 +83,7 @@ export default function Footer(props: FooterProps) {
         </div>
       </section>
 
-      <p className="w-full text-center text-base bg-[#141414] p-3">
+      <p className="w-full text-center text-base bg-[#141414] p-10">
         © 2025 {props.titlePage}. All rights reserved
       </p>
     </footer>

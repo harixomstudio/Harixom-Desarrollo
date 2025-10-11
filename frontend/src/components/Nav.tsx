@@ -156,7 +156,7 @@ export default function Nav(props: NavProps) {
         >
           <nav>
             <ul
-              className="flex flex-col text-lg md:flex-row md:space-x-8 items-start md:items-center mt-4 md:mt-0"
+              className="flex flex-col text-lg md:flex-row space-x-8 max-xl:space-x-4  items-start md:items-center mt-4 md:mt-0"
               style={{ fontFamily: "Monserrat" }}
             >
               {props.list.map((list, i) => (

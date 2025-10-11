@@ -49,7 +49,7 @@ function RootComponent() {
             referenceEvents={referenceEvents}
           />
         )}
-        <div className="flex-1 bg-stone-950">
+        <div className="flex-1 bg-stone-950 w-full">
           <Outlet />
         </div>
       </div>
