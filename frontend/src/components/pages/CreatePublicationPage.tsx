@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
-
 import { useToast } from "../ui/Toast";
 
 interface CreatePublicationProps {
@@ -22,6 +21,7 @@ export default function CreatePublicationPage({
   const [loading, setLoading] = useState(false);
 
   const { showToast } = useToast();
+  const navigate = useNavigate(); // ← redirección
 
   const categoryOptions = [
     "Digital Art",
@@ -34,23 +34,20 @@ export default function CreatePublicationPage({
   ];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  if (e.target.files && e.target.files.length > 0) {
-    const file = e.target.files[0];
-
-    // Validación de tamaño máximo 4 MB
-    const maxSize = 3 * 1024 * 1024; // 4 MB en bytes
-    if (file.size > maxSize) {
-      showToast("La imagen no puede superar los 4 MB.", "error");
-      e.target.value = ""; // limpiar input
-      setSelectedImage(null);
-      setPreviewUrl(null);
-      return;
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const maxSize = 3 * 1024 * 1024;
+      if (file.size > maxSize) {
+        showToast("La imagen no puede superar los 3 MB.", "error");
+        e.target.value = "";
+        setSelectedImage(null);
+        setPreviewUrl(null);
+        return;
+      }
+      setSelectedImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
     }
-
-    setSelectedImage(file);
-    setPreviewUrl(URL.createObjectURL(file));
-  }
-};
+  };
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("access_token");
@@ -69,14 +66,18 @@ export default function CreatePublicationPage({
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Publicación creada:", res.data);
+
       showToast("Publicación creada correctamente", "success");
       setDesc("");
       setCat("");
       setSelectedImage(null);
-      setPreviewUrl(null); // Limpiamos el preview
+      setPreviewUrl(null);
+
+      navigate({ to: "/Feed" }); // ← redirección al Feed
     } catch (err: any) {
-      console.error("Error al crear publicación:", err);
+      if (err.response) {
+        console.log("Error response:", err.response.data);
+      }
       showToast("Error al crear publicación", "error");
     } finally {
       setLoading(false);
@@ -84,18 +85,21 @@ export default function CreatePublicationPage({
   };
 
   return (
-    <section className=" min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')]">
-      <div className="">
-        <div className="mb-35 pl-4 ">
+    <section
+      className="min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')]"
+      style={{ fontFamily: "Monserrat" }}
+    >
+      <div>
+        <div className="mb-10 pl-4">
           <Link
             to="/Profile"
-            className="font-bold bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-2.5 "
+            className="font-bold bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-2.5"
           >
             ←
           </Link>
         </div>
 
-        <div className="flex flex-col items-center justify-center h-full ">
+        <div className="flex flex-col items-center justify-center h-full">
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-pink-400">{title}</h2>
           </div>

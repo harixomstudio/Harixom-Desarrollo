@@ -29,7 +29,7 @@ class UserController extends Controller
         $data = $request->validated();
         $data['password'] = bcrypt($data['password']);
 
-        
+
         // Guardar imagen de perfil
         if ($request->hasFile('profile_picture')) {
             $result = $upload->upload(
@@ -40,11 +40,9 @@ class UserController extends Controller
                     'unique_filename' => true,
                     'overwrite' => true
                 ]
-                
+
             );
-            dd($upload);
-            dd($data);
-            $data['profile_picture'] = $result['secure_url']; 
+            $data['profile_picture'] = $result['secure_url'];
         }
 
         // Guardar banner
@@ -59,18 +57,15 @@ class UserController extends Controller
                 ]
             );
 
-            $data['banner_picture'] = $result['secure_url']; 
+            $data['banner_picture'] = $result['secure_url'];
         }
 
-
         $user = User::create($data);
-
 
         return response()->json([
             'user' => new UserResource($user),
             'message' => 'Usuario creado correctamente.'
         ], 201);
-
     }
 
     //Funcion auth
@@ -137,7 +132,7 @@ class UserController extends Controller
 
         // Manejo de archivos
         if ($request->hasFile('profile_picture')) {
-           
+
             if ($user->profile_picture) {
                 @unlink(public_path($user->profile_picture));
             }
@@ -150,23 +145,23 @@ class UserController extends Controller
             ]);
 
             $data['profile_picture'] = $result['secure_url'];
-            }
+        }
 
         if ($request->hasFile('banner_picture')) {
-            
+
             if ($user->banner_picture) {
                 @unlink(public_path($user->banner_picture));
-                }
+            }
 
-         
+
             $result = $upload->upload($request->file('banner_picture')->getRealPath(), [
-            'folder' => 'Users/Banners',
-            'use_filename' => true,
-            'unique_filename' => true,
-            'overwrite' => true,
-        ]);
+                'folder' => 'Users/Banners',
+                'use_filename' => true,
+                'unique_filename' => true,
+                'overwrite' => true,
+            ]);
 
-        $data['banner_picture'] = $result['secure_url'];
+            $data['banner_picture'] = $result['secure_url'];
         }
 
         $user->fill($data);
@@ -192,43 +187,46 @@ class UserController extends Controller
 
     //Funciones para perfil ajeno
     public function showGuest($id)
-{
-    $user = User::with(['posts' => function($query){
-        $query->orderBy('created_at', 'desc');
-    }])->findOrFail($id);
+    {
+        $user = User::with(['posts' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }])->findOrFail($id);
 
-    $authUser = auth()->user();
-    $isFollowing = false;
+        $authUser = auth()->user();
+        $isFollowing = false;
 
-    if ($authUser) {
-        $isFollowing = $authUser->follows()->where('following_id', $id)->exists();
+        if ($authUser) {
+            $isFollowing = $authUser->follows()->where('following_id', $id)->exists();
+        }
+
+        $followers = Follow::with('follower')
+            ->where('following_id', $id)
+            ->get()
+            ->map(fn($f) => [
+                'id' => $f->follower->id,
+                'name' => $f->follower->name,
+                'profile_picture' => $f->follower->profile_picture
+            ]);
+
+        $followings = Follow::with('following')
+            ->where('follower_id', $id)
+            ->get()
+            ->map(fn($f) => [
+                'id' => $f->following->id,
+                'name' => $f->following->name,
+                'profile_picture' => $f->following->profile_picture
+            ]);
+
+            
+
+        return response()->json([
+            'user' => $user,
+            'isFollowing' => $isFollowing,
+            'followers' => $followers,
+            'followings' => $followings,
+
+        ]);
     }
-
-    $followers = Follow::with('follower')
-    ->where('following_id', $id)
-    ->get()
-    ->map(fn($f) => [
-        'id' => $f->follower->id,
-        'name' => $f->follower->name,
-        'profile_picture' => $f->follower->profile_picture
-    ]);
-
-$followings = Follow::with('following')
-    ->where('follower_id', $id)
-    ->get()
-    ->map(fn($f) => [
-        'id' => $f->following->id,
-        'name' => $f->following->name,
-        'profile_picture' => $f->following->profile_picture
-    ]);
-
-    return response()->json([
-        'user' => $user,
-        'isFollowing' => $isFollowing,
-        'followers' => $followers,
-        'followings' => $followings,
-    ]);
-}
 
     // Likes del usuario
     public function guestLikes($id)
@@ -236,7 +234,7 @@ $followings = Follow::with('following')
         $likes = Like::with('publication')
             ->where('user_id', $id)
             ->get()
-            ->map(function($like){
+            ->map(function ($like) {
                 return $like->publication;
             });
 
@@ -264,5 +262,19 @@ $followings = Follow::with('following')
         ]);
     }
 
-    
+    public function linkCoffee(Request $request)
+    {
+        $validated = $request->validate([
+            'buymeacoffee_link' => 'required|string|max:255',
+        ]);
+        $user = $request->user();
+
+        $user->buymeacoffee_link = $validated['buymeacoffee_link'];
+        $user->save();
+
+        return response()->json([
+            'message' => 'Link actualizado correctamente',
+            'link' => $user->buymeacoffee_link,
+        ], 200);
+    }
 }

@@ -2,15 +2,15 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function AIChallenge() {
-  const [specialty, setSpecialty] = useState(""); // Especialidad del usuario
+  const [specialty, setSpecialty] = useState(""); 
   const [challenge, setChallenge] = useState<{
     reto: string;
     pasos: string[];
     nota: string;
-  } | null>(null); // Objeto con el reto parseado
+  } | null>(null); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [buttonDisabled, setButtonDisabled] = useState(false); // 🔒 Nuevo estado
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const handleGetChallenge = async () => {
     if (!specialty.trim()) return alert("Escribe tu especialidad primero.");
@@ -18,7 +18,7 @@ export default function AIChallenge() {
     setLoading(true);
     setError("");
     setChallenge(null);
-    setButtonDisabled(true); // 🔒 Bloquea el botón al iniciar la solicitud
+    setButtonDisabled(true);
 
     try {
       const token = localStorage.getItem("access_token");
@@ -33,14 +33,12 @@ export default function AIChallenge() {
         }
       );
 
-      // Limpieza por si viene con ```json ... ```
       let raw = response.data.challenge;
       const cleaned = raw
         .replace(/```json/i, "")
         .replace(/```/g, "")
         .trim();
 
-      // Intentamos parsear la respuesta JSON que devuelve la IA
       const data = JSON.parse(cleaned);
 
       setChallenge({
@@ -51,7 +49,7 @@ export default function AIChallenge() {
     } catch (err: any) {
       console.error("Error:", err);
       setError("Error al obtener o procesar el reto.");
-      setButtonDisabled(false); // 🔓 Rehabilita el botón si hubo error
+      setButtonDisabled(false); 
     } finally {
       setLoading(false);
     }
@@ -59,7 +57,7 @@ export default function AIChallenge() {
 
   const handleSpecialtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSpecialty(e.target.value);
-    setButtonDisabled(false); // 🔓 Permite pedir otro reto si cambia la especialidad
+    setButtonDisabled(false); 
   };
 
   return (

@@ -139,18 +139,20 @@ export default function Login(props: LoginProps) {
                 type="button"
                 className="absolute right-3 top-9 text-sm"
                 onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "👁️" : "🙈"}
+              ><img
+                  src={showPassword ? "ojociego.svg" : "ojoabierto.svg"}
+                  alt={showPassword ? "Ojo cerrado" : "Ojo abierto"}
+                  className="w-6 h-6"
+                />
               </button>
             </div>
 
             <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-gradient-to-r from-pink-400 to-blue-400"
-              }`}
+                }`}
               disabled={loading}
             >
               {loading ? "Logging in..." : "LOGIN"}
@@ -160,7 +162,7 @@ export default function Login(props: LoginProps) {
           <div className="flex justify-center mt-3 text-sm">
             <Link
               to="/ForgotPassword"
-              className="text-pink-500 font-semibold underline hover:scale-105 duration-200"
+              className="text-pink-500 font-semibold underline underline-offset-2 hover:scale-105 duration-200"
             >
               Forgot Password?
             </Link>
@@ -170,7 +172,7 @@ export default function Login(props: LoginProps) {
             <p className="text-gray-700">{props.text}</p>
             <Link
               to="/Register"
-              className="ml-1 font-semibold underline hover:scale-105 duration-200"
+              className="ml-1 font-semibold underline underline-offset-2 hover:scale-105 duration-200"
             >
               {props.link}
             </Link>

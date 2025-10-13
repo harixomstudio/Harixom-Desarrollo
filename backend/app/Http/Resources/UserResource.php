@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'buymeacoffee_link' => $this->buymeacoffee_link,
             'address' => $this->address,
             'description' => $this->description,
             'profile_picture' => $this->profilePicturePath(),
@@ -29,6 +30,7 @@ class UserResource extends JsonResource
             'terms' => $this->terms,
             'profile_completed' => $this->profile_completed,
             'posts' => $this->posts()->get()->map(function ($post) {
+        
     return [
         'id' => $post->id,
         'description' => $post->description,

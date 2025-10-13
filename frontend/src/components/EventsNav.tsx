@@ -9,8 +9,9 @@ export default function EventsNav(props: EventsNavProps) {
   const { location } = useRouterState();
 
   return (
-    <section className="w-56 bg-[#202020] text-white py-12 px-6 flex flex-col min-h-screen">
-      <h2 className="text-xl font-bold mb-8 text-gray-300">Event Categories</h2>
+    <section className="w-56 bg-[#202020] text-white py-12 px-6 flex flex-col min-h-screen max-lg:w-30"
+    style={{ fontFamily: "Monserrat" }}>
+      <h2 className="text-2xl font-bold mb-8 text-pink-400 max-lg:text-sm text-center">Event Categories</h2>
       <nav className="space-y-6 w-full">
         <ul className="space-y-4">
           {props.listEvents.map((listEvents, i) => {
@@ -19,7 +20,7 @@ export default function EventsNav(props: EventsNavProps) {
               <li key={i} className="w-full">
                 <Link
                   to={props.referenceEvents[i]}
-                  className={`block py-3 px-4 rounded-lg transition-all duration-200 text-lg font-medium w-full
+                  className={`block py-3 px-4 rounded-lg transition-all duration-200 text-lg font-medium w-full max-lg:text-sm max-lg:text-center max-lg:px-0
                       ${isActive ? "bg-[#2d223a] text-purple-400" : "hover:bg-purple-900 hover:text-purple-200"}
                     `}
                 >

@@ -26,7 +26,7 @@ export function addWatermark(
       // Configurar el estilo del texto
       const fontSize = Math.floor(img.width * 0.05); // Tamaño del texto (5% del ancho de la imagen)
       ctx.font = `${fontSize}px Arial`;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.5)"; // Texto blanco con transparencia
+      ctx.fillStyle = "rgba(255, 255, 255, 0.2)"; // Texto blanco con transparencia
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 

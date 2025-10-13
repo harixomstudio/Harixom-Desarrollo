@@ -15,15 +15,18 @@ interface FooterProps {
 export default function Footer(props: FooterProps) {
   return (
     <footer
-      className="flex flex-col items-center w-full py-20"
+      className="flex flex-col items-center w-full py-16"
       style={{ fontFamily: "monserrat" }}
     >
-      <section className="flex w-full text-3xl max-lg:text-xl max-xl:text-xl py-10 max-lg:items-center bg-[#141414] ">
-        <div className="flex justify-between items-baseline w-full max-lg:flex-col max-lg:items-center max-lg:justify-center  max-lg:gap-20 px-15">
+
+      <section className="flex w-full text-base max-md:text-base bg-[#141414]">
+        <div className="flex justify-between items-start w-full max-md:flex-col max-md:items-center px-35 max-md:gap-15">
           {/* Logo and title */}
-          <div className="">
+          <div className="flex flex-col items-center justify-center max-lg:items-center max-md:w-full max-md:items-center">
+           
             <div
-              className="flex text-pink-500 text-3xl "
+              className="text-pink-500 text-3xl pl-4 max-md:pl-0"
+
               style={{ fontFamily: "Starstruck" }}
             >
               <a className="flex max-lg:text-center" href="/Landing">
@@ -33,29 +36,29 @@ export default function Footer(props: FooterProps) {
           </div>
 
           {/* Products */}
-          <div className="flex flex-col items-start justify-center">
-            <h4 className="font-semibold pb-15 max-lg:pb-5 ">Products</h4>
+          <div className="flex flex-col items-start justify-center max-md:w-full max-md:items-center">
+            <h5 className="font-semibold pb-4 text-lg">Products</h5>
             {props.products.map((product, index) => (
               <Link
                 key={index}
                 to={props.linksProducts[index]}
-                className="hover:scale-110 duration-600 hover:text-[#FA6063] pb-5 max-lg:pb-2"
+                className="hover:scale-110 duration-300 hover:text-[#FA6063] pb-2 text-base"
               >
-                <li>{product}</li>
+                <li className="list-none">{product}</li>
               </Link>
             ))}
           </div>
 
           {/* Social Media */}
-          <div className="flex flex-col items-center justify-center max-lg:items-start">
-            <h4 className="font-semibold pb-15 max-lg:pb-5">Social Medias</h4>
-            <div className="grid grid-cols-2 gap-5">
+          <div className="flex flex-col items-center justify-center max-md:w-full max-md:items-center">
+            <h5 className="font-semibold pb-4 text-lg">Social Medias</h5>
+            <div className="grid grid-cols-2 gap-4">
               {props.socialMedias.map((socialMedia, index) => (
                 <Link key={index} to={props.linksSocialMedia[index]}>
                   <img
                     src={socialMedia}
                     alt=""
-                    className="hover:scale-110 duration-600 w-15 h-15 max-lg:w-15 max-lg:h-15 object-cover rounded-full"
+                    className="hover:scale-110 duration-300 w-12 h-12 max-lg:w-10 max-lg:h-10 object-cover rounded-full"
                   />
                 </Link>
               ))}
@@ -63,24 +66,24 @@ export default function Footer(props: FooterProps) {
           </div>
 
           {/* Contacts */}
-          <div className="flex flex-col items-start justify-center pl-25">
-            <h4 className="font-semibold pb-15 max-lg:pb-10">Contacts</h4>
+          <div className="flex flex-col items-start justify-center max-md:w-full max-md:items-center">
+            <h5 className="font-semibold pb-4 text-lg">Contacts</h5>
             {props.contacts.map((contact, index) => (
               <a
                 key={index}
                 href={props.linksContacts[index]}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:scale-110 duration-600 hover:text-[#FA6063] pb-5  max-lg:pb-2"
+                className="hover:scale-110 duration-300 hover:text-[#FA6063] pb-2 text-base"
               >
-                <li>{contact}</li>
+                <li className="list-none">{contact}</li>
               </a>
             ))}
           </div>
         </div>
       </section>
 
-      <p className="w-full text-center text-xl bg-[#141414] p-3">
+      <p className="w-full text-center text-base bg-[#141414] p-10">
         © 2025 {props.titlePage}. All rights reserved
       </p>
     </footer>

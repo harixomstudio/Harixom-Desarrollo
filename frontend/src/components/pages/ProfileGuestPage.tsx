@@ -1,9 +1,11 @@
+import { useNavigate } from "@tanstack/react-router";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
 
 interface Message {
   id?: number;
+  userId: number;
   user: string;
   profile_picture?: string;
   message: string;
@@ -20,12 +22,16 @@ interface ProfileGuestProps {
   tabs?: string[];
   cards: { id: number; description: string; image?: string }[];
   likes: any[];
+  isFollowing?: boolean;
   userId: number;
+  buyMeACoffee?: string;
 }
 
 export default function ProfileGuestPage(props: ProfileGuestProps) {
   const { showToast } = useToast();
   const authUser = JSON.parse(localStorage.getItem("auth_user") || "{}");
+  const token = localStorage.getItem("access_token");
+  const navigate = useNavigate();
 
   // UI States
   const [showFollowers, setShowFollowers] = useState(false);
@@ -36,7 +42,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [favorites, setFavorites] = useState(props.likes || []);
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = React.useState(false);
-  const tabs = props.tabs || ["Home", "Commissions", "Messages", "Favorites"];
+  const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
+  const [commitions, setCommitions] = useState<{ [key: number]: string[] }>({});
 
   // Commissions
   const [services, setServices] = useState("");
@@ -51,8 +58,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [commissionText, setCommissionText] = useState("");
 
-  const [buttonPosition, setButtonPosition] = useState({ top: 450, left: 1000 });
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const [, setButtonPosition] = useState({ top: 450, left: 1000 });
+  (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setButtonPosition({
       top: rect.top + window.scrollY + rect.height + 200,
@@ -60,19 +67,39 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     });
     setIsModalOpen(true);
   };
-  const handleSendCommission = () => {
-    console.log("Comisión enviada:", commissionText);
-    setIsModalOpen(false);
+
+  const handleSendCommission = async (toUserId: number) => {
+    try {
+      if (!commissionText.trim()) {
+        showToast("Escribe una comisión antes de enviar", "error");
+        return;
+      }
+      const { data } = await axios.post(
+        `http://127.0.0.1:8000/api/user/commisions`,
+        {
+          to_user_id: toUserId,
+          message: commissionText,
+          date: new Date().toISOString().split("T")[0],
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      showToast("Comisión enviada con éxito", "success");
+      setIsModalOpen(false);
+      setCommissionText("");
+    } catch (err) {
+      console.error(err);
+      showToast("Error al enviar la comisión", "error");
+    }
   };
-
-  const token = localStorage.getItem("access_token");
-
 
   // Fetch de perfil guest, comisiones y mensajes
   useEffect(() => {
+    if (!token) return;
+
     const fetchGuestData = async () => {
       try {
-        if (!token) return;
+        // Datos del perfil
         const profileRes = await axios.get(
           `http://127.0.0.1:8000/api/users/${props.userId}`,
           { headers: { Authorization: `Bearer ${token}` } }
@@ -84,24 +111,52 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         setPrices(data.user.prices || "");
         setTerms(data.user.terms || "");
 
+        // Mensajes
         const messagesRes = await axios.get(
           `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const mapped = messagesRes.data.map((msg: any) => ({
           id: msg.id,
+          userId: msg.from_user.id,
           user: msg.from_user.name,
           profile_picture: msg.from_user.profile_picture,
           message: msg.message,
         }));
-        // Orden por fecha (más recientes primero)
         mapped.sort((a: any, b: any) => (b.id || 0) - (a.id || 0));
         setMessages(mapped);
       } catch (err) {
         console.error("Error fetching guest profile:", err);
       }
     };
+
     fetchGuestData();
+
+    const interval = setInterval(async () => {
+      try {
+        const messagesRes = await axios.get(
+          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const mapped = messagesRes.data.map((msg: any) => ({
+          id: msg.id,
+          userId: msg.from_user.id,
+          user: msg.from_user.name,
+          profile_picture: msg.from_user.profile_picture,
+          message: msg.message,
+        }));
+        mapped.sort((a: any, b: any) => (b.id || 0) - (a.id || 0));
+        setMessages((prev) => {
+          if (prev.length !== mapped.length) return mapped;
+          return prev;
+        });
+      } catch (err) {
+        console.error("Error fetching guest messages:", err);
+      }
+    }, 30000);
+
+    // Cleanup
+    return () => clearInterval(interval);
   }, [props.userId, token]);
 
   // Enviar mensaje
@@ -115,6 +170,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
       );
       const msg = {
         id: data.data.id,
+        userId: data.data.from_user.id,
         user: data.data.from_user.name,
         profile_picture: data.data.from_user.profile_picture,
         message: data.data.message,
@@ -127,44 +183,62 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
       showToast("No se pudo enviar el mensaje", "error");
     }
   };
+  React.useEffect(() => {
+    const fetchGuestProfile = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/users/${props.userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        const data = response.data;
+        setFollowers(data.followers || []);
+        setIsFollowing(!!data.isFollowing);
+      } catch (error) {
+        console.error("Error cargando perfil ajeno:", error);
+      }
+    };
+
+    fetchGuestProfile();
+  }, [props.userId]);
+  React.useEffect(() => {
+    setFavorites(props.likes || []);
+  }, [props.likes]);
+  React.useEffect(() => {
+    setFollowers(props.followers || []);
+  }, [props.followers]);
+  React.useEffect(() => {
+    setIsFollowing(!!props.isFollowing);
+  }, []);
 
   const handleToggleFollow = async () => {
     try {
       const token = localStorage.getItem("access_token");
       const url = `http://127.0.0.1:8000/api/follow/${props.userId}`;
 
-      const response = await axios.post(
-        url,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.post(url, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       const newStatus = response.data.following;
       setIsFollowing(newStatus);
 
-      setFollowers((prev) => {
+      setFollowers(prev => {
         if (newStatus) {
-          return [
-            ...prev,
-            {
-              id: authUser.id,
-              name: authUser.name,
-              profile_picture: authUser.profile_picture,
-            },
-          ];
+          return [...prev, { id: authUser.id, name: authUser.name, profile_picture: authUser.profile_picture }];
         } else {
-          return prev.filter((f) => f.id !== authUser.id);
+          return prev.filter(f => f.id !== authUser.id);
         }
       });
 
       showToast(
-        newStatus
-          ? "Ahora sigues a este usuario"
-          : "Dejaste de seguir a este usuario",
+        newStatus ? "Ahora sigues a este usuario" : "Dejaste de seguir a este usuario",
         "success"
       );
+
     } catch (error) {
       console.error(error);
       showToast("Error al actualizar el seguimiento", "error");
@@ -172,7 +246,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   };
 
   return (
-    <section className="relative flex items-center justify-center bg-stone-950 min-h-screen">
+    <section className="relative flex items-center justify-center bg-stone-950 min-h-screen"
+      style={{ fontFamily: "Monserrat" }}>
       <div className="w-full flex flex-col">
         {/* Banner y Avatar */}
         <div className="relative mb-10">
@@ -195,67 +270,42 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           </div>
         </div>
 
-        <div className="flex flex-col pl-10 text-white mt-6 mb-10">
+        <div className="flex flex-col px-10 text-white mt-6 mb-10 w-full">
+
           {/* Username */}
-          <span className="text-3xl font-bold mb-2">{props.username}</span>
-
-          {/* Botón flotante */}
-          <button
-            className="absolute right-6 py-4 px-7 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black"
-            style={{ fontFamily: "Monserrat" }}
-            onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
-          >
-            $
-          </button>
-
-          {/* Modal flotante */}
-          {isModalOpen && (
-            <div
-              className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
-              style={{
-                top: buttonPosition.top, // Posición vertical dinámica
-                left: buttonPosition.left, // Posición horizontal dinámica
-              }}
+          <div className="flex items-center w-full gap-15 max-lg:gap-5 max-[19rem]:gap-2 ">
+            <span className="text-3xl max-lg:text-2xl font-bold mb-2 max-[19rem]:text-xl">{props.username}</span>
+            <button
+              onClick={handleToggleFollow}
+              className={`px-4 py-2  max-[19rem]:text-sm rounded-full text-white font-semibold transition-all ${isFollowing ? "bg-gray-600 hover:bg-gray-700" : "bg-pink-500 hover:bg-pink-600"
+                }`}
             >
-              <h2 className="text-pink-400 text-lg font-semibold mb-4">
-                Escribe tu comisión
-              </h2>
-              <textarea
-                value={commissionText}
-                onChange={(e) => setCommissionText(e.target.value)}
-                placeholder="Describe tu comisión..."
-                className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
-                rows={5}
-              />
-              <div className="flex justify-end gap-4 mt-4">
-                <button
-                  className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                  onClick={() => setIsModalOpen(false)} // Cerrar el modal
-                >
-                  Cerrar
-                </button>
-                <button
-                  className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-                  onClick={handleSendCommission} // Enviar la comisión
-                >
-                  Enviar
-                </button>
-              </div>
-            </div>
-          )}
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>
+
+            {/* Botón flotante */}
+            <button
+              className="max-lg:text-xl py-3 px-6 max-[19rem]:px-4 max-[19rem]:py-2  bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black justify-start items-end text-center ml-auto"
+              style={{ fontFamily: "Monserrat" }}
+              onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
+            >
+              $
+            </button>
+
+          </div>
 
           {/* Description */}
-          <span className="text-gray-400 text-lg mb-6">{props.address}</span>
+          <span className="text-gray-400 text-lg mb-6 max-lg:text-sm">{props.address}</span>
 
           {/* Followers & Followings  */}
-          <div className="flex gap-20 text-white font-semibold text-xl mb-2">
+          <div className="flex gap-20 max-lg:gap-5 text-white font-semibold text-xl mb-2 max-lg:text-sm">
             <span
               className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
               onClick={() => setShowFollowers(true)}
             >
               <span>Followers</span>
               <span className="text-gray-300 text-lg font-normal">
-                {props.followers.length}
+                {followers.length}
               </span>
             </span>
             <span
@@ -263,42 +313,42 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
               onClick={() => setShowFollowings(true)}
             >
               <span>Followings</span>
-              <span className="text-gray-300 text-md font-normal">
-                {props.followings.length}
+              <span className="text-gray-300 text-lg font-normal">
+                {followings.length}
               </span>
             </span>
-            <button
-              onClick={handleToggleFollow}
-              className={`px-4 py-2 rounded-full text-white font-semibold transition-all ${isFollowing
-                ? "bg-gray-600 hover:bg-gray-700"
-                : "bg-pink-500 hover:bg-pink-600"
-                }`}
-            >
-              {isFollowing ? "Unfollow" : "Follow"}
-            </button>
           </div>
 
           {/* Followers Modal */}
           {showFollowers && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-6">Followers</h3>
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followers</h3>
                 <ul>
                   {props.followers.map((f) => (
                     <li
                       key={f.id}
-                      className="text-gray-200 mb-2 flex items-center gap-2"
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        setShowFollowers(false);
+                        if (f.id === props.userId) {
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                        } else {
+                          navigate({ to: "/Profile" });
+                        }
+                      }}
                     >
                       <img
-                        src={f.profile_picture}
-                        className="w-6 h-6 rounded-full"
-                      />
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
                   onClick={() => setShowFollowers(false)}
                 >
                   Close
@@ -311,23 +361,33 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           {showFollowings && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-4">Followings</h3>
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followings</h3>
                 <ul>
                   {props.followings.map((f) => (
                     <li
                       key={f.id}
-                      className="text-gray-200 mb-2 flex items-center gap-2"
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        setShowFollowings(false); // Cierra el modal
+                        if (f.id === props.userId) {
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                        } else {
+
+                          navigate({ to: "/Profile" });
+                        }
+                      }}
                     >
                       <img
-                        src={f.profile_picture}
-                        className="w-6 h-6 rounded-full"
-                      />
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
                   onClick={() => setShowFollowings(false)}
                 >
                   Close
@@ -339,52 +399,18 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           <p className="text-gray-300 text-sm mt-2 py-10">
             {props.description}
           </p>
+
+          <a href={`https://${props.buyMeACoffee}`} className={` underline underline-offset-2 text-pink-400 w-fit hover:scale-105 duration-500`}>{props.buyMeACoffee}</a>
         </div>
 
-        {/* Modal flotante */}
-        {isModalOpen && (
-          <div
-            className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
-            style={{
-              top: buttonPosition.top, // Posición vertical dinámica
-              left: buttonPosition.left, // Posición horizontal dinámica
-            }}
-          >
-            <h2 className="text-pink-400 text-lg font-semibold mb-4">
-              Escribe tu comisión
-            </h2>
-            <textarea
-              value={commissionText}
-              onChange={(e) => setCommissionText(e.target.value)}
-              placeholder="Describe tu comisión..."
-              className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
-              rows={5}
-            />
-            <div className="flex justify-end gap-4 mt-4">
-              <button
-                className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                onClick={() => setIsModalOpen(false)} // Cerrar el modal
-              >
-                Cerrar
-              </button>
-              <button
-                className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-                onClick={handleSendCommission} // Enviar la comisión
-              >
-                Enviar
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Tabs */}
-        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4">
+        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4 max-lg:gap-2 max-md:gap-2 max-md:Items-center max-[19rem]:gap-1 ">
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
+              className={`pb-4 font-semibold text-xl px-5 max-lg:text-sm max-md:px-2 max-[19rem]:text-[0.6rem] max-[19rem]:px-1  ${activeTab === i
                 ? "text-pink-400 border-b-2 border-pink-400"
-                : "text-gray-200"
+                : "text-gray-200  hover:text-pink-400 duration-500"
                 }`}
               onClick={() => setActiveTab(i)}
             >
@@ -394,7 +420,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         </div>
 
         {/* Contenido */}
-        <div className="w-full flex flex-col py-10 px-6">
+        <div className="w-full flex flex-col py-10 px-6 ">
           {activeTab === 1 ? (
             // Commissions
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -440,26 +466,45 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                   messages.map((msg) => (
                     <div
                       key={msg.id}
-                      className="bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
+                      className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
                     >
-                      {msg.profile_picture && (
-                        <img
-                          src={msg.profile_picture}
-                          className="w-10 h-10 rounded-full"
-                        />
-                      )}
+                      <img
+                        src={
+                          msg.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        }
+                        className="w-10 h-10 rounded-full cursor-pointer"
+                        onClick={() => {
+                          if (msg.userId && msg.userId === props.userId) {
+                            navigate({ to: "/ProfileGuest", search: { userId: msg.userId } });
+                          } else {
+                            navigate({ to: "/Profile" });
+                          }
+                        }}
+                      />
                       <div>
-                        <p className="text-sm font-semibold text-pink-400">
+                        <span
+                          className="text-sm font-semibold text-pink-400 cursor-pointer hover:text-pink-500"
+                          onClick={() => {
+                            if (msg.userId && msg.userId === props.userId) {
+
+                              navigate({
+                                to: "/ProfileGuest",
+                                search: { userId: msg.userId },
+                              });
+                            } else {
+                              navigate({ to: "/Profile" });
+                            }
+                          }}
+                        >
                           {msg.user}
-                        </p>
+                        </span>
                         <p className="text-sm mt-1">{msg.message}</p>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-400 text-sm text-center">
-                    No messages yet.
-                  </p>
+                  <p className="text-gray-400 text-sm text-center">No messages yet.</p>
                 )}
               </div>
             </div>
@@ -519,9 +564,14 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                   Cerrar
                 </button>
                 <button
+                  type="button"
                   className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-                  onClick={handleSendCommission}
-                >
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSendCommission(props.userId);
+                    setIsModalOpen(false)
+                    setCommissionText("");
+                  }}>
                   Enviar
                 </button>
               </div>

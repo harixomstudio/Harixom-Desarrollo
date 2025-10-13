@@ -79,6 +79,7 @@ function ProfileGuestRoute() {
       cards={sortedCards}
       likes={likesData || []}
       userId={user?.id}
+      buyMeACoffee={user?.buymeacoffee_link || ""}
     />
   );
 }

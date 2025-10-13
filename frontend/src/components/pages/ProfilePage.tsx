@@ -1,11 +1,11 @@
-import React from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
 import { useState, useEffect } from "react";
 
 interface Message {
   id?: number;
+  userId: number;
   user: string;
   profile_picture?: string;
   message: string;
@@ -26,6 +26,7 @@ interface ProfileProps {
   prices: string;
   terms: string;
   userId: number;
+  buyMeACoffee?: string;
 }
 
 export default function Profile(props: ProfileProps) {
@@ -39,47 +40,36 @@ export default function Profile(props: ProfileProps) {
   const [followers, setFollowers] = useState(props.followers || []);
   const [followings, setFollowings] = useState(props.followings || []);
   const [activeTab, setActiveTab] = useState(0);
-  const tabs = props.tabs || ["Home", "Commissions", "Messages", "Favorites"];
+  const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
   const [deleteModalOpen, setDeleteModalOpen] = useState<number | null>(null);
   const [editing, setEditing] = useState(false);
   const [services, setServices] = useState<string>(props.services ?? "");
   const [prices, setPrices] = useState<string>(props.prices ?? "");
   const [terms, setTerms] = useState<string>(props.terms ?? "");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [LinkText, setLinkText] = useState<string>(props.buyMeACoffee ?? "");
 
   // Hooks para mensajes
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
   // Hooks para comisiones y modales
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [commissionText, setCommissionText] = useState("");
-  const [buttonPosition, setButtonPosition] = useState({ top: 450, left: 1000 });
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setButtonPosition({
-      top: rect.top + window.scrollY + rect.height + 200,
-      left: rect.left + window.scrollX,
-    });
-    setIsModalOpen(true);
-  };
-  const handleSendCommission = () => {
-    console.log("Comisión enviada:", commissionText);
-    setIsModalOpen(false);
-  };
 
-
+  const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
+    if (!token) return;
+
     const fetchMessages = async () => {
       try {
-        if (!token) return;
         const { data } = await axios.get(
           `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const mapped = data.map((msg: any) => ({
           id: msg.id,
+          userId: msg.from_user.id,
           user: msg.from_user.name,
           profile_picture: msg.from_user.profile_picture,
           message: msg.message,
@@ -89,7 +79,12 @@ export default function Profile(props: ProfileProps) {
         console.error("Error fetching messages:", err);
       }
     };
+
     fetchMessages();
+
+    const interval = setInterval(fetchMessages, 30000);
+
+    return () => clearInterval(interval);
   }, [props.userId, token]);
 
   useEffect(() => setCards(props.cards || []), [props.cards]);
@@ -99,6 +94,8 @@ export default function Profile(props: ProfileProps) {
     () => setFollowings(props.followings || []),
     [props.followings]
   );
+
+  useEffect(() => setLinkText(props.buyMeACoffee || ""), [props.buyMeACoffee]);
 
   // Funciones
   const handleDeletePublication = async (id: number) => {
@@ -171,6 +168,7 @@ export default function Profile(props: ProfileProps) {
 
       const msg = {
         id: data.data.id,
+        userId: data.data.from_user.id,
         user: data.data.from_user.name,
         profile_picture: data.data.from_user.profile_picture,
         message: data.data.message,
@@ -198,6 +196,29 @@ export default function Profile(props: ProfileProps) {
     }
   };
 
+  const handleSendCoffee = async () => {
+    try {
+      if (!LinkText.trim()) {
+        showToast("Escribe un link antes de enviar", "error");
+        return;
+      }
+      const { data } = await axios.post(
+        `http://127.0.0.1:8000/api/user/update-coffee-link`,
+        {
+          buymeacoffee_link: LinkText
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      showToast("link guardado con éxito", "success");
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error(err);
+      showToast("Error al enviar el link", "error");
+    }
+  };
+
+
   return (
     <section
       className="relative flex items-center justify-center bg-stone-950 min-h-screen"
@@ -220,21 +241,24 @@ export default function Profile(props: ProfileProps) {
                   </h2>
                 )}
             </div>
-            <div className="absolute right-8 bottom-8 cursor-pointer">
+
+
+            <div className="absolute right-8 bottom-8 z-20">
+              {/* Botón de editar perfil */}
               <Link to="/SetProfile">
-                <svg
-                  width="100"
-                  height="56"
-                  viewBox="0 0 32 32"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                  className="text-gray-400 hover:text-pink-400"
-                  fill="none"
-                >
-                  <path d="M16 25h12M22 10.5l5.5 5.5-12.5 12.5H10.5v-5z" />
-                </svg>
+                <div className="flex items-center gap-2 px-4 py-2 bg-pink-400 rounded-full hover:scale-105 transition duration-300 cursor-pointer">
+                  <span className="text-black font-semibold text-base max-[19rem]:text-[0.6rem]">Edit Profile</span>
+                  <img
+                    src="/editar.png"
+                    alt="Editar"
+                    className="w-4 h-4"
+                  />
+                </div>
               </Link>
             </div>
+
+
+
             <div className="absolute left-5 bottom-2">
               <img
                 src={
@@ -242,69 +266,33 @@ export default function Profile(props: ProfileProps) {
                   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 }
                 alt="Avatar"
-                className="w-42 h-42 rounded-full border-5 border-stone-950 object-cover"
+                className="w-42 h-42 max-lg:w-25 max-lg:h-25 rounded-full border-5 border-stone-950 object-cover"
               />
             </div>
           </div>
         </div>
 
         {/* Info */}
-        <div className="flex flex-col pl-10 text-white mt-6 mb-10">
-          {/* Username */}
-          <span className="text-3xl font-bold mb-2">{props.username}</span>
+        <div className="flex flex-col pl-10 text-white mt-6 mb-10 max-[19rem]:pl-5">
+          <div className="flex items-center mb-2">
+            {/* Username */}
+            <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}</span>
 
-          {/* Botón flotante */}
-          <button
-            className="absolute right-6 py-4 px-7 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black"
-            style={{ fontFamily: "Monserrat" }}
-            onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
-          >
-            $
-          </button>
-
-          {/* Modal flotante */}
-          {isModalOpen && (
-            <div
-              className="absolute bg-black rounded-lg border-gray-700 p-6 shadow-lg w-96 border"
-              style={{
-                top: buttonPosition.top, // Posición vertical dinámica
-                left: buttonPosition.left, // Posición horizontal dinámica
-              }}
-            >
-              <h2 className="text-pink-400 text-lg font-semibold mb-4">
-                Escribe tu comisión
-              </h2>
-              <textarea
-                value={commissionText}
-                onChange={(e) => setCommissionText(e.target.value)}
-                placeholder="Describe tu comisión..."
-                className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
-                rows={5}
-              />
-              <div className="flex justify-end gap-4 mt-4">
-                <button
-                  className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                  onClick={() => setIsModalOpen(false)} // Cerrar el modal
-                >
-                  Cerrar
-                </button>
-                <button
-                  className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
-                  onClick={handleSendCommission} // Enviar la comisión
-                >
-                  Enviar
-                </button>
-              </div>
-            </div>
-          )}
+            {/* Buy me a coffee button */}
+            <button
+              className="bg-[#96E2FF] hover:bg-[#62aecc] duration-500 text-black font-bold py-2 px-4 rounded-full ml-auto mr-8 max-[19rem]:text-[0.6rem]"
+              onClick={() => setIsModalOpen(true)}>
+              Buy me a coffee
+            </button>
+          </div>
 
           {/* Description */}
           <span className="text-gray-400 text-lg mb-6">{props.address}</span>
 
           {/* Followers & Followings  */}
-          <div className="flex gap-20 text-white font-semibold text-xl mb-2">
+          <div className="flex gap-20 max-lg:gap-5 max-lg:text-sm text-white font-semibold text-xl mb-2">
             <span
-              className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
+              className="cursor-pointer hover:text-pink-400 flex flex-col items-center duration-500"
               onClick={() => setShowFollowers(true)}
             >
               <span>Followers</span>
@@ -313,37 +301,47 @@ export default function Profile(props: ProfileProps) {
               </span>
             </span>
             <span
-              className="cursor-pointer hover:text-pink-400 flex flex-col items-center"
+              className="cursor-pointer hover:text-pink-400 flex flex-col items-center duration-500"
               onClick={() => setShowFollowings(true)}
             >
               <span>Followings</span>
-              <span className="text-gray-300 text-md font-normal">
+              <span className="text-gray-300 text-lg font-normal">
                 {props.followings.length}
               </span>
             </span>
           </div>
 
+
+
           {/* Followers Modal */}
           {showFollowers && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-6">Followers</h3>
+              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto shadow-lg">
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followers</h3>
                 <ul>
                   {props.followers.map((f) => (
                     <li
                       key={f.id}
-                      className="text-gray-200 mb-2 flex items-center gap-2"
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        if (f.id === props.userId) {
+                          navigate({ to: "/Profile" });
+                        } else {
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                        }
+                      }}
                     >
                       <img
-                        src={f.profile_picture}
-                        className="w-6 h-6 rounded-full"
-                      />
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
                   onClick={() => setShowFollowers(false)}
                 >
                   Close
@@ -356,23 +354,31 @@ export default function Profile(props: ProfileProps) {
           {showFollowings && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
-                <h3 className="text-pink-400 font-bold mb-4">Followings</h3>
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followings</h3>
                 <ul>
                   {props.followings.map((f) => (
                     <li
                       key={f.id}
-                      className="text-gray-200 mb-2 flex items-center gap-2"
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        if (f.id === props.userId) {
+                          navigate({ to: "/Profile" });
+                        } else {
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                        }
+                      }}
                     >
                       <img
-                        src={f.profile_picture}
-                        className="w-6 h-6 rounded-full"
-                      />
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
                   ))}
                 </ul>
                 <button
-                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
                   onClick={() => setShowFollowings(false)}
                 >
                   Close
@@ -381,19 +387,72 @@ export default function Profile(props: ProfileProps) {
             </div>
           )}
 
-          <p className="text-gray-300 text-sm mt-2 py-10">
+          <p className="text-gray-300 text-sm my-3 ">
             {props.description}
           </p>
+
+
+          {/* Modal de buy a coffee */}
+          {isModalOpen && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-stone-800 rounded-lg border-gray-700 p-6 shadow-lg w-96 border">
+                <h2 className="text-white text-lg font-semibold mb-4">
+                  Escribe tu link de <a href="https://studio.buymeacoffee.com/dashboard" className="text-pink-400 underline underline-offset-2 animate-pulse">Buy Me A Coffee</a>
+                </h2>
+                <textarea
+                  value={LinkText}
+                  onChange={(e) => {
+                    let value = e.target.value.trim();
+                    const base = "buymeacoffee.com/";
+                    if (!value.startsWith(base)) {
+                      value = base + value;
+                    }
+                    setLinkText(value)
+                  }}
+                  placeholder="Escribe tu link de Buy Me A Coffee..."
+                  className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
+                  rows={2}
+                />
+                <div className="flex justify-end gap-4 mt-4">
+                  <button
+                    className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setLinkText("");
+                    }}
+                  >
+                    Cerrar
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsModalOpen(false)
+                      handleSendCoffee();
+                    }}>
+                    Enviar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="flex items-center w-full">
+            {/* Link de buy a coffee */}
+            <a href={`https://${LinkText}`} className={` underline underline-offset-2 text-pink-400 w-fit hover:scale-105 duration-500 max-[19rem]:text-[0.6rem]`}>{LinkText}</a>
+
+
+          </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4">
+        <div className="flex gap-8 border-b border-gray-400 mb-8 px-4 max-lg:gap-2 max-md:gap-2 max-md:Items-center max-[19rem]:gap-1 ">
           {tabs.map((tab, i) => (
             <button
               key={tab}
-              className={`pb-4 font-semibold text-xl px-5 ${activeTab === i
+              className={`pb-4 font-semibold text-xl px-5 max-lg:text-sm max-md:px-2 max-[19rem]:text-[0.6rem] max-[19rem]:px-1 ${activeTab === i
                 ? "text-pink-400 border-b-2 border-pink-400"
-                : "text-gray-200"
+                : "text-gray-200 hover:text-pink-400 duration-500"
                 }`}
               onClick={() => setActiveTab(i)}
             >
@@ -466,6 +525,8 @@ export default function Profile(props: ProfileProps) {
               </div>
             </>
           ) : activeTab === 2 ? (
+
+
             /* Messages tab */
             <div className="w-full max-w-4xl mx-auto">
               <div className="mb-6">
@@ -488,12 +549,40 @@ export default function Profile(props: ProfileProps) {
               <div className="space-y-4">
                 {messages.length ? (
                   messages.map((msg) => (
-                    <div key={msg.id} className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2">
-                      {msg.profile_picture && (
-                        <img src={msg.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} className="w-10 h-10 rounded-full" />
-                      )}
+                    <div
+                      key={msg.id}
+                      className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
+                    >
+                      <img
+                        src={
+                          msg.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        }
+                        className="w-10 h-10 rounded-full cursor-pointer"
+                        onClick={() => {
+                          if (msg.userId && msg.userId === props.userId) {
+                            navigate({ to: "/ProfileGuest", search: { userId: msg.userId } });
+                          } else {
+                            navigate({ to: "/Profile" });
+                          }
+                        }}
+                      />
                       <div>
-                        <p className="text-sm font-semibold text-pink-400">{msg.user}</p>
+                        <span
+                          className="text-sm font-semibold text-pink-400 cursor-pointer"
+                          onClick={() => {
+                            if (msg.userId && msg.userId === props.userId) {
+                              navigate({ to: "/Profile" });
+                            } else {
+                              navigate({
+                                to: "/ProfileGuest",
+                                search: { userId: msg.userId },
+                              });
+                            }
+                          }}
+                        >
+                          {msg.user}
+                        </span>
                         <p className="text-sm mt-1">{msg.message}</p>
                       </div>
                       <button
@@ -559,7 +648,7 @@ export default function Profile(props: ProfileProps) {
                   >
                     <button
                       onClick={() => setDeleteModalOpen(card.id)}
-                      className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 text-white text-xs px-2 py-1 rounded"
+                      className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 duration-500 text-white text-xs px-2 py-1 rounded"
                     >
                       ✕
                     </button>
@@ -618,7 +707,7 @@ export default function Profile(props: ProfileProps) {
       {/* Botón flotante */}
       <Link
         to="/CreatePublication"
-        className="fixed bottom-6 right-6 bg-pink-500 hover:bg-pink-600 text-white text-lg font-bold py-5 px-7 rounded-full shadow-lg transition-all duration-300"
+        className="fixed bottom-6 right-8 bg-pink-500 hover:bg-pink-600 text-white text-lg font-bold py-5 px-7 rounded-full shadow-lg transition-all duration-300"
       >
         +
       </Link>

@@ -16,6 +16,7 @@ interface Publication {
   user_id?: number;
   is_following?: boolean;
   category?: string;
+  created_at?: string;
 }
 
 interface FeedPageProps {
@@ -126,6 +127,18 @@ export default function FeedPage({ publications }: FeedPageProps) {
     setLikesCount(counts);
   }, [userLikes, publications, token]);
 
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("es-CR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  };
+
   // Evita renderizar publicaciones hasta conocer el usuario actual
   if (currentUserId === null) {
     return (
@@ -222,8 +235,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
   };
 
   return (
-    <div className="bg-stone-950 min-h-screen p-10 max-lg:">
-      <div className="grid grid-cols-4 gap-6 max-lg:grid-cols-1 max-lg:items-center">
+    <div className="bg-stone-950 min-h-screen p-10 "
+    style={{ fontFamily: "Monserrat" }}>
+      <div className="grid grid-cols-4 gap-6 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around">
         {publications.map((pub) => (
           <div
             key={pub.id}
@@ -291,9 +305,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
               <div className="flex flex-row gap-5 items-center">
                 {/* Like */}
                 <button
-                  className={`opacity-80 flex flex-row items-center gap-1 ${
-                    likes[pub.id] ? "text-red-500" : "text-gray-300"
-                  }`}
+                  className={`opacity-80 flex flex-row items-center gap-1 ${likes[pub.id] ? "text-red-500" : "text-gray-300"
+                    }`}
                   title="Like"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -341,9 +354,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 {/* Seguir (oculto si es el mismo user) */}
                 {pub.user_id !== undefined && pub.user_id !== currentUserId && (
                   <button
-                    className={`opacity-80 flex items-center justify-center ${
-                      follows[pub.user_id] ? "text-green-500" : "text-gray-300"
-                    }`}
+                    className={`opacity-80 flex items-center justify-center ${follows[pub.user_id] ? "text-green-500" : "text-gray-300"
+                      }`}
                     title={follows[pub.user_id] ? "Siguiendo" : "Seguir"}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -477,8 +489,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
       </div>
       {/* Modal publicaciones en grande */}
       {selectedPublication && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
-          <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:items-center">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen ">
+          <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-aut0 flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:mb-25 max-lg:items-center">
             {/* Imagen a la izquierda */}
             <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
               {selectedPublication.image ? (
@@ -501,6 +513,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 <h2 className="text-white text-3xl font-bold">
                   {selectedPublication.user_name || "Usuario desconocido"}
                 </h2>
+                <p className="text-gray-400 text-sm mt-2">
+                  {formatDate(selectedPublication.created_at)}
+                </p>
                 <p className="text-gray-300 mt-10 text-2xl">
                   {selectedPublication.description}
                 </p>
@@ -519,10 +534,16 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
               {/* Botón para cerrar */}
               <button
-                className="absolute bottom-20 right-30 px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
+                className="absolute hidden max-lg:translate-y-3/1 min-lg:bottom-30 min-lg:translate-x-3/1 px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
                 onClick={closeModal}
               >
                 Cerrar
+              </button>
+              <button
+                className="absolute right-60 max-lg:translate-y-3/1 min-lg:bottom-155 min-lg:translate-x-3/1 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
+                onClick={closeModal}
+              >
+                X
               </button>
             </div>
           </div>

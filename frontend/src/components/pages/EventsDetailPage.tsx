@@ -16,19 +16,25 @@ interface EventDetailPageProps {
 
 export default function EventDetailPage({ event }: EventDetailPageProps) {
   return (
-    <div className="bg-black min-h-screen p-6 text-white flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
-      <img
-        src={event.image || "https://cdn.pixabay.com/photo/2023/03/16/08/42/camping-7856198_960_720.jpg"}
-        alt={event.title}
-        className="w-full max-w-2xl h-auto mb-6 rounded-lg"
-      />
-      <p className="text-gray-300 mb-4">{event.description || "Sin descripción"}</p>
-      <div className="text-gray-400 space-y-2 text-lg">
-        <p><strong>Tipo:</strong> {event.type}</p>
-        <p><strong>Fecha inicio:</strong> {event.dateStart} <strong>Hora:</strong> {event.timeStart}</p>
-        <p><strong>Fecha fin:</strong> {event.dateEnd} <strong>Hora:</strong> {event.timeEnd}</p>
+    <main className="bg-black min-h-screen p-6 text-white flex flex-col items-center"
+      style={{ fontFamily: "Monserrat" }}>
+      <button className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl max-lg:hidden"><a href="/Events">Back</a></button>
+      <div className="flex flex-col items-center border-2 border-gray-600 rounded-2xl p-6 bg-stone-900">
+        <h1 className="text-4xl max-lg:text-2xl font-bold mb-4 font-startruc ">{event.title}</h1>
+        <img
+          src={event.image}
+          alt={event.title}
+          className="w-full max-w-2xl h-auto mb-6 rounded-lg"
+        />
+        <div className="text-gray-200 space-y-2 text-lg text-start flex flex-col w-full">
+          <p><strong>Tipo:</strong> {event.type}</p>
+          <p><strong>Fecha inicio:</strong> {event.dateStart} <strong className="pl-4">Hora:</strong> {event.timeStart}</p>
+          <p><strong>Fecha fin:</strong> {event.dateEnd} <strong className="pl-10">Hora:</strong> {event.timeEnd}</p>
+        </div>
+        <p className="text-gray-100 my-4 w-full lg:text-xl">{event.description || "Sin descripción"}</p>
       </div>
-    </div>
+      <button className="text-white mt-8 ml-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-12 py-2 rounded-4xl lg:hidden"><a href="/Events">Back</a></button>
+
+    </main>
   );
 }

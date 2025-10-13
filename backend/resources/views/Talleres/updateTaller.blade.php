@@ -14,10 +14,10 @@
 
         <div class="w-full h-full bg-[#2c2c2c] rounded-[4rem] p-40">
             <h1 class="text-8xl font-semibold mb-16 text-pink-500">Update Taller</h1>
-            
+
             <form action="{{ route('updateTallerAction', $taller->id) }}" method="POST">
-    @csrf
-    @method('PUT')
+                @csrf
+                @method('PUT')
                 <div class="flex flex-col">
                     <h3 class="mb-4 text-4xl font-semibold">Mode</h3>
                     <select name="mode" class="mb-20 border-b-2 bg-[#2c2c2c] p-3 text-2xl outline-none">
@@ -28,71 +28,72 @@
                     <div class="columns-2 mb-10 w-2/3 gap-20">
                         <div>
                             <h3 class="mb-4 text-4xl font-semibold">Date Start</h3>
-                            <input type="date" name="dateStart" value="{{ $taller->dateStart }}" 
+                            <input type="date" name="dateStart" value="{{ $taller->dateStart }}"
                                 class="w-full mb-10 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" />
                         </div>
 
                         <div>
                             <h3 class="mb-4 text-4xl font-semibold">Time Start</h3>
-                            <input type="time" name="timeStart" value="{{ $taller->timeStart }}" 
+                            <input type="time" name="timeStart" value="{{ $taller->timeStart }}"
                                 class="w-full mb-10 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" />
                         </div>
                     </div>
 
                     <h3 class="mb-4 text-4xl font-semibold">Contributor</h3>
-                    <input type="text" name="contributor" value="{{ $taller->contributor }}" 
+                    <input type="text" name="contributor" value="{{ $taller->contributor }}"
                         class="mb-20 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" />
 
                     <h3 class="mb-4 text-4xl font-semibold">Title</h3>
-                    <input type="text" name="title" value="{{ $taller->title }}" 
+                    <input type="text" name="title" value="{{ $taller->title }}"
                         class="mb-20 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" />
 
                     <div class="columns-2 mb-10 w-2/3 gap-20">
                         <div>
                             <h3 class="mb-4 text-4xl font-semibold">Duration</h3>
-                            <input type="text" name="duration" value="{{ $taller->duration }}" 
+                            <input type="text" name="duration" value="{{ $taller->duration }}"
                                 class="mb-20 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" />
                         </div>
 
                         <div>
                             <h3 class="mb-4 text-4xl font-semibold">Place</h3>
-                            <input type="text" name="place" value="{{ $taller->place }}" 
+                            <input type="text" name="place" value="{{ $taller->place }}"
                                 class="mb-20 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" />
                         </div>
                     </div>
 
                     <h3 class="mb-4 text-4xl font-semibold">Description</h3>
-                    <input type="text" name="description" value="{{ $taller->description }}" 
+                    <input type="text" name="description" value="{{ $taller->description }}"
                         class="mb-20 border-b-2 p-3 text-3xl outline-none bg-[#2c2c2c]" />
 
-                        <h3 class="mb-4 text-4xl font-semibold">Image</h3>
-@if($taller->image)
-  <img src="{{ asset('storage/'.$taller->image) }}" alt="Current Image" class="w-64 mb-4">
-@endif
-<input type="file" name="image" id="updateTallerImageInput" class="mb-20 text-white">
+                    <h3 class="mb-4 text-4xl font-semibold">Image</h3>
+                    @if($taller->image)
+                    <img src="{{ $taller->image }}" alt="Current Image" class="w-64 mb-4">
+                    @endif
+                    <input type="file" name="image" id="updateTallerImageInput" class="mb-20 text-white">
 
-<button type="submit" 
-        class="text-4xl w-1/4 bg-[#48e1ec] hover:bg-[#3ab9c2] duration-300 text-black font-semibold py-6 rounded-full">
-    Edit Taller
-</button>
+                    <button type="submit"
+                        class="text-4xl w-1/4 bg-[#48e1ec] hover:bg-[#3ab9c2] duration-300 text-black font-semibold py-6 rounded-full">
+                        Edit Taller
+                    </button>
                 </div>
             </form>
         </div>
     </main>
     <script>
-  const form = document.querySelector('form');
-  const imageInput = document.getElementById('updateTallerImageInput');
+        const form = document.querySelector('form');
+        const imageInput = document.getElementById('updateTallerImageInput');
 
-  form.addEventListener('submit', (e) => {
-    const file = imageInput.files[0];
-    if (file) {
-      const maxSize = 3 * 1024 * 1024; // 3 MB en bytes
-      if (file.size > maxSize) {
-        e.preventDefault(); // Evita que se envíe el formulario
-        alert('La imagen no puede superar 3MB');
-      }
-    }
-  });
-</script>
+        form.addEventListener('submit', (e) => {
+            const file = imageInput.files[0];
+            if (file) {
+                const maxSize = 3 * 1024 * 1024; // 3 MB en bytes
+                if (file.size > maxSize) {
+                    e.preventDefault(); // Evita que se envíe el formulario
+                    alert('La imagen no puede superar 3MB');
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>

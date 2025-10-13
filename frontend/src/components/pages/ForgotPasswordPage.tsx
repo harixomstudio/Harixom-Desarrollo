@@ -35,9 +35,9 @@ export default function ForgotPassword(props: ForgotPasswordProps) {
         className="absolute inset-0 w-full h-full object-cover opacity-30"
       />
 
-      <div className="relative z-10 flex lg:w-3/4">
-        <div className="hidden md:flex w-1/2 flex-col items-center justify-center text-center p-8">
-          <p className="text-lg text-white">Reset access to</p>
+      <div className="relative z-10 flex lg:w-3/4 max-lg:flex-col max-lg:items-center max-lg:justify-center">
+        <div className=" md:flex w-1/2 flex-col items-center justify-center text-center p-8 max-lg:w-full">
+          <p className="text-lg text-white max-lg:w-full">Reset access to</p>
           <h1
             className="mt-4 text-5xl md:text-7xl text-pink-500"
             style={{ fontFamily: "Starstruck" }}
@@ -66,16 +66,16 @@ export default function ForgotPassword(props: ForgotPasswordProps) {
 
             <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold cursor-pointer hover:scale-105 transform duration-500 ${loading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-gradient-to-r from-pink-400 to-blue-400"
-              }`}
+                }`}
               disabled={loading}
             >
               {loading ? "Sending..." : props.buttonText}
             </button>
           </form>
+            <a href="/Login" className="mt-4 text-sm underline underline-offset-3 text-pink-400 w-full text-center font-bold">Back to Login</a>
         </div>
       </div>
     </section>

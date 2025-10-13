@@ -16,6 +16,7 @@ function RouteComponent() {
         const formatted = data.map((taller: any) => ({
           id: taller.id,
           title: taller.title,
+          image: taller.image,
           description: taller.description,
           place: taller.place,
           dateStart: taller.dateStart,

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Like;
 use App\Models\Follow;
 use App\Models\Comment;
+use App\Models\Commission;
 use App\Models\Publication;
 use Illuminate\Http\Request;
 
@@ -15,164 +16,199 @@ class InteractionController extends Controller
 {
     //Funcion para dar like
     public function toggleLike($publicationId)
-{
-    $user = auth()->user();
-    if (!$user) {
-        Log::warning('Usuario no autenticado intentando dar like');
-        return response()->json(['error' => 'No autenticado'], 401);
-    }
+    {
+        $user = auth()->user();
+        if (!$user) {
+            Log::warning('Usuario no autenticado intentando dar like');
+            return response()->json(['error' => 'No autenticado'], 401);
+        }
 
-    $publication = Publication::findOrFail($publicationId);
+        $publication = Publication::findOrFail($publicationId);
 
-    $existingLike = $publication->likes()->where('user_id', $user->id)->first();
+        $existingLike = $publication->likes()->where('user_id', $user->id)->first();
 
-    if ($existingLike) {
-        $existingLike->delete();
-        $liked = false;
-    } else {
-        $publication->likes()->create([
-            'user_id' => $user->id
+        if ($existingLike) {
+            $existingLike->delete();
+            $liked = false;
+        } else {
+            $publication->likes()->create([
+                'user_id' => $user->id
+            ]);
+            $liked = true;
+        }
+
+        $publication->likes_count = $publication->likes()->count();
+        $publication->save();
+
+        return response()->json([
+            'liked' => $liked,
+            'total_likes' => $publication->likes_count
         ]);
-        $liked = true;
     }
 
-    $publication->likes_count = $publication->likes()->count();
-    $publication->save();
+    //Funcion para mostrar los likes
+    public function userLikes()
+    {
+        $user = auth()->user();
+        $likes = $user->likes()->with('publication')->get();
 
-    return response()->json([
-        'liked' => $liked,
-        'total_likes' => $publication->likes_count
-    ]);
-}
-
-//Funcion para mostrar los likes
-public function userLikes()
-{
-    $user = auth()->user();
-    $likes = $user->likes()->with('publication')->get();
-
-    return response()->json([
-        'likes' => $likes->map(fn($like) => [
-            'id' => $like->publication->id,
-            'description' => $like->publication->description,
-            'image' => $like->publication->image,
-        ])
-    ]);
-}
+        return response()->json([
+            'likes' => $likes->map(fn($like) => [
+                'id' => $like->publication->id,
+                'description' => $like->publication->description,
+                'image' => $like->publication->image,
+            ])
+        ]);
+    }
 
     //Funcion para seguir
     public function toggleFollow($userId)
-{
-    $user = auth()->user();
-    if (!$user) {
-        return response()->json(['error' => 'No autenticado'], 401);
-    }
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['error' => 'No autenticado'], 401);
+        }
 
-    // Verificamos que no se siga a sí mismo
-    if ($user->id == $userId) {
-        return response()->json(['error' => 'No puedes seguirte a ti mismo'], 400);
-    }
+        // Verificamos que no se siga a sí mismo
+        if ($user->id == $userId) {
+            return response()->json(['error' => 'No puedes seguirte a ti mismo'], 400);
+        }
 
-    $target = User::findOrFail($userId);
+        $target = User::findOrFail($userId);
 
-    // Revisamos si ya sigue
-    $existingFollow = $user->follows()->where('following_id', $target->id)->first();
+        // Revisamos si ya sigue
+        $existingFollow = $user->follows()->where('following_id', $target->id)->first();
 
-    if ($existingFollow) {
-        // Deja de seguir
-        $existingFollow->delete();
-        $following = false;
-    } else {
-        // Empieza a seguir
-        $user->follows()->create([
-            'following_id' => $target->id
+        if ($existingFollow) {
+            // Deja de seguir
+            $existingFollow->delete();
+            $following = false;
+        } else {
+            // Empieza a seguir
+            $user->follows()->create([
+                'following_id' => $target->id
+            ]);
+            $following = true;
+        }
+
+        return response()->json([
+            'following' => $following
         ]);
-        $following = true;
     }
 
-    return response()->json([
-        'following' => $following
-    ]);
-}
+    public function checkFollow($userId)
+    {
+        $user = auth()->user();
+        $exists = $user->follows()->where('following_id', $userId)->exists();
 
-public function checkFollow($userId)
-{
-    $user = auth()->user();
-    $exists = $user->follows()->where('following_id', $userId)->exists();
-
-    return response()->json([
-        'following' => $exists
-    ]);
-}
-
-public function userFollows()
-{
-    $user = auth()->user();
-    if (!$user) {
-        return response()->json(['error' => 'No autenticado'], 401);
+        return response()->json([
+            'following' => $exists
+        ]);
     }
 
-    // Obtener los usuarios que sigue
-    $followings = $user->follows()->with('following')->get()->map(function($follow) {
-        return [
-            'id' => $follow->following->id,
-            'name' => $follow->following->name,
-            'profile_picture' => $follow->following->profile_picture
-        ];
-    });
+    public function userFollows()
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['error' => 'No autenticado'], 401);
+        }
 
-    // Obtener los usuarios que lo siguen (followers)
-    $followers = $user->followers()->with('follower')->get()->map(function($follow) {
-        return [
-            'id' => $follow->follower->id,
-            'name' => $follow->follower->name,
-            'profile_picture' => $follow->follower->profile_picture
-        ];
-    });
+        // Obtener los usuarios que sigue
+        $followings = $user->follows()->with('following')->get()->map(function ($follow) {
+            return [
+                'id' => $follow->following->id,
+                'name' => $follow->following->name,
+                'profile_picture' => $follow->following->profile_picture
+            ];
+        });
 
-    return response()->json([
-        'followings' => $followings,
-        'followers' => $followers
-    ]);
-}
+        // Obtener los usuarios que lo siguen (followers)
+        $followers = $user->followers()->with('follower')->get()->map(function ($follow) {
+            return [
+                'id' => $follow->follower->id,
+                'name' => $follow->follower->name,
+                'profile_picture' => $follow->follower->profile_picture
+            ];
+        });
+
+        return response()->json([
+            'followings' => $followings,
+            'followers' => $followers
+        ]);
+    }
 
     //Funcion para dejar un comentario
     public function addComment(Request $request, $publicationId)
-{
-    $user = auth()->user(); // Usuario logueado
-    $request->validate(['comment' => 'required|string|max:500']);
+    {
+        $user = auth()->user(); // Usuario logueado
+        $request->validate(['comment' => 'required|string|max:500']);
 
-    $comment = Comment::create([
-        'user_id' => $user->id,
-        'publication_id' => $publicationId,
-        'comment' => $request->comment
-    ]);
+        $comment = Comment::create([
+            'user_id' => $user->id,
+            'publication_id' => $publicationId,
+            'comment' => $request->comment
+        ]);
 
-    return response()->json([
-        'comment' => [
-            'user' => ['name' => $user ? $user->name : 'Anonimo'],
-            'comment' => $comment->comment
-        ]
-    ]);
+        return response()->json([
+            'comment' => [
+                'user' => ['name' => $user ? $user->name : 'Anonimo'],
+                'comment' => $comment->comment
+            ]
+        ]);
+    }
+
+    public function getComments($publicationId)
+    {
+        $comments = Comment::with('user') // para traer info del usuario
+            ->where('publication_id', $publicationId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json([
+            'comments' => $comments->map(function ($comment) {
+                return [
+                    'user' => ['name' => $comment->user->name],
+                    'comment' => $comment->comment,
+                    'created_at' => $comment->created_at->diffForHumans(),
+                ];
+            })
+        ]);
+    }
+
+    public function commisions(Request $request)
+    {
+        $request->validate([
+            'to_user_id' => 'required|exists:users,id',
+            'message' => 'required|string|max:500',
+            'date' => 'required|date',
+        ]);
+
+        $commission = Commission::create([
+            'from_user_id' => auth()->id(),
+            'to_user_id' => $request->to_user_id,
+            'message' => $request->message,
+            'status' => 'High',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $commission->id,
+                'from_user' => $commission->fromUser->only(['id', 'name', 'profile_picture']),
+                'to_user' => $commission->toUser->only(['id', 'name']),
+                'message' => $commission->message,
+                'created_at' => $commission->created_at->diffForHumans(),
+            ],
+        ]);
+    }
+
+    public function index($userId)
+    {
+        $commissions = Commission::with('fromUser')
+            ->where('to_user_id', $userId)
+            ->latest()
+            ->get();
+
+        return response()->json(['commissions' => $commissions]);
+    }
 }
-
-public function getComments($publicationId)
-{
-    $comments = Comment::with('user') // para traer info del usuario
-        ->where('publication_id', $publicationId)
-        ->orderBy('created_at', 'asc')
-        ->get();
-
-    return response()->json([
-        'comments' => $comments->map(function ($comment) {
-            return [
-                'user' => ['name' => $comment->user->name],
-                'comment' => $comment->comment,
-                'created_at' => $comment->created_at->diffForHumans(),
-            ];
-        })
-    ]);
-}
-}
-
-

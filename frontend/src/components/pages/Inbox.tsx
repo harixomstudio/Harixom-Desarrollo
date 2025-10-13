@@ -1,0 +1,32 @@
+interface NotificationsProps {
+    prioritys: string[]
+    notification: string
+    titles: string[]
+    texts: string[]
+    dates: string[]
+    images: string[]
+    alts: string[]
+}
+
+export default function Notifications(props: NotificationsProps) {
+    const styles = props.prioritys.map((_, number) => props.prioritys[number] === 'High' ? 'border-l-red-400' : props.prioritys[number] === 'Medium' ? 'border-l-yellow-500' : props.prioritys[number] === 'Low' ? 'border-l-blue-500' : '')
+    props.images.map((_, number) => props.prioritys[number] === 'High' ? props.images[number] = 'bellPink.svg' : props.prioritys[number] === 'Medium' ? props.images[number] = 'bellYellow.svg' : props.prioritys[number] === 'Low' ? props.images[number] = 'bellBlue.svg' : '')
+    
+    return (
+        <section className="flex flex-col w-full py-25 gap-10 items-center bg-stone-950 text-white">
+            <h1 className=" text-4xl min-lg:text-6xl font-medium cursor-default font-startruc text-pink-500">{props.notification}</h1>
+          
+            {props.titles.map((_,number) => (
+
+                <div className={`flex border-1 border-l-6 ${styles[number]} items-center w-6/7 border-gray-300 gap-8 rounded-2xl py-5  bg-stone-900 overflow-hidden`}>
+                    <img className=" w-8 min-md:w-8 m-5 min-lg:m-10" src={props.images[number]} alt={props.alts[number]} />
+                    <div className="grid grid-cols-1 gap-2 w-3/4 justify-center items-center">
+                        <h1 className=" text-1xl font-semibold cursor-default"> {props.titles[number]} </h1>
+                        <p className="max-lg:text-sm max-lg:line-clamp-3"> {props.texts[number]} </p>
+                        <p className=""> {props.dates[number]} </p>
+                    </div>
+                </div>
+            ))}
+        </section>
+    )
+}

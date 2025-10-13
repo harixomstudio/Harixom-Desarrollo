@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\TallerApiController;
 use App\Http\Controllers\Api\ProfileMessageController;
 use App\Http\Controllers\Api\SearchController;
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
     //Rutas de perfil
     // Obtener perfil del usuario logueado
     Route::get('/user', [UserController::class, 'profile']);
@@ -49,7 +49,11 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('/profile/messages/{profileMessage}', [ProfileMessageController::class, 'destroy']);
 
     //Rutas para notificaciones
-    //
+    Route::post('/user/commisions', [InteractionController::class, 'commisions']);
+    Route::get('/user/commisions/{userId}', [InteractionController::class, 'index']);
+
+    //ruta para el link de coffee
+    Route::middleware('auth:sanctum')->post('user/update-coffee-link', [UserController::class, 'linkCoffee']);
 
     //Rutas para visualizar otros perfiles ajenos
     Route::middleware('auth:sanctum')->get('/users/{id}', [UserController::class, 'showGuest']);
@@ -58,19 +62,19 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/follow/{user}/check', [InteractionController::class, 'checkFollow']);
 });
 
-    //Rutas para eventos y talleres
-    Route::get('/events', [EventApiController::class, 'index']);
-    Route::get('/events/{id}', [EventApiController::class, 'show']);
-    Route::get('/tallers', [TallerApiController::class, 'index']);
-    Route::get('/tallers/{id}', [TallerApiController::class, 'show']);
+//Rutas para eventos y talleres
+Route::get('/events', [EventApiController::class, 'index']);
+Route::get('/events/{id}', [EventApiController::class, 'show']);
+Route::get('/tallers', [TallerApiController::class, 'index']);
+Route::get('/tallers/{id}', [TallerApiController::class, 'show']);
 
-    // Rutas de IA sin auth
-    Route::post('ia/challenge', [AIController::class, 'getChallenge']);
+// Rutas de IA sin auth
+Route::post('ia/challenge', [AIController::class, 'getChallenge']);
 
-    //Rutas de reset password
-    Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
-    Route::post('/reset-password', [PasswordResetController::class, 'reset']);
+//Rutas de reset password
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
+Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 
-    //Rutas de los Usuarios antes de autenticarse
-    Route::post('user/register', [UserController::class, 'store']);
-    Route::post('user/login', [UserController::class, 'auth']);
+//Rutas de los Usuarios antes de autenticarse
+Route::post('user/register', [UserController::class, 'store']);
+Route::post('user/login', [UserController::class, 'auth']);
