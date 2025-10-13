@@ -534,10 +534,16 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
               {/* Botón para cerrar */}
               <button
-                className="absolute max-lg:translate-y-3/1 min-lg:bottom-30 min-lg:translate-x-3/1 px-10 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
+                className="absolute hidden max-lg:translate-y-3/1 min-lg:bottom-30 min-lg:translate-x-3/1 px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
                 onClick={closeModal}
               >
                 Cerrar
+              </button>
+              <button
+                className="absolute right-60 max-lg:translate-y-3/1 min-lg:bottom-155 min-lg:translate-x-3/1 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
+                onClick={closeModal}
+              >
+                X
               </button>
             </div>
           </div>
