@@ -37,8 +37,8 @@ export default function Profile(props: ProfileProps) {
   const [showFollowings, setShowFollowings] = useState(false);
   const [cards, setCards] = useState(props.cards || []);
   const [favorites, setFavorites] = useState(props.likes || []);
-  const [followers, setFollowers] = useState(props.followers || []);
-  const [followings, setFollowings] = useState(props.followings || []);
+  const [, setFollowers] = useState(props.followers || []);
+  const [, setFollowings] = useState(props.followings || []);
   const [activeTab, setActiveTab] = useState(0);
   const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
   const [deleteModalOpen, setDeleteModalOpen] = useState<number | null>(null);
@@ -202,7 +202,7 @@ export default function Profile(props: ProfileProps) {
         showToast("Escribe un link antes de enviar", "error");
         return;
       }
-      const { data } = await axios.post(
+      const { } = await axios.post(
         `http://127.0.0.1:8000/api/user/update-coffee-link`,
         {
           buymeacoffee_link: LinkText

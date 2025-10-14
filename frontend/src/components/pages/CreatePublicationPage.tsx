@@ -60,7 +60,7 @@ export default function CreatePublicationPage({
 
     try {
       setLoading(true);
-      const res = await axiosRequest.post("/publications", formData, {
+      await axiosRequest.post("/publications", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
