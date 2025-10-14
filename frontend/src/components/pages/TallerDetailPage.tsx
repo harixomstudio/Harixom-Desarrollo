@@ -40,7 +40,7 @@ export default function TallerDetailPage({ taller }: TallerDetailPageProps) {
         </div>
         <p className="text-gray-300 mt-4 text-lg text-start flex flex-col w-full"><span className="font-bold flex">Description:</span> {taller.description}</p>
       </div>
-      <a href="/Workshops" className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl lg:hidden">Back</a>
+      <a href="/Workshops" className="text-white mt-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl lg:hidden">Back</a>
 
     </main>
   );
