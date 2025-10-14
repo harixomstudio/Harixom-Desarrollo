@@ -64,7 +64,7 @@ export default function Profile(props: ProfileProps) {
     const fetchMessages = async () => {
       try {
         const { data } = await axios.get(
-          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+          `https://harixom-desarrollo.onrender.com/api/profile/${props.userId}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const mapped = data.map((msg: any) => ({
@@ -100,7 +100,7 @@ export default function Profile(props: ProfileProps) {
   // Funciones
   const handleDeletePublication = async (id: number) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/publications/${id}`, {
+      await axios.delete(`https://harixom-desarrollo.onrender.com/api/publications/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -119,7 +119,7 @@ export default function Profile(props: ProfileProps) {
     try {
       const token = localStorage.getItem("access_token");
       const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/like/${postId}`,
+        `https://harixom-desarrollo.onrender.com/api/like/${postId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -139,7 +139,7 @@ export default function Profile(props: ProfileProps) {
     try {
       const token = localStorage.getItem("access_token");
       await axios.put(
-        "http://127.0.0.1:8000/api/user/profile",
+        "https://harixom-desarrollo.onrender.com/api/user/profile",
         {
           services,
           prices,
@@ -161,7 +161,7 @@ export default function Profile(props: ProfileProps) {
     try {
       if (!token || !newMessage.trim()) return;
       const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/profile/messages`,
+        `https://harixom-desarrollo.onrender.com/api/profile/messages`,
         { to_user_id: props.userId, message: newMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -185,7 +185,7 @@ export default function Profile(props: ProfileProps) {
   // Función para eliminar mensaje
   const handleDeleteMessage = async (id: number) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/profile/messages/${id}`, {
+      await axios.delete(`https://harixom-desarrollo.onrender.com/api/profile/messages/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessages((prev) => prev.filter((m) => m.id !== id));
@@ -203,7 +203,7 @@ export default function Profile(props: ProfileProps) {
         return;
       }
       const { } = await axios.post(
-        `http://127.0.0.1:8000/api/user/update-coffee-link`,
+        `https://harixom-desarrollo.onrender.com/api/user/update-coffee-link`,
         {
           buymeacoffee_link: LinkText
         },

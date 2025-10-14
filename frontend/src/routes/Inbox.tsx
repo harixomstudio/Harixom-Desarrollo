@@ -33,7 +33,7 @@ function RouteComponent() {
       if (!token) return
       try {
         const { data } = await axios.get(
-          `http://127.0.0.1:8000/api/user/commisions/${profileData?.user?.id}`,
+          `https://harixom-desarrollo.onrender.com/api/user/commisions/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

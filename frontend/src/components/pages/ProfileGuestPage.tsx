@@ -75,7 +75,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         return;
       }
       const { } = await axios.post(
-        `http://127.0.0.1:8000/api/user/commisions`,
+        `https://harixom-desarrollo.onrender.com/api/user/commisions`,
         {
           to_user_id: toUserId,
           message: commissionText,
@@ -101,7 +101,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
       try {
         // Datos del perfil
         const profileRes = await axios.get(
-          `http://127.0.0.1:8000/api/users/${props.userId}`,
+          `https://harixom-desarrollo.onrender.com/api/users/${props.userId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = profileRes.data;
@@ -113,7 +113,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
         // Mensajes
         const messagesRes = await axios.get(
-          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+          `https://harixom-desarrollo.onrender.com/api/profile/${props.userId}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const mapped = messagesRes.data.map((msg: any) => ({
@@ -135,7 +135,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     const interval = setInterval(async () => {
       try {
         const messagesRes = await axios.get(
-          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
+          `https://harixom-desarrollo.onrender.com/api/profile/${props.userId}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const mapped = messagesRes.data.map((msg: any) => ({
@@ -164,7 +164,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     try {
       if (!token || !newMessage.trim()) return;
       const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/profile/messages`,
+        `https://harixom-desarrollo.onrender.com/api/profile/messages`,
         { to_user_id: props.userId, message: newMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -188,7 +188,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
       try {
         const token = localStorage.getItem("access_token");
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/users/${props.userId}`,
+          `https://harixom-desarrollo.onrender.com/api/users/${props.userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -217,7 +217,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const handleToggleFollow = async () => {
     try {
       const token = localStorage.getItem("access_token");
-      const url = `http://127.0.0.1:8000/api/follow/${props.userId}`;
+      const url = `https://harixom-desarrollo.onrender.com/api/follow/${props.userId}`;
 
       const response = await axios.post(url, {}, {
         headers: { Authorization: `Bearer ${token}` }
