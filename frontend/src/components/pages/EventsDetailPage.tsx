@@ -33,7 +33,7 @@ export default function EventDetailPage({ event }: EventDetailPageProps) {
         </div>
         <p className="text-gray-100 my-4 w-full lg:text-xl">{event.description || "Sin descripción"}</p>
       </div>
-      <a href="/Events" className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl lg:hidden">Back</a>
+      <a href="/Events" className="text-white mt-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl lg:hidden">Back</a>
 
     </main>
   );
