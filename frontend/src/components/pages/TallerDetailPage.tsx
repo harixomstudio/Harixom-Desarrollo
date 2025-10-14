@@ -17,7 +17,7 @@ interface TallerDetailPageProps {
 export default function TallerDetailPage({ taller }: TallerDetailPageProps) {
   return (
     <main className="bg-black min-h-screen p-6 text-white flex flex-col items-center">
-      <button className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl max-lg:hidden"><a href="/Events">Back</a></button>
+      <a href="/Workshops" className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl max-lg:hidden">Back</a>
       <div className="flex flex-col items-center border-2 border-gray-600 rounded-2xl p-6 bg-stone-900">
         <h1 className="text-4xl max-lg:text-2xl font-bold mb-4">{taller.title}</h1>
         <img
@@ -40,7 +40,7 @@ export default function TallerDetailPage({ taller }: TallerDetailPageProps) {
         </div>
         <p className="text-gray-300 mt-4 text-lg text-start flex flex-col w-full"><span className="font-bold flex">Description:</span> {taller.description}</p>
       </div>
-      <button className="text-white mt-8 ml-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-12 py-2 rounded-4xl lg:hidden"><a href="/Events">Back</a></button>
+      <a href="/Workshops" className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl lg:hidden">Back</a>
 
     </main>
   );

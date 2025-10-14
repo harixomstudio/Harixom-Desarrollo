@@ -18,7 +18,7 @@ export default function EventDetailPage({ event }: EventDetailPageProps) {
   return (
     <main className="bg-black min-h-screen p-6 text-white flex flex-col items-center"
       style={{ fontFamily: "Monserrat" }}>
-      <button className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl max-lg:hidden"><a href="/Events">Back</a></button>
+      <a href="/Events" className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl max-lg:hidden">Back</a>
       <div className="flex flex-col items-center border-2 border-gray-600 rounded-2xl p-6 bg-stone-900">
         <h1 className="text-4xl max-lg:text-2xl font-bold mb-4 font-startruc ">{event.title}</h1>
         <img
@@ -33,7 +33,7 @@ export default function EventDetailPage({ event }: EventDetailPageProps) {
         </div>
         <p className="text-gray-100 my-4 w-full lg:text-xl">{event.description || "Sin descripción"}</p>
       </div>
-      <button className="text-white mt-8 ml-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-12 py-2 rounded-4xl lg:hidden"><a href="/Events">Back</a></button>
+      <a href="/Events" className="text-white mb-8 mr-auto bg-gradient-to-r from-pink-400 to-sky-400 hover:scale-110 transform duration-300 px-15 py-2 rounded-4xl lg:hidden">Back</a>
 
     </main>
   );
