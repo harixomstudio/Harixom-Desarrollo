@@ -10,7 +10,7 @@ function RouteComponent() {
   const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/events")
+    fetch("https://harixom-desarrollo.onrender.com/api/events")
       .then((res) => res.json())
       .then((data) => {
         const formatted = data.map((event: any) => ({

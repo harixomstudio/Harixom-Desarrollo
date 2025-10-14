@@ -20,7 +20,7 @@ function EventDetailRouteComponent() {
     queryKey: ["eventDetail", eventId],
     queryFn: async () => {
       const { data } = await axios.get(
-        `http://127.0.0.1:8000/api/events/${eventId}`,
+        `https://harixom-desarrollo.onrender.com/api/events/${eventId}`,
         { headers: token ? { Authorization: `Bearer ${token}` } : undefined }
       );
       return data;
