@@ -33,7 +33,7 @@ export default function PayPalButton(props: PayPalProps) {
     function renderPayPalButton() {
       window.paypal
         .Buttons({
-          createOrder: (data: any, actions: any) => {
+          createOrder: (_: any, actions: any) => {
             const amount = props.value > 0 ? props.value.toFixed(2) : "0.00";
             return actions.order.create({
               purchase_units: [
@@ -43,7 +43,7 @@ export default function PayPalButton(props: PayPalProps) {
               ],
             });
           },
-          onApprove: (data: any, actions: any) => {
+          onApprove: (_: any, actions: any) => {
             return actions.order.capture().then((details: any) => {
               alert("Pago completado por " + details.payer.name.given_name);
             });

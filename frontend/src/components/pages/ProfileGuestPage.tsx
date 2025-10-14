@@ -38,12 +38,12 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [showFollowings, setShowFollowings] = useState(false);
   const [followers, setFollowers] = useState(props.followers || []);
   const [followings, setFollowings] = useState(props.followings || []);
-  const [cards, setCards] = useState(props.cards || []);
-  const [favorites, setFavorites] = useState(props.likes || []);
+  const [cards, ] = useState(props.cards || []);
+  const [, setFavorites] = useState(props.likes || []);
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = React.useState(false);
   const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
-  const [commitions, setCommitions] = useState<{ [key: number]: string[] }>({});
+  const [] = useState<{ [key: number]: string[] }>({});
 
   // Commissions
   const [services, setServices] = useState("");
@@ -74,7 +74,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         showToast("Escribe una comisión antes de enviar", "error");
         return;
       }
-      const { data } = await axios.post(
+      const { } = await axios.post(
         `http://127.0.0.1:8000/api/user/commisions`,
         {
           to_user_id: toUserId,

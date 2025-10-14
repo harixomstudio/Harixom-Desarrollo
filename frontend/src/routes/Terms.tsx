@@ -9,7 +9,7 @@ export const Route = createFileRoute("/Terms")({
 
 function TermsRoute() {
   const navigate = useNavigate();
-  const [accepted, setAccepted] = useState(false);
+  const [, setAccepted] = useState(false);
 
   const handleAccept = () => {
     setAccepted(true);

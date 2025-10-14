@@ -5,6 +5,3 @@ export const Route = createFileRoute("/AIChallenge")({
   component: AIChallenge,
 });
 
-function RouteComponent() {
-  return <div>Hello "/AIChallenge"!</div>;
-}

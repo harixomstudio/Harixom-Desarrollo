@@ -35,7 +35,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
   const [likesCount, setLikesCount] = useState<{ [key: number]: number }>({});
   const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
-  const [hideFollow, setHideFollow] = useState<{ [key: number]: boolean }>({});
+  const [, setHideFollow] = useState<{ [key: number]: boolean }>({});
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [selectedPublication, setSelectedPublication] =
     useState<Publication | null>(null);

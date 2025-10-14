@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import Profile from "../components/pages/ProfilePage";
 import axios from "axios";
-import React from "react";
 
 export const Route = createFileRoute("/Profile")({
   component: ProfileRoute,
