@@ -86,10 +86,10 @@ export default function Nav(props: NavProps) {
   };
 
   return (
-    <section className="bg-[#151515] relative">
+    <section className="bg-[#151515] relative z-50">
       <div className="flex flex-wrap items-center justify-between p-4">
         {/* Logo + barra de búsqueda */}
-        <div className="flex flex-1 items-center space-x-4">
+        <div className="flex flex-1 items-center space-x-4 pl-10" >
           <div
             className="text-pink-500 text-2xl"
             style={{ fontFamily: "Starstruck" }}

@@ -55,22 +55,155 @@ function RouteComponent() {
     (pub: { category?: string }) =>
       pub.category?.toLowerCase() === name.toLowerCase()
   );
-  const categoryConfig: Record<string, { style: string; icon: string; alt: string }> = {
-    "Photography": { style: "text-[#ff6161]", icon: "../public/icon-foto.svg", alt: "Photography icon", },
-    "3D Art": { style: "text-[#DBFF4F]", icon: "../icon-3d.svg", alt: "3D category icon", },
-    "Animation": { style: "text-[#A39FF6]", icon: "../public/icon-animacion.svg", alt: "Animation icon", },
-    "Sculpture": { style: "text-[#9fe2f6]", icon: "../public/icon-sculture.svg", alt: "Sculpture icon", },
-    "Traditional": { style: "text-[#61ffa3]", icon: "../public/icon-traditional.svg", alt: "Traditional art icon", },
-    "Street Art": { style: "text-[#fddb1a]", icon: "../public/icon-streetart.svg", alt: "Street art icon",},
-    "Digital Art": { style: "text-pink-400", icon: "../public/icon-digitalart.svg", alt: "Digital art icon", }, };
-
+ const categoryConfig: Record<string, {
+  style: string;
+  icon: string;
+  alt: string;
+  info: React.ReactNode;
+}> = {
+  "Photography": {
+    style: "text-[#ff6161]",
+    icon: "../public/icon-foto.svg",
+    alt: "Photography icon",
+    info: (
+      <>
+        <p className="mb-2 text-xl">
+          Capturing still images using light. Focuses on the moment and visual composition.
+        </p>
+        <ul className="list-disc list-inside text-lg space-y-1">
+          <li>Portraits</li>
+          <li>Landscapes</li>
+          <li>Documentary</li>
+          <li>Street photography</li>
+          <li>Experimental shots</li>
+        </ul>
+      </>
+    ),
+  },
+  "3D Art": {
+    style: "text-[#DBFF4F]",
+    icon: "../icon-3d.svg",
+    alt: "3D category icon",
+    info: (
+      <>
+        <p className="mb-2 text-xl">
+          Creating shapes and worlds with volume in digital or physical spaces.
+        </p>
+        <ul className="list-disc list-inside text-lg space-y-1">
+          <li>Modeling</li>
+          <li>3D printed sculptures</li>
+          <li>Renderings</li>
+          <li>Virtual environments</li>
+          <li>Character sculpting</li>
+        </ul>
+      </>
+    ),
+  },
+  "Animation": {
+    style: "text-[#A39FF6]",
+    icon: "../public/icon-animacion.svg",
+    alt: "Animation icon",
+    info: (
+      <>
+        <p className="mb-2 text-xl">
+          Illusion of motion created from a sequence of static images.
+        </p>
+        <ul className="list-disc list-inside text-lg space-y-1">
+          <li>Animated films</li>
+          <li>GIFs</li>
+          <li>Stop-motion</li>
+          <li>Motion graphics</li>
+          <li>2D/3D animation</li>
+        </ul>
+      </>
+    ),
+  },
+  "Sculpture": {
+    style: "text-[#9fe2f6]",
+    icon: "../public/icon-sculture.svg",
+    alt: "Sculpture icon",
+    info: (
+      <>
+        <p className="mb-2 text-xl">
+          The art of creating tangible three-dimensional forms through carving, modeling, or assembling.
+        </p>
+        <ul className="list-disc list-inside text-lg space-y-1">
+          <li>Round objects</li>
+          <li>Reliefs</li>
+          <li>Installations</li>
+          <li>Clay figures</li>
+          <li>Mixed media sculptures</li>
+        </ul>
+      </>
+    ),
+  },
+  "Traditional": {
+    style: "text-[#61ffa3]",
+    icon: "../public/icon-traditional.svg",
+    alt: "Traditional art icon",
+    info: (
+      <>
+        <p className="mb-2 text-xl">
+          Disciplines that use classic physical materials and methods (not digital ones).
+        </p>
+        <ul className="list-disc list-inside text-lg space-y-1">
+          <li>Oil painting</li>
+          <li>Watercolor</li>
+          <li>Pencil drawing</li>
+          <li>Ink</li>
+          <li>Engraving</li>
+        </ul>
+      </>
+    ),
+  },
+  "Street Art": {
+    style: "text-[#fddb1a]",
+    icon: "../public/icon-streetart.svg",
+    alt: "Street art icon",
+    info: (
+      <>
+        <p className="mb-2 text-xl">
+          Art in public spaces, often with a social message and ephemeral in nature.
+        </p>
+        <ul className="list-disc list-inside text-lg space-y-1">
+          <li>Graffiti</li>
+          <li>Murals</li>
+          <li>Stencils</li>
+          <li>Urban interventions</li>
+          <li>Paste-ups</li>
+        </ul>
+      </>
+    ),
+  },
+  "Digital Art": {
+    style: "text-pink-400",
+    icon: "../public/icon-digitalart.svg",
+    alt: "Digital art icon",
+    info: (
+      <>
+        <p className="mb-2 text-xl">
+          Works created and manipulated entirely with digital tools and software.
+        </p>
+        <ul className="list-disc list-inside text-lg space-y-1">
+          <li>Digital illustration</li>
+          <li>Concept art</li>
+          <li>Photomontage</li>
+          <li>Abstract compositions</li>
+          <li>Character design</li>
+        </ul>
+      </>
+    ),
+  },
+};
      const category = categoryConfig[name as keyof typeof categoryConfig];
-
-  return <Categories
+return (
+  <Categories
     title={name}
     style={category.style}
     icon={category.icon}
     altIcon={category.alt}
     categoriesPublications={categoryPublications}
-  />;
+    info={category.info}
+  />
+);
 }

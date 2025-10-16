@@ -13,6 +13,7 @@ import { Route as WorkshopsDetailRouteImport } from './routes/WorkshopsDetail'
 import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
 import { Route as TermsRouteImport } from './routes/Terms'
+import { Route as SuscriptionsRouteImport } from './routes/Suscriptions'
 import { Route as SetProfileRouteImport } from './routes/SetProfile'
 import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
 import { Route as RegisterAdminRouteImport } from './routes/RegisterAdmin'
@@ -49,6 +50,11 @@ const UserRegisterRoute = UserRegisterRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/Terms',
   path: '/Terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuscriptionsRoute = SuscriptionsRouteImport.update({
+  id: '/Suscriptions',
+  path: '/Suscriptions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SetProfileRoute = SetProfileRouteImport.update({
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
+  '/Suscriptions': typeof SuscriptionsRoute
   '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
+  '/Suscriptions': typeof SuscriptionsRoute
   '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
@@ -201,6 +209,7 @@ export interface FileRoutesById {
   '/RegisterAdmin': typeof RegisterAdminRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
+  '/Suscriptions': typeof SuscriptionsRoute
   '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/RegisterAdmin'
     | '/ResetPassword'
     | '/SetProfile'
+    | '/Suscriptions'
     | '/Terms'
     | '/UserRegister'
     | '/Workshops'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/RegisterAdmin'
     | '/ResetPassword'
     | '/SetProfile'
+    | '/Suscriptions'
     | '/Terms'
     | '/UserRegister'
     | '/Workshops'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/RegisterAdmin'
     | '/ResetPassword'
     | '/SetProfile'
+    | '/Suscriptions'
     | '/Terms'
     | '/UserRegister'
     | '/Workshops'
@@ -296,6 +308,7 @@ export interface RootRouteChildren {
   RegisterAdminRoute: typeof RegisterAdminRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SetProfileRoute: typeof SetProfileRoute
+  SuscriptionsRoute: typeof SuscriptionsRoute
   TermsRoute: typeof TermsRoute
   UserRegisterRoute: typeof UserRegisterRoute
   WorkshopsRoute: typeof WorkshopsRoute
@@ -331,6 +344,13 @@ declare module '@tanstack/react-router' {
       path: '/Terms'
       fullPath: '/Terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Suscriptions': {
+      id: '/Suscriptions'
+      path: '/Suscriptions'
+      fullPath: '/Suscriptions'
+      preLoaderRoute: typeof SuscriptionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/SetProfile': {
@@ -472,6 +492,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterAdminRoute: RegisterAdminRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SetProfileRoute: SetProfileRoute,
+  SuscriptionsRoute: SuscriptionsRoute,
   TermsRoute: TermsRoute,
   UserRegisterRoute: UserRegisterRoute,
   WorkshopsRoute: WorkshopsRoute,

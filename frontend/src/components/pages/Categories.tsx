@@ -22,19 +22,23 @@ interface CategoriesProps {
   style: string;
   icon: string;
   altIcon: string;
+  info: React.ReactNode;
 
   categoriesPublications: CategoriesPublication[];
 }
 
 export default function Categories({
+  
   categoriesPublications,
   title,
   style,
   icon,
   altIcon,
+  info,
 }: CategoriesProps) {
   const token = localStorage.getItem("access_token");
   const { showToast } = useToast();
+  const [showInfo, setShowInfo] = useState(false);
 
   // Estados principales
   const [isModalOpen, setIsModalOpen] = useState<number | null>(null);
@@ -220,19 +224,34 @@ export default function Categories({
   };
 
   return (
-    <div className="bg-stone-950 min-h-screen p-10">
-      <div className="flex items-center gap-3 mb-8">
-        <img src={icon} alt={altIcon} className="w-15 h-15 mt-2" />
-        <span className={`${style} text-4xl font-bold`}>{title}</span>
+    <div className="bg-stone-950 min-h-screen px-2 py-10" style={{ fontFamily: "Monserrat" }}>
+      <div className="flex items-center justify-between mb-8 relative px-5">
+        <div className="flex items-center gap-6">
+          <img src={icon} alt={altIcon} className="w-15 h-15 mt-2" />
+          <span className={`${style} text-4xl font-bold`}>{title}</span>
+        </div>
+
+        {/* Botón de información */}
+        <button onClick={() => setShowInfo((prev) => !prev)}>
+          <img src="/info.svg" alt="Información" className="w-8 h-8" />
+        </button>
+
+        {/* Ventana emergente */}
+        {showInfo && (
+          <div className="absolute right-0 top-full mt-2 bg-[#363636] text-white p-4 rounded-xl w-90 h-70 shadow-lg z-50">
+            <p className="text-lg leading-relaxed">{info}</p>
+          </div>
+        )}
       </div>
-      <div className="grid grid-cols-4 gap-6">
+
+      <div className="grid grid-cols-4 gap-2">
         {categoriesPublications.map((pub) => (
           <div
             key={pub.id}
             className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px]"
           >
             {/* Imagen */}
-            <div className="relative w-full h-[340px] aspect-square flex items-center justify-center">
+            <div className="relative w-full h-[340px] aspect-square flex items-center justify-center ">
               {/* Avatar y nombre */}
               <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
                 <img
