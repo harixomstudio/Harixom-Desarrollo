@@ -25,6 +25,7 @@ interface ProfileGuestProps {
   isFollowing?: boolean;
   userId: number;
   buyMeACoffee?: string;
+  commissions_enabled?: boolean;
 }
 
 export default function ProfileGuestPage(props: ProfileGuestProps) {
@@ -38,7 +39,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [showFollowings, setShowFollowings] = useState(false);
   const [followers, setFollowers] = useState(props.followers || []);
   const [followings, setFollowings] = useState(props.followings || []);
-  const [cards, ] = useState(props.cards || []);
+  const [cards,] = useState(props.cards || []);
   const [, setFavorites] = useState(props.likes || []);
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = React.useState(false);
@@ -46,9 +47,12 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [] = useState<{ [key: number]: string[] }>({});
 
   // Commissions
+
   const [services, setServices] = useState("");
   const [prices, setPrices] = useState("");
   const [terms, setTerms] = useState("");
+const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
+
 
   // Messages
   const [newMessage, setNewMessage] = useState("");
@@ -67,6 +71,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     });
     setIsModalOpen(true);
   };
+
 
   const handleSendCommission = async (toUserId: number) => {
     try {
@@ -110,6 +115,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         setServices(data.user.services || "");
         setPrices(data.user.prices || "");
         setTerms(data.user.terms || "");
+        setCommissionsEnabled(!!data.user.commissions_enabled);
 
         // Mensajes
         const messagesRes = await axios.get(
@@ -244,8 +250,10 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
       showToast("Error al actualizar el seguimiento", "error");
     }
   };
+  
 
   return (
+    
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen"
       style={{ fontFamily: "Monserrat" }}>
       <div className="w-full flex flex-col">
@@ -283,14 +291,18 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
               {isFollowing ? "Unfollow" : "Follow"}
             </button>
 
-            {/* Botón flotante */}
-            <button
-              className="max-lg:text-xl py-3 px-6 max-[19rem]:px-4 max-[19rem]:py-2  bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black justify-start items-end text-center ml-auto"
-              style={{ fontFamily: "Monserrat" }}
-              onClick={() => setIsModalOpen(true)} // Abrir el modal al hacer clic
-            >
-              $
-            </button>
+            {/* Botón flotante de comisiones */}
+            {commissionsEnabled && (
+              <button
+                className="max-lg:text-xl py-3 px-6 max-[19rem]:px-4 max-[19rem]:py-2 bg-green-400 text-2xl font-bold rounded-full hover:scale-125 transition z-10 text-black justify-start items-end text-center ml-auto"
+                style={{ fontFamily: "Monserrat" }}
+                onClick={() => setIsModalOpen(true)}
+              >
+                $
+              </button>
+            )}
+
+
 
           </div>
 

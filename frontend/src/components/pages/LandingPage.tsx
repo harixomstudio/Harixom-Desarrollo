@@ -393,7 +393,7 @@ export default function Landing(props: LandingProps) {
           </div>
 
           {/* Texto de la app */}
-          <div className="relative z-10 flex flex-col w-full lg:w-2/3 text-justify justify-center gap-8 sm:gap-10 items-center max-xl:items-center items-start" >
+          <div className="relative z-10 flex flex-col w-full lg:w-2/3 text-justify justify-center gap-8 sm:gap-10 max-xl:items-center items-start" >
             <h2
               className={`text-3xl sm:text-4xl md:text-5xl font-bold text-center lg:text-left transition-all duration-1000 ease-out ${appVisible
                 ? "opacity-100 translate-y-0"

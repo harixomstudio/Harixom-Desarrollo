@@ -80,6 +80,7 @@ function ProfileGuestRoute() {
       likes={likesData || []}
       userId={user?.id}
       buyMeACoffee={user?.buymeacoffee_link || ""}
+      
     />
   );
 }
