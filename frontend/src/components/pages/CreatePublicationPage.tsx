@@ -1,47 +1,59 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { axiosRequest } from "../helpers/config";
 import { useToast } from "../ui/Toast";
+import { axiosRequest } from "../helpers/config";
 
-interface CreatePublicationProps {
-  title: string;
-  description?: string;
-  category?: string;
+interface UserSuggestion {
+  id: number;
+  display: string;
+  picture?: string;
 }
 
-export default function CreatePublicationPage({
-  title,
-  description = "",
-  category = "",
-}: CreatePublicationProps) {
-  const [desc, setDesc] = useState(description);
-  const [cat, setCat] = useState(category);
+export default function CreatePublicationPage({ title }: { title: string }) {
+  const [desc, setDesc] = useState<string>("");
+  const [cat, setCat] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [userSuggestions, setUserSuggestions] = useState<UserSuggestion[]>([]);
 
   const { showToast } = useToast();
-  const navigate = useNavigate(); // ← redirección
+  const navigate = useNavigate();
 
-  const categoryOptions = [
-    "Digital Art",
-    "Animation",
-    "Sculture",
-    "Traditional Art",
-    "3D Art",
-    "Street Art",
-    "Photography",
-  ];
+  const token = localStorage.getItem("access_token");
 
+  // 🔍 Obtener sugerencias de usuarios
+  const fetchSuggestions = async (query: string) => {
+    const cleanQuery = query.replace(/^@/, "").trim();
+    if (!cleanQuery) return [];
+
+    try {
+      const { data } = await axiosRequest.get(`/search?q=${cleanQuery}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const userData: UserSuggestion[] = data.users.map((user: any) => ({
+        id: user.id,
+        display: `@${user.name}`,
+        picture: user.profile_picture ?? "",
+      }));
+
+      setUserSuggestions(userData);
+      return userData;
+    } catch (error) {
+      console.error("Error buscando sugerencias:", error);
+      setUserSuggestions([]);
+      return [];
+    }
+  };
+
+  // 🖼 Imagen seleccionada
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+    if (e.target.files?.[0]) {
       const file = e.target.files[0];
       const maxSize = 3 * 1024 * 1024;
       if (file.size > maxSize) {
         showToast("La imagen no puede superar los 3 MB.", "error");
-        e.target.value = "";
-        setSelectedImage(null);
-        setPreviewUrl(null);
         return;
       }
       setSelectedImage(file);
@@ -49,8 +61,8 @@ export default function CreatePublicationPage({
     }
   };
 
+  // 📨 Enviar publicación
   const handleSubmit = async () => {
-    const token = localStorage.getItem("access_token");
     if (!token) return showToast("No estás logueado", "error");
 
     const formData = new FormData();
@@ -72,23 +84,40 @@ export default function CreatePublicationPage({
       setCat("");
       setSelectedImage(null);
       setPreviewUrl(null);
-
-      navigate({ to: "/Feed" }); // ← redirección al Feed
+      navigate({ to: "/Feed" });
     } catch (err: any) {
-      if (err.response) {
-        console.log("Error response:", err.response.data);
-      }
+      console.log("Error al crear publicación:", err);
       showToast("Error al crear publicación", "error");
     } finally {
       setLoading(false);
     }
   };
 
+  const categoryOptions = [
+    "Digital Art",
+    "Animation",
+    "Sculpture",
+    "Traditional Art",
+    "3D Art",
+    "Street Art",
+    "Photography",
+  ];
+
+  // Manejar cambio de textarea y sugerencias
+  const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDesc(e.target.value);
+
+    // Buscar la última mención que empieza con "@"
+    const match = e.target.value.match(/@(\w*)$/);
+    if (match) {
+      fetchSuggestions(match[1]);
+    } else {
+      setUserSuggestions([]);
+    }
+  };
+
   return (
-    <section
-      className="min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')]"
-      style={{ fontFamily: "Monserrat" }}
-    >
+    <section className="min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')] font-[Monserrat]">
       <div>
         <div className="mb-10 pl-4">
           <Link
@@ -99,16 +128,16 @@ export default function CreatePublicationPage({
           </Link>
         </div>
 
-        <div className="flex flex-col items-center justify-center h-full">
+        <div className="flex flex-col items-center justify-center">
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-pink-400">{title}</h2>
           </div>
 
-          <div className="w-full max-w-xl flex flex-col items-center gap-8">
-            {/* Selector de imagen */}
+          <div className="w-full max-w-xl flex flex-col gap-8 relative">
+            {/* 📸 Imagen */}
             <div className="w-full bg-gray-400 rounded-lg flex items-center justify-center text-white cursor-pointer relative overflow-hidden">
               <label className="w-full flex items-center justify-center relative">
-                {selectedImage && previewUrl ? (
+                {previewUrl ? (
                   <img
                     src={previewUrl}
                     alt="Preview"
@@ -126,25 +155,42 @@ export default function CreatePublicationPage({
               </label>
             </div>
 
-            {/* Input de descripción */}
-            <div className="w-full">
-              <label className="text-gray-400 text-sm mb-1 block">
-                Description
-              </label>
-              <input
-                type="text"
+            {/* 📝 Descripción con @ y sugerencias */}
+            <div className="w-full relative">
+              <label className="text-gray-400 text-sm mb-1 block">Description</label>
+              <textarea
                 value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-                placeholder="Add description"
-                className="w-full bg-stone-950 text-gray-300 p-3 rounded-lg border-b-2 border-stone-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                onChange={handleDescChange}
+                placeholder="Add description with @user or #tag"
+                className="w-full bg-stone-950 text-gray-300 p-3 rounded-lg border-b-2 border-stone-700"
               />
+              {userSuggestions.length > 0 && (
+                <div className="absolute bg-stone-800 text-white rounded-md mt-1 w-full z-10 max-h-60 overflow-auto shadow-lg">
+                  {userSuggestions.map((user) => (
+                    <div
+                      key={user.id}
+                      className="p-2 hover:bg-stone-700 cursor-pointer"
+                      onClick={() => {
+                        // Reemplaza el último @texto con el nombre seleccionado
+                        const lastAtIndex = desc.lastIndexOf("@");
+                        if (lastAtIndex !== -1) {
+                          const newDesc =
+                            desc.substring(0, lastAtIndex) + user.display + " ";
+                          setDesc(newDesc);
+                          setUserSuggestions([]);
+                        }
+                      }}
+                    >
+                      {user.display}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Select de categoría */}
+            {/* 🎨 Categoría */}
             <div className="w-full">
-              <label className="text-gray-400 text-sm mb-1 block">
-                Category
-              </label>
+              <label className="text-gray-400 text-sm mb-1 block">Category</label>
               <select
                 value={cat}
                 onChange={(e) => setCat(e.target.value)}
@@ -161,7 +207,7 @@ export default function CreatePublicationPage({
               </select>
             </div>
 
-            {/* Botón de enviar */}
+            {/* 🚀 Botón */}
             <div className="w-full pb-20 pt-5">
               <button
                 type="button"

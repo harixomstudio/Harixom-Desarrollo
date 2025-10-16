@@ -15,30 +15,29 @@ class SearchController extends Controller
     public function search(Request $request)
 {
     $query = trim($request->input('q'));
+$query = ltrim($query, '@'); // quitar @ inicial
+$query = strtolower($query);
 
-    if (!$query) {
-        return response()->json(['message' => 'Debe proporcionar un término de búsqueda.'], 400);
-    }
+if (!$query) {
+    return response()->json(['message' => 'Debe proporcionar un término de búsqueda.'], 400);
+}
 
-    // Si es solo una letra, busca solo al inicio; si es más, puede buscar en cualquier lugar
-    $pattern = strlen($query) === 1 ? "{$query}%" : "{$query}%";
+// Buscar usuarios ignorando mayúsculas/minúsculas
+$users = User::whereRaw('LOWER(name) LIKE ?', ["%{$query}%"])
+    ->select('id', 'name', 'profile_picture')
+    ->limit(10)
+    ->get();
 
-    // Usuarios
-    $users = User::where('name', 'LIKE', $pattern)
-        ->select('id', 'name', 'profile_picture')
-        ->limit(10)
-        ->get();
+// Publicaciones
+$publications = Publication::where('description', 'LIKE', "%{$query}%")
+    ->orWhere('category', 'LIKE', "%{$query}%")
+    ->select('id', 'description', 'image', 'user_id')
+    ->limit(10)
+    ->get();
 
-    // Publicaciones (solo por nombre o categoría que empiece con el texto)
-    $publications = Publication::where('description', 'LIKE', $pattern)
-        ->orWhere('category', 'LIKE', $pattern)
-        ->select('id', 'description', 'image', 'user_id')
-        ->limit(10)
-        ->get();
-
-    return response()->json([
-        'users' => $users,
-        'publications' => $publications
-    ]);
+return response()->json([
+    'users' => $users,
+    'publications' => $publications
+]);
 }
 }

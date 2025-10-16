@@ -19,7 +19,6 @@ use App\Models\Follow;
 
 Configuration::instance('cloudinary://175261732836894:2Cofi1fGKc6rmC1-ELQKZjxKCuw@duxccowqf?secure=true');
 
-
 class UserController extends Controller
 {
     //Funcion store

@@ -7,10 +7,6 @@ export const Route = createFileRoute("/CreatePublication")({
 
 function RouteComponent() {
   return (
-    <CreatePublicationPage
-      title="Create Publication"
-      description="Mi primera publicación"
-      category="Digital Art"
-    />
+    <CreatePublicationPage title="Create Publication" />
   );
 }

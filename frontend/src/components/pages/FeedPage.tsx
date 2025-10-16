@@ -23,6 +23,65 @@ interface FeedPageProps {
   publications: Publication[];
 }
 
+function FeedDescription({ pub, currentUserId }: any) {
+  const navigate = useNavigate();
+
+  const parseText = (text: string) => {
+    const parts = text.split(/(\s+)/);
+    return parts.map((part, index) => {
+      if (part.startsWith("@")) {
+  return (
+    <span
+      key={index}
+      className="text-pink-400 font-semibold cursor-pointer hover:underline"
+      onClick={(e) => {
+        e.stopPropagation();
+        if (pub.user_id === currentUserId) {
+          navigate({ to: "/Profile" });
+        } else {
+          navigate({
+            to: "/ProfileGuest",
+            search: { userId: pub.user_id },
+          });
+        }
+      }}
+    >
+      {part}
+    </span>
+  );
+}
+
+      if (part.startsWith("#")) {
+        const tag = part.substring(1);
+        return (
+          <span
+            key={index}
+            className="text-blue-400 font-semibold cursor-pointer hover:underline"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (tag.toLowerCase() === "retoharixom") {
+                navigate({ to: "/AIChallenge" });
+              } else {
+                console.log("Hashtag no reconocido:", tag);
+              }
+            }}
+          >
+            {part}
+          </span>
+        );
+      }
+
+      return part;
+    });
+  };
+
+  return (
+    <p className="text-gray-300 text-sm mt-2 break-words">
+      {parseText(pub.description || "")}
+    </p>
+  );
+}
+
 export default function FeedPage({ publications }: FeedPageProps) {
   const token = localStorage.getItem("access_token");
   const { showToast } = useToast();
@@ -139,7 +198,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
     }).format(date);
   };
 
-  // Evita renderizar publicaciones hasta conocer el usuario actual
   if (currentUserId === null) {
     return (
       <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
@@ -236,7 +294,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   return (
     <div className="bg-stone-950 min-h-screen py-10 px-3"
-    style={{ fontFamily: "Monserrat" }}>
+      style={{ fontFamily: "Monserrat" }}>
       <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around">
         {publications.map((pub) => (
           <div
@@ -405,9 +463,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
             {/* Descripción */}
             <div className="px-4 pb-6">
-              <span className="text-base text-white font-bold block">
-                {pub.description || "Sin título"}
-              </span>
+              <FeedDescription pub={pub} currentUserId={currentUserId} />
             </div>
 
             {/* Modal comentarios */}
@@ -517,7 +573,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   {formatDate(selectedPublication.created_at)}
                 </p>
                 <p className="text-gray-300 mt-10 text-2xl">
-                  {selectedPublication.description}
+                  <FeedDescription pub={selectedPublication} currentUserId={currentUserId} />
                 </p>
                 <div className="mt-8 flex gap-5">
                   <Link
