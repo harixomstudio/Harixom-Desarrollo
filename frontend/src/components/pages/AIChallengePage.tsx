@@ -61,75 +61,73 @@ export default function AIChallenge() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-[#0d0d0d] via-[#1a1a1a] to-[#262626] text-white px-6 py-12">
-      {/* Encabezado */}
-      <div className="max-w-2xl text-center mb-12">
-        <h1
-          className="text-5xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-[#F778BD] via-[#A39FF6] to-[#96E2FF] text-transparent bg-clip-text"
-          style={{ fontFamily: "Starstruck" }}
-        >
-          Reto Harixom IA
-        </h1>
-        <p className="text-gray-300 text-lg leading-relaxed">
-          Despierta tu creatividad con la{" "}
-            inteligencia artificial.  
-          Escribe tu <span className="text-[#FA6063] font-semibold">especialidad</span> (por ejemplo: dibujante, diseñadora, fotógrafa o animador) y genera un{" "}
-          reto personalizado.
-          <br />
-        </p>
-      </div>
+    <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-[#0d0d0d] via-[#1a1a1a] to-[#262626] text-white px-4 sm:px-6 py-8 sm:py-12">
+  {/* Encabezado */}
+  <div className="max-w-2xl text-center mb-8 sm:mb-12">
+    <h1
+      className="text-3xl sm:text-5xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-[#F778BD] via-[#A39FF6] to-[#96E2FF] text-transparent bg-clip-text"
+      style={{ fontFamily: "Starstruck" }}
+    >
+      Reto Harixom IA
+    </h1>
+    <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
+      Despierta tu creatividad con la{" "}
+      inteligencia artificial.  
+      Escribe tu <span className="text-[#FA6063] font-semibold">especialidad</span> (ej: dibujante, diseñadora, fotógrafa o animador) y genera un{" "}
+      reto personalizado.
+      <br />
+    </p>
+  </div>
 
       {/* Formulario de reto */}
-      <div className="bg-[#141414] rounded-2xl p-8 w-full max-w-xl border border-[#8936D2]/50 backdrop-blur-lg transition-all duration-300 hover:shadow-[#A39FF6]/40">
-        <h2 className="text-2xl font-semibold text-[#A39FF6] mb-6 text-center">
-          Genera tu reto creativo
-        </h2>
+      <div className="bg-[#141414] rounded-2xl p-6 sm:p-8 w-full max-w-xl border border-[#8936D2]/50 backdrop-blur-lg transition-all duration-300 hover:shadow-[#A39FF6]/40">
+    <h2 className="text-xl sm:text-2xl font-semibold text-[#A39FF6] mb-4 sm:mb-6 text-center">
+      Genera tu reto creativo
+    </h2>
 
-        <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
-          <input
-            type="text"
-            placeholder="Escribe tu especialidad (ej: dibujante)"
-            value={specialty}
-            onChange={handleSpecialtyChange}
-            className="flex-1 px-4 py-3 rounded-lg bg-[#1f1f1f] text-white border border-[#96E2FF]/40 focus:outline-none focus:ring-2 focus:ring-[#96E2FF] placeholder-gray-500"
-          />
+    <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+      <input
+        type="text"
+        placeholder="Escribe tu especialidad (ej: dibujante)"
+        value={specialty}
+        onChange={handleSpecialtyChange}
+        className="flex-1 px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-[#1f1f1f] text-white border border-[#96E2FF]/40 focus:outline-none focus:ring-2 focus:ring-[#96E2FF] placeholder-gray-500 text-sm sm:text-base"
+      />
 
-          <button
-            onClick={handleGetChallenge}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
-              loading || buttonDisabled
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-gradient-to-r from-[#F778BD] to-[#FA6063] hover:opacity-90"
-            }`}
-            disabled={loading || buttonDisabled}
-          >
-            {loading
-              ? "Cargando..."
-              : buttonDisabled
-              ? "Reto generado ✅"
-              : "Obtener Reto"}
-          </button>
-        </div>
+      <button
+        onClick={handleGetChallenge}
+        className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold transition-all duration-200 text-sm sm:text-base ${
+          loading || buttonDisabled
+            ? "bg-gray-600 cursor-not-allowed"
+            : "bg-gradient-to-r from-[#F778BD] to-[#FA6063] hover:opacity-90"
+        }`}
+        disabled={loading || buttonDisabled}
+      >
+        {loading
+          ? "Cargando..."
+          : buttonDisabled
+          ? "Reto generado ✅"
+          : "Obtener Reto"}
+      </button>
+    </div>
 
         {error && (
-          <p className="text-red-500 text-center font-medium mb-4">{error}</p>
-        )}
+      <p className="text-red-500 text-center font-medium mb-2 sm:mb-4 text-sm sm:text-base">{error}</p>
+    )}
 
-        {challenge && (
-          <div className="bg-[#1a1a1a] p-6 rounded-lg border border-[#96E2FF]/30 text-gray-200 mt-4">
-            <h3 className="text-xl font-bold mb-2 text-[#96E2FF]">Tu reto:</h3>
-            <p className="mb-4">{challenge.reto}</p>
+    {challenge && (
+      <div className="bg-[#1a1a1a] p-4 sm:p-6 rounded-lg border border-[#96E2FF]/30 text-gray-200 mt-4 text-sm sm:text-base">
+        <h3 className="text-lg sm:text-xl font-bold mb-2 text-[#96E2FF]">Tu reto:</h3>
+        <p className="mb-3 sm:mb-4">{challenge.reto}</p>
 
-            <h4 className="font-semibold mb-2 text-gray-300">Pasos:</h4>
-            <ol className="list-decimal list-inside space-y-1 mb-4">
-              {challenge.pasos.map((paso, index) => (
-                <li key={index}>{paso}</li>
-              ))}
-            </ol>
+        <h4 className="font-semibold mb-1 sm:mb-2 text-gray-300">Pasos:</h4>
+        <ol className="list-decimal list-inside space-y-1 mb-3 sm:mb-4">
+          {challenge.pasos.map((paso, index) => (
+            <li key={index}>{paso}</li>
+          ))}
+        </ol>
 
-            <p className="text-[#FDD519] font-medium text-center mt-4">
-              {challenge.nota}
-            </p>
+            <p className="text-[#FDD519] font-medium text-center mt-2 sm:mt-4">{challenge.nota}</p>
           </div>
         )}
       </div>
@@ -141,8 +139,7 @@ export default function AIChallenge() {
         </h2>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
           Aquí se mostrarán las publicaciones más creativas con el hashtag{" "}
-          <span className="text-[#F778BD] font-semibold">#RetoHarixom</span>.  
-          ¡Prepárate para inspirarte con los proyectos de la comunidad!
+          <span className="text-[#F778BD] font-semibold">#RetoHarixom</span>.
         </p>
         <div className="mt-8 h-48 border-2 border-dashed border-[#A39FF6]/40 rounded-2xl flex items-center justify-center text-gray-500">
           <span>Contenido en desarrollo...</span>
