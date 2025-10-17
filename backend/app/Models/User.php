@@ -32,6 +32,7 @@ class User extends Authenticatable
         'services',   
         'prices',     
         'terms', 
+        'commissions_enabled',
     ];
 
     public function isActive()
@@ -61,6 +62,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'commissions_enabled' => 'boolean',
         ];
     }
 

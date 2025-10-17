@@ -35,23 +35,26 @@ function RootComponent() {
 
   return (
     <React.Fragment>
+      {/* NAV PRINCIPAL */}
       {!hideNav && (
         <>
-          <Nav
-            list={["Feed", "Create", "Events", "Inbox"]}
-            reference={["/Feed", "/CreatePublication", "/Events", "/Inbox"]}
-          />
+          <Nav />
+
+          {/* NAV DE EVENTOS (solo en las rutas especificadas) */}
+          {referenceEvents.includes(currentPath) && (
+            <EventsNav
+              listEvents={listEvents}
+              referenceEvents={referenceEvents}
+            />
+          )}
+
           <SidebarNavigation />
         </>
       )}
+
+      {/* CONTENIDO PRINCIPAL */}
       <div className="flex min-h-screen">
-        {!hideNav && <div className="w-14 shrink-0" />} 
-        {referenceEvents.includes(currentPath) && (
-          <EventsNav
-            listEvents={listEvents}
-            referenceEvents={referenceEvents}
-          />
-        )}
+        {!hideNav && <div className="w-14 shrink-0" />}
         <div className="flex-1 bg-stone-950">
           <Outlet />
         </div>

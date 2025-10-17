@@ -22,6 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
     //Cerrar sesion
     Route::post('user/logout', [UserController::class, 'logout']);
 
+    //Bloquear y desbloquear usuarios
+    Route::post('/block/{userId}', [UserController::class, 'blockUser']);
+    Route::delete('/unblock/{userId}', [UserController::class, 'unblockUser']);
+
     //Ruta para buscar
     Route::get('/search', [SearchController::class, 'search']);
 

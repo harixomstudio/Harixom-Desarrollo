@@ -22,7 +22,6 @@ export default function CreatePublicationPage({ title }: { title: string }) {
 
   const token = localStorage.getItem("access_token");
 
-  // 🔍 Obtener sugerencias de usuarios
   const fetchSuggestions = async (query: string) => {
     const cleanQuery = query.replace(/^@/, "").trim();
     if (!cleanQuery) return [];
@@ -47,7 +46,6 @@ export default function CreatePublicationPage({ title }: { title: string }) {
     }
   };
 
-  // 🖼 Imagen seleccionada
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       const file = e.target.files[0];
@@ -103,14 +101,23 @@ export default function CreatePublicationPage({ title }: { title: string }) {
     "Photography",
   ];
 
-  // Manejar cambio de textarea y sugerencias
   const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDesc(e.target.value);
 
-    // Buscar la última mención que empieza con "@"
-    const match = e.target.value.match(/@(\w*)$/);
-    if (match) {
-      fetchSuggestions(match[1]);
+    // Detectar última mención o hashtag
+    const atMatch = e.target.value.match(/@(\w*)$/);
+    const hashMatch = e.target.value.match(/#(\w*)$/);
+
+    if (atMatch) {
+      fetchSuggestions(atMatch[1]); // usuarios
+    } else if (hashMatch) {
+      const tag = hashMatch[1];
+      // Por ahora solo mostramos #RetoHarixom
+      if ("RetoHarixom".toLowerCase().startsWith(tag.toLowerCase())) {
+        setUserSuggestions([{ id: 0, display: "#RetoHarixom" }]);
+      } else {
+        setUserSuggestions([]);
+      }
     } else {
       setUserSuggestions([]);
     }
@@ -171,11 +178,12 @@ export default function CreatePublicationPage({ title }: { title: string }) {
                       key={user.id}
                       className="p-2 hover:bg-stone-700 cursor-pointer"
                       onClick={() => {
-                        // Reemplaza el último @texto con el nombre seleccionado
-                        const lastAtIndex = desc.lastIndexOf("@");
-                        if (lastAtIndex !== -1) {
-                          const newDesc =
-                            desc.substring(0, lastAtIndex) + user.display + " ";
+                        const lastAt = desc.lastIndexOf("@");
+                        const lastHash = desc.lastIndexOf("#");
+                        const lastIndex = Math.max(lastAt, lastHash);
+
+                        if (lastIndex !== -1) {
+                          const newDesc = desc.substring(0, lastIndex) + user.display + " ";
                           setDesc(newDesc);
                           setUserSuggestions([]);
                         }

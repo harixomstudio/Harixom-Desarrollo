@@ -15,7 +15,7 @@ class SearchController extends Controller
     public function search(Request $request)
 {
     $query = trim($request->input('q'));
-$query = ltrim($query, '@'); // quitar @ inicial
+$query = ltrim($query, '@'); 
 $query = strtolower($query);
 
 if (!$query) {

@@ -13,7 +13,7 @@ interface Message {
 
 interface ProfileProps {
   username: string;
-  followers: { id: number; name: string; profile_picture?: string }[];
+  followers: { id: number; name: string; profile_picture?: string; isBlocked?: boolean; }[];
   followings: { id: number; name: string; profile_picture?: string }[];
   address: string;
   description: string;
@@ -34,6 +34,9 @@ export default function Profile(props: ProfileProps) {
 
   // Hooks para UI
   const [showFollowers, setShowFollowers] = useState(false);
+  const [followersState, setFollowersState] = useState(
+    props.followers.map(f => ({ ...f, isBlocked: false })) // inicializamos isBlocked en false
+  );
   const [showFollowings, setShowFollowings] = useState(false);
   const [cards, setCards] = useState(props.cards || []);
   const [favorites, setFavorites] = useState(props.likes || []);
@@ -315,43 +318,80 @@ export default function Profile(props: ProfileProps) {
 
           {/* Followers Modal */}
           {showFollowers && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto shadow-lg">
-                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followers</h3>
-                <ul>
-                  {props.followers.map((f) => (
-                    <li
-                      key={f.id}
-                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
-                      onClick={() => {
-                        if (f.id === props.userId) {
-                          navigate({ to: "/Profile" });
-                        } else {
-                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
-                        }
-                      }}
-                    >
-                      <img
-                        src={
-                          f.profile_picture ||
-                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                        } className="w-12 h-12 rounded-full object-cover" />
-                      {f.name}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
-                  onClick={() => setShowFollowers(false)}
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto shadow-lg">
+            <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followers</h3>
+            <ul>
+              {followersState.map((f, index) => (
+                <li
+                  key={f.id}
+                  className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                  onClick={() => {
+                    if (f.id === props.userId) {
+                      navigate({ to: "/Profile" });
+                    } else {
+                      navigate({ to: "/ProfileGuest", search: { userId: f.id } });
+                    }
+                  }}
                 >
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
+                  <img
+                    src={
+                      f.profile_picture ||
+                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                    }
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  {f.name}
+
+                  <button
+                    className={`ml-auto px-2 py-1 rounded text-white ${
+                      f.isBlocked ? "bg-green-500" : "bg-red-500"
+                    }`}
+                    onClick={async (e) => {
+                      e.stopPropagation(); // evita navegar al perfil al hacer click
+                      try {
+                        if (f.isBlocked) {
+                          // Desbloquear
+                          await axios.delete(`https://harixom-desarrollo.onrender.com/api/unblock/${f.id}`, {
+                            headers: { Authorization: `Bearer ${token}` },
+                          });
+                          showToast("Usuario desbloqueado", "success");
+                        } else {
+                          // Bloquear
+                          await axios.post(`https://harixom-desarrollo.onrender.com/api/block/${f.id}`, {}, {
+                            headers: { Authorization: `Bearer ${token}` },
+                          });
+                          showToast("Usuario bloqueado", "success");
+                        }
+
+                        // Actualizar estado local
+                        const newFollowers = [...followersState];
+                        newFollowers[index].isBlocked = !f.isBlocked;
+                        setFollowersState(newFollowers);
+                      } catch (err) {
+                        showToast("Error actualizando estado de usuario", "error");
+                      }
+                    }}
+                  >
+                    {f.isBlocked ? "Desbloquear" : "Bloquear"}
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            <button
+              className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
+              onClick={() => setShowFollowers(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
 
           {/* Followings Modal */}
-          {showFollowings && (
+      {showFollowings && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
                 <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followings</h3>
