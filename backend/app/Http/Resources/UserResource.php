@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             'services' => $this->services,
             'prices' => $this->prices,
             'terms' => $this->terms,
+            'commissions_enabled' => $this-> commissions_enabled,
             'profile_completed' => $this->profile_completed,
             'posts' => $this->posts()->get()->map(function ($post) {
         

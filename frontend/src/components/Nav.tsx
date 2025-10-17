@@ -1,26 +1,21 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "@tanstack/react-router";
+import { useNavigate, useLocation  } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { axiosRequest } from "../components/helpers/config";
 import { useToast } from "../components/ui/Toast";
 
-interface NavProps {
-  list: string[];
-  reference: string[];
-}
-
-export default function Nav(props: NavProps) {
+export default function Nav() {
   const { showToast } = useToast();
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation(); // 🔹 para saber la ruta actual
   const currentPath = location.pathname;
 
-  const [menuOpen, setMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
 
   const token = localStorage.getItem("access_token");
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
   const { data: profileData } = useQuery({
     queryKey: ["userProfileNav"],
@@ -62,11 +57,16 @@ export default function Nav(props: NavProps) {
       } else {
         setShowModal(false);
       }
-    }, 400); // espera 400ms tras escribir
+    }, 400);
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
 
-  // 🔍 Buscar en el backend
+  useEffect(() => {
+    if (profileData?.user?.id) {
+      setCurrentUserId(profileData.user.id);
+    }
+  }, [profileData]);
+
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
 
@@ -87,14 +87,16 @@ export default function Nav(props: NavProps) {
 
   return (
     <section className="bg-[#151515] relative z-50">
-      <div className="flex flex-wrap items-center justify-between p-4">
+      <div className="flex items-center justify-between p-4">
         {/* Logo + barra de búsqueda */}
-        <div className="flex flex-1 items-center space-x-4 pl-10" >
+        <div className="flex items-center space-x-4 pl-10 flex-1">
+          {/* Logo */}
           <div
-            className="text-pink-500 text-2xl"
+            className="text-pink-500 text-2xl cursor-pointer"
             style={{ fontFamily: "Starstruck" }}
+            onClick={() => navigate({ to: "/Landing" })}
           >
-            <a href="/Landing">Harixom</a>
+            Harixom
           </div>
 
           {/* Barra de búsqueda */}
@@ -128,95 +130,65 @@ export default function Nav(props: NavProps) {
           </div>
         </div>
 
-        {/* Menú hamburguesa */}
-        <button
-          className="md:hidden text-white ml-4 focus:outline-none"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <svg
-            className="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            ></path>
-          </svg>
-        </button>
-
-        {/* Menú de navegación */}
-        <div
-          className={`w-full md:w-auto md:flex md:items-center md:space-x-8 mt-4 md:mt-0 ${
-            menuOpen ? "flex flex-col space-y-4" : "hidden md:flex"
-          }`}
-        >
-          <nav>
-            <ul
-              className="flex flex-col text-lg md:flex-row space-x-8 max-xl:space-x-4  items-start md:items-center mt-4 md:mt-0"
-              style={{ fontFamily: "Monserrat" }}
-            >
-              {props.list.map((list, i) => (
-                <li key={i}>
-                  <a className="text-white" href={props.reference[i]}>
-                    {list}
-                  </a>
-                </li>
-              ))}
-
-              <li>
-                {currentPath === "/Profile" ? (
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center justify-start text-white font-bold bg-[#F778BD] py-1 px-4 rounded-full border-[#FFAFEE] border-2 hover:bg-[#ff32a3] transition-all mt-2 md:mt-0"
-                  >
-                    <img
-                      src={userImage}
-                      alt="User Avatar"
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                    Log out
-                  </button>
-                ) : (
-                  <a
-                    className="flex items-center justify-start text-white font-bold bg-[#8936D2] py-1 px-10 rounded-full border-[#A39FF6] border-2 hover:bg-[#7813c6] transition-all mt-2 md:mt-0"
-                    href="/Profile"
-                  >
-                    <img
-                      src={userImage}
-                      alt="User Avatar"
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                    Profile
-                  </a>
-                )}
-              </li>
-            </ul>
-          </nav>
-        </div>
+        {/* Acceso al perfil (oculto en móviles) */}
+        <ul className="pr-6 hidden md:flex items-center">
+          <li>
+            {currentPath === "/Profile" ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center justify-start text-white font-bold bg-[#FA6063] py-1 px-4 rounded-full border-[#ff4a4d] border-2 hover:bg-[#ff4a4d] transition-all mt-2 md:mt-0"
+              >
+                <img
+                  src={userImage}
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full mr-2"
+                />
+                Log out
+              </button>
+            ) : (
+              <a
+                className="flex items-center justify-start text-white font-bold bg-[#8936D2] py-1 px-10 rounded-full border-[#A39FF6] border-2 hover:bg-[#7813c6] transition-all mt-2 md:mt-0"
+                href="/Profile"
+              >
+                <img
+                  src={userImage}
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full mr-2"
+                />
+                Profile
+              </a>
+            )}
+          </li>
+        </ul>
       </div>
 
       {/* 🧾 Modal de resultados */}
       {showModal && searchResults && (
         <div className="fixed inset-0 bg-black/20 flex justify-center items-center z-50">
           <div className="bg-[#222] rounded-2xl p-6 w-[90%] max-w-3xl max-h-[80vh] overflow-y-auto shadow-lg border border-pink-400">
-            <h2 className="text-2xl text-pink-400 font-bold mb-4">Resultados de búsqueda</h2>
+            <h2 className="text-2xl text-pink-400 font-bold mb-4">
+              Resultados de búsqueda
+            </h2>
 
             {/* Usuarios */}
             <div>
-              <h3 className="text-lg text-gray-300 font-semibold mb-2">Usuarios</h3>
+              <h3 className="text-lg text-gray-300 font-semibold mb-2">
+                Usuarios
+              </h3>
               {searchResults.users?.length ? (
                 <ul className="space-y-3">
                   {searchResults.users.map((user: any) => (
                     <li
                       key={user.id}
                       className="flex items-center gap-3 bg-[#333] rounded-lg p-3 hover:bg-[#444] cursor-pointer"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (user.id === currentUserId) {
+                          navigate({ to: "/Profile" });
+                        } else {
+                          navigate({ to: "/ProfileGuest", search: { userId: user.id } });
+                        }
                         setShowModal(false);
-                        navigate({ to: "/ProfileGuest", search: { userId: user.id } });
                       }}
                     >
                       <img
@@ -232,21 +204,37 @@ export default function Nav(props: NavProps) {
                   ))}
                 </ul>
               ) : (
-                <p className="text-gray-400 text-sm">No se encontraron usuarios</p>
+                <p className="text-gray-400 text-sm">
+                  No se encontraron usuarios
+                </p>
               )}
             </div>
 
             <hr className="my-4 border-gray-600" />
 
-            {/* Obras (solo por nombre, no del usuario) */}
+            {/* Obras */}
             <div>
-              <h3 className="text-lg text-gray-300 font-semibold mb-2">Obras</h3>
+              <h3 className="text-lg text-gray-300 font-semibold mb-2">
+                Obras
+              </h3>
               {searchResults.publications?.length ? (
                 <ul className="grid grid-cols-2 gap-4">
                   {searchResults.publications.map((pub: any) => (
                     <li
                       key={pub.id}
                       className="bg-[#333] p-3 rounded-lg hover:bg-[#444] cursor-pointer flex flex-col items-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (pub.user_id === Number(currentUserId)) {
+                          navigate({ to: "/Profile" });
+                        } else {
+                          navigate({
+                            to: "/ProfileGuest",
+                            search: { userId: pub.user_id },
+                          });
+                        }
+                        setShowModal(false);
+                      }}
                     >
                       <img
                         src={pub.image}
@@ -260,7 +248,9 @@ export default function Nav(props: NavProps) {
                   ))}
                 </ul>
               ) : (
-                <p className="text-gray-400 text-sm">No se encontraron obras</p>
+                <p className="text-gray-400 text-sm">
+                  No se encontraron obras
+                </p>
               )}
             </div>
 

@@ -16,6 +16,7 @@ use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 use App\Models\Like;
 use App\Models\Follow;
+use App\Models\Block;
 
 Configuration::instance('cloudinary://175261732836894:2Cofi1fGKc6rmC1-ELQKZjxKCuw@duxccowqf?secure=true');
 
@@ -114,6 +115,7 @@ class UserController extends Controller
     {
         $upload = new UploadApi();
         $user = $request->user();
+\Log::info('Usuario autenticado:', ['user' => $user]);
 
         $data = $request->validate([
             'name' => 'nullable|string|max:255',
@@ -126,9 +128,19 @@ class UserController extends Controller
             'services' => 'nullable|string',
             'prices' => 'nullable|string',
             'terms' => 'nullable|string',
+            'commissions_enabled' => 'nullable|boolean',
         ]);
 
+// Log para depuración
+    \Log::info('Commissions Enabled recibido:', [
+        'raw' => $request->input('commissions_enabled'),
+        'validated' => $data['commissions_enabled'] ?? null,
+    ]);
 
+    // Aseguramos que sea boolean/int correcto
+    if (isset($data['commissions_enabled'])) {
+    $data['commissions_enabled'] = filter_var($data['commissions_enabled'], FILTER_VALIDATE_BOOLEAN);
+}
         // Manejo de archivos
         if ($request->hasFile('profile_picture')) {
 
@@ -276,4 +288,38 @@ class UserController extends Controller
             'link' => $user->buymeacoffee_link,
         ], 200);
     }
+
+    // Bloquear usuario
+public function blockUser(Request $request, $id)
+{
+    $user = $request->user();
+    
+    if ($user->id == $id) {
+        return response()->json(['error' => 'No puedes bloquearte a ti mismo'], 400);
+    }
+
+    $block = Block::firstOrCreate([
+        'user_id' => $user->id,
+        'blocked_user_id' => $id,
+    ]);
+
+    return response()->json(['message' => 'Usuario bloqueado']);
+}
+
+// Desbloquear usuario
+public function unblockUser(Request $request, $id)
+{
+    $user = $request->user();
+
+    Block::where('user_id', $user->id)
+         ->where('blocked_user_id', $id)
+         ->delete();
+
+    return response()->json(['message' => 'Usuario desbloqueado']);
+}
+
+public function blockedUsers(Request $request)
+{
+    return $request->user()->blocks()->pluck('blocked_user_id');
+}
 }

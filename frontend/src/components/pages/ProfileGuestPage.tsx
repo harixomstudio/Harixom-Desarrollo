@@ -80,7 +80,7 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
         return;
       }
       const { } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/user/commisions`,
+        `http://127.0.0.1:8000/api/user/commisions`,
         {
           to_user_id: toUserId,
           message: commissionText,
@@ -106,7 +106,7 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
       try {
         // Datos del perfil
         const profileRes = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/users/${props.userId}`,
+          `http://127.0.0.1:8000/api/users/${props.userId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = profileRes.data;
@@ -119,7 +119,7 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
 
         // Mensajes
         const messagesRes = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/profile/${props.userId}/messages`,
+          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const mapped = messagesRes.data.map((msg: any) => ({
@@ -141,7 +141,7 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
     const interval = setInterval(async () => {
       try {
         const messagesRes = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/profile/${props.userId}/messages`,
+          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const mapped = messagesRes.data.map((msg: any) => ({
@@ -170,7 +170,7 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
     try {
       if (!token || !newMessage.trim()) return;
       const { data } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/profile/messages`,
+        `http://127.0.0.1:8000/api/profile/messages`,
         { to_user_id: props.userId, message: newMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -194,7 +194,7 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
       try {
         const token = localStorage.getItem("access_token");
         const response = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/users/${props.userId}`,
+          `http://127.0.0.1:8000/api/users/${props.userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -223,7 +223,7 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
   const handleToggleFollow = async () => {
     try {
       const token = localStorage.getItem("access_token");
-      const url = `https://harixom-desarrollo.onrender.com/api/follow/${props.userId}`;
+      const url = `http://127.0.0.1:8000/api/follow/${props.userId}`;
 
       const response = await axios.post(url, {}, {
         headers: { Authorization: `Bearer ${token}` }
