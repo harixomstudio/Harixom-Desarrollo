@@ -10,7 +10,7 @@ function RouteComponent() {
   const [workshops, setWorkshops] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/tallers")
+    fetch("https://harixom-desarrollo.onrender.com/api/tallers")
       .then((res) => res.json())
       .then((data) => {
         const formatted = data.map((taller: any) => ({
