@@ -139,8 +139,7 @@ export default function AIChallenge() {
         </h2>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
           Aquí se mostrarán las publicaciones más creativas con el hashtag{" "}
-          <span className="text-[#F778BD] font-semibold">#RetoHarixom</span>.  
-          ¡Prepárate para inspirarte con los proyectos de la comunidad!
+          <span className="text-[#F778BD] font-semibold">#RetoHarixom</span>.
         </p>
         <div className="mt-8 h-48 border-2 border-dashed border-[#A39FF6]/40 rounded-2xl flex items-center justify-center text-gray-500">
           <span>Contenido en desarrollo...</span>
