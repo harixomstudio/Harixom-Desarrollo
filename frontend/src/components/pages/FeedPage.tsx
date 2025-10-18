@@ -30,26 +30,26 @@ function FeedDescription({ pub, currentUserId }: any) {
     const parts = text.split(/(\s+)/);
     return parts.map((part, index) => {
       if (part.startsWith("@")) {
-  return (
-    <span
-      key={index}
-      className="text-pink-400 font-semibold cursor-pointer hover:underline"
-      onClick={(e) => {
-        e.stopPropagation();
-        if (pub.user_id === currentUserId) {
-          navigate({ to: "/Profile" });
-        } else {
-          navigate({
-            to: "/ProfileGuest",
-            search: { userId: pub.user_id },
-          });
-        }
-      }}
-    >
-      {part}
-    </span>
-  );
-}
+        return (
+          <span
+            key={index}
+            className="text-pink-400 font-semibold cursor-pointer hover:underline"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (pub.user_id === currentUserId) {
+                navigate({ to: "/Profile" });
+              } else {
+                navigate({
+                  to: "/ProfileGuest",
+                  search: { userId: pub.user_id },
+                });
+              }
+            }}
+          >
+            {part}
+          </span>
+        );
+      }
 
       if (part.startsWith("#")) {
         const tag = part.substring(1);
@@ -98,6 +98,24 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [selectedPublication, setSelectedPublication] =
     useState<Publication | null>(null);
+  const [visibleCount, setVisibleCount] = useState(12);
+
+
+  useEffect(() => {
+
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+         setVisibleCount((prevCount) => prevCount + 12);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [visibleCount]);
+
+
 
   // Funciones para abrir y cerrar el modal
   const openModal = (publication: Publication) => {
@@ -296,7 +314,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
     <div className="bg-stone-950 min-h-screen py-10 px-3"
       style={{ fontFamily: "Monserrat" }}>
       <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around">
-        {publications.map((pub) => (
+        {publications.slice(0, visibleCount).map((pub) => (
           <div
             key={pub.id}
             className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px] max-lg:w-full max-lg:h-full"
@@ -543,6 +561,16 @@ export default function FeedPage({ publications }: FeedPageProps) {
           </div>
         ))}
       </div>
+      {visibleCount < publications.length ? (
+        <div className="flex justify-center pt-20">
+          <div className="flex space-x-3">
+            <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+            <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+            <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
+          </div>
+        </div>
+      ) : null}
+
       {/* Modal publicaciones en grande */}
       {selectedPublication && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen ">
