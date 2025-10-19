@@ -37,12 +37,10 @@ function FeedDescription({ pub, currentUserId }: any) {
             onClick={(e) => {
               e.stopPropagation();
               if (pub.user_id === currentUserId) {
-                navigate({ to: "/Profile" });
+                //navigate({ to: "/Profile" });
               } else {
-                navigate({
-                  to: "/ProfileGuest",
-                  search: { userId: pub.user_id },
-                });
+               // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
+               console.log("Perfil no reconocido:", pub.user_id);
               }
             }}
           >
@@ -101,14 +99,12 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const [visibleCount, setVisibleCount] = useState(12);
 
 
-  useEffect(() => {
-
+  useEffect(() => { //Despliegue de un feed infinito, scroll aparece cargando y aumentan las publicaciones
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+      if (window.innerHeight + window.scrollY === document.documentElement.scrollHeight) {
          setVisibleCount((prevCount) => prevCount + 12);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -561,15 +557,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
           </div>
         ))}
       </div>
-      {visibleCount < publications.length ? (
-        <div className="flex justify-center pt-20">
+      {visibleCount < publications.length ? ( // esto es el loading se activa al scrollear
+        <div className="flex justify-center pt-10 pb-15">
           <div className="flex space-x-3">
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
           </div>
         </div>
-      ) : null}
+      ) : <div className="text-gray-400 text-sm text-center pb-5"> NO HAY MAS PUBLICACIONES</div> }
 
       {/* Modal publicaciones en grande */}
       {selectedPublication && (

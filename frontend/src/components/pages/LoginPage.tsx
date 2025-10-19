@@ -39,7 +39,8 @@ export default function Login(props: LoginProps) {
       if (response.data.error) {
         alert(response.data.error);
       } else {
-        // No guardamos el token aún
+        // Guardar el token en el localStorage
+        localStorage.setItem("auth_user", JSON.stringify(response.data.user));
         setTempToken(response.data.access_token);
         setShowTerms(true);
       }
@@ -150,8 +151,8 @@ export default function Login(props: LoginProps) {
             <button
               type="submit"
               className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-pink-400 to-blue-400"
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-pink-400 to-blue-400"
                 }`}
               disabled={loading}
             >

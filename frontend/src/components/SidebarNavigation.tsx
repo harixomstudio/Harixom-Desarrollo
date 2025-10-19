@@ -25,7 +25,7 @@ export default function SidebarNavigation() {
               key={index}
               to={item.to}
               className={`flex items-center gap-6 transition-all duration-300 group pl-2 ${
-                isActive ? "brightness-125" : ""
+                isActive ? "brightness-125 border-r-2 border-pink-500 transform duration-500 " : ""
               }`}
             >
               <img

@@ -40,7 +40,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [followers, setFollowers] = useState(props.followers || []);
   const [followings, setFollowings] = useState(props.followings || []);
   const [cards,] = useState(props.cards || []);
-  const [, setFavorites] = useState(props.likes || []);
+  const [favorites, setFavorites] = useState(props.likes || []);
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = React.useState(false);
   const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
@@ -51,8 +51,53 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [services, setServices] = useState("");
   const [prices, setPrices] = useState("");
   const [terms, setTerms] = useState("");
-const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
+  const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
+  const [visibleCount, setVisibleCount] = useState(12);
+  const [messageCount, setMessageCount] = useState(4);
+  const [favoriteCount, setFavoriteCount] = useState(12);
 
+
+  useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan las publicaciones
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+        setFavoriteCount((prevCount) => prevCount + 12);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+
+
+  }, [favoriteCount]);
+
+  useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan las publicaciones
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+        setVisibleCount((prevCount) => prevCount + 12);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+
+
+  }, [visibleCount]);
+
+  useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan los mensajes
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY === document.documentElement.scrollHeight) {
+        setMessageCount((prevCount) => prevCount + 4);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+
+
+  }, [messageCount]);
 
   // Messages
   const [newMessage, setNewMessage] = useState("");
@@ -250,10 +295,28 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
       showToast("Error al actualizar el seguimiento", "error");
     }
   };
-  
+  const handleToggleLike = async (postId: number) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const { data } = await axios.post(
+        `https://harixom-desarrollo.onrender.com/api/like/${postId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data.liked) {
+        setFavorites((prev) => [...prev, data.post]); // agrega si liked
+      } else {
+        setFavorites((prev) => prev.filter((f) => f.id !== postId)); // elimina si deslike
+      }
+      showToast(data.liked ? "Like agregado" : "Like eliminado", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("No se pudo actualizar el like", "error");
+    }
+  };
 
   return (
-    
+
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen"
       style={{ fontFamily: "Monserrat" }}>
       <div className="w-full flex flex-col">
@@ -339,14 +402,16 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
                 <ul>
                   {props.followers.map((f) => (
                     <li
+
                       key={f.id}
                       className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
                       onClick={() => {
-                        setShowFollowers(false);
-                        if (f.id === props.userId) {
-                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
-                        } else {
+                        setShowFollowers(false); // Cerrar el modal de Followers
+
+                        if (f.id === authUser.id) {
                           navigate({ to: "/Profile" });
+                        } else {
+                          window.location.search = "userId=" + f.id;
                         }
                       }}
                     >
@@ -357,11 +422,15 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
                         } className="w-12 h-12 rounded-full object-cover" />
                       {f.name}
                     </li>
-                  ))}
+                  ))
+                  }
                 </ul>
                 <button
                   className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
-                  onClick={() => setShowFollowers(false)}
+                  onClick={() =>
+                    setShowFollowers(false)
+
+                  }
                 >
                   Close
                 </button>
@@ -380,12 +449,12 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
                       key={f.id}
                       className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
                       onClick={() => {
-                        setShowFollowings(false); // Cierra el modal
-                        if (f.id === props.userId) {
-                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
-                        } else {
-
+                        setShowFollowings(false); // Cerrar el modal de Followings
+                        if (f.id === authUser.id) {
                           navigate({ to: "/Profile" });
+                        } else {
+                          window.location.search = "userId=" + f.id;
+
                         }
                       }}
                     >
@@ -475,7 +544,7 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
               </div>
               <div className="space-y-4">
                 {messages.length ? (
-                  messages.map((msg) => (
+                  messages.slice(0, messageCount).map((msg) => (
                     <div
                       key={msg.id}
                       className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
@@ -518,41 +587,112 @@ const [commissionsEnabled, setCommissionsEnabled] = useState<boolean>(false);
                 ) : (
                   <p className="text-gray-400 text-sm text-center">No messages yet.</p>
                 )}
+
               </div>
+              {messageCount < messages.length ? ( // esto es el loading se activa al scrollear
+                <div className="flex justify-center pt-10 pb-15">
+                  <div className="flex space-x-3">
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
+                  </div>
+                </div>
+              ) : <div className={`text-gray-400 text-sm text-center pb-5 pt-10 ${messages.length === 0 ? 'hidden' : ''}`}> NO MORE MESSAGES</div>}
+            </div>
+
+          ) : activeTab === 3 ? (
+            /* Favorites tab */
+            <div className="w-full max-w-4xl mx-auto">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {favorites.length ? (
+                  favorites.slice(0, favoriteCount).map((like) => (
+                    <div
+                      key={like.id}
+                      className="relative bg-stone-800 rounded-lg p-4 flex flex-col items-center"
+                    >
+                      <button
+                        onClick={() => handleToggleLike(like.id)}
+                        className="absolute top-2 right-2 bg-pink-400 hover:bg-pink-500 text-white text-xs px-2 py-1 rounded"
+                      >
+                        ✕
+                      </button>
+                      {like.image ? (
+                        <img
+                          src={like.image}
+                          alt={`Post ${like.id}`}
+                          className="w-24 h-24 rounded-lg object-cover mb-2"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center text-gray-300 mb-2">
+                          No Image
+                        </div>
+                      )}
+                      <p className="text-gray-200 text-sm text-center">
+                        {like.description}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm col-span-4 text-center">
+                    No hay likes aún.
+                  </p>
+                )}
+              </div>
+              {favoriteCount < favorites.length ? ( // esto es el loading se activa al scrollear
+                <div className="flex justify-center pt-10 pb-15">
+                  <div className="flex space-x-3">
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
+                  </div>
+                </div>
+              ) : <div className={`text-gray-400 text-sm text-center pb-5 pt-10 ${favorites.length === 0 ? 'hidden' : ''}`}> NO MORE FAVORITES</div>}
             </div>
           ) : (
             // Home / Posts
-            <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
-              {cards.length ? (
-                cards.map((card) => (
-                  <div
-                    key={card.id}
-                    className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative"
-                  >
-                    {card.image ? (
-                      <img
-                        src={card.image}
-                        alt={`Card ${card.id}`}
-                        className="w-full h-auto block"
-                      />
-                    ) : (
-                      <div className="w-full bg-gray-600 flex items-center justify-center text-gray-300 text-xs h-40">
-                        Sin imagen
-                      </div>
-                    )}
-                    <p className="text-xs text-gray-200 text-center px-2 py-2">
-                      {card.description}
-                    </p>
+            <div>
+              <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
+                {cards.length ? (
+                  cards.slice(0, visibleCount).map((card) => (
+                    <div
+                      key={card.id}
+                      className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative"
+                    >
+                      {card.image ? (
+                        <img
+                          src={card.image}
+                          alt={`Card ${card.id}`}
+                          className="w-full h-auto block"
+                        />
+                      ) : (
+                        <div className="w-full bg-gray-600 flex items-center justify-center text-gray-300 text-xs h-40">
+                          Sin imagen
+                        </div>
+                      )}
+                      <p className="text-xs text-gray-200 text-center px-2 py-2">
+                        {card.description}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm text-center">
+                    no post yet.
+                  </p>
+                )}
+              </div>
+              {visibleCount < cards.length ? ( // esto es el loading se activa al scrollear
+                <div className="flex justify-center pt-10 pb-15">
+                  <div className="flex space-x-3">
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
                   </div>
-                ))
-              ) : (
-                <p className="text-gray-400 text-sm text-center">
-                  No hay posts aún.
-                </p>
-              )}
+                </div>
+              ) : <div className={`text-gray-400 text-sm text-center pb-5 pt-10 ${cards.length === 0 ? 'hidden' : ''}`}> NO MORE POSTS</div>}
             </div>
           )}
         </div>
+
 
         {/* Modal de comisión */}
         {isModalOpen && (

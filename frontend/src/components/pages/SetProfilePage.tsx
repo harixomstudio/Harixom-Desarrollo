@@ -43,13 +43,11 @@ export default function SetProfilePage() {
       .get("/user", { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         const user = res.data.user;
-      console.log("Datos crudos del usuario:", user);
-      const commissionsEnabled = Number(user.commissions_enabled) === 1;
-      console.log("Valor de commissions_enabled tras convertir:", commissionsEnabled); 
+        user.commissions_enabled = Number(user.commissions_enabled) === 1;
         setProfile({
-  ...user,
-  commissions_enabled: Number(user.commissions_enabled) === 1,
-});
+          ...user,
+          commissions_enabled: Number(user.commissions_enabled) === 1,
+        });
       })
       .catch((err) => console.error(err));
   }, []);
@@ -91,22 +89,25 @@ export default function SetProfilePage() {
       return;
     }
 
+    // Enviar petición de actualización datos actuaizados al backend
     const formData = new FormData();
     formData.append("name", profile.name);
     formData.append("email", profile.email);
     formData.append("phone", profile.phone);
     formData.append("address", profile.address);
     formData.append("description", profile.description || "");
-    formData.append(
-      "commissions_enabled",
-      profile.commissions_enabled ? "1" : "0"
-    );
+    formData.append("commissions_enabled", profile.commissions_enabled ? "1" : "0");
 
     if (profileFile) formData.append("profile_picture", profileFile);
     if (bannerFile) formData.append("banner_picture", bannerFile);
 
     try {
-      
+       await axiosRequest.post("/user/profile?_method=PUT", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       showToast("Perfil actualizado!", "success");
       navigate({ to: "/Profile" });
@@ -121,6 +122,7 @@ export default function SetProfilePage() {
       setLoading(false);
     }
   };
+
 
   return (
     <section className="flex flex-col min-h-screen items-center justify-start bg-stone-950 py-15">
@@ -246,6 +248,7 @@ export default function SetProfilePage() {
                 setProfile((prev) => ({
                   ...prev,
                   commissions_enabled: !prev.commissions_enabled,
+                  
                 }))
               }
               className={`w-14 h-8 flex items-center rounded-full px-1 transition-colors duration-300 ${profile.commissions_enabled ? "bg-green-400" : "bg-gray-500"
