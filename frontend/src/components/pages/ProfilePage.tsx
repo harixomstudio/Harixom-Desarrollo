@@ -56,7 +56,52 @@ export default function Profile(props: ProfileProps) {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
-  // Hooks para comisiones y modales
+  const [visibleCount, setVisibleCount] = useState(12);
+  const [messageCount, setMessageCount] = useState(4);
+  const [favoriteCount, setFavoriteCount] = useState(12);
+
+
+  useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan las publicaciones favoritas
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+        setFavoriteCount((prevCount) => prevCount + 12);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+
+
+  }, [favoriteCount]);
+
+  useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan las publicaciones
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+        setVisibleCount((prevCount) => prevCount + 12);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+
+
+  }, [visibleCount]);
+
+  useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan los mensajes
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY === document.documentElement.scrollHeight) {
+        setMessageCount((prevCount) => prevCount + 4);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+
+
+  }, [messageCount]);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
@@ -318,80 +363,79 @@ export default function Profile(props: ProfileProps) {
 
           {/* Followers Modal */}
           {showFollowers && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto shadow-lg">
-            <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followers</h3>
-            <ul>
-              {followersState.map((f, index) => (
-                <li
-                  key={f.id}
-                  className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
-                  onClick={() => {
-                    if (f.id === props.userId) {
-                      navigate({ to: "/Profile" });
-                    } else {
-                      navigate({ to: "/ProfileGuest", search: { userId: f.id } });
-                    }
-                  }}
-                >
-                  <img
-                    src={
-                      f.profile_picture ||
-                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                    }
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  {f.name}
-
-                  <button
-                    className={`ml-auto px-2 py-1 rounded text-white ${
-                      f.isBlocked ? "bg-green-500" : "bg-red-500"
-                    }`}
-                    onClick={async (e) => {
-                      e.stopPropagation(); // evita navegar al perfil al hacer click
-                      try {
-                        if (f.isBlocked) {
-                          // Desbloquear
-                          await axios.delete(`https://harixom-desarrollo.onrender.com/api/unblock/${f.id}`, {
-                            headers: { Authorization: `Bearer ${token}` },
-                          });
-                          showToast("Usuario desbloqueado", "success");
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto shadow-lg">
+                <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followers</h3>
+                <ul>
+                  {followersState.map((f, index) => (
+                    <li
+                      key={f.id}
+                      className="flex items-center gap-4 py-3 border-b border-stone-700 cursor-pointer hover:bg-stone-700 rounded transition-all"
+                      onClick={() => {
+                        if (f.id === props.userId) {
+                          navigate({ to: "/Profile" });
                         } else {
-                          // Bloquear
-                          await axios.post(`https://harixom-desarrollo.onrender.com/api/block/${f.id}`, {}, {
-                            headers: { Authorization: `Bearer ${token}` },
-                          });
-                          showToast("Usuario bloqueado", "success");
+                          navigate({ to: "/ProfileGuest", search: { userId: f.id } });
                         }
+                      }}
+                    >
+                      <img
+                        src={
+                          f.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        }
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      {f.name}
 
-                        // Actualizar estado local
-                        const newFollowers = [...followersState];
-                        newFollowers[index].isBlocked = !f.isBlocked;
-                        setFollowersState(newFollowers);
-                      } catch (err) {
-                        showToast("Error actualizando estado de usuario", "error");
-                      }
-                    }}
-                  >
-                    {f.isBlocked ? "Desbloquear" : "Bloquear"}
-                  </button>
-                </li>
-              ))}
-            </ul>
+                      <button
+                        className={`ml-auto px-2 py-1 rounded text-white ${f.isBlocked ? "bg-green-500" : "bg-red-500"
+                          }`}
+                        onClick={async (e) => {
+                          e.stopPropagation(); // evita navegar al perfil al hacer click
+                          try {
+                            if (f.isBlocked) {
+                              // Desbloquear
+                              await axios.delete(`https://harixom-desarrollo.onrender.com/api/unblock/${f.id}`, {
+                                headers: { Authorization: `Bearer ${token}` },
+                              });
+                              showToast("Usuario desbloqueado", "success");
+                            } else {
+                              // Bloquear
+                              await axios.post(`https://harixom-desarrollo.onrender.com/api/block/${f.id}`, {}, {
+                                headers: { Authorization: `Bearer ${token}` },
+                              });
+                              showToast("Usuario bloqueado", "success");
+                            }
 
-            <button
-              className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
-              onClick={() => setShowFollowers(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+                            // Actualizar estado local
+                            const newFollowers = [...followersState];
+                            newFollowers[index].isBlocked = !f.isBlocked;
+                            setFollowersState(newFollowers);
+                          } catch (err) {
+                            showToast("Error actualizando estado de usuario", "error");
+                          }
+                        }}
+                      >
+                        {f.isBlocked ? "Desbloquear" : "Bloquear"}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  className="mt-6 w-full py-3 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600 transition-colors"
+                  onClick={() => setShowFollowers(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
 
 
           {/* Followings Modal */}
-      {showFollowings && (
+          {showFollowings && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
                 <h3 className="text-2xl text-pink-400 font-bold mb-6 text-center">Followings</h3>
@@ -588,7 +632,7 @@ export default function Profile(props: ProfileProps) {
               </div>
               <div className="space-y-4">
                 {messages.length ? (
-                  messages.map((msg) => (
+                  messages.slice(0, messageCount).map((msg) => (
                     <div
                       key={msg.id}
                       className="relative bg-stone-800 p-4 rounded-lg text-gray-200 flex items-start gap-2"
@@ -637,13 +681,23 @@ export default function Profile(props: ProfileProps) {
                   <p className="text-gray-400 text-sm text-center">No messages yet.</p>
                 )}
               </div>
+              {messageCount < messages.length ? ( // esto es el loading se activa al scrollear
+                <div className="flex justify-center pt-10 pb-15">
+                  <div className="flex space-x-3">
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
+                  </div>
+                </div>
+              ) : <div className={`text-gray-400 text-sm text-center pb-5 pt-10 ${messages.length === 0 ? 'hidden' : ''}`}> NO MORE MESSAGES</div>}
+
             </div>
           ) : activeTab === 3 ? (
             /* Favorites tab */
             <div className="w-full max-w-4xl mx-auto">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {favorites.length ? (
-                  favorites.map((like: any) => (
+                  favorites.slice(0, favoriteCount).map((like) => (
                     <div
                       key={like.id}
                       className="relative bg-stone-800 rounded-lg p-4 flex flex-col items-center"
@@ -676,69 +730,89 @@ export default function Profile(props: ProfileProps) {
                   </p>
                 )}
               </div>
+              {favoriteCount < favorites.length ? ( // esto es el loading se activa al scrollear
+                <div className="flex justify-center pt-10 pb-15">
+                  <div className="flex space-x-3">
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
+                  </div>
+                </div>
+              ) : <div className={`text-gray-400 text-sm text-center pb-5 pt-10 ${favorites.length === 0 ? 'hidden' : ''}`}> NO MORE FAVORITES</div>}
             </div>
           ) : (
             /* Home tab - Posts */
-            <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
-              {cards.length ? (
-                cards.map((card) => (
-                  <div
-                    key={card.id}
-                    className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative"
-                  >
-                    <button
-                      onClick={() => setDeleteModalOpen(card.id)}
-                      className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 duration-500 text-white text-xs px-2 py-1 rounded"
+            <div>
+              <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
+                {cards.length ? (
+                  cards.slice(0, visibleCount).map((card) => (
+                    <div
+                      key={card.id}
+                      className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative"
                     >
-                      ✕
-                    </button>
+                      <button
+                        onClick={() => setDeleteModalOpen(card.id)}
+                        className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 duration-500 text-white text-xs px-2 py-1 rounded"
+                      >
+                        ✕
+                      </button>
 
-                    {deleteModalOpen === card.id && (
-                      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                        <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
-                          <h2 className="text-white text-lg font-semibold mb-4">
-                            ¿Estás seguro de que deseas eliminar esta
-                            publicación?
-                          </h2>
-                          <div className="flex justify-end gap-4 mt-4">
-                            <button
-                              className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                              onClick={() => setDeleteModalOpen(null)}
-                            >
-                              Cancelar
-                            </button>
-                            <button
-                              className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
-                              onClick={() => handleDeletePublication(card.id)}
-                            >
-                              Eliminar
-                            </button>
+                      {deleteModalOpen === card.id && (
+                        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                          <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
+                            <h2 className="text-white text-lg font-semibold mb-4">
+                              ¿Estás seguro de que deseas eliminar esta
+                              publicación?
+                            </h2>
+                            <div className="flex justify-end gap-4 mt-4">
+                              <button
+                                className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
+                                onClick={() => setDeleteModalOpen(null)}
+                              >
+                                Cancelar
+                              </button>
+                              <button
+                                className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
+                                onClick={() => handleDeletePublication(card.id)}
+                              >
+                                Eliminar
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {card.image ? (
-                      <img
-                        src={card.image}
-                        alt={`Card ${card.id}`}
-                        className="w-full h-auto block"
-                      />
-                    ) : (
-                      <div className="w-full bg-gray-600 flex items-center justify-center text-gray-300 text-xs h-40">
-                        Sin imagen
-                      </div>
-                    )}
-                    <p className="text-xs text-gray-200 text-center px-2 py-2">
-                      {card.description}
-                    </p>
+                      {card.image ? (
+                        <img
+                          src={card.image}
+                          alt={`Card ${card.id}`}
+                          className="w-full h-auto block"
+                        />
+                      ) : (
+                        <div className="w-full bg-gray-600 flex items-center justify-center text-gray-300 text-xs h-40">
+                          Sin imagen
+                        </div>
+                      )}
+                      <p className="text-xs text-gray-200 text-center px-2 py-2">
+                        {card.description}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm text-center col-span-3">
+                    No hay posts aún.
+                  </p>
+                )}
+              </div>
+              {visibleCount < cards.length ? ( // esto es el loading se activa al scrollear
+                <div className="flex justify-center pt-10 pb-15">
+                  <div className="flex space-x-3">
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
                   </div>
-                ))
-              ) : (
-                <p className="text-gray-400 text-sm text-center col-span-3">
-                  No hay posts aún.
-                </p>
-              )}
+                </div>
+              ) : <div className={`text-gray-400 text-sm text-center pb-5 pt-10 ${cards.length === 0 ? 'hidden' : ''}`}> NO MORE POSTS</div>}
             </div>
           )}
         </div>
@@ -751,6 +825,6 @@ export default function Profile(props: ProfileProps) {
       >
         +
       </Link>
-    </section>
+    </section >
   );
 }
