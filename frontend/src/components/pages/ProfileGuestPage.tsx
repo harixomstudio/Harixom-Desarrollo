@@ -295,25 +295,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
       showToast("Error al actualizar el seguimiento", "error");
     }
   };
-  const handleToggleLike = async (postId: number) => {
-    try {
-      const token = localStorage.getItem("access_token");
-      const { data } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/like/${postId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (data.liked) {
-        setFavorites((prev) => [...prev, data.post]); // agrega si liked
-      } else {
-        setFavorites((prev) => prev.filter((f) => f.id !== postId)); // elimina si deslike
-      }
-      showToast(data.liked ? "Like agregado" : "Like eliminado", "success");
-    } catch (err) {
-      console.error(err);
-      showToast("No se pudo actualizar el like", "error");
-    }
-  };
 
   return (
 
@@ -610,12 +591,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                       key={like.id}
                       className="relative bg-stone-800 rounded-lg p-4 flex flex-col items-center"
                     >
-                      <button
-                        onClick={() => handleToggleLike(like.id)}
-                        className="absolute top-2 right-2 bg-pink-400 hover:bg-pink-500 text-white text-xs px-2 py-1 rounded"
-                      >
-                        ✕
-                      </button>
                       {like.image ? (
                         <img
                           src={like.image}

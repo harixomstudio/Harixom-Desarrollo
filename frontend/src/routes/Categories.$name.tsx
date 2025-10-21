@@ -63,7 +63,7 @@ function RouteComponent() {
 }> = {
   "Photography": {
     style: "text-[#ff6161]",
-    icon: "../public/icon-foto.svg",
+    icon: "../icon-foto.svg",
     alt: "Photography icon",
     info: (
       <>
@@ -101,7 +101,7 @@ function RouteComponent() {
   },
   "Animation": {
     style: "text-[#A39FF6]",
-    icon: "../public/icon-animacion.svg",
+    icon: "../icon-animacion.svg",
     alt: "Animation icon",
     info: (
       <>
@@ -120,7 +120,7 @@ function RouteComponent() {
   },
   "Sculpture": {
     style: "text-[#9fe2f6]",
-    icon: "../public/icon-sculture.svg",
+    icon: "../icon-sculture.svg",
     alt: "Sculpture icon",
     info: (
       <>
@@ -139,7 +139,7 @@ function RouteComponent() {
   },
   "Traditional": {
     style: "text-[#61ffa3]",
-    icon: "../public/icon-traditional.svg",
+    icon: "../icon-traditional.svg",
     alt: "Traditional art icon",
     info: (
       <>
@@ -158,7 +158,7 @@ function RouteComponent() {
   },
   "Street Art": {
     style: "text-[#fddb1a]",
-    icon: "../public/icon-streetart.svg",
+    icon: "../icon-streetart.svg",
     alt: "Street art icon",
     info: (
       <>
@@ -177,7 +177,7 @@ function RouteComponent() {
   },
   "Digital Art": {
     style: "text-pink-400",
-    icon: "../public/icon-digitalart.svg",
+    icon: "../icon-digitalart.svg",
     alt: "Digital art icon",
     info: (
       <>

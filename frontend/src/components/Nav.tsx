@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation  } from "@tanstack/react-router";
+import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { axiosRequest } from "../components/helpers/config";
 import { useToast } from "../components/ui/Toast";
@@ -187,6 +187,7 @@ export default function Nav() {
                           navigate({ to: "/Profile" });
                         } else {
                           navigate({ to: "/ProfileGuest", search: { userId: user.id } });
+                          setTimeout(() => window.location.reload(), 100);
                         }
                         setShowModal(false);
                       }}
