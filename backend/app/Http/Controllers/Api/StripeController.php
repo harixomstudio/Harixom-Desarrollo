@@ -36,7 +36,7 @@ $email = $user->email; // viene del token
         $plan = $request->plan;   // 'monthly' o 'annual'
         \Log::info('Plan seleccionado', ['plan' => $plan]);
 
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey('sk_test_51SKQLwRtEJ6FFuUtTad4B2Sn6kI4DxGpIhuRj5kspE1rurj45nrqqm2THLHI1CP3MAd1ZXBAKVZkgG3HhuGLgol600EST2fRbm');
 
         $priceId = $plan === 'monthly'
             ? 'price_1SKQXRRtEJ6FFuUtsSOpb7df' 
@@ -59,49 +59,40 @@ $email = $user->email; // viene del token
     }
 
     public function handleWebhook(Request $request)
-    {
-        \Log::info('Webhook recibido', ['payload' => $request->getContent()]);
-        $payload = $request->getContent();
-        $sigHeader = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
-        $secret = config('services.stripe.webhook_secret');
+{
+    $payload = $request->getContent();
+    $sigHeader = $request->header('Stripe-Signature');
+    $secret = env('STRIPE_WEBHOOK_SECRET');
 
-        try {
-            $event = \Stripe\Webhook::constructEvent($payload, $sigHeader, $secret);
-        } catch (\UnexpectedValueException $e) {
-            return response('Invalid payload', 400);
-        } catch (\Stripe\Exception\SignatureVerificationException $e) {
-            return response('Invalid signature', 400);
-        }
+    try {
+        $event = \Stripe\Webhook::constructEvent($payload, $sigHeader, $secret);
+        \Log::info('✅ Webhook recibido', ['type' => $event->type]);
+    } catch (\Exception $e) {
+        \Log::error('⚠️ Error webhook', ['msg' => $e->getMessage()]);
+        return response('Webhook error', 400);
+    }
 
-        // 🔹 Cuando se crea la suscripción
-        if ($event->type === 'checkout.session.completed') {
+    // ✅ Solo aquí procesas el evento
+    switch ($event->type) {
+        case 'checkout.session.completed':
             $session = $event->data->object;
-
             $user = \App\Models\User::where('email', $session->customer_email)->first();
             if ($user) {
-                Subscription::updateOrCreate(
-                    ['user_id' => $user->id],
-                    [
-                        'stripe_subscription_id' => $session->subscription,
-                        'stripe_customer_id' => $session->customer,
-                        'plan_type' => 'monthly', // o determinarlo dinámicamente
-                        'status' => 'active'
-                    ]
-                );
-
-                $user->update(['is_premium' => true]);
+                $user->is_premium = true;
+                $user->save();
+                \Log::info('Usuario actualizado a premium', ['user_id' => $user->id]);
             }
-        }
+            break;
 
-        // 🔸 Si la suscripción se cancela
-        if ($event->type === 'customer.subscription.deleted') {
-            $sub = Subscription::where('stripe_subscription_id', $event->data->object->id)->first();
+        case 'customer.subscription.deleted':
+            $sub = \App\Models\Subscription::where('stripe_subscription_id', $event->data->object->id)->first();
             if ($sub) {
                 $sub->update(['status' => 'canceled']);
                 $sub->user->update(['is_premium' => false]);
             }
-        }
-
-        return response('Webhook handled', 200);
+            break;
     }
+
+    return response('Webhook handled', 200); // Siempre responde 200 si todo va bien
+}
 }
