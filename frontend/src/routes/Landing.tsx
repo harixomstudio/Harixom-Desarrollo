@@ -79,8 +79,8 @@ const footer = {
     "https://www.tiktok.com/@harixom2025",
     "https://youtube.com/@harixom_2025",
   ],
-   contacts: ["+506 8394 7941", "harixonstudio@gmail.com"],
-   linksContacts: ["https://wa.me/50683947941", "mailto:harixonstudio@gmail.com"],
+   contacts: ["+506 8394 7941", "harixonstudio@gmail.com", "Report a suggestion or problem"],
+   linksContacts: ["https://wa.me/50683947941", "mailto:harixonstudio@gmail.com","https://docs.google.com/forms/d/e/1FAIpQLScROFJWquxRPF6S0Wa9JzfyD8rz2sCJiYz-fjYJ0opYUzmZOw/viewform?usp=sharing&ouid=111796854085052906024"],
 
 
    

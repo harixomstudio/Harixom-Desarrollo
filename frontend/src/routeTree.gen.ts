@@ -27,6 +27,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
 import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
 import { Route as EventsRouteImport } from './routes/Events'
+import { Route as DashboardRouteImport } from './routes/Dashboard'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
 import { Route as AIChallengeRouteImport } from './routes/AIChallenge'
 import { Route as IndexRouteImport } from './routes/index'
@@ -122,6 +123,11 @@ const EventsRoute = EventsRouteImport.update({
   path: '/Events',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/Dashboard',
+  path: '/Dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreatePublicationRoute = CreatePublicationRouteImport.update({
   id: '/CreatePublication',
   path: '/CreatePublication',
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
   '/CreatePublication': typeof CreatePublicationRoute
+  '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
   '/CreatePublication': typeof CreatePublicationRoute
+  '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
   '/CreatePublication': typeof CreatePublicationRoute
+  '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/Feed': typeof FeedRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/'
     | '/AIChallenge'
     | '/CreatePublication'
+    | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
     | '/Feed'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/'
     | '/AIChallenge'
     | '/CreatePublication'
+    | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
     | '/Feed'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
     | '/'
     | '/AIChallenge'
     | '/CreatePublication'
+    | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
     | '/Feed'
@@ -295,6 +307,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AIChallengeRoute: typeof AIChallengeRoute
   CreatePublicationRoute: typeof CreatePublicationRoute
+  DashboardRoute: typeof DashboardRoute
   EventsRoute: typeof EventsRoute
   EventsDetailRoute: typeof EventsDetailRoute
   FeedRoute: typeof FeedRoute
@@ -444,6 +457,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/Dashboard': {
+      id: '/Dashboard'
+      path: '/Dashboard'
+      fullPath: '/Dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/CreatePublication': {
       id: '/CreatePublication'
       path: '/CreatePublication'
@@ -479,6 +499,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AIChallengeRoute: AIChallengeRoute,
   CreatePublicationRoute: CreatePublicationRoute,
+  DashboardRoute: DashboardRoute,
   EventsRoute: EventsRoute,
   EventsDetailRoute: EventsDetailRoute,
   FeedRoute: FeedRoute,
