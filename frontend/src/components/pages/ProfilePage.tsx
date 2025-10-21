@@ -359,8 +359,6 @@ export default function Profile(props: ProfileProps) {
             </span>
           </div>
 
-
-
           {/* Followers Modal */}
           {showFollowers && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

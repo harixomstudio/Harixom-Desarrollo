@@ -108,6 +108,7 @@ class UserController extends Controller
         return response()->json([
             'user' => UserResource::make($request->user()),
         ]);
+        
     }
 
     //Funcion updateProfile
@@ -130,12 +131,6 @@ class UserController extends Controller
             'terms' => 'nullable|string',
             'commissions_enabled' => 'nullable|boolean',
         ]);
-
-// Log para depuración
-    \Log::info('Commissions Enabled recibido:', [
-        'raw' => $request->input('commissions_enabled'),
-        'validated' => $data['commissions_enabled'] ?? null,
-    ]);
 
     // Aseguramos que sea boolean/int correcto
     if (isset($data['commissions_enabled'])) {

@@ -15,7 +15,7 @@ interface FooterProps {
 export default function Footer(props: FooterProps) {
   return (
     <footer
-      className="flex flex-col items-center w-full py-16"
+      className="flex flex-col items-center w-full py-10"
       style={{ fontFamily: "monserrat" }}
     >
 
@@ -37,7 +37,7 @@ export default function Footer(props: FooterProps) {
 
           {/* Products */}
           <div className="flex flex-col items-start justify-center max-md:w-full max-md:items-center">
-            <h5 className="font-semibold pb-4 text-lg">Products</h5>
+            <h5 className="font-semibold pb-4 text-lg">Interactions</h5>
             {props.products.map((product, index) => (
               <Link
                 key={index}
@@ -83,7 +83,7 @@ export default function Footer(props: FooterProps) {
         </div>
       </section>
 
-      <p className="w-full text-center text-base bg-[#141414] p-10">
+      <p className="w-full text-center text-base bg-[#141414] pt-15">
         © 2025 {props.titlePage}. All rights reserved
       </p>
     </footer>

@@ -36,7 +36,8 @@ class UserResource extends JsonResource
         'id' => $post->id,
         'description' => $post->description,
         'image' => $post->image ? url($post->image) : null,
-        'created_at' => $post->created_at, 
+        'created_at' => $post->created_at,
+         
     ];
 }),
         ];
