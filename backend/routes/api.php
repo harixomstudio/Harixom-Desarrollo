@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\EventApiController;
 use App\Http\Controllers\Api\TallerApiController;
 use App\Http\Controllers\Api\ProfileMessageController;
 use App\Http\Controllers\Api\SearchController;
-use App\Http\Controllers\StripeController;
+use App\Http\Controllers\Api\StripeController;
 
 Route::middleware('auth:sanctum')->group(function () {
     //Rutas de perfil
@@ -66,11 +66,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{id}/follows', [UserController::class, 'guestFollows']);
     Route::get('/follow/{user}/check', [InteractionController::class, 'checkFollow']);
 
-    
-});
-
-//Pagos
+    //Pagos
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
+
+});
 
 //Stripe
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
