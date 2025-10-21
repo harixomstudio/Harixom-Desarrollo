@@ -37,7 +37,7 @@ const categoriesDown = [
   "icon-foto.svg",
 ];
 const categoriesDownNames = [
-  "3D",
+  "3D Art",
   "Street Art",
   "Photography",
 ];
@@ -46,7 +46,7 @@ const categoriesDownColors = [
   "#FDD519", // naranja
   "#FA6063", // rojo
 ];
-const links2 = ["/Categories/3d", "/Categories/Street Art", "/Categories/Photography"];
+const links2 = ["/Categories/3D Art", "/Categories/Street Art", "/Categories/Photography"];
 
 const linksArt = ["", "", "", "", "", "", "", "", "", ""];
 
