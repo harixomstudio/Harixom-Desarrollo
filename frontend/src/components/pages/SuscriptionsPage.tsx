@@ -25,22 +25,46 @@ const SuscriptionsPage = () => {
   ];
 
   const token = localStorage.getItem("access_token");
-  const handleSubscribe = async (plan: string) => {
-  const token = localStorage.getItem("access_token");
-  try {
-    const res = await axios.post(
-      "https://harixom-desarrollo.onrender.com/api/create-checkout-session",
-      { plan },
-      {
-        headers: { Authorization: `Bearer ${token}` },
+  console.log("Access token:", token); // Verificar si hay token
+
+  const handleSubscription = async (plan: string) => {
+    console.log("Iniciando creación de suscripción para plan:", plan);
+    if (!token) {
+      console.warn("No hay token de acceso");
+      alert("No estás autenticado");
+      return;
+    }
+
+    try {
+      console.log("Enviando request a backend...");
+      const response = await axios.post(
+        "https://harixom-desarrollo.onrender.com/api/subscriptions/createCheckoutSession",
+        { plan: plan.toLowerCase() },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Respuesta del backend:", response);
+      console.log("URL de checkout:", response.data.url);
+
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      } else {
+        console.error("No se recibió URL del checkout");
+        alert("No se pudo crear la sesión de Stripe");
       }
-    );
-    window.location.href = res.data.url; // redirige al checkout
-  } catch (err) {
-    console.error(err);
-    alert("Error al crear la sesión de Stripe.");
-  }
-};
+    } catch (err: any) {
+      console.error("Error al crear la sesión de Stripe:", err);
+      if (err.response) {
+        console.error("Error response data:", err.response.data);
+        console.error("Error response status:", err.response.status);
+      }
+      alert("Error creando la sesión de Stripe. Revisa la consola para más detalles.");
+    }
+  };
 
   return (
     <section className="min-h-screen bg-black text-white flex flex-col items-center py-20 px-4" style={{ fontFamily: "Monserrat" }}>
@@ -78,7 +102,7 @@ const SuscriptionsPage = () => {
               ))}
             </ul>
             <button
-              onClick={() => handleSubscribe(plan.title.toLowerCase())}
+              onClick={() => handleSubscription(plan.title)}
               className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition"
             >
               Order Now
