@@ -13,7 +13,7 @@ export default function Notifications(props: NotificationsProps) {
     props.images.map((_, number) => props.prioritys[number] === 'High' ? props.images[number] = 'bellPink.svg' : props.prioritys[number] === 'Medium' ? props.images[number] = 'bellYellow.svg' : props.prioritys[number] === 'Low' ? props.images[number] = 'bellBlue.svg' : '')
     
     return (
-        <section className="flex flex-col w-full py-25 gap-10 items-center bg-stone-950 text-white">
+        <section className="flex flex-col w-full py-10 gap-10 items-center bg-stone-950 text-white">
             <h1 className=" text-4xl min-lg:text-6xl font-medium cursor-default font-startruc text-pink-500">{props.notification}</h1>
           
             {props.titles.map((_,number) => (
