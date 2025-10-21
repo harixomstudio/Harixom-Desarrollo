@@ -111,8 +111,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
     };
   }, [visibleCount]);
 
-
-
   // Funciones para abrir y cerrar el modal
   const openModal = (publication: Publication) => {
     setSelectedPublication(publication);

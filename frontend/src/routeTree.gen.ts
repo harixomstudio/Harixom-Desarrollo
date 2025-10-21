@@ -25,6 +25,7 @@ import { Route as LandingRouteImport } from './routes/Landing'
 import { Route as InboxRouteImport } from './routes/Inbox'
 import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
+import { Route as FAQRouteImport } from './routes/FAQ'
 import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
 import { Route as EventsRouteImport } from './routes/Events'
 import { Route as DashboardRouteImport } from './routes/Dashboard'
@@ -113,6 +114,11 @@ const FeedRoute = FeedRouteImport.update({
   path: '/Feed',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FAQRoute = FAQRouteImport.update({
+  id: '/FAQ',
+  path: '/FAQ',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsDetailRoute = EventsDetailRouteImport.update({
   id: '/EventsDetail',
   path: '/EventsDetail',
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
+  '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Inbox': typeof InboxRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByTo {
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
+  '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Inbox': typeof InboxRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
+  '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Inbox': typeof InboxRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
+    | '/FAQ'
     | '/Feed'
     | '/ForgotPassword'
     | '/Inbox'
@@ -259,6 +269,7 @@ export interface FileRouteTypes {
     | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
+    | '/FAQ'
     | '/Feed'
     | '/ForgotPassword'
     | '/Inbox'
@@ -284,6 +295,7 @@ export interface FileRouteTypes {
     | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
+    | '/FAQ'
     | '/Feed'
     | '/ForgotPassword'
     | '/Inbox'
@@ -310,6 +322,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   EventsRoute: typeof EventsRoute
   EventsDetailRoute: typeof EventsDetailRoute
+  FAQRoute: typeof FAQRoute
   FeedRoute: typeof FeedRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   InboxRoute: typeof InboxRoute
@@ -443,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/FAQ': {
+      id: '/FAQ'
+      path: '/FAQ'
+      fullPath: '/FAQ'
+      preLoaderRoute: typeof FAQRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/EventsDetail': {
       id: '/EventsDetail'
       path: '/EventsDetail'
@@ -502,6 +522,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   EventsRoute: EventsRoute,
   EventsDetailRoute: EventsDetailRoute,
+  FAQRoute: FAQRoute,
   FeedRoute: FeedRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   InboxRoute: InboxRoute,

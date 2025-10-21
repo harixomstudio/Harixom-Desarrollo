@@ -33,8 +33,6 @@ interface LandingProps {
   descriptionApp: string;
   textApp: string;
   linksArt: string[];
-  commisionsCategories: string[];
-  linksCommisions: string[];
   footer?: FooterProps;
 }
 
