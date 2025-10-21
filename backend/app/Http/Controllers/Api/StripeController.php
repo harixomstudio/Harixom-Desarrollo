@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
@@ -11,14 +12,35 @@ class StripeController extends Controller
 {
     public function createCheckoutSession(Request $request)
     {
-        $user = $request->user(); // viene del token
+
+        // Loguear todo lo que entra
+    \Log::info('Headers recibidos:', $request->headers->all());
+
+    // Intentar obtener el usuario autenticado
+    $user = $request->user();
+
+    // Log para ver si el usuario es null
+    if (!$user) {
+        \Log::warning('Usuario no autenticado', ['headers' => $request->headers->all()]);
+        return response()->json(['error' => 'Usuario no autenticado'], 401);
+    }
+
+// Loguear el usuario recibido
+    \Log::info('Usuario autenticado', [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email
+    ]);
+
+$email = $user->email; // viene del token
         $plan = $request->plan;   // 'monthly' o 'annual'
+        \Log::info('Plan seleccionado', ['plan' => $plan]);
 
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $priceId = $plan === 'monthly'
-            ? 'price_1QABC123xyz456Monthly'  // ← reemplaza con tu ID de Stripe real
-            : 'price_1QABC123xyz456Annual';  // ← reemplaza con tu ID de Stripe real
+            ? 'price_1SKQXRRtEJ6FFuUtsSOpb7df' 
+            : 'price_1SKQYmRtEJ6FFuUtK9JWK24a';
 
         $session = Session::create([
             'customer_email' => $user->email,
@@ -27,15 +49,18 @@ class StripeController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'subscription',
-            'success_url' => env('FRONTEND_URL') . '/subscription-success?session_id={CHECKOUT_SESSION_ID}',
+            'success_url' => env('FRONTEND_URL') . '/Profile',
             'cancel_url' => env('FRONTEND_URL') . '/subscription-cancelled',
         ]);
+
+        \Log::info('Stripe session creada', ['url' => $session->url]);
 
         return response()->json(['url' => $session->url]);
     }
 
     public function handleWebhook(Request $request)
     {
+        \Log::info('Webhook recibido', ['payload' => $request->getContent()]);
         $payload = $request->getContent();
         $sigHeader = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
         $secret = config('services.stripe.webhook_secret');

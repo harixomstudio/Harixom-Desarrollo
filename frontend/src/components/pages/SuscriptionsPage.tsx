@@ -26,18 +26,25 @@ const SuscriptionsPage = () => {
 
   const token = localStorage.getItem("access_token");
   const handleSubscribe = async (plan: string) => {
-  const token = localStorage.getItem("access_token");
+  console.log("Plan seleccionado:", plan);
+  console.log("Token enviado:", token);
+
   try {
     const res = await axios.post(
       "https://harixom-desarrollo.onrender.com/api/create-checkout-session",
       { plan },
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
       }
     );
+
+    console.log("Respuesta del servidor:", res.data);
     window.location.href = res.data.url; // redirige al checkout
-  } catch (err) {
-    console.error(err);
+  } catch (err: any) {
+    console.error("Error Axios:", err.response ? err.response.data : err);
     alert("Error al crear la sesión de Stripe.");
   }
 };
