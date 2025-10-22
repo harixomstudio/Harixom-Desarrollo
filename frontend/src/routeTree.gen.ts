@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SubscriptionSuccessRouteImport } from './routes/subscription-success'
+import { Route as SubscriptionCancelledRouteImport } from './routes/subscription-cancelled'
 import { Route as WorkshopsDetailRouteImport } from './routes/WorkshopsDetail'
 import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
@@ -34,6 +36,16 @@ import { Route as AIChallengeRouteImport } from './routes/AIChallenge'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CategoriesNameRouteImport } from './routes/Categories.$name'
 
+const SubscriptionSuccessRoute = SubscriptionSuccessRouteImport.update({
+  id: '/subscription-success',
+  path: '/subscription-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscriptionCancelledRoute = SubscriptionCancelledRouteImport.update({
+  id: '/subscription-cancelled',
+  path: '/subscription-cancelled',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkshopsDetailRoute = WorkshopsDetailRouteImport.update({
   id: '/WorkshopsDetail',
   path: '/WorkshopsDetail',
@@ -179,6 +191,8 @@ export interface FileRoutesByFullPath {
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/subscription-cancelled': typeof SubscriptionCancelledRoute
+  '/subscription-success': typeof SubscriptionSuccessRoute
   '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRoutesByTo {
@@ -205,6 +219,8 @@ export interface FileRoutesByTo {
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/subscription-cancelled': typeof SubscriptionCancelledRoute
+  '/subscription-success': typeof SubscriptionSuccessRoute
   '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRoutesById {
@@ -232,6 +248,8 @@ export interface FileRoutesById {
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/subscription-cancelled': typeof SubscriptionCancelledRoute
+  '/subscription-success': typeof SubscriptionSuccessRoute
   '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRouteTypes {
@@ -260,6 +278,8 @@ export interface FileRouteTypes {
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/subscription-cancelled'
+    | '/subscription-success'
     | '/Categories/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -286,6 +306,8 @@ export interface FileRouteTypes {
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/subscription-cancelled'
+    | '/subscription-success'
     | '/Categories/$name'
   id:
     | '__root__'
@@ -312,6 +334,8 @@ export interface FileRouteTypes {
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/subscription-cancelled'
+    | '/subscription-success'
     | '/Categories/$name'
   fileRoutesById: FileRoutesById
 }
@@ -339,11 +363,27 @@ export interface RootRouteChildren {
   UserRegisterRoute: typeof UserRegisterRoute
   WorkshopsRoute: typeof WorkshopsRoute
   WorkshopsDetailRoute: typeof WorkshopsDetailRoute
+  SubscriptionCancelledRoute: typeof SubscriptionCancelledRoute
+  SubscriptionSuccessRoute: typeof SubscriptionSuccessRoute
   CategoriesNameRoute: typeof CategoriesNameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/subscription-success': {
+      id: '/subscription-success'
+      path: '/subscription-success'
+      fullPath: '/subscription-success'
+      preLoaderRoute: typeof SubscriptionSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subscription-cancelled': {
+      id: '/subscription-cancelled'
+      path: '/subscription-cancelled'
+      fullPath: '/subscription-cancelled'
+      preLoaderRoute: typeof SubscriptionCancelledRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/WorkshopsDetail': {
       id: '/WorkshopsDetail'
       path: '/WorkshopsDetail'
@@ -539,6 +579,8 @@ const rootRouteChildren: RootRouteChildren = {
   UserRegisterRoute: UserRegisterRoute,
   WorkshopsRoute: WorkshopsRoute,
   WorkshopsDetailRoute: WorkshopsDetailRoute,
+  SubscriptionCancelledRoute: SubscriptionCancelledRoute,
+  SubscriptionSuccessRoute: SubscriptionSuccessRoute,
   CategoriesNameRoute: CategoriesNameRoute,
 }
 export const routeTree = rootRouteImport

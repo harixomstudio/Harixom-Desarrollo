@@ -135,7 +135,7 @@ export default function SetProfilePage() {
             className="w-full h-full object-cover"
           />
           <img
-            src={profile.banner_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
+            src={profile.banner_picture || "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80"}
             alt="Banner"
             className="w-full h-full object-cover"
           />

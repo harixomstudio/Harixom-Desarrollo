@@ -269,8 +269,6 @@ export default function Profile(props: ProfileProps) {
     }
   };
 
-  console.log(props);
-
   return (
     <section
       className="relative flex items-center justify-center bg-stone-950 min-h-screen"
@@ -330,7 +328,7 @@ export default function Profile(props: ProfileProps) {
             {/* Username */}
             <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}</span>
               {props.isPremium && (
-                <img src="/premiumBadge.svg" alt="Insignia Premium" className="w-5 h-5 mx-2"/>
+                <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6 mx-2"/>
               )}
 
             {/* Buy me a coffee button */}
