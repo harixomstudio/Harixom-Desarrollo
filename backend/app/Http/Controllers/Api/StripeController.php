@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
+use Stripe\PaymentIntent;
 use Stripe\Checkout\Session;
 use App\Models\Subscription;
 
@@ -36,7 +37,7 @@ $email = $user->email; // viene del token
         $plan = $request->plan;   // 'monthly' o 'annual'
         \Log::info('Plan seleccionado', ['plan' => $plan]);
 
-        Stripe::setApiKey('sk_test_51SKQLwRtEJ6FFuUtTad4B2Sn6kI4DxGpIhuRj5kspE1rurj45nrqqm2THLHI1CP3MAd1ZXBAKVZkgG3HhuGLgol600EST2fRbm');
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $priceId = $plan === 'monthly'
             ? 'price_1SKQXRRtEJ6FFuUtsSOpb7df' 
@@ -49,50 +50,53 @@ $email = $user->email; // viene del token
                 'quantity' => 1,
             ]],
             'mode' => 'subscription',
-            'success_url' => env('FRONTEND_URL') . '/Profile',
+            'success_url' => env('FRONTEND_URL') . '/subscription-success',
             'cancel_url' => env('FRONTEND_URL') . '/subscription-cancelled',
         ]);
 
         \Log::info('Stripe session creada', ['url' => $session->url]);
 
+        $user->is_premium = true;
+    $user->save();
+    \Log::info('Usuario marcado como premium (simulación)', ['user_id' => $user->id]);
+
         return response()->json(['url' => $session->url]);
     }
 
-    public function handleWebhook(Request $request)
+    public function cancelSubscription(Request $request)
 {
-    $payload = $request->getContent();
-    $sigHeader = $request->header('Stripe-Signature');
-    $secret = env('STRIPE_WEBHOOK_SECRET');
+    $user = $request->user();
+
+    // Verificar si el usuario está marcado como premium
+    if (!$user || !$user->is_premium) {
+        return response()->json(['error' => 'No hay suscripción activa'], 400);
+    }
+
+    Stripe::setApiKey(env('STRIPE_SECRET'));
 
     try {
-        $event = \Stripe\Webhook::constructEvent($payload, $sigHeader, $secret);
-        \Log::info('✅ Webhook recibido', ['type' => $event->type]);
+        // Si el usuario no tiene un stripe_subscription_id, solo baja su estado premium
+        if (!$user->stripe_subscription_id) {
+            $user->is_premium = false;
+            $user->save();
+
+            return response()->json([
+                'message' => 'Suscripción cancelada localmente (sin registro en Stripe)'
+            ]);
+        }
+
+        // Si tiene un ID válido en Stripe, se cancela allá también
+        $subscription = \Stripe\Subscription::retrieve($user->stripe_subscription_id);
+        $subscription->cancel(); // Cancela inmediatamente
+
+        // Actualiza el usuario
+        $user->is_premium = false;
+        $user->stripe_subscription_id = null;
+        $user->save();
+
+        return response()->json(['message' => 'Suscripción cancelada con éxito']);
     } catch (\Exception $e) {
-        \Log::error('⚠️ Error webhook', ['msg' => $e->getMessage()]);
-        return response('Webhook error', 400);
+        return response()->json(['error' => $e->getMessage()], 500);
     }
-
-    // ✅ Solo aquí procesas el evento
-    switch ($event->type) {
-        case 'checkout.session.completed':
-            $session = $event->data->object;
-            $user = \App\Models\User::where('email', $session->customer_email)->first();
-            if ($user) {
-                $user->is_premium = true;
-                $user->save();
-                \Log::info('Usuario actualizado a premium', ['user_id' => $user->id]);
-            }
-            break;
-
-        case 'customer.subscription.deleted':
-            $sub = \App\Models\Subscription::where('stripe_subscription_id', $event->data->object->id)->first();
-            if ($sub) {
-                $sub->update(['status' => 'canceled']);
-                $sub->user->update(['is_premium' => false]);
-            }
-            break;
-    }
-
-    return response('Webhook handled', 200); // Siempre responde 200 si todo va bien
 }
 }
