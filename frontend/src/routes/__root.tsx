@@ -53,9 +53,9 @@ function RootComponent() {
       )}
 
       {/* CONTENIDO PRINCIPAL */}
-      <div className="flex min-h-screen">
-        {!hideNav && <div className="w-14 shrink-0" />}
-        <div className="flex-1 bg-stone-950">
+      <div className={`flex min-h-screen ${!hideNav ? "pl-14" : ""}`}>
+      {!hideNav}
+        <div className="flex-1 bg-stone-950 w-full">
           <Outlet />
         </div>
       </div>
