@@ -33,7 +33,6 @@ class User extends Authenticatable
         'prices',     
         'terms', 
         'is_premium',
-        'stripe_subscription_id',
         'commissions_enabled',
     ];
 
