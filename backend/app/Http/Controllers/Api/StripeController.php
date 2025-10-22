@@ -37,7 +37,7 @@ $email = $user->email; // viene del token
         $plan = $request->plan;   // 'monthly' o 'annual'
         \Log::info('Plan seleccionado', ['plan' => $plan]);
 
-        Stripe::setApiKey('sk_test_51SKQLwRtEJ6FFuUtTad4B2Sn6kI4DxGpIhuRj5kspE1rurj45nrqqm2THLHI1CP3MAd1ZXBAKVZkgG3HhuGLgol600EST2fRbm');
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $priceId = $plan === 'monthly'
             ? 'price_1SKQXRRtEJ6FFuUtsSOpb7df' 
