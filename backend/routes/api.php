@@ -68,7 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Pagos
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
-
+    Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
 });
 
 //Stripe

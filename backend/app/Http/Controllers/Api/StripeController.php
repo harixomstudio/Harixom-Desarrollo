@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
+use Stripe\PaymentIntent;
 use Stripe\Checkout\Session;
 use App\Models\Subscription;
 
@@ -49,15 +50,20 @@ $email = $user->email; // viene del token
                 'quantity' => 1,
             ]],
             'mode' => 'subscription',
-            'success_url' => env('FRONTEND_URL') . '/Profile',
+            'success_url' => env('FRONTEND_URL') . '/subscription-success',
             'cancel_url' => env('FRONTEND_URL') . '/subscription-cancelled',
         ]);
 
         \Log::info('Stripe session creada', ['url' => $session->url]);
 
+        $user->is_premium = true;
+        $user->save();
+        \Log::info('Usuario marcado como premium (simulación)', ['user_id' => $user->id]);
+
         return response()->json(['url' => $session->url]);
     }
 
+<<<<<<< Updated upstream
     public function handleWebhook(Request $request)
     {
         \Log::info('Webhook recibido', ['payload' => $request->getContent()]);
@@ -104,4 +110,42 @@ $email = $user->email; // viene del token
 
         return response('Webhook handled', 200);
     }
+=======
+    public function cancelSubscription(Request $request)
+{
+    $user = $request->user();
+
+    // Verificar si el usuario está marcado como premium
+    if (!$user || !$user->is_premium) {
+        return response()->json(['error' => 'No hay suscripción activa'], 400);
+    }
+
+    Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    try {
+        // Si el usuario no tiene un stripe_subscription_id, solo baja su estado premium
+        if (!$user->stripe_subscription_id) {
+            $user->is_premium = false;
+            $user->save();
+
+            return response()->json([
+                'message' => 'Suscripción cancelada localmente (sin registro en Stripe)'
+            ]);
+        }
+
+        // Si tiene un ID válido en Stripe, se cancela allá también
+        $subscription = \Stripe\Subscription::retrieve($user->stripe_subscription_id);
+        $subscription->cancel(); // Cancela inmediatamente
+
+        // Actualiza el usuario
+        $user->is_premium = false;
+        $user->stripe_subscription_id = null;
+        $user->save();
+
+        return response()->json(['message' => 'Suscripción cancelada con éxito']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+>>>>>>> Stashed changes
 }

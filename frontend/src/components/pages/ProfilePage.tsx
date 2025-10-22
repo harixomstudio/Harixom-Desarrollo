@@ -19,7 +19,7 @@ interface ProfileProps {
   description: string;
   profilePicture?: string;
   bannerPicture?: string;
-  isPremium?:boolean;
+  isPremium?: boolean;
   tabs?: string[];
   cards: { id: number; description: string; image?: string }[];
   likes: any[];
@@ -62,7 +62,7 @@ export default function Profile(props: ProfileProps) {
   const [messageCount, setMessageCount] = useState(4);
   const [favoriteCount, setFavoriteCount] = useState(12);
 
-  
+
 
   useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan las publicaciones favoritas
     const handleScroll = () => {
@@ -269,7 +269,7 @@ export default function Profile(props: ProfileProps) {
     }
   };
 
-  console.log("Datos de usuario: ", props);
+  console.log(props);
 
   return (
     <section
@@ -328,10 +328,10 @@ export default function Profile(props: ProfileProps) {
         <div className="flex flex-col pl-10 text-white mt-6 mb-10 max-[19rem]:pl-5">
           <div className="flex items-center mb-2">
             {/* Username */}
-            <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}
-  {props.isPremium && (
-    <span className="text-yellow-400 text-sm font-semibold">★ Premium</span>
-  )}</span>
+            <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}</span>
+              {props.isPremium && (
+                <img src="/premiumBadge.svg" alt="Insignia Premium" className="w-5 h-5 mx-2"/>
+              )}
 
             {/* Buy me a coffee button */}
             <button

@@ -31,6 +31,7 @@ class UserResource extends JsonResource
             'commissions_enabled' => $this-> commissions_enabled,
             'profile_completed' => $this->profile_completed,
             'is_premium' => $this->is_premium,
+            'stripe_subscription_id' => $this->stripe_subscription_id,
             'posts' => $this->posts()->get()->map(function ($post) {
         
     return [
