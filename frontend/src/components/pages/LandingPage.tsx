@@ -262,7 +262,7 @@ export default function Landing(props: LandingProps) {
                   <h2
                     className={`absolute inset-0 flex items-center justify-center text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
                     style={{ fontFamily: "Monserrat" }}
-                  > 
+                  >
                     Get inspired and Create your own Art
                   </h2>
                 </div>
@@ -330,7 +330,7 @@ export default function Landing(props: LandingProps) {
                 <img
                   src={categoriesUp}
                   alt={`Image ${number}`}
-                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
+                  className="w-15 h-15 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
                 />
                 <span
                   className="text-center text-sm sm:text-base md:text-lg font-medium"
@@ -353,7 +353,7 @@ export default function Landing(props: LandingProps) {
                 <img
                   src={categoriesDown}
                   alt={`Image ${number}`}
-                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
+                  className="w-15 h-15 max-[31rem]:w-10 max-[31rem]:h-10 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
                 />
                 <span
                   className="text-center text-sm sm:text-base md:text-lg font-medium"

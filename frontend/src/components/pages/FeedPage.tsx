@@ -563,7 +563,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
           </div>
         </div>
-      ) : <div className="text-gray-400 text-sm text-center pb-5"> NO HAY MAS PUBLICACIONES</div> }
+      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS PUBLICACIONES</div> }
 
       {/* Modal publicaciones en grande */}
       {selectedPublication && (
