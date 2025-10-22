@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SubscriptionSuccessRouteImport } from './routes/subscription-success'
+import { Route as SubscriptionCancelledRouteImport } from './routes/subscription-cancelled'
 import { Route as WorkshopsDetailRouteImport } from './routes/WorkshopsDetail'
 import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
@@ -25,6 +27,7 @@ import { Route as LandingRouteImport } from './routes/Landing'
 import { Route as InboxRouteImport } from './routes/Inbox'
 import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
+import { Route as FAQRouteImport } from './routes/FAQ'
 import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
 import { Route as EventsRouteImport } from './routes/Events'
 import { Route as DashboardRouteImport } from './routes/Dashboard'
@@ -33,6 +36,16 @@ import { Route as AIChallengeRouteImport } from './routes/AIChallenge'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CategoriesNameRouteImport } from './routes/Categories.$name'
 
+const SubscriptionSuccessRoute = SubscriptionSuccessRouteImport.update({
+  id: '/subscription-success',
+  path: '/subscription-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscriptionCancelledRoute = SubscriptionCancelledRouteImport.update({
+  id: '/subscription-cancelled',
+  path: '/subscription-cancelled',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkshopsDetailRoute = WorkshopsDetailRouteImport.update({
   id: '/WorkshopsDetail',
   path: '/WorkshopsDetail',
@@ -113,6 +126,11 @@ const FeedRoute = FeedRouteImport.update({
   path: '/Feed',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FAQRoute = FAQRouteImport.update({
+  id: '/FAQ',
+  path: '/FAQ',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsDetailRoute = EventsDetailRouteImport.update({
   id: '/EventsDetail',
   path: '/EventsDetail',
@@ -156,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
+  '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Inbox': typeof InboxRoute
@@ -172,6 +191,8 @@ export interface FileRoutesByFullPath {
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/subscription-cancelled': typeof SubscriptionCancelledRoute
+  '/subscription-success': typeof SubscriptionSuccessRoute
   '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRoutesByTo {
@@ -181,6 +202,7 @@ export interface FileRoutesByTo {
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
+  '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Inbox': typeof InboxRoute
@@ -197,6 +219,8 @@ export interface FileRoutesByTo {
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/subscription-cancelled': typeof SubscriptionCancelledRoute
+  '/subscription-success': typeof SubscriptionSuccessRoute
   '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRoutesById {
@@ -207,6 +231,7 @@ export interface FileRoutesById {
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
   '/EventsDetail': typeof EventsDetailRoute
+  '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
   '/ForgotPassword': typeof ForgotPasswordRoute
   '/Inbox': typeof InboxRoute
@@ -223,6 +248,8 @@ export interface FileRoutesById {
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
   '/WorkshopsDetail': typeof WorkshopsDetailRoute
+  '/subscription-cancelled': typeof SubscriptionCancelledRoute
+  '/subscription-success': typeof SubscriptionSuccessRoute
   '/Categories/$name': typeof CategoriesNameRoute
 }
 export interface FileRouteTypes {
@@ -234,6 +261,7 @@ export interface FileRouteTypes {
     | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
+    | '/FAQ'
     | '/Feed'
     | '/ForgotPassword'
     | '/Inbox'
@@ -250,6 +278,8 @@ export interface FileRouteTypes {
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/subscription-cancelled'
+    | '/subscription-success'
     | '/Categories/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -259,6 +289,7 @@ export interface FileRouteTypes {
     | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
+    | '/FAQ'
     | '/Feed'
     | '/ForgotPassword'
     | '/Inbox'
@@ -275,6 +306,8 @@ export interface FileRouteTypes {
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/subscription-cancelled'
+    | '/subscription-success'
     | '/Categories/$name'
   id:
     | '__root__'
@@ -284,6 +317,7 @@ export interface FileRouteTypes {
     | '/Dashboard'
     | '/Events'
     | '/EventsDetail'
+    | '/FAQ'
     | '/Feed'
     | '/ForgotPassword'
     | '/Inbox'
@@ -300,6 +334,8 @@ export interface FileRouteTypes {
     | '/UserRegister'
     | '/Workshops'
     | '/WorkshopsDetail'
+    | '/subscription-cancelled'
+    | '/subscription-success'
     | '/Categories/$name'
   fileRoutesById: FileRoutesById
 }
@@ -310,6 +346,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   EventsRoute: typeof EventsRoute
   EventsDetailRoute: typeof EventsDetailRoute
+  FAQRoute: typeof FAQRoute
   FeedRoute: typeof FeedRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   InboxRoute: typeof InboxRoute
@@ -326,11 +363,27 @@ export interface RootRouteChildren {
   UserRegisterRoute: typeof UserRegisterRoute
   WorkshopsRoute: typeof WorkshopsRoute
   WorkshopsDetailRoute: typeof WorkshopsDetailRoute
+  SubscriptionCancelledRoute: typeof SubscriptionCancelledRoute
+  SubscriptionSuccessRoute: typeof SubscriptionSuccessRoute
   CategoriesNameRoute: typeof CategoriesNameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/subscription-success': {
+      id: '/subscription-success'
+      path: '/subscription-success'
+      fullPath: '/subscription-success'
+      preLoaderRoute: typeof SubscriptionSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subscription-cancelled': {
+      id: '/subscription-cancelled'
+      path: '/subscription-cancelled'
+      fullPath: '/subscription-cancelled'
+      preLoaderRoute: typeof SubscriptionCancelledRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/WorkshopsDetail': {
       id: '/WorkshopsDetail'
       path: '/WorkshopsDetail'
@@ -443,6 +496,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/FAQ': {
+      id: '/FAQ'
+      path: '/FAQ'
+      fullPath: '/FAQ'
+      preLoaderRoute: typeof FAQRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/EventsDetail': {
       id: '/EventsDetail'
       path: '/EventsDetail'
@@ -502,6 +562,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   EventsRoute: EventsRoute,
   EventsDetailRoute: EventsDetailRoute,
+  FAQRoute: FAQRoute,
   FeedRoute: FeedRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   InboxRoute: InboxRoute,
@@ -518,6 +579,8 @@ const rootRouteChildren: RootRouteChildren = {
   UserRegisterRoute: UserRegisterRoute,
   WorkshopsRoute: WorkshopsRoute,
   WorkshopsDetailRoute: WorkshopsDetailRoute,
+  SubscriptionCancelledRoute: SubscriptionCancelledRoute,
+  SubscriptionSuccessRoute: SubscriptionSuccessRoute,
   CategoriesNameRoute: CategoriesNameRoute,
 }
 export const routeTree = rootRouteImport

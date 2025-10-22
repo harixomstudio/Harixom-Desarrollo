@@ -30,13 +30,15 @@ class UserResource extends JsonResource
             'terms' => $this->terms,
             'commissions_enabled' => $this-> commissions_enabled,
             'profile_completed' => $this->profile_completed,
+            'is_premium' => $this->is_premium,
             'posts' => $this->posts()->get()->map(function ($post) {
         
     return [
         'id' => $post->id,
         'description' => $post->description,
         'image' => $post->image ? url($post->image) : null,
-        'created_at' => $post->created_at, 
+        'created_at' => $post->created_at,
+         
     ];
 }),
         ];

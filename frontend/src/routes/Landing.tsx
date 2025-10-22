@@ -50,28 +50,12 @@ const links2 = ["/Categories/3D Art", "/Categories/Street Art", "/Categories/Pho
 
 const linksArt = ["", "", "", "", "", "", "", "", "", ""];
 
-const commisionsCategories = [
-  "Retratos",
-  "Diseño de tatuajes",
-  "Paisajes",
-  "Diseño de personajes",
-  "Arte de mascotas",
-  "Anime/Manga",
-  "Comisiones personalizadas",
-  "Fantasía",
-  "Cartoon",
-  "Realismo",
-  "",
-  "",
-];
-const linksCommisions = ["", "", "", "", "", "", "", "", "", "", "", ""];
-
 const footer = {
   titlePage: "Harixom",
   logo: "LogoHarixom.svg",
   altLogo: "Logo",
-  products: ["Explorar", "Comisiones", "Recursos", "Ayuda"],
-  linksProducts: [""],
+  products: ["Explorar", "Preguntas Frecuentes", "Soporte"],
+  linksProducts: ["/Feed", "/FAQ", "https://docs.google.com/forms/d/e/1FAIpQLScROFJWquxRPF6S0Wa9JzfyD8rz2sCJiYz-fjYJ0opYUzmZOw/viewform?usp=sharing&ouid=111796854085052906024"],
   socialMedias: ["instagram.svg", "facebook.svg", "tiktok.svg", "youtube.svg"],
   linksSocialMedia: [
     "https://www.instagram.com/harixom2025",
@@ -104,8 +88,6 @@ function RouteComponent() {
       descriptionApp="Create, connect, and grow!"
       textApp="Welcome to Harixom, the social network for artists that offers a safe space to share your work, connect with other creators, and find a home for your art. Your talent deserves to be seen and valued."
       linksArt={linksArt}
-      commisionsCategories={commisionsCategories}
-      linksCommisions={linksCommisions}
       footer={footer}
     />
   );
