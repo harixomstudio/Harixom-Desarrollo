@@ -18,6 +18,7 @@ import { Route as TermsRouteImport } from './routes/Terms'
 import { Route as SuscriptionsRouteImport } from './routes/Suscriptions'
 import { Route as SetProfileRouteImport } from './routes/SetProfile'
 import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
+import { Route as ReportRouteImport } from './routes/Report'
 import { Route as RegisterAdminRouteImport } from './routes/RegisterAdmin'
 import { Route as RegisterRouteImport } from './routes/Register'
 import { Route as ProfileGuestRouteImport } from './routes/ProfileGuest'
@@ -79,6 +80,11 @@ const SetProfileRoute = SetProfileRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/ResetPassword',
   path: '/ResetPassword',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/Report',
+  path: '/Report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterAdminRoute = RegisterAdminRouteImport.update({
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
+  '/Report': typeof ReportRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/Suscriptions': typeof SuscriptionsRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByTo {
   '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
+  '/Report': typeof ReportRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/Suscriptions': typeof SuscriptionsRoute
@@ -241,6 +249,7 @@ export interface FileRoutesById {
   '/ProfileGuest': typeof ProfileGuestRoute
   '/Register': typeof RegisterRoute
   '/RegisterAdmin': typeof RegisterAdminRoute
+  '/Report': typeof ReportRoute
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/Suscriptions': typeof SuscriptionsRoute
@@ -271,6 +280,7 @@ export interface FileRouteTypes {
     | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
+    | '/Report'
     | '/ResetPassword'
     | '/SetProfile'
     | '/Suscriptions'
@@ -299,6 +309,7 @@ export interface FileRouteTypes {
     | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
+    | '/Report'
     | '/ResetPassword'
     | '/SetProfile'
     | '/Suscriptions'
@@ -327,6 +338,7 @@ export interface FileRouteTypes {
     | '/ProfileGuest'
     | '/Register'
     | '/RegisterAdmin'
+    | '/Report'
     | '/ResetPassword'
     | '/SetProfile'
     | '/Suscriptions'
@@ -356,6 +368,7 @@ export interface RootRouteChildren {
   ProfileGuestRoute: typeof ProfileGuestRoute
   RegisterRoute: typeof RegisterRoute
   RegisterAdminRoute: typeof RegisterAdminRoute
+  ReportRoute: typeof ReportRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SetProfileRoute: typeof SetProfileRoute
   SuscriptionsRoute: typeof SuscriptionsRoute
@@ -431,6 +444,13 @@ declare module '@tanstack/react-router' {
       path: '/ResetPassword'
       fullPath: '/ResetPassword'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Report': {
+      id: '/Report'
+      path: '/Report'
+      fullPath: '/Report'
+      preLoaderRoute: typeof ReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/RegisterAdmin': {
@@ -572,6 +592,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileGuestRoute: ProfileGuestRoute,
   RegisterRoute: RegisterRoute,
   RegisterAdminRoute: RegisterAdminRoute,
+  ReportRoute: ReportRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SetProfileRoute: SetProfileRoute,
   SuscriptionsRoute: SuscriptionsRoute,

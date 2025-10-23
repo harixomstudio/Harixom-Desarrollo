@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "@tanstack/react-router";
+
+import { useNavigate } from "@tanstack/react-router";
+
 import { useQuery } from "@tanstack/react-query";
 import { axiosRequest } from "../components/helpers/config";
 import { useToast } from "../components/ui/Toast";
@@ -7,8 +9,7 @@ import { useToast } from "../components/ui/Toast";
 export default function Nav() {
   const { showToast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation(); // 🔹 para saber la ruta actual
-  const currentPath = location.pathname;
+  
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any>(null);
@@ -133,31 +134,17 @@ export default function Nav() {
         {/* Acceso al perfil (oculto en móviles) */}
         <ul className="pr-6 hidden md:flex items-center">
           <li>
-            {currentPath === "/Profile" ? (
-              <button
-                onClick={handleLogout}
-                className="flex items-center justify-start text-white font-bold bg-[#FA6063] py-1 px-4 rounded-full border-[#ff4a4d] border-2 hover:bg-[#ff4a4d] transition-all mt-2 md:mt-0"
-              >
-                <img
-                  src={userImage}
-                  alt="User Avatar"
-                  className="w-8 h-8 rounded-full mr-2"
-                />
-                Log out
-              </button>
-            ) : (
-              <a
-                className="flex items-center justify-start text-white font-bold bg-[#8936D2] py-1 px-10 rounded-full border-[#A39FF6] border-2 hover:bg-[#7813c6] transition-all mt-2 md:mt-0"
-                href="/Profile"
-              >
-                <img
-                  src={userImage}
-                  alt="User Avatar"
-                  className="w-8 h-8 rounded-full mr-2"
-                />
-                Profile
-              </a>
-            )}
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-start text-white font-bold bg-[#FA6063] py-1 px-4 rounded-full border-[#ff4a4d] border-2 hover:bg-[#ff4a4d] transition-all mt-2 md:mt-0"
+            >
+              <img
+                src={userImage}
+                alt="User Avatar"
+                className="w-8 h-8 rounded-full mr-2"
+              />
+              Log out
+            </button>
           </li>
         </ul>
       </div>
@@ -186,7 +173,11 @@ export default function Nav() {
                         if (user.id === currentUserId) {
                           navigate({ to: "/Profile" });
                         } else {
-                          navigate({ to: "/ProfileGuest", search: { userId: user.id } });
+                          navigate({
+                            to: "/ProfileGuest",
+                            search: { userId: user.id },
+                          });
+
                           setTimeout(() => window.location.reload(), 100);
                         }
                         setShowModal(false);
@@ -200,7 +191,9 @@ export default function Nav() {
                         alt={user.name}
                         className="w-10 h-10 rounded-full object-cover"
                       />
-                      <span className="text-white font-medium">{user.name}</span>
+                      <span className="text-white font-medium">
+                        {user.name}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -249,9 +242,7 @@ export default function Nav() {
                   ))}
                 </ul>
               ) : (
-                <p className="text-gray-400 text-sm">
-                  No se encontraron obras
-                </p>
+                <p className="text-gray-400 text-sm">No se encontraron obras</p>
               )}
             </div>
 

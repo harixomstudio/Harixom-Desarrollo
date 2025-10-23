@@ -5,6 +5,7 @@ export const Route = createFileRoute("/Landing")({
   component: RouteComponent,
 });
 
+
 const banners = [
   "banner1.svg",
   "banner2.svg",
@@ -64,7 +65,7 @@ const footer = {
     "https://youtube.com/@harixom_2025",
   ],
    contacts: ["+506 8394 7941", "harixonstudio@gmail.com", "Report a suggestion or problem"],
-   linksContacts: ["https://wa.me/50683947941", "mailto:harixonstudio@gmail.com","https://docs.google.com/forms/d/e/1FAIpQLScROFJWquxRPF6S0Wa9JzfyD8rz2sCJiYz-fjYJ0opYUzmZOw/viewform?usp=sharing&ouid=111796854085052906024"],
+   linksContacts: ["https://wa.me/50683947941", "mailto:harixonstudio@gmail.com","/Report"],
 
 
    
