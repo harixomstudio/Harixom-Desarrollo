@@ -19,6 +19,7 @@ interface ProfileProps {
   description: string;
   profilePicture?: string;
   bannerPicture?: string;
+  isPremium?: boolean;
   tabs?: string[];
   cards: { id: number; description: string; image?: string }[];
   likes: any[];
@@ -28,6 +29,7 @@ interface ProfileProps {
   userId: number;
   buyMeACoffee?: string;
 }
+
 
 export default function Profile(props: ProfileProps) {
   const { showToast } = useToast();
@@ -59,6 +61,7 @@ export default function Profile(props: ProfileProps) {
   const [visibleCount, setVisibleCount] = useState(12);
   const [messageCount, setMessageCount] = useState(4);
   const [favoriteCount, setFavoriteCount] = useState(12);
+
 
 
   useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan las publicaciones favoritas
@@ -266,7 +269,6 @@ export default function Profile(props: ProfileProps) {
     }
   };
 
-
   return (
     <section
       className="relative flex items-center justify-center bg-stone-950 min-h-screen"
@@ -325,6 +327,9 @@ export default function Profile(props: ProfileProps) {
           <div className="flex items-center mb-2">
             {/* Username */}
             <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}</span>
+              {props.isPremium && (
+                <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6 mx-2"/>
+              )}
 
             {/* Buy me a coffee button */}
             <button
@@ -358,8 +363,6 @@ export default function Profile(props: ProfileProps) {
               </span>
             </span>
           </div>
-
-
 
           {/* Followers Modal */}
           {showFollowers && (

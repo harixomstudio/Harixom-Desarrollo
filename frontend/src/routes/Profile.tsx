@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import Profile from "../components/pages/ProfilePage";
 import axios from "axios";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/Profile")({
   component: ProfileRoute,
@@ -11,16 +12,20 @@ function ProfileRoute() {
   const token = localStorage.getItem("access_token");
 
   // Query perfil
-  const { data: profileData, isLoading, error } = useQuery({
-    queryKey: ["userProfile"],
-    queryFn: async () => {
-      const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return data;
-    },
-    enabled: !!token,
-  });
+  const { data: profileData, isLoading, error, refetch } = useQuery({
+  queryKey: ["userProfile"],
+  queryFn: async () => {
+    const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data;
+  },
+  enabled: !!token,
+});
+
+useEffect(() => {
+  refetch(); // Esto recargará el perfil y traerá el isPremium actualizado
+}, []);
 
   // Query likes
   const { data: likesData } = useQuery({
@@ -89,6 +94,7 @@ function ProfileRoute() {
       terms={user?.terms ?? ""}
       userId={user?.id}
       buyMeACoffee={user?.buymeacoffee_link || ""} 
+      isPremium={user?.is_premium ?? false}
     />
   );
 }

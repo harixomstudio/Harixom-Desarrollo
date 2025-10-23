@@ -33,11 +33,8 @@ interface LandingProps {
   descriptionApp: string;
   textApp: string;
   linksArt: string[];
-  commisionsCategories: string[];
-  linksCommisions: string[];
   footer?: FooterProps;
 }
-
 
 interface Publication {
   id: number;
@@ -75,12 +72,15 @@ export default function Landing(props: LandingProps) {
   const { data } = useQuery({
     queryKey: ["allPublications"],
     queryFn: async () => {
-      const response = await fetch("https://harixom-desarrollo.onrender.com/api/publications", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://harixom-desarrollo.onrender.com/api/publications",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
       if (!response.ok) throw new Error("Error al obtener las publicaciones");
       const json = await response.json();
       return json.publications as Publication[];
@@ -93,9 +93,12 @@ export default function Landing(props: LandingProps) {
     if (!token) return;
     (async () => {
       try {
-        const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data } = await axios.get(
+          "https://harixom-desarrollo.onrender.com/api/user",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setCurrentUserId(data.user?.id ?? null);
       } catch (err) {
         console.log("No se pudo obtener current user:", err);
@@ -116,12 +119,10 @@ export default function Landing(props: LandingProps) {
     .sort((a, b) => b.likes - a.likes)
     .slice(0, 4);
 
-
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % total);
     }, 60000);
-
 
     return () => clearInterval(timer);
   }, [total]);
@@ -188,6 +189,7 @@ export default function Landing(props: LandingProps) {
     />
   );
 
+
   return (
     <>
       {styleTag}
@@ -210,10 +212,16 @@ export default function Landing(props: LandingProps) {
                 className="absolute w-full h-full object-cover"
               />
               <div className="z-10 text-center pb-20 sm:pb-32 md:pb-40 lg:pb-48">
-                <h1 className="text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold" style={{ fontFamily: "Monserrat" }}>
+                <h1
+                  className="text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
+                  style={{ fontFamily: "Monserrat" }}
+                >
                   Canvas Flow
                 </h1>
-                <h2 className="text-black text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl p-2" style={{ fontFamily: "Monserrat" }}>
+                <h2
+                  className="text-black text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl p-2"
+                  style={{ fontFamily: "Monserrat" }}
+                >
                   Unleash Your Inner Artist
                 </h2>
               </div>
@@ -227,10 +235,16 @@ export default function Landing(props: LandingProps) {
                 className="absolute w-full h-full object-cover"
               />
               <div className="z-10 text-center flex flex-col items-center gap-5 pt-10">
-                <h1 className="text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold" style={{ fontFamily: "Monserrat" }}>
+                <h1
+                  className="text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
+                  style={{ fontFamily: "Monserrat" }}
+                >
                   Participate in incredible Events
                 </h1>
-                <h2 className="text-black text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl" style={{ fontFamily: "Monserrat" }}>
+                <h2
+                  className="text-black text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl"
+                  style={{ fontFamily: "Monserrat" }}
+                >
                   Discover the power of creativity
                 </h2>
                 <Link
@@ -264,7 +278,7 @@ export default function Landing(props: LandingProps) {
                   <h2
                     className={`absolute inset-0 flex items-center justify-center text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
                     style={{ fontFamily: "Monserrat" }}
-                  > 
+                  >
                     Get inspired and Create your own Art
                   </h2>
                 </div>
@@ -280,7 +294,6 @@ export default function Landing(props: LandingProps) {
                 </Link>
               </div>
             </div>
-
           </div>
 
           {/* Flechas de navegación */}
@@ -322,7 +335,10 @@ export default function Landing(props: LandingProps) {
           </h2>
 
           {/* Upper categories */}
-          <div className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 pt-5 duration-500" style={{ fontFamily: "Monserrat" }}>
+          <div
+            className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 pt-5 duration-500"
+            style={{ fontFamily: "Monserrat" }}
+          >
             {props.categoriesUp.map((categoriesUp, number) => (
               <Link
                 to={props.links[number]}
@@ -332,7 +348,7 @@ export default function Landing(props: LandingProps) {
                 <img
                   src={categoriesUp}
                   alt={`Image ${number}`}
-                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
+                  className="w-15 h-15 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
                 />
                 <span
                   className="text-center text-sm sm:text-base md:text-lg font-medium"
@@ -345,7 +361,10 @@ export default function Landing(props: LandingProps) {
           </div>
 
           {/* Lower categories */}
-          <div className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 duration-500" style={{ fontFamily: "Monserrat" }}>
+          <div
+            className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 duration-500"
+            style={{ fontFamily: "Monserrat" }}
+          >
             {props.categoriesDown.map((categoriesDown, number) => (
               <Link
                 to={props.links2[number]}
@@ -355,7 +374,7 @@ export default function Landing(props: LandingProps) {
                 <img
                   src={categoriesDown}
                   alt={`Image ${number}`}
-                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
+                  className="w-15 h-15 max-[31rem]:w-10 max-[31rem]:h-10 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
                 />
                 <span
                   className="text-center text-sm sm:text-base md:text-lg font-medium"
@@ -367,7 +386,6 @@ export default function Landing(props: LandingProps) {
             ))}
           </div>
         </section>
-
 
         {/* app section */}
         <section
@@ -385,29 +403,32 @@ export default function Landing(props: LandingProps) {
             <img
               src={props.imgApp}
               alt={props.imgAppAlt}
-              className={`w-3/4 sm:w-2/3 object-contain transition-all duration-1000 ease-out ${appVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-                }`}
+              className={`w-3/4 sm:w-2/3 object-contain transition-all duration-1000 ease-out ${
+                appVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
             />
           </div>
 
           {/* Texto de la app */}
-          <div className="relative z-10 flex flex-col w-full lg:w-2/3 text-justify justify-center gap-8 sm:gap-10 max-xl:items-center items-start" >
+          <div className="relative z-10 flex flex-col w-full lg:w-2/3 text-justify justify-center gap-8 sm:gap-10 max-xl:items-center items-start">
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl font-bold text-center lg:text-left transition-all duration-1000 ease-out ${appVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-                }`}
+              className={`text-3xl sm:text-4xl md:text-5xl font-bold text-center lg:text-left transition-all duration-1000 ease-out ${
+                appVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
               style={{ fontFamily: "Monserrat" }}
             >
               {props.descriptionApp}
             </h2>
             <p
-              className={`text-base sm:text-lg md:text-xl lg:text-2xl text-center lg:text-left px-2 lg:px-0 transition-all duration-1000 ease-out ${appVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-                }`}
+              className={`text-base sm:text-lg md:text-xl lg:text-2xl text-center lg:text-left px-2 lg:px-0 transition-all duration-1000 ease-out ${
+                appVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
               style={{ fontFamily: "Monserrat" }}
             >
               {props.textApp}
@@ -426,8 +447,10 @@ export default function Landing(props: LandingProps) {
         </section>
 
         {/* artists ranking */}
-        <section className="flex flex-col items-center justify-center gap-16 py-20 px-4 sm:px-8 md:px-12 lg:px-20"
-          style={{ fontFamily: "Monserrat" }}>
+        <section
+          className="flex flex-col items-center justify-center gap-16 py-20 px-4 sm:px-8 md:px-12 lg:px-20"
+          style={{ fontFamily: "Monserrat" }}
+        >
           <h2
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-pink-300 flex gap-1"
             style={{ fontFamily: "Monserrat" }}
@@ -448,7 +471,6 @@ export default function Landing(props: LandingProps) {
               </span>
             ))}
           </h2>
-
 
           <div className="grid grid-cols-2 max-xl:grid-cols-1 gap-10 w-full">
             {topArtists.map((artist) => (
@@ -496,7 +518,6 @@ export default function Landing(props: LandingProps) {
           </div>
         </section>
 
-
         {/* Feed section */}
         <section
           className="relative flex flex-col items-center justify-center text-center w-full min-h-[80vh] sm:min-h-[90vh] lg:min-h-screen text-white px-4 sm:px-8 md:px-12"
@@ -524,8 +545,8 @@ export default function Landing(props: LandingProps) {
           </Link>
         </section>
 
-
         <Footer {...props.footer} />
+
       </main>
     </>
   );

@@ -13,6 +13,8 @@ class ProfileMessage extends Model
         'from_user_id',
         'to_user_id',
         'message',
+        'status',
+        'title',
     ];
 
     // Relaciones

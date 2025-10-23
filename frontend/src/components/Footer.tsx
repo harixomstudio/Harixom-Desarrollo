@@ -15,17 +15,17 @@ interface FooterProps {
 export default function Footer(props: FooterProps) {
   return (
     <footer
-      className="flex flex-col items-center w-full py-16"
+      className="flex flex-col items-center w-full py-10"
       style={{ fontFamily: "monserrat" }}
     >
 
       <section className="flex w-full text-base max-md:text-base bg-[#141414]">
-        <div className="flex justify-between items-start w-full max-md:flex-col max-md:items-center px-35 max-md:gap-15">
+        <div className="flex justify-evenly items-start w-full max-md:flex-col max-md:items-center max-md:gap-15 max-md:px-0">
           {/* Logo and title */}
           <div className="flex flex-col items-center justify-center max-lg:items-center max-md:w-full max-md:items-center">
            
             <div
-              className="text-pink-500 text-3xl pl-4 max-md:pl-0"
+              className="text-pink-500 text-3xl pl-4 max-md:pl-0 -mt-2"
 
               style={{ fontFamily: "Starstruck" }}
             >
@@ -37,7 +37,7 @@ export default function Footer(props: FooterProps) {
 
           {/* Products */}
           <div className="flex flex-col items-start justify-center max-md:w-full max-md:items-center">
-            <h5 className="font-semibold pb-4 text-lg">Products</h5>
+            <h5 className="font-semibold pb-4 text-lg">Interactions</h5>
             {props.products.map((product, index) => (
               <Link
                 key={index}
@@ -76,14 +76,14 @@ export default function Footer(props: FooterProps) {
                 rel="noopener noreferrer"
                 className="hover:scale-110 duration-300 hover:text-[#FA6063] pb-2 text-base"
               >
-                <li className="list-none">{contact}</li>
+                <li className="list-none ">{contact}</li>
               </a>
             ))}
           </div>
         </div>
       </section>
 
-      <p className="w-full text-center text-base bg-[#141414] p-10">
+      <p className="w-full text-center text-base bg-[#141414] pt-15">
         © 2025 {props.titlePage}. All rights reserved
       </p>
     </footer>

@@ -32,6 +32,7 @@ class User extends Authenticatable
         'services',   
         'prices',     
         'terms', 
+        'is_premium',
         'commissions_enabled',
     ];
 
@@ -62,6 +63,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'is_premium' => 'boolean',
             'commissions_enabled' => 'boolean',
         ];
     }

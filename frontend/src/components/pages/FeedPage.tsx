@@ -101,7 +101,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   useEffect(() => { //Despliegue de un feed infinito, scroll aparece cargando y aumentan las publicaciones
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY === document.documentElement.scrollHeight) {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
          setVisibleCount((prevCount) => prevCount + 12);
       }
     };
@@ -110,8 +110,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [visibleCount]);
-
-
 
   // Funciones para abrir y cerrar el modal
   const openModal = (publication: Publication) => {
@@ -565,7 +563,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
           </div>
         </div>
-      ) : <div className="text-gray-400 text-sm text-center pb-5"> NO HAY MAS PUBLICACIONES</div> }
+      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS PUBLICACIONES</div> }
 
       {/* Modal publicaciones en grande */}
       {selectedPublication && (

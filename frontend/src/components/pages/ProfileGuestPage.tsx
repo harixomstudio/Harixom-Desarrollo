@@ -118,30 +118,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   };
 
 
-  const handleSendCommission = async (toUserId: number) => {
-    try {
-      if (!commissionText.trim()) {
-        showToast("Escribe una comisión antes de enviar", "error");
-        return;
-      }
-      const { } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/user/commisions`,
-        {
-          to_user_id: toUserId,
-          message: commissionText,
-          date: new Date().toISOString().split("T")[0],
-        },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-
-      showToast("Comisión enviada con éxito", "success");
-      setIsModalOpen(false);
-      setCommissionText("");
-    } catch (err) {
-      console.error(err);
-      showToast("Error al enviar la comisión", "error");
-    }
-  };
 
   // Fetch de perfil guest, comisiones y mensajes
   useEffect(() => {
@@ -210,15 +186,49 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     return () => clearInterval(interval);
   }, [props.userId, token]);
 
+
+
+  const handleSendCommission = async (toUserId: number) => {
+    try {
+      if (!commissionText.trim()) {
+        showToast("Escribe una comisión antes de enviar", "error");
+        return;
+      }
+      const { } = await axios.post(
+        `https://harixom-desarrollo.onrender.com/api/user/commisions`,
+        {
+          to_user_id: toUserId,
+          message: commissionText,
+          date: new Date().toISOString().split("T")[0],
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      showToast("Comisión enviada con éxito", "success");
+      setIsModalOpen(false);
+      setCommissionText("");
+    } catch (err) {
+      console.error(err);
+      showToast("Error al enviar la comisión", "error");
+    }
+  };
+
   // Enviar mensaje
   const handleSendMessage = async () => {
     try {
       if (!token || !newMessage.trim()) return;
       const { data } = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/profile/messages`,
-        { to_user_id: props.userId, message: newMessage },
+        {
+          to_user_id: props.userId,
+          title: "¡Te han escrito en tu muro!",
+          message: newMessage,
+          status: "Medium",
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log(data);
+
       const msg = {
         id: data.data.id,
         userId: data.data.from_user.id,
@@ -293,25 +303,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     } catch (error) {
       console.error(error);
       showToast("Error al actualizar el seguimiento", "error");
-    }
-  };
-  const handleToggleLike = async (postId: number) => {
-    try {
-      const token = localStorage.getItem("access_token");
-      const { data } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/like/${postId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (data.liked) {
-        setFavorites((prev) => [...prev, data.post]); // agrega si liked
-      } else {
-        setFavorites((prev) => prev.filter((f) => f.id !== postId)); // elimina si deslike
-      }
-      showToast(data.liked ? "Like agregado" : "Like eliminado", "success");
-    } catch (err) {
-      console.error(err);
-      showToast("No se pudo actualizar el like", "error");
     }
   };
 
@@ -610,12 +601,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                       key={like.id}
                       className="relative bg-stone-800 rounded-lg p-4 flex flex-col items-center"
                     >
-                      <button
-                        onClick={() => handleToggleLike(like.id)}
-                        className="absolute top-2 right-2 bg-pink-400 hover:bg-pink-500 text-white text-xs px-2 py-1 rounded"
-                      >
-                        ✕
-                      </button>
                       {like.image ? (
                         <img
                           src={like.image}
