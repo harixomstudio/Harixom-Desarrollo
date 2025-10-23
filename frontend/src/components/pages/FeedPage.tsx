@@ -101,7 +101,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   useEffect(() => { //Despliegue de un feed infinito, scroll aparece cargando y aumentan las publicaciones
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY === document.documentElement.scrollHeight) {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
          setVisibleCount((prevCount) => prevCount + 12);
       }
     };

@@ -28,29 +28,41 @@ function RouteComponent() {
     enabled: !!token,
   });
 
+
   useEffect(() => {
-    const fetchCommissions = async () => {
+    const fetchNotifications = async () => {
       if (!token) return
       try {
-        const { data } = await axios.get(
+        const { data: commissions } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/user/commisions/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
-        const myNotifications = data.commissions.filter(
+        const myCommissions = commissions.commissions.filter(
           (comission: any) => comission.to_user_id === profileData?.user?.id
         )
+      
+        const { data: messages } = await axios.get(
 
-        setNotifications(myNotifications)
+          `https://harixom-desarrollo.onrender.com/api/profile/${profileData?.user?.id}/messages`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        const myNotifications = messages.filter(
+          (profile_message: any) => profile_message.to_user_id === profileData?.user?.id
+        )
+
+        setNotifications([...myNotifications, ...myCommissions])
+
       } catch (err) {
-        console.error('Error fetching commissions:', err)
+        console.error('Error fetching messages wall:', err)
       }
     }
-
-
-    fetchCommissions()
-    const intervalId = setInterval(fetchCommissions, 30000);
+    
+    fetchNotifications()
+    const intervalId = setInterval(fetchNotifications, 30000);
     return () => clearInterval(intervalId);
   }, [token, profileData?.user?.id])
 
@@ -60,6 +72,8 @@ function RouteComponent() {
       prioritys={notifications.map((number) => (number.status))}
       notification="Notifications"
       titles={notifications.map((number) => number.title || 'New Commission')}
+      users={notifications.map((number) => number.from_user.name)}
+      UsersID={notifications.map((number) => number.from_user.id)}
       texts={notifications.map((number) => number.message)}
       dates={notifications.map((number) => new Date(number.created_at).toLocaleDateString())}
       images={notifications.map(() => 'bell.svg')}

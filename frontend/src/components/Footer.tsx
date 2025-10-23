@@ -20,7 +20,7 @@ export default function Footer(props: FooterProps) {
     >
 
       <section className="flex w-full text-base max-md:text-base bg-[#141414]">
-        <div className="flex justify-between items-start w-full max-md:flex-col max-md:items-center px-35 max-md:gap-15 max-md:px-0">
+        <div className="flex justify-evenly items-start w-full max-md:flex-col max-md:items-center max-md:gap-15 max-md:px-0">
           {/* Logo and title */}
           <div className="flex flex-col items-center justify-center max-lg:items-center max-md:w-full max-md:items-center">
            

@@ -118,30 +118,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   };
 
 
-  const handleSendCommission = async (toUserId: number) => {
-    try {
-      if (!commissionText.trim()) {
-        showToast("Escribe una comisión antes de enviar", "error");
-        return;
-      }
-      const { } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/user/commisions`,
-        {
-          to_user_id: toUserId,
-          message: commissionText,
-          date: new Date().toISOString().split("T")[0],
-        },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-
-      showToast("Comisión enviada con éxito", "success");
-      setIsModalOpen(false);
-      setCommissionText("");
-    } catch (err) {
-      console.error(err);
-      showToast("Error al enviar la comisión", "error");
-    }
-  };
 
   // Fetch de perfil guest, comisiones y mensajes
   useEffect(() => {
@@ -210,15 +186,49 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     return () => clearInterval(interval);
   }, [props.userId, token]);
 
+
+
+  const handleSendCommission = async (toUserId: number) => {
+    try {
+      if (!commissionText.trim()) {
+        showToast("Escribe una comisión antes de enviar", "error");
+        return;
+      }
+      const { } = await axios.post(
+        `https://harixom-desarrollo.onrender.com/api/user/commisions`,
+        {
+          to_user_id: toUserId,
+          message: commissionText,
+          date: new Date().toISOString().split("T")[0],
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      showToast("Comisión enviada con éxito", "success");
+      setIsModalOpen(false);
+      setCommissionText("");
+    } catch (err) {
+      console.error(err);
+      showToast("Error al enviar la comisión", "error");
+    }
+  };
+
   // Enviar mensaje
   const handleSendMessage = async () => {
     try {
       if (!token || !newMessage.trim()) return;
       const { data } = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/profile/messages`,
-        { to_user_id: props.userId, message: newMessage },
+        {
+          to_user_id: props.userId,
+          title: "¡Te han escrito en tu muro!",
+          message: newMessage,
+          status: "Medium",
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log(data);
+
       const msg = {
         id: data.data.id,
         userId: data.data.from_user.id,
