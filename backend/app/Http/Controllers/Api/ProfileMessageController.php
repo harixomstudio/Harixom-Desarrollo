@@ -24,13 +24,17 @@ class ProfileMessageController extends Controller
     {
         $request->validate([
             'to_user_id' => 'required|exists:users,id',
+            'title' => 'required|string|max:100',
             'message' => 'required|string|max:1000',
+            'status' => 'required|in:Low,Medium,High',
         ]);
 
         $message = ProfileMessage::create([
-            'from_user_id' => $request->user()->id, 
+            'from_user_id' => $request->user()->id,
             'to_user_id' => $request->to_user_id,
+            'title' => $request->title,
             'message' => $request->message,
+            'status' => $request->status,
         ]);
 
         return response()->json([
@@ -42,8 +46,10 @@ class ProfileMessageController extends Controller
     // Eliminar mensaje (solo el dueño del perfil o el autor)
     public function destroy(ProfileMessage $profileMessage, Request $request)
     {
-        if ($profileMessage->from_user_id !== $request->user()->id &&
-            $profileMessage->to_user_id !== $request->user()->id) {
+        if (
+            $profileMessage->from_user_id !== $request->user()->id &&
+            $profileMessage->to_user_id !== $request->user()->id
+        ) {
             return response()->json(['error' => 'No autorizado'], 403);
         }
 
