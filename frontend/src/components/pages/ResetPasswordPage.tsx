@@ -23,35 +23,62 @@ export default function ResetPassword(props: ResetPasswordProps) {
   const [loading, setLoading] = useState(false);
 
   const handleReset = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (password !== confirmPassword) {
-      showToast("Las contraseñas no coinciden", "error");
-      return;
-    }
+  console.log("Iniciando reset de contraseña...");
+  console.log("Password:", password);
+  console.log("ConfirmPassword:", confirmPassword);
+  console.log("Token:", token);
+  console.log("Email:", email);
 
-    setLoading(true);
+  if (password !== confirmPassword) {
+    showToast("Las contraseñas no coinciden", "error");
+    console.warn("Contraseñas no coinciden");
+    return;
+  }
 
-    try {
-      const response = await axiosRequest.post("reset-password", {
+  setLoading(true);
+
+  try {
+    console.log("Enviando request a backend...");
+    const response = await axiosRequest.post(
+      "https://harixom-desarrollo.onrender.com/api/reset-password",
+      {
         email,
         token,
         password,
         password_confirmation: confirmPassword,
-      });
+      }
+    );
 
-      showToast(response.data.message || "Contraseña cambiada con éxito");
-      navigate({ to: "/Login" });
-    } catch (error: any) {
-      console.error(error);
-      showToast(
-        error.response?.data?.error || "Error al cambiar la contraseña",
-        "error"
-      );
-    } finally {
-      setLoading(false);
+    console.log("Respuesta del backend:", response.data);
+
+    showToast(response.data.message || "Contraseña cambiada con éxito");
+    navigate({ to: "/Login" });
+  } catch (error: any) {
+    console.error("Error en la petición Axios:", error);
+
+    // Mostrar datos de la respuesta para depuración más profunda
+    if (error.response) {
+      console.error("Status:", error.response.status);
+      console.error("Headers:", error.response.headers);
+      console.error("Data:", error.response.data);
+    } else if (error.request) {
+      console.error("Request hecho pero sin respuesta:", error.request);
+    } else {
+      console.error("Error inesperado:", error.message);
     }
-  };
+
+    showToast(
+      error.response?.data?.error || "Error al cambiar la contraseña",
+      "error"
+    );
+  } finally {
+    setLoading(false);
+    console.log("Proceso terminado");
+  }
+};
+
 
   return (
     <section className="relative flex min-h-screen items-center justify-center bg-stone-950">

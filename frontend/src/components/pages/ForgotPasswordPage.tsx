@@ -13,19 +13,40 @@ export default function ForgotPassword(props: ForgotPasswordProps) {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const response = await axiosRequest.post("forgot-password", { email });
-      alert(response.data.message || props.successMessage);
-    } catch (error: any) {
-      console.error(error);
-      alert(error.response?.data?.error || "Error al enviar el correo.");
-    } finally {
-      setLoading(false);
+  console.log("📧 Email a enviar:", email);
+
+  try {
+    const response = await axiosRequest.post(
+      "https://harixom-desarrollo.onrender.com/api/forgot-password",
+      { email }
+    );
+
+    console.log("✅ Response completa:", response);
+    console.log("📄 Response data:", response.data);
+
+    alert(response.data.message || props.successMessage);
+  } catch (error: any) {
+    console.error("❌ Error capturado:", error);
+
+    // Log detallado del error
+    if (error.response) {
+      console.log("⚠️ Error response data:", error.response.data);
+      console.log("⚠️ Error response status:", error.response.status);
+      console.log("⚠️ Error response headers:", error.response.headers);
+    } else if (error.request) {
+      console.log("⚠️ Error request:", error.request);
+    } else {
+      console.log("⚠️ Error message:", error.message);
     }
-  };
+
+    alert(error.response?.data?.error || "Error al enviar el correo.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section className="relative flex min-h-screen items-center justify-center bg-stone-950">

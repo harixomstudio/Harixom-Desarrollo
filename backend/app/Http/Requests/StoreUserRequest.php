@@ -26,6 +26,7 @@ class StoreUserRequest extends FormRequest
         'email' => 'required|email|max:255|unique:users,email',
         'phone' => ['nullable','string','max:20','regex:/^\+\d{1,3}\d{4,14}$/'],
         'address' => 'required|max:255',
+        
         'password' => 'required|min:6|max:255',
         'description' => 'nullable|string|max:500',
         'profile_picture' => 'nullable|image|max:2048',
@@ -39,7 +40,7 @@ class StoreUserRequest extends FormRequest
             'name.required' => 'The name field is required.',
             'name.max' => 'The name field must be at most 255 characters long',
 
-             'phone.regex' => 'El número de teléfono debe iniciar con + y contener solo números. Ej: +50688881234',
+             'phone.regex' => 'El número de teléfono debe iniciar con +, contener solo números sin espacios. Ej: +50688881234',
 
             'email.required' => 'The email field is required.',
             'email.email' => 'The email field must be a valid email address',
