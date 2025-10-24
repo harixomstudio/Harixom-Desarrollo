@@ -29,10 +29,6 @@ export default function Nav() {
     enabled: !!token,
   });
 
-  const userImage =
-    profileData?.user?.profile_picture ||
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-
   const handleLogout = async () => {
     try {
       if (!token) return;
@@ -138,11 +134,6 @@ export default function Nav() {
               onClick={handleLogout}
               className="flex items-center justify-start text-white font-bold bg-[#FA6063] py-1 px-4 rounded-full border-[#ff4a4d] border-2 hover:bg-[#ff4a4d] transition-all mt-2 md:mt-0"
             >
-              <img
-                src={userImage}
-                alt="User Avatar"
-                className="w-8 h-8 rounded-full mr-2"
-              />
               Log out
             </button>
           </li>
