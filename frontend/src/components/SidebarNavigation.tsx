@@ -34,7 +34,7 @@ export default function SidebarNavigation() {
   // Imagen del perfil del usuario o una predeterminada
   const userImage =
     profileData?.user?.profile_picture ||
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"; //imagen predeterminada 
 
   return (
     <aside className="fixed top-0 left-0 h-screen bg-[#151515] z-40 transition-all duration-300 w-14 hover:w-48 overflow-hidden">
