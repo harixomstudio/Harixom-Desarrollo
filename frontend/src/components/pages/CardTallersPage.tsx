@@ -98,6 +98,7 @@ export default function CardTallers({ tallers }: CardTallersProps) {
           </div>
         </div>
       ) :<div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS TALLERES</div> }
+      <Link to="/TallerCreate" className="fixed bottom-8 right-8 bg-pink-500 text-white rounded-full p-4 shadow-lg">＋</Link>
     </div>
   );
 }

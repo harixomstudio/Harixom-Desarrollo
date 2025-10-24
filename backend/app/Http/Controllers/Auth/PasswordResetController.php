@@ -1,61 +1,45 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
-
-use App\Http\Controllers\Controller;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class PasswordResetController extends Controller
 {
     // Enviar link al correo
     public function sendResetLink(Request $request)
-{
-    $request->validate(['email' => 'required|email']);
-
-    $user = \App\Models\User::where('email', $request->email)->first();
-
-    if (!$user) {
-        return response()->json([
-            'error' => 'No se encontró un usuario con ese correo.'
-        ], 404);
-    }
-
-    if (!$user->is_active) {
-        return response()->json([
-            'error' => 'Tu cuenta está inactiva. No se puede restablecer la contraseña.'
-        ], 403);
-    }
-
-    $status = Password::sendResetLink($request->only('email'));
-
-    return $status === Password::RESET_LINK_SENT
-        ? response()->json(['message' => __($status)], 200)
-        : response()->json(['error' => __($status)], 400);
-}
-
-    // Resetear contraseña con el token
-    public function reset(Request $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6|confirmed',
-        ]);
+        $request->validate(['email' => 'required|email']);
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password),
-                ])->save();
-            }
-        );
+        $user = \App\Models\User::where('email', $request->email)->first();
 
-        return $status === Password::PASSWORD_RESET
-            ? response()->json(['message' => __($status)], 200)
-            : response()->json(['error' => __($status)], 400);
+        if (!$user) {
+            return response()->json([
+                'error' => 'No se encontró un usuario con ese correo.'
+            ], 404);
+        }
+
+        if (!$user->is_active) {
+            return response()->json([
+                'error' => 'Tu cuenta está inactiva. No se puede restablecer la contraseña.'
+            ], 403);
+        }
+
+        // Generar token
+        $token = Password::createToken($user);
+
+        // Enviar correo usando Brevo directamente
+        $notification = new ResetPasswordNotification($token, $user->email);
+        $sent = $notification->sendResetEmail();
+
+        if (!$sent) {
+            return response()->json([
+                'error' => 'Error al enviar el correo. Intenta más tarde.'
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'Se envió el enlace de restablecimiento de contraseña a tu correo.'
+        ], 200);
     }
 }

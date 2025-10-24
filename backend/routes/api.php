@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Api\PublicationController;
 use App\Http\Controllers\Api\InteractionController;
 use App\Http\Controllers\Api\AIController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\Api\TallerApiController;
 use App\Http\Controllers\Api\ProfileMessageController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\StripeController;
+
 
 Route::middleware('auth:sanctum')->group(function () {
     //Rutas de perfil
@@ -69,7 +72,16 @@ Route::middleware('auth:sanctum')->group(function () {
     //Pagos
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
     Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
+
+    
+    // Subgrupo solo para usuarios premium
+    Route::middleware(['premium'])->group(function () {
+        //Route::post('/events/create', [EventApiController::class, 'store']);
+        Route::post('/workshops/create', [TallerApiController::class, 'store']);
+    });
 });
+
+Route::post('/events/create', [EventApiController::class, 'store']);
 
 //Stripe
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
@@ -84,8 +96,8 @@ Route::get('/tallers/{id}', [TallerApiController::class, 'show']);
 Route::post('ia/challenge', [AIController::class, 'getChallenge']);
 
 //Rutas de reset password
-Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
-Route::post('/reset-password', [PasswordResetController::class, 'reset']);
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
+Route::post('/reset-password', [NewPasswordController::class, 'store']);
 
 //Rutas de los Usuarios antes de autenticarse
 Route::post('user/register', [UserController::class, 'store']);
