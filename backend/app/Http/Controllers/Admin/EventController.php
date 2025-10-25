@@ -24,6 +24,7 @@ class EventController extends Controller
     {
         $upload = new UploadApi();
 
+
         $data = $request->validate([
             'type' => 'required|string',
             'dateStart' => 'required|date',
