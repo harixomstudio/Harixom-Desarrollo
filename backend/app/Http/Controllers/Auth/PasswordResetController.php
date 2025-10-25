@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
+use App\Services\BrevoMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class PasswordResetController extends Controller
@@ -34,8 +36,25 @@ class PasswordResetController extends Controller
 
         $token = Password::createToken($user);
 
-        $user->notify(new ResetPasswordNotification($token));
+        $resetUrl = env('FRONTEND_URL') 
+        . "/ResetPassword?token=" . urlencode($token) 
+        . "&email=" . urlencode($user->email);
 
+        try {
+            BrevoMailer::send($user->email, "Restablecer contraseña", "
+            <h2>Hola {$user->name}</h2>
+            <h4>Este es un correo de restablecimiento de contraseña de Harixom </h4>
+            <p>Haz clic aquí para restablecer tu contraseña:</p>
+            <a href='{$resetUrl}'>Restablecer contraseña</a>
+            <p>Si no has solicitado un restablecimiento de contraseña, puedes ignorar este correo.</p>
+            <p>Atentamente, el equipo de Harixom</p>
+
+        ");
+        } catch (\Exception $e) {
+            Log::error('Error al enviar correo en Notification: ' . $e->getMessage());
+        }
+
+        
         return response()->json([
             'message' => 'Se ha enviado un correo para restablecer la contraseña.'
         ], 200);
