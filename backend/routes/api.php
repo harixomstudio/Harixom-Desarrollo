@@ -96,8 +96,8 @@ Route::get('/tallers/{id}', [TallerApiController::class, 'show']);
 Route::post('ia/challenge', [AIController::class, 'getChallenge']);
 
 //Rutas de reset password
-Route::post('/forgot-password', [PasswordResetController::class, 'store']);
-Route::post('/reset-password', [PasswordResetController::class, 'store']);
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
+Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 
 //Rutas de los Usuarios antes de autenticarse
 Route::post('user/register', [UserController::class, 'store']);
