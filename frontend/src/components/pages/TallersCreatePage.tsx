@@ -66,7 +66,7 @@ export default function TallerCreatePage({ title }: { title: string }) {
 
     try {
       setLoading(true);
-      await axiosRequest.post(`https://harixom-desarrollo.onrender.com/api/workshops/create`, formData, {
+      await axiosRequest.post(`http://127.0.0.1:8000/api/workshops/create`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

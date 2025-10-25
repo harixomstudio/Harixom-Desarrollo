@@ -73,7 +73,7 @@ export default function Landing(props: LandingProps) {
     queryKey: ["allPublications"],
     queryFn: async () => {
       const response = await fetch(
-        "https://harixom-desarrollo.onrender.com/api/publications",
+        "http://127.0.0.1:8000/api/publications",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -94,7 +94,7 @@ export default function Landing(props: LandingProps) {
     (async () => {
       try {
         const { data } = await axios.get(
-          "https://harixom-desarrollo.onrender.com/api/user",
+          "http://127.0.0.1:8000/api/user",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

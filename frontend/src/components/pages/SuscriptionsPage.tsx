@@ -49,7 +49,7 @@ const SuscriptionsPage = () => {
 
       try {
         const res = await axios.get(
-          "https://harixom-desarrollo.onrender.com/api/user",
+          "http://127.0.0.1:8000/api/user",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -76,7 +76,7 @@ const SuscriptionsPage = () => {
     setLoadingAction(true);
     try {
       const res = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/create-checkout-session`,
+        `http://127.0.0.1:8000/api/create-checkout-session`,
         { plan },
         {
           headers: {
@@ -104,7 +104,7 @@ const SuscriptionsPage = () => {
     setLoadingAction(true);
     try {
       const res = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/cancelSubscription`,
+        `http://127.0.0.1:8000/api/cancelSubscription`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
