@@ -55,7 +55,7 @@ function RootComponent() {
       if (!token) return
       try {
         const { data: commissions } = await axios.get(
-          `http://127.0.0.1:8000/api/user/commisions/${profileData?.user?.id}`,
+          `https://harixom-desarrollo.onrender.com/api/user/commisions/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -65,7 +65,7 @@ function RootComponent() {
         )
 
         const { data: messages } = await axios.get(
-          `http://127.0.0.1:8000/api/profile/${profileData?.user?.id}/messages`,
+          `https://harixom-desarrollo.onrender.com/api/profile/${profileData?.user?.id}/messages`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
