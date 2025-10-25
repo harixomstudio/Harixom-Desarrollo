@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
 class ResetPasswordNotification extends Notification
 {
@@ -21,22 +22,25 @@ class ResetPasswordNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['brevo'];
     }
 
-    public function toMail($notifiable)
+    public function toBrevo($notifiable)
     {
-        $url = env('FRONTEND_URL') . '/ResetPassword?token=' . $this->token . '&email=' . urlencode($notifiable->email);
+        $resetUrl = env('FRONTEND_URL') . "/ResetPassword?token={$this->token}&email={$notifiable->email}";
 
-        $subject = 'Restablecer contraseña';
-        $html = "
-            <p>Hola, {$notifiable->name}</p>
-            <p>Hemos recibido una solicitud para restablecer tu contraseña.</p>
-            <p><a href='{$url}'>Haz clic aquí para cambiar tu contraseña</a></p>
-            <p>Si no solicitaste este cambio, ignora este correo.</p>
-        ";
+        try {
+            BrevoMailer::send($notifiable->email, "Restablecer contraseña", "
+            <h2>Hola {$notifiable->name}</h2>
+            <h4>Este es un correo de restablecimiento de contraseña de Harixom </h4>
+            <p>Haz clic aquí para restablecer tu contraseña:</p>
+            <a href='{$resetUrl}'>Restablecer contraseña</a>
+            <p>Si no has solicitado un restablecimiento de contraseña, puedes ignorar este correo.</p>
+            <p>Atentamente, el equipo de Harixom</p>
 
-        return BrevoMailer::send($notifiable->email, $subject, $html);
-        
+        ");
+        } catch (\Exception $e) {
+            Log::error('Error al enviar correo en Notification: ' . $e->getMessage());
+        }
     }
 }
