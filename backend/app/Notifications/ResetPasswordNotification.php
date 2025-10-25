@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Notifications;
 
+use App\Services\BrevoMailer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -26,11 +28,15 @@ class ResetPasswordNotification extends Notification
     {
         $url = env('FRONTEND_URL') . '/ResetPassword?token=' . $this->token . '&email=' . urlencode($notifiable->email);
 
+        $subject = 'Restablecer contraseña';
+        $html = "
+            <p>Hola, {$notifiable->name}</p>
+            <p>Hemos recibido una solicitud para restablecer tu contraseña.</p>
+            <p><a href='{$url}'>Haz clic aquí para cambiar tu contraseña</a></p>
+            <p>Si no solicitaste este cambio, ignora este correo.</p>
+        ";
 
-        return (new MailMessage)
-            ->subject('Restablecer contraseña')
-            ->line('Has solicitado restablecer tu contraseña.')
-            ->action('Restablecer contraseña', $url)
-            ->line('Si no solicitaste este cambio, ignora este correo.');
+        return BrevoMailer::send($notifiable->email, $subject, $html);
+        
     }
 }
