@@ -24,7 +24,7 @@ export default function ReportPage() {
 
     try {
       await axios.post(
-        "http://127.0.0.1:8000/send-email",
+        "https://harixom-desarrollo.onrender.com/send-email",
         formData
       ); // URL del backend
       setSuccessMessage("¡Tu reporte ha sido enviado exitosamente!");
