@@ -73,9 +73,10 @@ class User extends Authenticatable
     /**
      * Notificación personalizada de restablecimiento de contraseña.
      */
-    public function sendPasswordResetNotification($token)
+   public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPasswordNotification($token, $this->email));
+        $this->notify(new ResetPasswordNotification($token));
+        
     }
 
     public function posts()

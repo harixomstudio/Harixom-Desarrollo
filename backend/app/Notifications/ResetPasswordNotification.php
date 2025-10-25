@@ -2,28 +2,36 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Services\BrevoMailer;
 
 class ResetPasswordNotification extends Notification
 {
-    public $token;
-    public $email;
+    use Queueable;
 
-    public function __construct($token, $email)
+    public $token;
+
+    public function __construct($token)
     {
         $this->token = $token;
-        $this->email = $email;
     }
 
-    // No necesitamos 'via' porque no vamos a usar el sistema de mail de Laravel
-    public function sendResetEmail()
+    public function via($notifiable)
     {
-        $url = url("https://harixom.netlify.app/resetPassword?token={$this->token}&email={$this->email}");
+        return ['mail'];
+    }
 
-        $subject = 'Restablecer contraseña';
-        $html = view('emails.reset-password-html', ['url' => $url])->render();
+    public function toMail($notifiable)
+    {
+        $url = env('FRONTEND_URL') . '/ResetPassword?token=' . $this->token . '&email=' . urlencode($notifiable->email);
 
-        return BrevoMailer::send($this->email, $subject, $html);
+
+        return (new MailMessage)
+            ->subject('Restablecer contraseña')
+            ->line('Has solicitado restablecer tu contraseña.')
+            ->action('Restablecer contraseña', $url)
+            ->line('Si no solicitaste este cambio, ignora este correo.');
     }
 }
