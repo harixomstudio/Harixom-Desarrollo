@@ -25,6 +25,8 @@ function RouteComponent() {
     enabled: !!token,
   });
 
+  console.log(data);
+
   if (!token)
     return <p className="text-white text-center mt-10">No estás logueado.</p>;
   if (isLoading)

@@ -24,6 +24,7 @@ class StoreUserRequest extends FormRequest
     return [
         'name' => 'required|max:255',
         'email' => 'required|email|max:255|unique:users,email',
+                'regex:/^[^\s]+$/',
         'phone' => ['nullable','string','max:20','regex:/^\+\d{1,3}\d{4,14}$/'],
         'address' => 'required|max:255',
         'password' => 'required|min:6|max:255',
@@ -38,8 +39,9 @@ class StoreUserRequest extends FormRequest
         return [
             'name.required' => 'The name field is required.',
             'name.max' => 'The name field must be at most 255 characters long',
+            'name.regex' => 'The name field cannot contain spaces.',
 
-             'phone.regex' => 'El número de teléfono debe iniciar con + y contener solo números. Ej: +50688881234',
+             'phone.regex' => 'The phone number must begin with +, contain only numbers, and have no spaces. Ex: +50688881234',
 
             'email.required' => 'The email field is required.',
             'email.email' => 'The email field must be a valid email address',

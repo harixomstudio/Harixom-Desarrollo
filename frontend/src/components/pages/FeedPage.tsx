@@ -11,6 +11,7 @@ interface Publication {
   description: string;
   image?: string;
   user_name?: string;
+  isPremium?: boolean;
   user_profile_picture?: string;
   total_likes?: number;
   total_comments?: number;
@@ -259,6 +260,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
     }
   };
 
+
   return (
     <div className="bg-stone-950 min-h-screen py-10 px-3"
       style={{ fontFamily: "Monserrat" }}>
@@ -310,7 +312,28 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     }
                   }}
                 >
-                  {pub.user_name || "ArtistUser"}
+                  <div className="flex items-center gap-1">
+  <span
+    className="text-white font-semibold text-sm drop-shadow hover:text-pink-400 cursor-pointer"
+    onClick={(e) => {
+      e.stopPropagation();
+      if (pub.user_id === currentUserId) {
+        navigate({ to: "/Profile" });
+      } else {
+        navigate({
+          to: "/ProfileGuest",
+          search: { userId: pub.user_id },
+        });
+      }
+    }}
+  >
+    {pub.user_name || "ArtistUser"}
+  </span>
+  {pub.isPremium && (
+    <img src="/premium.svg" alt="Insignia Premium" className="w-4 h-4" />
+  )}
+</div>
+
                 </span>
               </div>
               {pub.image ? (
@@ -330,8 +353,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
               <div className="flex flex-row gap-5 items-center">
                 {/* Like */}
                 <button
-                  className={`opacity-80 flex flex-row items-center gap-1 ${likes[pub.id] ? "text-red-500" : "text-gray-300"
-                    }`}
+                  className={`flex items-center gap-1 group transition-colors duration-200
+    ${likes[pub.id] ? "text-pink-500" : "text-gray-300"}`}
                   title="Like"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -341,19 +364,24 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   <svg
                     width="28"
                     height="28"
-                    fill={likes[pub.id] ? "red" : "none"}
-                    stroke="white"
-                    strokeWidth="2"
                     viewBox="0 0 24 24"
+                    fill={likes[pub.id] ? "currentColor" : "none"}
+                    stroke={likes[pub.id] ? "currentColor" : "white"}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`transition-all duration-200 group-hover:stroke-pink-500 ${likes[pub.id] ? "animate-like" : ""}`}
                   >
-                    <path d="M12 21s-1-.5-2-1.5S5 14 5 10.5 8 5 12 8s7-2 7 2.5-5 9-5 9-1 1-2 1z" />
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
-                  <span className="text-xs">{likesCount[pub.id] || 0}</span>
+                  <span className="text-xs transition-colors duration-200 group-hover:text-pink-500">
+                    {likesCount[pub.id] || 0}
+                  </span>
                 </button>
 
                 {/* Comentario */}
                 <button
-                  className="text-gray-300 opacity-80 flex flex-row items-center gap-1"
+                  className="flex items-center gap-1 group transition-colors duration-200 text-gray-300 opacity-80"
                   title="Comentar"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -368,10 +396,11 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     stroke="white"
                     strokeWidth="2"
                     viewBox="0 0 24 24"
+                    className="transition-colors duration-200 group-hover:stroke-pink-500"
                   >
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
-                  <span className="text-xs">
+                  <span className="text-xs transition-colors duration-200 group-hover:text-pink-500">
                     {comments[pub.id]?.length || 0}
                   </span>
                 </button>
@@ -379,8 +408,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 {/* Seguir (oculto si es el mismo user) */}
                 {pub.user_id !== undefined && pub.user_id !== currentUserId && (
                   <button
-                    className={`opacity-80 flex items-center justify-center ${follows[pub.user_id] ? "text-green-500" : "text-gray-300"
-                      }`}
+                    className={`flex items-center justify-center opacity-80 transition-colors duration-200 group
+      ${follows[pub.user_id] ? "text-green-500" : "text-gray-300"}`}
                     title={follows[pub.user_id] ? "Siguiendo" : "Seguir"}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -388,7 +417,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     }}
                   >
                     {follows[pub.user_id] ? (
-                      // Check
                       <svg
                         width="28"
                         height="28"
@@ -398,12 +426,12 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="transition-colors duration-200 group-hover:stroke-pink-500"
                       >
                         <circle cx="12" cy="12" r="10" />
                         <polyline points="17 9 11 17 6 13" />
                       </svg>
                     ) : (
-                      // ✚ Cruz
                       <svg
                         width="28"
                         height="28"
@@ -413,6 +441,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="transition-colors duration-200 group-hover:stroke-pink-500"
                       >
                         <circle cx="12" cy="12" r="10" />
                         <line x1="12" y1="7" x2="12" y2="17" />
@@ -526,8 +555,25 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
       {/* Modal publicaciones en grande */}
       {selectedPublication && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen ">
-          <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-aut0 flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:mb-25 max-lg:items-center">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
+          <div className="relative bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:items-center">
+
+            {/* ❌ Botón de cierre */}
+            <button
+              onClick={closeModal}
+              className="
+          absolute 
+          lg:top-6 lg:right-6    /* 🖥️ En desktop: arriba a la derecha dentro del área del nombre */
+          max-lg:top-4 max-lg:right-4 /* 📱 En móvil: arriba sobre la imagen */
+          px-3 py-1 
+          bg-red-500 text-white 
+          rounded-full font-bold text-lg 
+          hover:bg-red-600 transition-all 
+          shadow-md z-20
+        "
+            >
+              ✕
+            </button>
             {/* Imagen a la izquierda */}
             <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
               {selectedPublication.image ? (
@@ -576,12 +622,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
               >
                 Cerrar
               </button>
-              <button
-                className="absolute right-60 max-lg:translate-y-3/1 min-lg:bottom-155 min-lg:translate-x-3/1 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
-                onClick={closeModal}
-              >
-                X
-              </button>
+
             </div>
           </div>
         </div>

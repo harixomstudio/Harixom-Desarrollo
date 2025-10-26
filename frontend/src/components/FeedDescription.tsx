@@ -12,10 +12,11 @@ export default function FeedDescription({ pub, currentUserId }: any) {
 
   const parseText = (text: string) => {
     const parts = text.split(/(\s+)/);
+
     return parts.map((part, index) => {
-      // 👇 Detecta menciones
       if (part.startsWith("@")) {
         const username = part.substring(1);
+
         return (
           <span
             key={index}
@@ -23,38 +24,28 @@ export default function FeedDescription({ pub, currentUserId }: any) {
             onClick={(e) => {
               e.stopPropagation();
 
-              // Si el usuario hace clic en su propio @nombre
-              if (pub.user_id === currentUserId) {
-                navigate({ to: "/Profile" });
-                return;
-              }
-
-              // Buscar usuario por nombre usando /search
               axiosRequest
-  .get(`/search?q=${username}`)
-  .then((res) => {
-    const users = res.data.users;
-    const user = users.find(
-      (u: any) =>
-        u.name.toLowerCase() === username.toLowerCase()
-    );
+                .get(`/search?q=${username}`)
+                .then((res) => {
+                  const users = res.data.users;
+                  const user = users.find(
+                    (u: any) =>
+                      u.name.toLowerCase() === username.toLowerCase()
+                  );
 
-    if (user) {
-      if (user.id === currentUserId) {
-        navigate({ to: "/Profile" });
-      } else {
-        navigate({
-          to: "/ProfileGuest",
-          search: { userId: user.id },
-        });
-      }
-    } else {
-      console.warn(`Usuario @${username} no encontrado.`);
-    }
-  })
-  .catch((err) => {
-    console.error("Error al buscar usuario:", err);
-  });
+                  if (user) {
+                    if (user.id === currentUserId) {
+                      navigate({ to: "/Profile" });
+                    } else {
+                      window.location.href = `/ProfileGuest?userId=${user.id}`;
+                    }
+                  } else {
+                    console.warn(`Usuario @${username} no encontrado.`);
+                  }
+                })
+                .catch((err) => {
+                  console.error("Error al buscar usuario:", err);
+                });
             }}
           >
             {part}
@@ -62,7 +53,7 @@ export default function FeedDescription({ pub, currentUserId }: any) {
         );
       }
 
-      // 👇 Detecta hashtags
+      // Hashtags
       if (part.startsWith("#")) {
         const tag = part.substring(1);
         return (
@@ -81,7 +72,6 @@ export default function FeedDescription({ pub, currentUserId }: any) {
         );
       }
 
-      // Texto normal
       return part;
     });
   };

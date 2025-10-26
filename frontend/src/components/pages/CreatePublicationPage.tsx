@@ -220,8 +220,10 @@ export default function CreatePublicationPage({ title }: { title: string }) {
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={loading}
-                className="w-full py-3 rounded-full font-semibold text-black bg-gradient-to-r from-pink-400 to-blue-300 hover:shadow-lg disabled:opacity-50"
+                disabled={loading || !selectedImage || !cat} // <-- Aquí
+                className={`w-full py-3 rounded-full font-semibold text-black 
+      bg-gradient-to-r from-pink-400 to-blue-300 hover:scale-102 transition-transform duration-500 
+      ${loading || !selectedImage || !cat ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 {loading ? "Creando..." : "Create"}
               </button>

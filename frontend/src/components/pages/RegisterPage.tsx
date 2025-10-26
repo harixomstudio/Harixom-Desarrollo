@@ -37,6 +37,7 @@ export default function Register(props: RegisterProps) {
     confirmPassword: "",
   });
   const [phoneError, setPhoneError] = useState("");
+  const [nameError, setNameError] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -55,9 +56,18 @@ export default function Register(props: RegisterProps) {
   const validatePhone = (value: string) => {
     const regex = /^\+\d{1,3}\d{4,14}$/;
     if (value && !regex.test(value)) {
-      setPhoneError("Debe iniciar con + y contener solo números");
+      setPhoneError("The phone number example: +50612345678");
     } else {
       setPhoneError("");
+    }
+  };
+
+  const validateName = (value: string) => {
+    const regex = /^[^\s]+$/;
+    if (value && !regex.test(value)) {
+      setNameError("The name field cannot contain spaces.");
+    } else {
+      setNameError("");
     }
   };
 
@@ -66,7 +76,13 @@ export default function Register(props: RegisterProps) {
     setLoading(true);
 
     if (user.password !== user.confirmPassword) {
-      showToast("Las contraseñas no coinciden", "error");
+      showToast("Passwords do not match", "error");
+      setLoading(false);
+      return;
+    }
+
+    if (phoneError || nameError) {
+      showToast("Please correct the errors before continuing.", "error");
       setLoading(false);
       return;
     }
@@ -178,9 +194,14 @@ export default function Register(props: RegisterProps) {
                     onChange={(e) => {
                       setUser({ ...user, [field]: e.target.value });
                       if (field === "phone") validatePhone(e.target.value);
+                      if (field === "name") validateName(e.target.value);
                     }}
                     className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
                   />
+                  {/* Mostrar mensaje de error del nombre */}
+                  {field === "name" && nameError && (
+                    <p className="text-red-500 text-sm mt-1">{nameError}</p>
+                  )}
 
                   {/* Mostrar mensaje de error del teléfono */}
                   {field === "phone" && phoneError && (

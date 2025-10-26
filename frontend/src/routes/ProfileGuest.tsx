@@ -24,6 +24,7 @@ function ProfileGuestRoute() {
     },
     enabled: !!token && !!guestUserId,
   });
+  
 
   // Likes y follows del invitado
   const { data: likesData } = useQuery({
@@ -80,7 +81,7 @@ function ProfileGuestRoute() {
       likes={likesData || []}
       userId={user?.id}
       buyMeACoffee={user?.buymeacoffee_link || ""}
-      
+      isPremium={user?.is_premium}
     />
   );
 }
