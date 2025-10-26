@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Resources\UserResource;
+use App\Http\Middleware\PremiumOnly;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -75,13 +76,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
 
     // Subgrupo solo para usuarios premium
-    Route::middleware(['premium'])->group(function () {
-        Route::post('/events/create', [EventApiController::class, 'store']);
-        Route::post('/workshops/create', [TallerApiController::class, 'store']);
+    Route::middleware(['premiumOnly'])->group(function () {
+       Route::post('/events/create', [EventApiController::class, 'store']);
+       Route::post('/workshops/create', [TallerApiController::class, 'store']);
     });
 });
-
-Route::post('/events/create', [EventApiController::class, 'store']);
 
 //Stripe
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);

@@ -13,7 +13,7 @@ function RouteComponent() {
     fetch("https://harixom-desarrollo.onrender.com/api/events")
       .then((res) => res.json())
       .then((data) => {
-        const formatted = data.map((event: any) => ({
+        const formatted = data.events.map((event: any) => ({
           id: event.id,
           image: event.image,
           title: event.title,
