@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //Rutas para publicaciones
     Route::post('/publications', [PublicationController::class, 'store']);
     Route::get('/publications', [PublicationController::class, 'index']);
+    Route::get('/publications/{id}', [PublicationController::class, 'show']);
     Route::delete('/publications/{id}', [PublicationController::class, 'destroy']);
 
     // Rutas para likes

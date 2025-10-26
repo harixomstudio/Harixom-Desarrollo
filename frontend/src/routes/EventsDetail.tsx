@@ -17,16 +17,17 @@ function EventDetailRouteComponent() {
   const { eventId } = Route.useSearch();
 
   const { data: eventData, isLoading, error } = useQuery({
-    queryKey: ["eventDetail", eventId],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        `https://harixom-desarrollo.onrender.com/api/events/${eventId}`,
-        { headers: token ? { Authorization: `Bearer ${token}` } : undefined }
-      );
-      return data;
-    },
-    enabled: !!eventId,
-  });
+  queryKey: ["eventDetail", eventId],
+  queryFn: async () => {
+    const { data } = await axios.get(
+      `https://harixom-desarrollo.onrender.com/api/events/${eventId}`,
+      { headers: token ? { Authorization: `Bearer ${token}` } : undefined }
+    );
+    return data.event;
+  },
+  enabled: !!eventId,
+});
+
 
   if (!eventId) return <p className="text-white text-center mt-10">Evento no especificado.</p>;
   if (isLoading) return (

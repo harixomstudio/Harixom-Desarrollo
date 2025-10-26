@@ -23,7 +23,7 @@ function TallerDetailRouteComponent() {
         `https://harixom-desarrollo.onrender.com/api/tallers/${tallerId}`,
         { headers: token ? { Authorization: `Bearer ${token}` } : undefined }
       );
-      return data;
+      return data.taller;
     },
     enabled: !!tallerId,
   });
