@@ -4,6 +4,7 @@ import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import WatermarkedImage from "../ui/WaterMarkedImage";
+import  FeedDescription  from "../FeedDescription";
 
 interface Publication {
   id: number;
@@ -21,63 +22,6 @@ interface Publication {
 
 interface FeedPageProps {
   publications: Publication[];
-}
-
-function FeedDescription({ pub, currentUserId }: any) {
-  const navigate = useNavigate();
-
-  const parseText = (text: string) => {
-    const parts = text.split(/(\s+)/);
-    return parts.map((part, index) => {
-      if (part.startsWith("@")) {
-        return (
-          <span
-            key={index}
-            className="text-pink-400 font-semibold cursor-pointer hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (pub.user_id === currentUserId) {
-                //navigate({ to: "/Profile" });
-              } else {
-                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
-                console.log("Perfil no reconocido:", pub.user_id);
-              }
-            }}
-          >
-            {part}
-          </span>
-        );
-      }
-
-      if (part.startsWith("#")) {
-        const tag = part.substring(1);
-        return (
-          <span
-            key={index}
-            className="text-blue-400 font-semibold cursor-pointer hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (tag.toLowerCase() === "retoharixom") {
-                navigate({ to: "/AIChallenge" });
-              } else {
-                console.log("Hashtag no reconocido:", tag);
-              }
-            }}
-          >
-            {part}
-          </span>
-        );
-      }
-
-      return part;
-    });
-  };
-
-  return (
-    <p className="text-gray-300 text-sm mt-2 break-words">
-      {parseText(pub.description || "")}
-    </p>
-  );
 }
 
 export default function FeedPage({ publications }: FeedPageProps) {
@@ -599,7 +543,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             </div>
 
             {/* Información a la derecha */}
-            <div className="w-1/3 flex flex-col-2 justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-10">
+            <div className="w-1/3 flex flex-col-2 justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-10 mx-4">
               <div>
                 <h2 className="text-white text-3xl font-bold">
                   {selectedPublication.user_name || "Usuario desconocido"}

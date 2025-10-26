@@ -112,7 +112,7 @@ export default function Profile(props: ProfileProps) {
   const [LinkText, setLinkText] = useState<string>(props.buyMeACoffee ?? "");
   const [selectedPublication, setSelectedPublication] = useState<any>(null);
   const [loadingPublication, setLoadingPublication] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [currentUserId] = useState<number | null>(null);
 
   // Hooks para mensajes
   const [newMessage, setNewMessage] = useState("");
@@ -953,7 +953,7 @@ export default function Profile(props: ProfileProps) {
               </div>
 
               {/* Información a la derecha */}
-              <div className="w-1/3 flex flex-col justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-6 relative mx-5">
+              <div className="w-1/3 flex flex-col justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-6 relative mx-4">
                 <div>
                   <h2 className="text-white text-3xl font-bold">
                     {selectedPublication.user_name || "Usuario desconocido"}

@@ -103,7 +103,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [isFollowing, setIsFollowing] = React.useState(false);
   const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
   const [] = useState<{ [key: number]: string[] }>({});
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
   const [selectedPublication, setSelectedPublication] = useState<any>(null);
 const [loadingPublication, setLoadingPublication] = useState(false);
 
@@ -793,7 +792,7 @@ const formatDate = (dateString?: string) => {
         </div>
 
         {/* Información */}
-        <div className="w-1/3 flex flex-col justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-6 relative mx-5">
+        <div className="w-1/3 flex flex-col justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-6 relative mx-4">
           <div>
             <h2 className="text-white text-3xl font-bold">
               {selectedPublication.user_name || "Usuario desconocido"}
