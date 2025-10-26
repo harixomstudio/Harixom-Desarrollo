@@ -56,26 +56,20 @@ function RootComponent() {
     const fetchNotifications = async () => {
       if (!token) return
       try {
+        // comisiones recibidas
         const { data: commissions } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/user/commisions/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
-        const myCommissions = commissions.commissions.filter(
-          (comission: any) => comission.to_user_id === profileData?.user?.id
-        )
-
+        // mensajes recibidos en el wall
         const { data: messages } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/profile/${profileData?.user?.id}/messages`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
-        const myNotifications = messages.filter(
-          (profile_message: any) => profile_message.to_user_id === profileData?.user?.id
-        )
-
         // comentarios recibidos en las publicaciones
         const { data } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/user/comments/${profileData?.user?.id}`,
@@ -83,20 +77,52 @@ function RootComponent() {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
-        const myComments = data.comments.filter(
-          (comments: any) => parseInt(comments.for_user_id) === profileData?.user?.id
-        )
-
+        // seguidores recibidos
         const { data: followersData } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/user/follows`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
-        const myFollowers = followersData.followers
+        // los likes que se reciben en cada publiccacion
+        const { data: likesData } = await axios.get(
+          `https://harixom-desarrollo.onrender.com/api/user/likes/${profileData?.user?.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
 
-        setNotifications(myCommissions.length + myNotifications.length + myComments.length + myFollowers.length)
-        setNotificationsData([...myNotifications, ...myCommissions, ...myComments, ...myFollowers])
+        //se saca toda la data del json y se filtra
+        const myCommissions = commissions.commissions.filter(
+          (comission: any) => comission.to_user_id === profileData?.user?.id
+        )
+        const myNotifications = messages.messages.filter(
+          (profile_message: any) => profile_message.to_user_id === profileData?.user?.id
+        )
+        const myComments = data.comments.filter(
+          (comments: any) => parseInt(comments.for_user_id) === profileData?.user?.id
+        )
+        const myFollowers = followersData.followers
+        const myLikes = likesData.likes
+
+
+        const mergedNotifications = [ //unificacion de la data
+          ...myNotifications,
+          ...myCommissions,
+          ...myComments,
+          ...myFollowers,
+          ...myLikes
+        ];
+
+        mergedNotifications.sort((a: any, b: any) => {
+          const dateA = new Date(a.created_at);
+          const dateB = new Date(b.created_at);
+          return dateB.getTime() - dateA.getTime();
+        });
+
+
+        setNotifications(mergedNotifications.length)
+        setNotificationsData(mergedNotifications)
 
       } catch (err) {
         console.error('Error fetching messages wall:', err)
@@ -135,15 +161,15 @@ function RootComponent() {
           notification="Notifications"
           titles={notificationsData.map((number) => number.title || 'New Commission')}
           users={notificationsData.map((number) => number.from_user?.name || number.user?.name || number.name)}
-          UsersID={notificationsData.map((number) => number.from_user?.id || number.user?.id || number.id)}
+          UsersID={notificationsData.map((number) => number.from_user?.id || number.user?.id || number.id || number.user_id)}
           texts={notificationsData.map((number) => number.message || number.comment)}
-          dates={notificationsData.map((number) => number.created_at?.split('T')[0])}
+          dates={notificationsData.map((number) => new Date(number.created_at).toLocaleString() === 'Invalid Date' ? number.created_at : new Date(number.created_at).toLocaleString('es-CR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }))}
           images={notificationsData.map(() => 'bell.svg')}
           alts={notificationsData.map(() => 'bell')}
         />}
 
       {/* CONTENIDO PRINCIPAL */}
-      { currentPath !== '/Inbox' &&
+      {currentPath !== '/Inbox' &&
         <div className={`flex min-h-screen ${!hideNav ? "pl-14" : ""}`}>
           {!hideNav}
           <div className="flex-1 bg-stone-950 w-full">

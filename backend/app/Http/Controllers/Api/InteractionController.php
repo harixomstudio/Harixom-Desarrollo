@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class InteractionController extends Controller
 {
     //Funcion para dar like
-    public function toggleLike($publicationId)
+    public function toggleLike($publicationId, Request $request)
     {
         $user = auth()->user();
         if (!$user) {
@@ -32,7 +32,10 @@ class InteractionController extends Controller
             $liked = false;
         } else {
             $publication->likes()->create([
-                'user_id' => $user->id
+                'user_id' => $user->id,
+                'for_user_id' => $publication->user_id,
+                'title' => $request->title,
+                'status' => $request->status
             ]);
             $liked = true;
         }
@@ -42,6 +45,9 @@ class InteractionController extends Controller
 
         return response()->json([
             'liked' => $liked,
+            'for_user_id' => $publication->user_id,
+            'title' => $request->title,
+            'status' => $request->status,
             'total_likes' => $publication->likes_count
         ]);
     }
@@ -58,6 +64,29 @@ class InteractionController extends Controller
                 'description' => $like->publication->description,
                 'image' => $like->publication->image,
             ])
+        ]);
+    }
+
+    public function userLikesNotis($userId)
+    {
+        $likes = Like::with('publication')
+        ->where('for_user_id', $userId)
+        ->orderBy('created_at', 'asc')
+        ->get();
+
+        return response()->json([
+            'likes' => $likes->map(function ($like) {
+                return [
+                    'publication_id' => $like->publication->id,
+                    'for_user_id' => $like->for_user_id,
+                    'title' => $like->title,
+                    'user_id' => $like->user_id,
+                    'user' => ['name' => $like->user ? $like->user->name : 'Anonimo'],
+                    'description' => $like->publication->description,
+                    'status' => $like->status,
+                    'created_at' => $like->created_at->diffForHumans(),
+                ];
+            })
         ]);
     }
 
@@ -127,7 +156,7 @@ class InteractionController extends Controller
                 'title' => $follow->title,
                 'name' => $follow->following->name,
                 'status' => $follow->status,
-                'created_at' => $follow->created_at
+                'created_at' => $follow->created_at->diffForHumans()
             ];
         });
 
@@ -138,7 +167,7 @@ class InteractionController extends Controller
                 'title' => $follow->title,
                 'name' => $follow->follower->name,
                 'status' => $follow->status,
-                'created_at' => $follow->created_at
+                'created_at' => $follow->created_at->diffForHumans()
             ];
         });
 

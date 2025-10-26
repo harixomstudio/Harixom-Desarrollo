@@ -18,6 +18,8 @@ interface UserProfile {
 export default function SetProfilePage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+
   const { showToast } = useToast();
 
   const [profile, setProfile] = useState<UserProfile>({
@@ -48,6 +50,7 @@ export default function SetProfilePage() {
           ...user,
           commissions_enabled: Number(user.commissions_enabled) === 1,
         });
+        setLoadingProfile(true);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -102,7 +105,7 @@ export default function SetProfilePage() {
     if (bannerFile) formData.append("banner_picture", bannerFile);
 
     try {
-       await axiosRequest.post("/user/profile?_method=PUT", formData, {
+      await axiosRequest.post("/user/profile?_method=PUT", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -125,161 +128,166 @@ export default function SetProfilePage() {
 
 
   return (
-    <section className="flex flex-col min-h-screen items-center justify-start bg-stone-950 py-15">
-      {/* Banner */}
-      <div className="relative w-3/4 h-50 rounded-xl overflow-hidden mb-6">
-        <div className="flex relative w-full h-full items-center justify-center">
-          <img
-            src={profile.banner_picture}
-            alt="Banner"
-            className="w-full h-full object-cover"
-          />
-          <img
-            src={profile.banner_picture || "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80"}
-            alt="Banner"
-            className="w-full h-full object-cover"
-          />
-        </div>
+    <section className="flex flex-col min-h-screen items-center justify-center bg-stone-950 py-15">
+      <div className={`${loadingProfile ? "flex" : "hidden"} flex-col items-center justify-center w-full`}>
+        {/* Banner */}
+        <div className="relative w-3/4 h-50 rounded-xl overflow-hidden mb-6">
+          <div className="flex relative w-full h-full items-center justify-center">
+            <img
+              src={profile.banner_picture || "https://img.freepik.com/foto-gratis/fondo-textura-abstracta_1258-30553.jpg?semt=ais_incoming&w=740&q=80"}
+              alt="Banner"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => handleFileChange(e, "banner")}
-          className="hidden"
-          id="banner-upload"
-        />
-        <label
-          htmlFor="banner-upload"
-          className="absolute right-4 bottom-4 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full cursor-pointer text-sm"
-        >
-          Cambiar Banner
-        </label>
-      </div>
-
-      {/* Perfil */}
-      <div className="flex flex-col items-center gap-4 w-3/4">
-        <div className="relative">
-          <img
-            src={
-              profile.profile_picture ||
-              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-            }
-            alt="Perfil"
-            className="w-32 h-32 rounded-full border-4 border-white object-cover"
-          />
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleFileChange(e, "profile")}
+            onChange={(e) => handleFileChange(e, "banner")}
             className="hidden"
-            id="profile-upload"
+            id="banner-upload"
           />
           <label
-            htmlFor="profile-upload"
-            className="absolute right-0 bottom-0 bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-full cursor-pointer text-xs"
+            htmlFor="banner-upload"
+            className="absolute right-4 bottom-4 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full cursor-pointer text-sm"
           >
-            Cambiar Foto
+            Cambiar Banner
           </label>
         </div>
 
-        <form className="flex flex-col gap-4 w-full">
-          <div>
-            <label className="block text-sm mb-1 text-white">Nombre</label>
-            <input
-              type="text"
-              name="name"
-              value={profile.name}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm mb-1 text-white">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={profile.email}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm mb-1 text-white">Teléfono</label>
-            <input
-              type="tel"
-              name="phone"
-              value={profile.phone}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm mb-1 text-white">Dirección</label>
-            <input
-              type="text"
-              name="address"
-              value={profile.address}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm mb-1 text-white">Descripción</label>
-            <textarea
-              name="description"
-              value={profile.description ?? ""}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white resize-none"
-            />
-          </div>
-
-          <div className="flex items-center gap-4 mt-4">
-            <label htmlFor="commissions-toggle" className="text-white text-sm">
-              Activar comisiones
-            </label>
-            <button
-              id="commissions-toggle"
-              type="button"
-              onClick={() =>
-                setProfile((prev) => ({
-                  ...prev,
-                  commissions_enabled: !prev.commissions_enabled,
-                  
-                }))
+        {/* Perfil */}
+        <div className="flex flex-col items-center gap-4 w-3/4">
+          <div className="relative">
+            <img
+              src={
+                profile.profile_picture ||
+                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
               }
-              className={`w-14 h-8 flex items-center rounded-full px-1 transition-colors duration-300 ${profile.commissions_enabled ? "bg-green-400" : "bg-gray-500"
-                }`}
+              alt="Perfil"
+              className="w-32 h-32 rounded-full border-4 border-white object-cover"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, "profile")}
+              className="hidden"
+              id="profile-upload"
+            />
+            <label
+              htmlFor="profile-upload"
+              className="absolute right-0 bottom-0 bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-full cursor-pointer text-xs"
             >
-              <div
-                className={`w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 ${profile.commissions_enabled ? "translate-x-6" : "translate-x-0"
-                  }`}
-              />
-            </button>
+              Cambiar Foto
+            </label>
           </div>
 
-          <div className="flex justify-between mt-6">
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/Profile" })}
-              className="px-6 py-2 rounded-full font-semibold text-white bg-gray-500 hover:bg-gray-600"
-            >
-              Volver
-            </button>
-            <button
-              type="button"
-              onClick={handleSave}
-              className="px-6 py-2 rounded-full font-semibold text-white bg-gradient-to-r from-pink-400 to-blue-400"
-              disabled={loading}
-            >
-              {loading ? "Guardando..." : "Guardar"}
-            </button>
-          </div>
-        </form>
+          <form className="flex flex-col gap-4 w-full">
+            <div>
+              <label className="block text-sm mb-1 text-white">Nombre</label>
+              <input
+                type="text"
+                name="name"
+                value={profile.name}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm mb-1 text-white">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={profile.email}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm mb-1 text-white">Teléfono</label>
+              <input
+                type="tel"
+                name="phone"
+                value={profile.phone}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm mb-1 text-white">Dirección</label>
+              <input
+                type="text"
+                name="address"
+                value={profile.address}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm mb-1 text-white">Descripción</label>
+              <textarea
+                name="description"
+                value={profile.description ?? ""}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none text-white resize-none"
+              />
+            </div>
+
+            <div className="flex items-center gap-4 mt-4">
+              <label htmlFor="commissions-toggle" className="text-white text-sm">
+                Activar comisiones
+              </label>
+              <button
+                id="commissions-toggle"
+                type="button"
+                onClick={() =>
+                  setProfile((prev) => ({
+                    ...prev,
+                    commissions_enabled: !prev.commissions_enabled,
+
+                  }))
+                }
+                className={`w-14 h-8 flex items-center rounded-full px-1 transition-colors duration-300 ${profile.commissions_enabled ? "bg-green-400" : "bg-gray-500"
+                  }`}
+              >
+                <div
+                  className={`w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 ${profile.commissions_enabled ? "translate-x-6" : "translate-x-0"
+                    }`}
+                />
+              </button>
+            </div>
+
+            <div className="flex justify-between mt-6">
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/Profile" })}
+                className="px-6 py-2 rounded-full font-semibold text-white bg-gray-500 hover:bg-gray-600"
+              >
+                Volver
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                className="px-6 py-2 rounded-full font-semibold text-white bg-gradient-to-r from-pink-400 to-blue-400"
+                disabled={loading}
+              >
+                {loading ? "Guardando..." : "Guardar"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
+      {!loadingProfile ? (<div className="flex justify-center pt-10 pb-15">
+        <div className="flex space-x-3">
+          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
+          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
+        </div>
+      </div>
+      ) : ""}
     </section>
   );
 }
