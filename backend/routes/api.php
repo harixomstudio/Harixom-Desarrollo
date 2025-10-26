@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Resources\UserResource;
+use App\Http\Middleware\PremiumOnly;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -74,9 +75,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
     Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
 
-    //crear talleres y eventos
-    Route::post('/events/create', [EventApiController::class, 'store']);
-    Route::post('/workshops/create', [TallerApiController::class, 'store']);
+    // Subgrupo solo para usuarios premium
+    Route::middleware(['premiumOnly'])->group(function () {
+       Route::post('/events/create', [EventApiController::class, 'store']);
+       Route::post('/workshops/create', [TallerApiController::class, 'store']);
+    });
 });
 
 //Stripe
