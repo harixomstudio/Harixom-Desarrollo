@@ -405,7 +405,7 @@ export default function Profile(props: ProfileProps) {
                               showToast("Usuario desbloqueado", "success");
                             } else {
                               // Bloquear
-                              await axios.post(`https://harixom-desarrollo.onrender.com/api/block/${f.id}`, {}, {
+                              await axios.post(`http://127.0.0.1:8000/api/block/${f.id}`, {}, {
                                 headers: { Authorization: `Bearer ${token}` },
                               });
                               showToast("Usuario bloqueado", "success");

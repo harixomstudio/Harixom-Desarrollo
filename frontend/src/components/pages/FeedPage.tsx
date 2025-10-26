@@ -39,8 +39,8 @@ function FeedDescription({ pub, currentUserId }: any) {
               if (pub.user_id === currentUserId) {
                 //navigate({ to: "/Profile" });
               } else {
-               // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
-               console.log("Perfil no reconocido:", pub.user_id);
+                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
+                console.log("Perfil no reconocido:", pub.user_id);
               }
             }}
           >
@@ -102,7 +102,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   useEffect(() => { //Despliegue de un feed infinito, scroll aparece cargando y aumentan las publicaciones
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
-         setVisibleCount((prevCount) => prevCount + 12);
+        setVisibleCount((prevCount) => prevCount + 12);
       }
     };
     window.addEventListener("scroll", handleScroll);
@@ -264,36 +264,45 @@ export default function FeedPage({ publications }: FeedPageProps) {
     try {
       const { data } = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/follow/${userId}`,
-        {},
+        {
+          title: "¡Te han empezado a seguir!",
+          status: "Medium",
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
+      console.log(data);
+      
       setFollows((prev) => ({ ...prev, [userId]: data.following }));
       setHideFollow((prev) => ({ ...prev, [userId]: data.following }));
+      showToast("¡Ahora sigues a este usuario!", "success");
     } catch (err) {
       console.error(err);
       showToast("Error al seguir", "error");
     }
   };
 
-  const addComment = async (id: number, text: string) => {
+  const addComment = async (id: number, text: string, for_user_id: number) => {
     if (!text.trim()) {
       showToast("El comentario no puede estar vacío", "error");
       return;
     }
-
     try {
       const { data } = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/comment/${id}`,
-        { comment: text },
+        {
+          title: "¡Te han enviado un comentario!",
+          comment: text,
+          for_user_id: for_user_id,
+          status: "Low",
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       setComments((prev) => ({
         ...prev,
         [id]: [
           ...(prev[id] || []),
-          `${data.comment.user.name}: ${data.comment.comment}`,
+          `${data.comment.user.name}: ${data.comment.comment} `,
         ],
       }));
 
@@ -433,7 +442,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     }}
                   >
                     {follows[pub.user_id] ? (
-                      // ✅ Check
+                      // Check
                       <svg
                         width="28"
                         height="28"
@@ -534,7 +543,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                       onClick={async (e) => {
                         e.stopPropagation();
                         if (currentComment.trim()) {
-                          await addComment(pub.id, currentComment);
+                          await addComment(pub.id, currentComment, publications.find((p) => p.id === pub.id)?.user_id!);
                           await fetchComments(pub.id);
                           setIsModalOpen(null);
                           setCurrentComment("");
@@ -563,7 +572,11 @@ export default function FeedPage({ publications }: FeedPageProps) {
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
           </div>
         </div>
-      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS PUBLICACIONES</div> }
+      ) : <div className="flex space-x-1 items-baseline text-gray-400 text-sm text-center justify-center pb-5 pt-10"> ESPERANDO PUBLICACIONES
+        <p className="animate-pulse [animation-delay:-0.8s] text-2xl pl-1">.</p>
+        <p className="animate-pulse [animation-delay:-0.3s] text-2xl">.</p>
+        <p className="animate-pulse text-2xl" >.</p>
+      </div>}
 
       {/* Modal publicaciones en grande */}
       {selectedPublication && (

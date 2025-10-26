@@ -33,6 +33,8 @@ function RouteComponent() {
     const fetchNotifications = async () => {
       if (!token) return
       try {
+
+        // mensajes de comisiones recibidas
         const { data: commissions } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/user/commisions/${profileData?.user?.id}`,
           {
@@ -42,9 +44,10 @@ function RouteComponent() {
         const myCommissions = commissions.commissions.filter(
           (comission: any) => comission.to_user_id === profileData?.user?.id
         )
-      
-        const { data: messages } = await axios.get(
 
+
+        // mensajes del muro
+        const { data: messages } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/profile/${profileData?.user?.id}/messages`,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -54,17 +57,38 @@ function RouteComponent() {
           (profile_message: any) => profile_message.to_user_id === profileData?.user?.id
         )
 
-        setNotifications([...myNotifications, ...myCommissions])
+        // followers recibidos en las publicaciones
+        const { data } = await axios.get(
+          `https://harixom-desarrollo.onrender.com/api/user/comments/${profileData?.user?.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        const myComments = data.comments.filter(
+          (comments: any) => parseInt(comments.for_user_id) === profileData?.user?.id
+        )
+
+        const { data: followersData } = await axios.get(
+          `https://harixom-desarrollo.onrender.com/api/user/follows`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        const myFollowers = followersData.followers
+
+        setNotifications([...myNotifications, ...myCommissions, ...myComments, ...myFollowers])
+
 
       } catch (err) {
         console.error('Error fetching messages wall:', err)
       }
     }
-    
+
     fetchNotifications()
-    const intervalId = setInterval(fetchNotifications, 30000);
+    const intervalId = setInterval(fetchNotifications, 15000);
     return () => clearInterval(intervalId);
   }, [token, profileData?.user?.id])
+
 
 
   return (
@@ -72,10 +96,10 @@ function RouteComponent() {
       prioritys={notifications.map((number) => (number.status))}
       notification="Notifications"
       titles={notifications.map((number) => number.title || 'New Commission')}
-      users={notifications.map((number) => number.from_user.name)}
-      UsersID={notifications.map((number) => number.from_user.id)}
-      texts={notifications.map((number) => number.message)}
-      dates={notifications.map((number) => new Date(number.created_at).toLocaleDateString())}
+      users={notifications.map((number) => number.from_user?.name || number.user?.name || number.name)}
+      UsersID={notifications.map((number) => number.from_user?.id || number.user?.id || number.id)}
+      texts={notifications.map((number) => number.message || number.comment)}
+      dates={notifications.map((number) => number.created_at?.split('T')[0])}
       images={notifications.map(() => 'bell.svg')}
       alts={notifications.map(() => 'bell')}
     />
