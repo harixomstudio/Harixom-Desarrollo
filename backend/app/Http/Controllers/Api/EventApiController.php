@@ -49,7 +49,15 @@ class EventApiController extends Controller
      */
     public function store(Request $request)
     {
-        $upload = new UploadApi();
+        $user = $request->user();
+
+if (!$user) {
+    return response()->json(['error' => 'No autorizado.'], 401);
+}
+
+if (!$user->is_premium) {
+    return response()->json(['error' => 'Solo usuarios premium pueden crear eventos.'], 403);
+}
 
         $data = $request->validate([
             'type' => 'required|string|max:255',
@@ -61,6 +69,8 @@ class EventApiController extends Controller
             'timeEnd' => 'required|string',
             'image' => 'nullable|image|max:3072',
         ]);
+
+        $upload = new UploadApi();
 
         // Subida a Cloudinary
         if ($request->hasFile('image')) {
