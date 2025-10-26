@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
 import { useState, useEffect } from "react";
-import WatermarkedImage from "../ui/WaterMarkedImage";
+//import WatermarkedImage from "../ui/WaterMarkedImage";
 
 interface Message {
   id?: number;
@@ -31,72 +31,62 @@ interface ProfileProps {
   buyMeACoffee?: string;
 }
 
-interface Publication {
-  id: number;
-  user_id?: number;
-  user_name?: string;
-  image?: string;
-  description?: string;
-  created_at?: string;
-  category?: string;
-}
-
-function FeedDescription({ pub, currentUserId }: any) {
-  const navigate = useNavigate();
-
-  const parseText = (text: string) => {
-    const parts = text.split(/(\s+)/);
-    return parts.map((part, index) => {
-      if (part.startsWith("@")) {
-        return (
-          <span
-            key={index}
-            className="text-pink-400 font-semibold cursor-pointer hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (pub.user_id === currentUserId) {
-                //navigate({ to: "/Profile" });
-              } else {
-                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
-                console.log("Perfil no reconocido:", pub.user_id);
-              }
-            }}
-          >
-            {part}
-          </span>
-        );
-      }
-
-      if (part.startsWith("#")) {
-        const tag = part.substring(1);
-        return (
-          <span
-            key={index}
-            className="text-blue-400 font-semibold cursor-pointer hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (tag.toLowerCase() === "retoharixom") {
-                navigate({ to: "/AIChallenge" });
-              } else {
-                console.log("Hashtag no reconocido:", tag);
-              }
-            }}
-          >
-            {part}
-          </span>
-        );
-      }
-
-      return part;
-    });
-  };
-
-  return (
-    <p className="text-gray-300 text-sm mt-2 break-words">
-      {parseText(pub.description || "")}
-    </p>
-  );
-}
+//function FeedDescription({ pub, currentUserId }: any) {
+//  const navigate = useNavigate();
+//
+//  const parseText = (text: string) => {
+//    const parts = text.split(/(\s+)/);
+//    return parts.map((part, index) => {
+//      if (part.startsWith("@")) {
+//        return (
+//          <span
+//            key={index}
+//            className="text-pink-400 font-semibold cursor-pointer hover:underline"
+//            onClick={(e) => {
+//              e.stopPropagation();
+//              if (pub.user_id === currentUserId) {
+//                //navigate({ to: "/Profile" });
+//              } else {
+//                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
+//                console.log("Perfil no reconocido:", pub.user_id);
+//              }
+//            }}
+//          >
+//            {part}
+//          </span>
+//        );
+//      }
+//
+//      if (part.startsWith("#")) {
+//        const tag = part.substring(1);
+//        return (
+//          <span
+//            key={index}
+//            className="text-blue-400 font-semibold cursor-pointer hover:underline"
+//            onClick={(e) => {
+//              e.stopPropagation();
+//              if (tag.toLowerCase() === "retoharixom") {
+//                navigate({ to: "/AIChallenge" });
+//              } else {
+//                console.log("Hashtag no reconocido:", tag);
+//              }
+//            }}
+//          >
+//            {part}
+//          </span>
+//        );
+//      }
+//
+//      return part;
+//    });
+//  };
+//
+//  return (
+//    <p className="text-gray-300 text-sm mt-2 break-words">
+//      {parseText(pub.description || "")}
+//    </p>
+//  );
+//}
 
 export default function Profile(props: ProfileProps) {
   const { showToast } = useToast();
@@ -362,9 +352,9 @@ const [loadingPublication, setLoadingPublication] = useState(false);
   }
 };
 
-const closeModal = () => {
-  setSelectedPublication(null);
-};
+//const closeModal = () => {
+//  setSelectedPublication(null);
+//};
 
   function formatDate(date?: string) {
   if (!date) return "";
