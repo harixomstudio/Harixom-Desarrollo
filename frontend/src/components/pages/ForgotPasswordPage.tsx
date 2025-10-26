@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { axiosRequest } from "../helpers/config";
+import { useToast } from "../ui/Toast";
 
 interface ForgotPasswordProps {
   title: string;
@@ -11,6 +12,7 @@ interface ForgotPasswordProps {
 export default function ForgotPassword(props: ForgotPasswordProps) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,10 +20,13 @@ export default function ForgotPassword(props: ForgotPasswordProps) {
 
     try {
       const response = await axiosRequest.post("forgot-password", { email });
-      alert(response.data.message || props.successMessage);
+      showToast(response.data.message || props.successMessage);
     } catch (error: any) {
-      console.error(error);
-      alert(error.response?.data?.error || "Error al enviar el correo.");
+      showToast(
+        error.response?.data?.error || "Error al enviar el correo.",
+        "error"
+      )
+
     } finally {
       setLoading(false);
     }
@@ -46,7 +51,7 @@ export default function ForgotPassword(props: ForgotPasswordProps) {
           </h1>
         </div>
 
-        <div className="w-full md:w-1/2 bg-gray-200 opacity-90 p-10 flex flex-col justify-center rounded-3xl">
+        <div className="w-full xl:w-1/2 bg-gray-200 opacity-90 p-10 flex flex-col justify-center rounded-3xl">
           <h2 className="text-2xl font-bold text-center mb-6 text-black">
             {props.title}
           </h2>

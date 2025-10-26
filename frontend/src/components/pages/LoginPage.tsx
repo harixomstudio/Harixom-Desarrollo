@@ -48,7 +48,7 @@ export default function Login(props: LoginProps) {
       setLoading(false);
       if (error.response) {
         showToast(
-          `Error del servidor: ${error.response.data.message || JSON.stringify(error.response.data)}`,
+          error.response.data.message || error.response.data,
           "error"
         );
       } else if (error.request) {

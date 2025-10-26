@@ -48,7 +48,7 @@ export default function Notifications(props: NotificationsProps) {
                     </div>
                 </div>
             ))}
-            {visibleCount < props.titles.length || props.titles.length === 0 ? ( // esto es el loading se activa al scrollear
+            {visibleCount < props.titles.length ? ( // esto es el loading se activa al scrollear
                 <div className="flex justify-center pt-10 pb-15">
                     <div className="flex space-x-3">
                         <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
@@ -56,7 +56,11 @@ export default function Notifications(props: NotificationsProps) {
                         <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
                     </div>
                 </div>
-            ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS NOTIFICACIONES</div>}
+            ) : <div className="flex space-x-1 text-gray-400 text-sm justify-center items-baseline pt-10 "> ESPERANDO NOTIFICACIONES 
+                <p className="animate-pulse [animation-delay:-0.8s] text-2xl pl-1">.</p>
+                <p className="animate-pulse [animation-delay:-0.3s] text-2xl">.</p>
+                <p className="animate-pulse text-2xl" >.</p>
+            </div>}
         </section>
     )
 }
