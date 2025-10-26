@@ -54,7 +54,6 @@ const SuscriptionsPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("Usuario cargado desde backend:", res.data);
         setUser(res.data.user);
         setIsPremium(res.data.user.is_premium);
       } catch (err: any) {
@@ -85,6 +84,7 @@ const SuscriptionsPage = () => {
           },
         }
       );
+
       showToast("Redirigiendo a Stripe...", "info");
       window.location.href = res.data.url;
     } catch (err: any) {

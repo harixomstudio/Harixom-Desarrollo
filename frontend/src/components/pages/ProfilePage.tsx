@@ -108,6 +108,7 @@ export default function Profile(props: ProfileProps) {
 
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
     if (!token) return;
@@ -116,7 +117,8 @@ export default function Profile(props: ProfileProps) {
       try {
         const { data } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/profile/${props.userId}/messages`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          {withCredentials: true,
+             headers: { Authorization: `Bearer ${token}` } }
         );
         const mapped = data.map((msg: any) => ({
           id: msg.id,
@@ -153,6 +155,7 @@ export default function Profile(props: ProfileProps) {
     try {
       await axios.delete(`https://harixom-desarrollo.onrender.com/api/publications/${id}`, {
         headers: {
+          withCredentials: true,
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
@@ -172,7 +175,7 @@ export default function Profile(props: ProfileProps) {
       const { data } = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/like/${postId}`,
         {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        {withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
       if (data.liked) {
         setFavorites((prev) => [...prev, data.post]); // agrega si liked
@@ -197,6 +200,7 @@ export default function Profile(props: ProfileProps) {
           terms,
         },
         {
+          withCredentials: true,
           headers: { Authorization: `Bearer ${token}` },
         }
       );
@@ -214,7 +218,7 @@ export default function Profile(props: ProfileProps) {
       const { data } = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/profile/messages`,
         { to_user_id: props.userId, message: newMessage },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
 
       const msg = {
@@ -237,7 +241,7 @@ export default function Profile(props: ProfileProps) {
   const handleDeleteMessage = async (id: number) => {
     try {
       await axios.delete(`https://harixom-desarrollo.onrender.com/api/profile/messages/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+       withCredentials: true, headers: { Authorization: `Bearer ${token}` },
       });
       setMessages((prev) => prev.filter((m) => m.id !== id));
       showToast("Mensaje eliminado", "success");
@@ -258,7 +262,7 @@ export default function Profile(props: ProfileProps) {
         {
           buymeacoffee_link: LinkText
         },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { withCredentials: true, headers: { Authorization: `Bearer ${token}` } },
       );
 
       showToast("link guardado con éxito", "success");
