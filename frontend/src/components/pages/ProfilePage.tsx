@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
 import { useState, useEffect } from "react";
-//import WatermarkedImage from "../ui/WaterMarkedImage";
+import WatermarkedImage from "../ui/WaterMarkedImage";
 
 interface Message {
   id?: number;
@@ -31,62 +31,62 @@ interface ProfileProps {
   buyMeACoffee?: string;
 }
 
-//function FeedDescription({ pub, currentUserId }: any) {
-//  const navigate = useNavigate();
-//
-//  const parseText = (text: string) => {
-//    const parts = text.split(/(\s+)/);
-//    return parts.map((part, index) => {
-//      if (part.startsWith("@")) {
-//        return (
-//          <span
-//            key={index}
-//            className="text-pink-400 font-semibold cursor-pointer hover:underline"
-//            onClick={(e) => {
-//              e.stopPropagation();
-//              if (pub.user_id === currentUserId) {
-//                //navigate({ to: "/Profile" });
-//              } else {
-//                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
-//                console.log("Perfil no reconocido:", pub.user_id);
-//              }
-//            }}
-//          >
-//            {part}
-//          </span>
-//        );
-//      }
-//
-//      if (part.startsWith("#")) {
-//        const tag = part.substring(1);
-//        return (
-//          <span
-//            key={index}
-//            className="text-blue-400 font-semibold cursor-pointer hover:underline"
-//            onClick={(e) => {
-//              e.stopPropagation();
-//              if (tag.toLowerCase() === "retoharixom") {
-//                navigate({ to: "/AIChallenge" });
-//              } else {
-//                console.log("Hashtag no reconocido:", tag);
-//              }
-//            }}
-//          >
-//            {part}
-//          </span>
-//        );
-//      }
-//
-//      return part;
-//    });
-//  };
-//
-//  return (
-//    <p className="text-gray-300 text-sm mt-2 break-words">
-//      {parseText(pub.description || "")}
-//    </p>
-//  );
-//}
+function FeedDescription({ pub, currentUserId }: any) {
+  const navigate = useNavigate();
+
+  const parseText = (text: string) => {
+    const parts = text.split(/(\s+)/);
+    return parts.map((part, index) => {
+      if (part.startsWith("@")) {
+        return (
+          <span
+            key={index}
+            className="text-pink-400 font-semibold cursor-pointer hover:underline"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (pub.user_id === currentUserId) {
+                //navigate({ to: "/Profile" });
+              } else {
+                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
+                console.log("Perfil no reconocido:", pub.user_id);
+              }
+            }}
+          >
+            {part}
+          </span>
+        );
+      }
+
+      if (part.startsWith("#")) {
+        const tag = part.substring(1);
+        return (
+          <span
+            key={index}
+            className="text-blue-400 font-semibold cursor-pointer hover:underline"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (tag.toLowerCase() === "retoharixom") {
+                navigate({ to: "/AIChallenge" });
+              } else {
+                console.log("Hashtag no reconocido:", tag);
+              }
+            }}
+          >
+            {part}
+          </span>
+        );
+      }
+
+      return part;
+    });
+  };
+
+  return (
+    <p className="text-gray-300 text-sm mt-2 break-words">
+      {parseText(pub.description || "")}
+    </p>
+  );
+}
 
 export default function Profile(props: ProfileProps) {
   const { showToast } = useToast();
@@ -111,7 +111,8 @@ export default function Profile(props: ProfileProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [LinkText, setLinkText] = useState<string>(props.buyMeACoffee ?? "");
   const [selectedPublication, setSelectedPublication] = useState<any>(null);
-const [loadingPublication, setLoadingPublication] = useState(false);
+  const [loadingPublication, setLoadingPublication] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
   // Hooks para mensajes
   const [newMessage, setNewMessage] = useState("");
@@ -176,8 +177,10 @@ const [loadingPublication, setLoadingPublication] = useState(false);
       try {
         const { data } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/profile/${props.userId}/messages`,
-          {withCredentials: true,
-             headers: { Authorization: `Bearer ${token}` } }
+          {
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${token}` }
+          }
         );
         const mapped = data.map((msg: any) => ({
           id: msg.id,
@@ -234,7 +237,7 @@ const [loadingPublication, setLoadingPublication] = useState(false);
       const { data } = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/like/${postId}`,
         {},
-        {withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
+        { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
       if (data.liked) {
         setFavorites((prev) => [...prev, data.post]); // agrega si liked
@@ -300,7 +303,7 @@ const [loadingPublication, setLoadingPublication] = useState(false);
   const handleDeleteMessage = async (id: number) => {
     try {
       await axios.delete(`https://harixom-desarrollo.onrender.com/api/profile/messages/${id}`, {
-       withCredentials: true, headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true, headers: { Authorization: `Bearer ${token}` },
       });
       setMessages((prev) => prev.filter((m) => m.id !== id));
       showToast("Mensaje eliminado", "success");
@@ -332,34 +335,41 @@ const [loadingPublication, setLoadingPublication] = useState(false);
     }
   };
 
- const openModal = async (publicationId: number) => {
-  try {
-    setLoadingPublication(true);
+  const openModal = async (publicationId: number) => {
+    try {
+      setLoadingPublication(true);
 
-    const token = localStorage.getItem("access_token");
-    const { data } = await axios.get(
-      `https://harixom-desarrollo.onrender.com/api/publications/${publicationId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      }
-    );
-    setSelectedPublication(data);
-    setLoadingPublication(false);
-  } catch (err) {
-    console.error("Error fetching publication:", err);
-    setLoadingPublication(false);
-  }
-};
+      const token = localStorage.getItem("access_token");
+      const { data } = await axios.get(
+        `https://harixom-desarrollo.onrender.com/api/publications/${publicationId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        }
+      );
+      setSelectedPublication(data);
+      setLoadingPublication(false);
+    } catch (err) {
+      console.error("Error fetching publication:", err);
+      setLoadingPublication(false);
+    }
+  };
 
-//const closeModal = () => {
-//  setSelectedPublication(null);
-//};
+  //const closeModal = () => {
+  //  setSelectedPublication(null);
+  //};
 
-  function formatDate(date?: string) {
-  if (!date) return "";
-  return new Date(date).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
-}
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("es-CR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  };
 
   return (
     <section
@@ -419,9 +429,9 @@ const [loadingPublication, setLoadingPublication] = useState(false);
           <div className="flex items-center mb-2">
             {/* Username */}
             <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}</span>
-              {props.isPremium && (
-                <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6 mx-2"/>
-              )}
+            {props.isPremium && (
+              <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6 mx-2" />
+            )}
 
             {/* Buy me a coffee button */}
             <button
@@ -841,13 +851,14 @@ const [loadingPublication, setLoadingPublication] = useState(false);
               <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
                 {cards.length ? (
                   cards.slice(0, visibleCount).map((card) => (
+                    
                     <div
                       key={card.id}
                       className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative"
                     >
                       <button
                         onClick={() => setDeleteModalOpen(card.id)}
-                        className=" top-2 right-2 bg-pink-500 hover:bg-pink-600 duration-500 text-white text-xs px-2 py-1 rounded"
+                        className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 duration-500 text-white text-xs px-2 py-1 rounded z-10"
                       >
                         ✕
                       </button>
@@ -878,15 +889,15 @@ const [loadingPublication, setLoadingPublication] = useState(false);
                       )}
 
                       {cards.slice(0, visibleCount).map((card) => (
-  <div key={card.id} className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative">
-    <img
-      src={card.image}
-      alt={card.description}
-      className="w-full h-auto block"
-      onClick={() => openModal(card.id)} // <-- aquí abrimos el modal con id
-    />
-  </div>
-))}
+                        <div key={card.id} className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative">
+                          <img
+                            src={card.image}
+                            alt={card.description}
+                            className="w-full h-auto block"
+                            onClick={() => openModal(card.id)} // <-- aquí abrimos el modal con id
+                          />
+                        </div>
+                      ))}
                       <p className="text-xs text-gray-200 text-center px-2 py-2">
                         {card.description}
                       </p>
@@ -920,30 +931,62 @@ const [loadingPublication, setLoadingPublication] = useState(false);
         +
       </Link>
       {selectedPublication && (
-  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    {loadingPublication ? (
-      <div className="text-white">Cargando...</div>
-    ) : (
-      <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto">
-        <h2 className="text-white text-2xl font-bold">{selectedPublication.user_name}</h2>
-        <p className="text-gray-400">{formatDate(selectedPublication.created_at)}</p>
-        <img
-          src={selectedPublication.image}
-          alt={selectedPublication.description}
-          className="mt-4 w-full h-64 object-cover rounded-lg"
-        />
-        <p className="text-gray-300 mt-2">{selectedPublication.description}</p>
-        <span className="text-pink-400 mt-2">{selectedPublication.category}</span>
-        <button
-          className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
-          onClick={() => setSelectedPublication(null)}
-        >
-          Cerrar
-        </button>
-      </div>
-    )}
-  </div>
-)}
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
+          {loadingPublication ? (
+            <div className="text-white">Cargando...</div>
+          ) : (
+            <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:mb-6 max-lg:items-center relative">
+              {/* Imagen a la izquierda */}
+              <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
+                {selectedPublication.image ? (
+                  <WatermarkedImage
+                    src={selectedPublication.image}
+                    alt={selectedPublication.description}
+                    className="w-full h-full object-cover rounded-lg max-lg:w-4/5"
+                    watermarkText={`Propiedad de ${selectedPublication.user_name || "Usuario desconocido"}`}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
+                    Sin imagen
+                  </div>
+                )}
+              </div>
+
+              {/* Información a la derecha */}
+              <div className="w-1/3 flex flex-col justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-6 relative mx-5">
+                <div>
+                  <h2 className="text-white text-3xl font-bold">
+                    {selectedPublication.user_name || "Usuario desconocido"}
+                  </h2>
+                  <p className="text-gray-400 text-sm mt-2">
+                    {formatDate(selectedPublication.created_at)}
+                  </p>
+                  <p className="text-gray-300 mt-4 text-lg">
+                    <FeedDescription pub={selectedPublication} currentUserId={currentUserId} />
+                  </p>
+                  <div className="mt-4 flex gap-3">
+                    <Link
+                      to="/Categories/$name"
+                      params={{ name: selectedPublication.category || "General" }}
+                      className="px-4 py-2 bg-pink-500 text-white rounded-full text-sm hover:scale-105 transition-transform"
+                    >
+                      {selectedPublication.category || "Sin categoría"}
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Botones de cierre */}
+                <button
+                  className="absolute top-0 right-0 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg max-lg:right-6 max-lg:top-2"
+                  onClick={() => setSelectedPublication(null)}
+                >
+                  X
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </section >
   );
 }
