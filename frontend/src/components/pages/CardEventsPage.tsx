@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { axiosRequest } from "../helpers/config";
+import { useToast } from "../ui/Toast";
 
 interface Event {
   id: number;
@@ -18,9 +20,10 @@ interface CardEventsProps {
 }
 
 export default function CardEvents({ events }: CardEventsProps) {
-
-
   const [visibleCount, setVisibleCount] = useState(9);
+  const [isPremium, setIsPremium] = useState(false);
+  const { showToast } = useToast();
+  const token = localStorage.getItem("access_token");
 
   useEffect(() => { //Despliegue de un feed infinito, scroll aparece cargando y aumentan las publicaciones
     const handleScroll = () => {
@@ -32,9 +35,25 @@ export default function CardEvents({ events }: CardEventsProps) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-
-
   }, [visibleCount]);
+
+  // Verificar si el usuario es premium
+  useEffect(() => {
+    const checkPremium = async () => {
+      try {
+        if (!token) return;
+        const { data } = await axiosRequest.get("/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const user = data.user ?? data;
+        setIsPremium(user.is_premium);
+      } catch (err) {
+        console.error("Error verificando usuario:", err);
+        showToast("Error al verificar usuario.", "error");
+      }
+    };
+    checkPremium();
+  }, [token]);
 
   return (
     <div className="bg-black p-6 min-h-screen">
@@ -90,7 +109,15 @@ export default function CardEvents({ events }: CardEventsProps) {
           </div>
         </div>
       ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS EVENTOS</div> }
-      <Link to="/EventsCreate" className="fixed bottom-8 right-8 bg-pink-500 text-white rounded-full p-6 shadow-lg">＋</Link>
+      {/* Solo mostrar el botón si el usuario es premium */}
+      {isPremium && (
+        <Link
+          to="/EventsCreate"
+          className="fixed bottom-8 right-8 bg-pink-500 text-white rounded-full p-6 shadow-lg"
+        >
+          ＋
+        </Link>
+      )}
     </div>
   );
 }

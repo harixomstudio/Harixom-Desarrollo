@@ -49,7 +49,7 @@ class TallerApiController extends Controller
     public function store(Request $request)
     {
         try {
-            $user = $request->user(); // obtiene el usuario autenticado por Sanctum
+            $user = $request->user(); 
 
             if (!$user) {
                 return response()->json(['error' => 'No autorizado.'], 401);
