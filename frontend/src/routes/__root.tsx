@@ -6,6 +6,7 @@ import SidebarNavigation from "../components/SidebarNavigation";
 import axios from "axios";
 import { axiosRequest } from "../components/helpers/config";
 import { useQuery } from "@tanstack/react-query";
+import Inbox from '../components/pages/Inbox'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -17,6 +18,7 @@ function RootComponent() {
 
   const token = localStorage.getItem('access_token')
   const [notifications, setNotifications] = React.useState(0);
+  const [notificationsData, setNotificationsData] = React.useState<any[]>([])
 
   React.useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
@@ -73,6 +75,7 @@ function RootComponent() {
         const myNotifications = messages.filter(
           (profile_message: any) => profile_message.to_user_id === profileData?.user?.id
         )
+
         // comentarios recibidos en las publicaciones
         const { data } = await axios.get(
           `https://harixom-desarrollo.onrender.com/api/user/comments/${profileData?.user?.id}`,
@@ -84,14 +87,24 @@ function RootComponent() {
           (comments: any) => parseInt(comments.for_user_id) === profileData?.user?.id
         )
 
-        setNotifications(myCommissions.length + myNotifications.length + myComments.length)
+        const { data: followersData } = await axios.get(
+          `https://harixom-desarrollo.onrender.com/api/user/follows`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        const myFollowers = followersData.followers
+
+        setNotifications(myCommissions.length + myNotifications.length + myComments.length + myFollowers.length)
+        setNotificationsData([...myNotifications, ...myCommissions, ...myComments, ...myFollowers])
+
       } catch (err) {
         console.error('Error fetching messages wall:', err)
       }
     }
 
     fetchNotifications()
-    const intervalId = setInterval(fetchNotifications, 10000);
+    const intervalId = setInterval(fetchNotifications, 25000);
     return () => clearInterval(intervalId);
   }, [profileData?.user?.id]);
 
@@ -115,13 +128,29 @@ function RootComponent() {
         </>
       )}
 
+      {/* NOTIFICACIONES */}
+      {currentPath === '/Inbox' &&
+        <Inbox
+          prioritys={notificationsData.map((number) => (number.status))}
+          notification="Notifications"
+          titles={notificationsData.map((number) => number.title || 'New Commission')}
+          users={notificationsData.map((number) => number.from_user?.name || number.user?.name || number.name)}
+          UsersID={notificationsData.map((number) => number.from_user?.id || number.user?.id || number.id)}
+          texts={notificationsData.map((number) => number.message || number.comment)}
+          dates={notificationsData.map((number) => number.created_at?.split('T')[0])}
+          images={notificationsData.map(() => 'bell.svg')}
+          alts={notificationsData.map(() => 'bell')}
+        />}
+
       {/* CONTENIDO PRINCIPAL */}
-      <div className={`flex min-h-screen ${!hideNav ? "pl-14" : ""}`}>
-        {!hideNav}
-        <div className="flex-1 bg-stone-950 w-full">
-          <Outlet />
+      { currentPath !== '/Inbox' &&
+        <div className={`flex min-h-screen ${!hideNav ? "pl-14" : ""}`}>
+          {!hideNav}
+          <div className="flex-1 bg-stone-950 w-full">
+            <Outlet />
+          </div>
         </div>
-      </div>
+      }
     </React.Fragment>
   );
 }
