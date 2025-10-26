@@ -72,8 +72,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Subgrupo solo para usuarios premium
     Route::middleware(['premium'])->group(function () {
-        Route::post('/events/create', [EventApiController::class, 'storeEvent']);
-        Route::post('/workshops/create', [TallerApiController::class, 'storeTaller']);
+        Route::post('/events/create', [EventApiController::class, 'store']);
+        Route::post('/workshops/create', [TallerApiController::class, 'store']);
     });
 });
 
