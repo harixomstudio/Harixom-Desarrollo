@@ -16,7 +16,22 @@ class ProfileMessageController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($messages);
+        return response()->json([
+            'messages' => $messages->map(function ($message) {
+                return [
+                    'id' => $message->id,
+                    'from_user' => [
+                        'id' => $message->fromUser->id,
+                        'name' => $message->fromUser->name,
+                    ],
+                    'to_user_id' => $message->to_user_id,
+                    'title' => $message->title,
+                    'message' => $message->message,
+                    'status' => $message->status,
+                    'created_at' => $message->created_at->diffForHumans(),
+                ];
+            })
+        ]);
     }
 
     // Crear nuevo mensaje en un perfil
@@ -35,11 +50,12 @@ class ProfileMessageController extends Controller
             'title' => $request->title,
             'message' => $request->message,
             'status' => $request->status,
+
         ]);
 
         return response()->json([
             'message' => 'Mensaje publicado con éxito',
-            'data' => $message->load('fromUser:id,name,profile_picture')
+            'data' => $message->load('fromUser:id,name,profile_picture'),
         ], 201);
     }
 

@@ -4,7 +4,7 @@ import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import WatermarkedImage from "../ui/WaterMarkedImage";
-import  FeedDescription  from "../FeedDescription";
+import FeedDescription from "../FeedDescription";
 
 interface Publication {
   id: number;
@@ -188,11 +188,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
     }
   };
 
-  const toggleLike = async (id: number) => {
+  const toggleLike = async (id: number, for_user_id: number) => {
     try {
       const { data } = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/like/${id}`,
-        {},
+        {
+          title: "¡Te han dado like!",
+          for_user_id: for_user_id,
+          status: "Low",
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -215,8 +219,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log(data);
-      
       setFollows((prev) => ({ ...prev, [userId]: data.following }));
       setHideFollow((prev) => ({ ...prev, [userId]: data.following }));
       showToast("¡Ahora sigues a este usuario!", "success");
@@ -333,7 +335,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   title="Like"
                   onClick={(e) => {
                     e.stopPropagation();
-                    toggleLike(pub.id);
+                    toggleLike(pub.id, publications.find((p) => p.id === pub.id)?.user_id!);
                   }}
                 >
                   <svg

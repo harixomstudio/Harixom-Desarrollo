@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas para likes
     Route::post('/like/{publication}', [InteractionController::class, 'toggleLike']);
     Route::get('/user/likes', [InteractionController::class, 'userLikes']);
+    Route::get('/user/likes/{userId}', [InteractionController::class, 'userLikesNotis']);
 
     // Rutas para seguidores
     Route::get('user/follows', [InteractionController::class, 'userFollows']);

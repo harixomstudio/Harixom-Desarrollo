@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
 {
-    protected $fillable = ['user_id', 'publication_id'];
+    protected $fillable = ['for_user_id',  'title', 'user_id', 'publication_id', 'status'];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function publication() {
+    public function publication()
+    {
         return $this->belongsTo(Publication::class);
     }
 }
