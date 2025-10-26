@@ -104,7 +104,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const tabs = props.tabs || ["Home", "Commissions", "Wall", "Favorites"];
   const [] = useState<{ [key: number]: string[] }>({});
   const [selectedPublication, setSelectedPublication] = useState<any>(null);
-const [loadingPublication, setLoadingPublication] = useState(false);
+  const [loadingPublication, setLoadingPublication] = useState(false);
 
   // Commissions
 
@@ -288,7 +288,7 @@ const [loadingPublication, setLoadingPublication] = useState(false);
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      
+
       const msg = {
         id: data.data.id,
         userId: data.data.from_user.id,
@@ -340,7 +340,10 @@ const [loadingPublication, setLoadingPublication] = useState(false);
       const token = localStorage.getItem("access_token");
       const url = `https://harixom-desarrollo.onrender.com/api/follow/${props.userId}`;
 
-      const response = await axios.post(url, {}, {
+      const response = await axios.post(url, {
+        title: "¡Te han empezado a seguir!",
+        status: "Medium",
+      }, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -367,26 +370,26 @@ const [loadingPublication, setLoadingPublication] = useState(false);
   };
 
   const openModal = async (publicationId: number) => {
-  try {
-    setLoadingPublication(true);
+    try {
+      setLoadingPublication(true);
 
-    const token = localStorage.getItem("access_token");
-    const { data } = await axios.get(
-      `https://harixom-desarrollo.onrender.com/api/publications/${publicationId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      }
-    );
-    setSelectedPublication(data);
-    setLoadingPublication(false);
-  } catch (err) {
-    console.error("Error fetching publication:", err);
-    setLoadingPublication(false);
-  }
-};
+      const token = localStorage.getItem("access_token");
+      const { data } = await axios.get(
+        `https://harixom-desarrollo.onrender.com/api/publications/${publicationId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        }
+      );
+      setSelectedPublication(data);
+      setLoadingPublication(false);
+    } catch (err) {
+      console.error("Error fetching publication:", err);
+      setLoadingPublication(false);
+    }
+  };
 
-const formatDate = (dateString?: string) => {
+  const formatDate = (dateString?: string) => {
     if (!dateString) return "";
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("es-CR", {
@@ -728,35 +731,35 @@ const formatDate = (dateString?: string) => {
             // Home / Posts
             <div>
               <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
-  {cards.length ? (
-    cards.slice(0, visibleCount).map((card) => (
-      <div
-        key={card.id}
-        className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative cursor-pointer"
-      >
-        {card.image ? (
-          <img
-            src={card.image}
-            alt={`Card ${card.id}`}
-            className="w-full h-auto block"
-            onClick={() => openModal(card.id)}
-          />
-        ) : (
-          <div className="w-full bg-gray-600 flex items-center justify-center text-gray-300 text-xs h-40">
-            Sin imagen
-          </div>
-        )}
-        <p className="text-xs text-gray-200 text-center px-2 py-2">
-          {card.description}
-        </p>
-      </div>
-    ))
-  ) : (
-    <p className="text-gray-400 text-sm text-center">
-      no post yet.
-    </p>
-  )}
-</div>
+                {cards.length ? (
+                  cards.slice(0, visibleCount).map((card) => (
+                    <div
+                      key={card.id}
+                      className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative cursor-pointer"
+                    >
+                      {card.image ? (
+                        <img
+                          src={card.image}
+                          alt={`Card ${card.id}`}
+                          className="w-full h-auto block"
+                          onClick={() => openModal(card.id)}
+                        />
+                      ) : (
+                        <div className="w-full bg-gray-600 flex items-center justify-center text-gray-300 text-xs h-40">
+                          Sin imagen
+                        </div>
+                      )}
+                      <p className="text-xs text-gray-200 text-center px-2 py-2">
+                        {card.description}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm text-center">
+                    no post yet.
+                  </p>
+                )}
+              </div>
               {visibleCount < cards.length ? ( // esto es el loading se activa al scrollear
                 <div className="flex justify-center pt-10 pb-15">
                   <div className="flex space-x-3">
@@ -770,62 +773,62 @@ const formatDate = (dateString?: string) => {
           )}
         </div>
         {selectedPublication && (
-  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
-    {loadingPublication ? (
-      <div className="text-white">Cargando...</div>
-    ) : (
-      <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:mb-6 max-lg:items-center relative">
-        {/* Imagen */}
-        <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
-          {selectedPublication.image ? (
-            <WatermarkedImage
-              src={selectedPublication.image}
-              alt={selectedPublication.description}
-              className="w-full h-full object-cover rounded-lg max-lg:w-4/5"
-              watermarkText={`Propiedad de ${selectedPublication.user_name || "Usuario desconocido"}`}
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
-              Sin imagen
-            </div>
-          )}
-        </div>
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
+            {loadingPublication ? (
+              <div className="text-white">Cargando...</div>
+            ) : (
+              <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:mb-6 max-lg:items-center relative">
+                {/* Imagen */}
+                <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
+                  {selectedPublication.image ? (
+                    <WatermarkedImage
+                      src={selectedPublication.image}
+                      alt={selectedPublication.description}
+                      className="w-full h-full object-cover rounded-lg max-lg:w-4/5"
+                      watermarkText={`Propiedad de ${selectedPublication.user_name || "Usuario desconocido"}`}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
+                      Sin imagen
+                    </div>
+                  )}
+                </div>
 
-        {/* Información */}
-        <div className="w-1/3 flex flex-col justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-6 relative mx-4">
-          <div>
-            <h2 className="text-white text-3xl font-bold">
-              {selectedPublication.user_name || "Usuario desconocido"}
-            </h2>
-            <p className="text-gray-400 text-sm mt-2">
-              {formatDate(selectedPublication.created_at)}
-            </p>
-            <p className="text-gray-300 mt-4 text-lg">
-              <FeedDescription pub={selectedPublication} currentUserId={authUser.id} />
-            </p>
-            <div className="mt-4 flex gap-3">
-              <Link
-                to="/Categories/$name"
-                params={{ name: selectedPublication.category || "General" }}
-                className="px-4 py-2 bg-pink-500 text-white rounded-full text-sm hover:scale-105 transition-transform"
-              >
-                {selectedPublication.category || "Sin categoría"}
-              </Link>
-            </div>
+                {/* Información */}
+                <div className="w-1/3 flex flex-col justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-6 relative mx-4">
+                  <div>
+                    <h2 className="text-white text-3xl font-bold">
+                      {selectedPublication.user_name || "Usuario desconocido"}
+                    </h2>
+                    <p className="text-gray-400 text-sm mt-2">
+                      {formatDate(selectedPublication.created_at)}
+                    </p>
+                    <p className="text-gray-300 mt-4 text-lg">
+                      <FeedDescription pub={selectedPublication} currentUserId={authUser.id} />
+                    </p>
+                    <div className="mt-4 flex gap-3">
+                      <Link
+                        to="/Categories/$name"
+                        params={{ name: selectedPublication.category || "General" }}
+                        className="px-4 py-2 bg-pink-500 text-white rounded-full text-sm hover:scale-105 transition-transform"
+                      >
+                        {selectedPublication.category || "Sin categoría"}
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Botón de cierre */}
+                  <button
+                    className="absolute top-0 right-0 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg max-lg:right-6 max-lg:top-2"
+                    onClick={() => setSelectedPublication(null)}
+                  >
+                    X
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-
-          {/* Botón de cierre */}
-          <button
-            className="absolute top-0 right-0 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg max-lg:right-6 max-lg:top-2"
-            onClick={() => setSelectedPublication(null)}
-          >
-            X
-          </button>
-        </div>
-      </div>
-    )}
-  </div>
-)}
+        )}
         {/* Modal de comisión */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
