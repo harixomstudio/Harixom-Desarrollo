@@ -19,7 +19,7 @@ class Comment extends Model
     });
 }
 
-    protected $fillable = ['user_id', 'publication_id', 'comment'];
+    protected $fillable = ['title', 'user_id', 'for_user_id', 'publication_id', 'comment', 'status'];
 
     public function user() {
         return $this->belongsTo(User::class);

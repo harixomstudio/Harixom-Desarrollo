@@ -73,8 +73,18 @@ function RootComponent() {
         const myNotifications = messages.filter(
           (profile_message: any) => profile_message.to_user_id === profileData?.user?.id
         )
+        // comentarios recibidos en las publicaciones
+        const { data } = await axios.get(
+          `https://harixom-desarrollo.onrender.com/api/user/comments/${profileData?.user?.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        const myComments = data.comments.filter(
+          (comments: any) => parseInt(comments.for_user_id) === profileData?.user?.id
+        )
 
-        setNotifications(myCommissions.length + myNotifications.length)
+        setNotifications(myCommissions.length + myNotifications.length + myComments.length)
       } catch (err) {
         console.error('Error fetching messages wall:', err)
       }
@@ -101,7 +111,7 @@ function RootComponent() {
             />
           )}
 
-         <SidebarNavigation numberNotis={notifications } />
+          <SidebarNavigation numberNotis={notifications} />
         </>
       )}
 

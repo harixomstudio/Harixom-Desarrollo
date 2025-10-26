@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas para comentarios
     Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
     Route::get('/comment/{publication}', [InteractionController::class, 'getComments']);
+    Route::get('/user/comments/{userId}', [InteractionController::class, 'userComments']);
 
     //Rutas para mensajes del perfil
     Route::get('/profile/{userId}/messages', [ProfileMessageController::class, 'index']);
