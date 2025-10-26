@@ -126,4 +126,27 @@ class User extends Authenticatable
         $this->notify(new ResetPasswordNotification($token));
         
     }
+
+    public function blockedUsers()
+{
+    // Usuarios que yo he bloqueado
+    return $this->belongsToMany(User::class, 'blocks', 'user_id', 'blocked_user_id');
+}
+
+public function blockedByUsers()
+{
+    // Usuarios que me han bloqueado
+    return $this->belongsToMany(User::class, 'blocks', 'blocked_user_id', 'user_id');
+}
+
+// Función de conveniencia para chequear si un usuario está bloqueado
+public function hasBlocked(User $user)
+{
+    return $this->blockedUsers()->where('blocked_user_id', $user->id)->exists();
+}
+
+public function isBlockedBy(User $user)
+{
+    return $this->blockedByUsers()->where('user_id', $user->id)->exists();
+}
 }

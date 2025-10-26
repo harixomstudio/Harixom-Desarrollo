@@ -18,30 +18,43 @@ class PublicationController extends Controller
 {
 
     public function index()
-    {
-        $publications = Publication::with('user', 'likes')
-            ->withCount('likes') 
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($pub) {
-                return [
-                    'id' => $pub->id,
-                    'description' => $pub->description,
-                    'category' => $pub->category,
-                    'image' => $pub->image,
-                    'created_at' => $pub->created_at,
-                    'user_id' => $pub->user ? $pub->user->id : null,
-                    'user_name' => $pub->user ? $pub->user->name : 'Usuario',
-                    'user_profile_picture' => $pub->user ? $pub->user->profilePicturePath() : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                    'total_likes' => $pub->likes_count,
-                    'total_comments' => $pub->comments_count,
-                ];
-            });
+{
+    // Verifica si hay usuario autenticado
+    $authUser = Auth::check() ? Auth::user() : null;
 
-        return response()->json([
-            'publications' => $publications
-        ]);
+    // Aplica el filtro de bloqueados solo si hay usuario autenticado
+    $query = Publication::query();
+
+    if ($authUser) {
+        $query->withoutBlocked($authUser);
     }
+
+    $publications = $query
+        ->with(['user', 'likes'])
+        ->withCount(['likes', 'comments'])
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function ($pub) {
+            return [
+                'id' => $pub->id,
+                'description' => $pub->description,
+                'category' => $pub->category,
+                'image' => $pub->image,
+                'created_at' => $pub->created_at,
+                'user_id' => $pub->user ? $pub->user->id : null,
+                'user_name' => $pub->user ? $pub->user->name : 'Usuario',
+                'user_profile_picture' => $pub->user
+                    ? $pub->user->profilePicturePath()
+                    : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                'total_likes' => $pub->likes_count,
+                'total_comments' => $pub->comments_count,
+            ];
+        });
+
+    return response()->json([
+        'publications' => $publications,
+    ]);
+}
 
     public function store(Request $request)
     {
