@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-
-import { useNavigate } from "@tanstack/react-router";
-
+import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { axiosRequest } from "../components/helpers/config";
 import { useToast } from "../components/ui/Toast";
@@ -9,7 +7,7 @@ import { useToast } from "../components/ui/Toast";
 export default function Nav() {
   const { showToast } = useToast();
   const navigate = useNavigate();
-  
+  const location = useLocation();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any>(null);
@@ -82,6 +80,8 @@ export default function Nav() {
     }
   };
 
+  const isNotProfile = location.pathname !== "/Profile";
+
   return (
     <section className="bg-[#151515] relative z-50">
       <div className="flex items-center justify-between p-4">
@@ -132,7 +132,12 @@ export default function Nav() {
           <li>
             <button
               onClick={handleLogout}
-              className="flex items-center justify-start text-white font-bold bg-[#FA6063] py-1 px-4 rounded-full border-[#ff4a4d] border-2 hover:bg-[#ff4a4d] transition-all mt-2 md:mt-0"
+              className={`flex items-center justify-start  font-bold py-1 px-4 rounded-full border-2 transition-all mt-2 md:mt-0 
+                ${
+                  isNotProfile
+                    ? "bg-neutral-700 border-neutral-800 text-neutral-400 hover:bg-neutral-600" 
+                    : "bg-[#FA6063] border-[#ff4a4d] text-white hover:bg-[#ff4a4d]"
+                }`}
             >
               Log out
             </button>
@@ -182,9 +187,12 @@ export default function Nav() {
                         alt={user.name}
                         className="w-10 h-10 rounded-full object-cover"
                       />
-                      <span className="text-white font-medium">
-                        {user.name}
-                      </span>
+                      <span className="text-white font-medium flex items-center gap-1">
+  {user.name}
+  {user.isPremium && (
+    <img src="/premium.svg" alt="Insignia Premium" className="w-2 h-2" />
+  )}
+</span>
                     </li>
                   ))}
                 </ul>

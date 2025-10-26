@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
 import WatermarkedImage from "../ui/WaterMarkedImage";
+import FeedDescription from "../FeedDescription";
 
 interface Message {
   id?: number;
@@ -14,6 +15,7 @@ interface Message {
 
 interface ProfileGuestProps {
   username: string;
+  isPremium?: boolean;
   followers: { id: number; name: string; profile_picture?: string }[];
   followings: { id: number; name: string; profile_picture?: string }[];
   address: string;
@@ -27,63 +29,6 @@ interface ProfileGuestProps {
   userId: number;
   buyMeACoffee?: string;
   commissions_enabled?: boolean;
-}
-
-function FeedDescription({ pub, currentUserId }: any) {
-  const navigate = useNavigate();
-
-  const parseText = (text: string) => {
-    const parts = text.split(/(\s+)/);
-    return parts.map((part, index) => {
-      if (part.startsWith("@")) {
-        return (
-          <span
-            key={index}
-            className="text-pink-400 font-semibold cursor-pointer hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (pub.user_id === currentUserId) {
-                //navigate({ to: "/Profile" });
-              } else {
-                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
-                console.log("Perfil no reconocido:", pub.user_id);
-              }
-            }}
-          >
-            {part}
-          </span>
-        );
-      }
-
-      if (part.startsWith("#")) {
-        const tag = part.substring(1);
-        return (
-          <span
-            key={index}
-            className="text-blue-400 font-semibold cursor-pointer hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (tag.toLowerCase() === "retoharixom") {
-                navigate({ to: "/AIChallenge" });
-              } else {
-                console.log("Hashtag no reconocido:", tag);
-              }
-            }}
-          >
-            {part}
-          </span>
-        );
-      }
-
-      return part;
-    });
-  };
-
-  return (
-    <p className="text-gray-300 text-sm mt-2 break-words">
-      {parseText(pub.description || "")}
-    </p>
-  );
 }
 
 export default function ProfileGuestPage(props: ProfileGuestProps) {
@@ -430,7 +375,12 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
           {/* Username */}
           <div className="flex items-center w-full gap-15 max-lg:gap-5 max-[19rem]:gap-2 ">
-            <span className="text-3xl max-lg:text-2xl font-bold mb-2 max-[19rem]:text-xl">{props.username}</span>
+            <span className="text-3xl max-lg:text-2xl font-bold mb-2 max-[19rem]:text-xl flex items-center gap-2">
+    {props.username}
+    {props.isPremium && (
+      <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6" />
+    )}
+  </span>
             <button
               onClick={handleToggleFollow}
               className={`px-4 py-2  max-[19rem]:text-sm rounded-full text-white font-semibold transition-all ${isFollowing ? "bg-gray-600 hover:bg-gray-700" : "bg-pink-500 hover:bg-pink-600"
@@ -449,9 +399,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                 $
               </button>
             )}
-
-
-
           </div>
 
           {/* Description */}
@@ -539,7 +486,6 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                           navigate({ to: "/Profile" });
                         } else {
                           window.location.search = "userId=" + f.id;
-
                         }
                       }}
                     >
@@ -749,9 +695,9 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                           Sin imagen
                         </div>
                       )}
-                      <p className="text-xs text-gray-200 text-center px-2 py-2">
-                        {card.description}
-                      </p>
+                      <div className="px-2 py-2 text-gray-200 text-xs text-center">
+                        <FeedDescription pub={card} currentUserId={authUser.id} />
+                      </div>
                     </div>
                   ))
                 ) : (

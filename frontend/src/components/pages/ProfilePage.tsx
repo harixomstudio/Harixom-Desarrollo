@@ -3,6 +3,7 @@ import axios from "axios";
 import { useToast } from "../ui/Toast";
 import { useState, useEffect } from "react";
 import WatermarkedImage from "../ui/WaterMarkedImage";
+import FeedDescription from "../FeedDescription";
 
 interface Message {
   id?: number;
@@ -29,63 +30,6 @@ interface ProfileProps {
   terms: string;
   userId: number;
   buyMeACoffee?: string;
-}
-
-function FeedDescription({ pub, currentUserId }: any) {
-  const navigate = useNavigate();
-
-  const parseText = (text: string) => {
-    const parts = text.split(/(\s+)/);
-    return parts.map((part, index) => {
-      if (part.startsWith("@")) {
-        return (
-          <span
-            key={index}
-            className="text-pink-400 font-semibold cursor-pointer hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (pub.user_id === currentUserId) {
-                //navigate({ to: "/Profile" });
-              } else {
-                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
-                console.log("Perfil no reconocido:", pub.user_id);
-              }
-            }}
-          >
-            {part}
-          </span>
-        );
-      }
-
-      if (part.startsWith("#")) {
-        const tag = part.substring(1);
-        return (
-          <span
-            key={index}
-            className="text-blue-400 font-semibold cursor-pointer hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (tag.toLowerCase() === "retoharixom") {
-                navigate({ to: "/AIChallenge" });
-              } else {
-                console.log("Hashtag no reconocido:", tag);
-              }
-            }}
-          >
-            {part}
-          </span>
-        );
-      }
-
-      return part;
-    });
-  };
-
-  return (
-    <p className="text-gray-300 text-sm mt-2 break-words">
-      {parseText(pub.description || "")}
-    </p>
-  );
 }
 
 export default function Profile(props: ProfileProps) {
@@ -851,7 +795,7 @@ export default function Profile(props: ProfileProps) {
               <div className="w-full columns-4 max-lg:columns-2 max-md:columns-1">
                 {cards.length ? (
                   cards.slice(0, visibleCount).map((card) => (
-                    
+
                     <div
                       key={card.id}
                       className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative"
@@ -863,12 +807,12 @@ export default function Profile(props: ProfileProps) {
                         ✕
                       </button>
 
+                      {/* Modal de confirmación */}
                       {deleteModalOpen === card.id && (
                         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                           <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
                             <h2 className="text-white text-lg font-semibold mb-4">
-                              ¿Estás seguro de que deseas eliminar esta
-                              publicación?
+                              ¿Estás seguro de que deseas eliminar esta publicación?
                             </h2>
                             <div className="flex justify-end gap-4 mt-4">
                               <button
@@ -888,19 +832,18 @@ export default function Profile(props: ProfileProps) {
                         </div>
                       )}
 
-                      {cards.slice(0, visibleCount).map((card) => (
-                        <div key={card.id} className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative">
-                          <img
-                            src={card.image}
-                            alt={card.description}
-                            className="w-full h-auto block"
-                            onClick={() => openModal(card.id)} // <-- aquí abrimos el modal con id
-                          />
-                        </div>
-                      ))}
-                      <p className="text-xs text-gray-200 text-center px-2 py-2">
-                        {card.description}
-                      </p>
+                      {/* Imagen */}
+                      <img
+                        src={card.image}
+                        alt={card.description}
+                        className="w-full h-auto block cursor-pointer"
+                        onClick={() => openModal(card.id)}
+                      />
+
+                      {/* Descripción con FeedDescription */}
+                      <div className="px-2 py-2 text-gray-200 text-xs text-center">
+                        <FeedDescription pub={card} currentUserId={currentUserId} />
+                      </div>
                     </div>
                   ))
                 ) : (
