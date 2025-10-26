@@ -79,10 +79,7 @@ class InteractionController extends Controller
         // Revisamos si ya sigue
         $existingFollow = $user->follows()->where('following_id', $target->id)->first();
 
-        $request->validate([
-            'title' => 'required|string|max:100',
-            'status' => 'required|in:Low,Medium,High',
-        ]);
+
 
         if ($existingFollow) {
             // Deja de seguir
