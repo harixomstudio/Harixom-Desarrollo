@@ -69,6 +69,12 @@ Route::middleware('auth:sanctum')->group(function () {
     //Pagos
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
     Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
+
+    // Subgrupo solo para usuarios premium
+    Route::middleware(['premium'])->group(function () {
+        Route::post('/events/create', [EventApiController::class, 'storeEvent']);
+        Route::post('/workshops/create', [TallerApiController::class, 'storeTaller']);
+    });
 });
 
 //Stripe

@@ -15,6 +15,7 @@ import { Route as WorkshopsDetailRouteImport } from './routes/WorkshopsDetail'
 import { Route as WorkshopsRouteImport } from './routes/Workshops'
 import { Route as UserRegisterRouteImport } from './routes/UserRegister'
 import { Route as TermsRouteImport } from './routes/Terms'
+import { Route as TallerCreateRouteImport } from './routes/TallerCreate'
 import { Route as SuscriptionsRouteImport } from './routes/Suscriptions'
 import { Route as SetProfileRouteImport } from './routes/SetProfile'
 import { Route as ResetPasswordRouteImport } from './routes/ResetPassword'
@@ -30,6 +31,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/ForgotPassword'
 import { Route as FeedRouteImport } from './routes/Feed'
 import { Route as FAQRouteImport } from './routes/FAQ'
 import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
+import { Route as EventsCreateRouteImport } from './routes/EventsCreate'
 import { Route as EventsRouteImport } from './routes/Events'
 import { Route as DashboardRouteImport } from './routes/Dashboard'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
@@ -65,6 +67,11 @@ const UserRegisterRoute = UserRegisterRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/Terms',
   path: '/Terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TallerCreateRoute = TallerCreateRouteImport.update({
+  id: '/TallerCreate',
+  path: '/TallerCreate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuscriptionsRoute = SuscriptionsRouteImport.update({
@@ -142,6 +149,11 @@ const EventsDetailRoute = EventsDetailRouteImport.update({
   path: '/EventsDetail',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsCreateRoute = EventsCreateRouteImport.update({
+  id: '/EventsCreate',
+  path: '/EventsCreate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsRoute = EventsRouteImport.update({
   id: '/Events',
   path: '/Events',
@@ -179,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
+  '/EventsCreate': typeof EventsCreateRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
@@ -194,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/Suscriptions': typeof SuscriptionsRoute
+  '/TallerCreate': typeof TallerCreateRoute
   '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
@@ -208,6 +222,7 @@ export interface FileRoutesByTo {
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
+  '/EventsCreate': typeof EventsCreateRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
@@ -223,6 +238,7 @@ export interface FileRoutesByTo {
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/Suscriptions': typeof SuscriptionsRoute
+  '/TallerCreate': typeof TallerCreateRoute
   '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
@@ -238,6 +254,7 @@ export interface FileRoutesById {
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
+  '/EventsCreate': typeof EventsCreateRoute
   '/EventsDetail': typeof EventsDetailRoute
   '/FAQ': typeof FAQRoute
   '/Feed': typeof FeedRoute
@@ -253,6 +270,7 @@ export interface FileRoutesById {
   '/ResetPassword': typeof ResetPasswordRoute
   '/SetProfile': typeof SetProfileRoute
   '/Suscriptions': typeof SuscriptionsRoute
+  '/TallerCreate': typeof TallerCreateRoute
   '/Terms': typeof TermsRoute
   '/UserRegister': typeof UserRegisterRoute
   '/Workshops': typeof WorkshopsRoute
@@ -269,6 +287,7 @@ export interface FileRouteTypes {
     | '/CreatePublication'
     | '/Dashboard'
     | '/Events'
+    | '/EventsCreate'
     | '/EventsDetail'
     | '/FAQ'
     | '/Feed'
@@ -284,6 +303,7 @@ export interface FileRouteTypes {
     | '/ResetPassword'
     | '/SetProfile'
     | '/Suscriptions'
+    | '/TallerCreate'
     | '/Terms'
     | '/UserRegister'
     | '/Workshops'
@@ -298,6 +318,7 @@ export interface FileRouteTypes {
     | '/CreatePublication'
     | '/Dashboard'
     | '/Events'
+    | '/EventsCreate'
     | '/EventsDetail'
     | '/FAQ'
     | '/Feed'
@@ -313,6 +334,7 @@ export interface FileRouteTypes {
     | '/ResetPassword'
     | '/SetProfile'
     | '/Suscriptions'
+    | '/TallerCreate'
     | '/Terms'
     | '/UserRegister'
     | '/Workshops'
@@ -327,6 +349,7 @@ export interface FileRouteTypes {
     | '/CreatePublication'
     | '/Dashboard'
     | '/Events'
+    | '/EventsCreate'
     | '/EventsDetail'
     | '/FAQ'
     | '/Feed'
@@ -342,6 +365,7 @@ export interface FileRouteTypes {
     | '/ResetPassword'
     | '/SetProfile'
     | '/Suscriptions'
+    | '/TallerCreate'
     | '/Terms'
     | '/UserRegister'
     | '/Workshops'
@@ -357,6 +381,7 @@ export interface RootRouteChildren {
   CreatePublicationRoute: typeof CreatePublicationRoute
   DashboardRoute: typeof DashboardRoute
   EventsRoute: typeof EventsRoute
+  EventsCreateRoute: typeof EventsCreateRoute
   EventsDetailRoute: typeof EventsDetailRoute
   FAQRoute: typeof FAQRoute
   FeedRoute: typeof FeedRoute
@@ -372,6 +397,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SetProfileRoute: typeof SetProfileRoute
   SuscriptionsRoute: typeof SuscriptionsRoute
+  TallerCreateRoute: typeof TallerCreateRoute
   TermsRoute: typeof TermsRoute
   UserRegisterRoute: typeof UserRegisterRoute
   WorkshopsRoute: typeof WorkshopsRoute
@@ -423,6 +449,13 @@ declare module '@tanstack/react-router' {
       path: '/Terms'
       fullPath: '/Terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/TallerCreate': {
+      id: '/TallerCreate'
+      path: '/TallerCreate'
+      fullPath: '/TallerCreate'
+      preLoaderRoute: typeof TallerCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/Suscriptions': {
@@ -530,6 +563,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsDetailRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/EventsCreate': {
+      id: '/EventsCreate'
+      path: '/EventsCreate'
+      fullPath: '/EventsCreate'
+      preLoaderRoute: typeof EventsCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/Events': {
       id: '/Events'
       path: '/Events'
@@ -581,6 +621,7 @@ const rootRouteChildren: RootRouteChildren = {
   CreatePublicationRoute: CreatePublicationRoute,
   DashboardRoute: DashboardRoute,
   EventsRoute: EventsRoute,
+  EventsCreateRoute: EventsCreateRoute,
   EventsDetailRoute: EventsDetailRoute,
   FAQRoute: FAQRoute,
   FeedRoute: FeedRoute,
@@ -596,6 +637,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SetProfileRoute: SetProfileRoute,
   SuscriptionsRoute: SuscriptionsRoute,
+  TallerCreateRoute: TallerCreateRoute,
   TermsRoute: TermsRoute,
   UserRegisterRoute: UserRegisterRoute,
   WorkshopsRoute: WorkshopsRoute,

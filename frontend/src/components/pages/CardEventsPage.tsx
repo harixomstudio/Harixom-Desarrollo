@@ -90,6 +90,7 @@ export default function CardEvents({ events }: CardEventsProps) {
           </div>
         </div>
       ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS EVENTOS</div> }
+      <Link to="/EventsCreate" className="fixed bottom-8 right-8 bg-pink-500 text-white rounded-full p-6 shadow-lg">＋</Link>
     </div>
   );
 }
