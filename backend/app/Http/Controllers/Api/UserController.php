@@ -282,6 +282,17 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function findUserByName($name)
+{
+    $user = User::where('name', $name)->first();
+
+    if (!$user) {
+        return response()->json(['message' => 'Usuario no encontrado'], 404);
+    }
+
+    return response()->json($user);
+}
+
     // Bloquear usuario
     public function blockUser(Request $request, $id)
     {
