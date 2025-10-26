@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { useToast } from "../ui/Toast";
 import { useState, useEffect } from "react";
+import WatermarkedImage from "../ui/WaterMarkedImage";
 
 interface Message {
   id?: number;
@@ -30,6 +31,72 @@ interface ProfileProps {
   buyMeACoffee?: string;
 }
 
+interface Publication {
+  id: number;
+  user_id?: number;
+  user_name?: string;
+  image?: string;
+  description?: string;
+  created_at?: string;
+  category?: string;
+}
+
+function FeedDescription({ pub, currentUserId }: any) {
+  const navigate = useNavigate();
+
+  const parseText = (text: string) => {
+    const parts = text.split(/(\s+)/);
+    return parts.map((part, index) => {
+      if (part.startsWith("@")) {
+        return (
+          <span
+            key={index}
+            className="text-pink-400 font-semibold cursor-pointer hover:underline"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (pub.user_id === currentUserId) {
+                //navigate({ to: "/Profile" });
+              } else {
+                // navigate({ to: "/ProfileGuest", search: { userId: pub.user_id }, });
+                console.log("Perfil no reconocido:", pub.user_id);
+              }
+            }}
+          >
+            {part}
+          </span>
+        );
+      }
+
+      if (part.startsWith("#")) {
+        const tag = part.substring(1);
+        return (
+          <span
+            key={index}
+            className="text-blue-400 font-semibold cursor-pointer hover:underline"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (tag.toLowerCase() === "retoharixom") {
+                navigate({ to: "/AIChallenge" });
+              } else {
+                console.log("Hashtag no reconocido:", tag);
+              }
+            }}
+          >
+            {part}
+          </span>
+        );
+      }
+
+      return part;
+    });
+  };
+
+  return (
+    <p className="text-gray-300 text-sm mt-2 break-words">
+      {parseText(pub.description || "")}
+    </p>
+  );
+}
 
 export default function Profile(props: ProfileProps) {
   const { showToast } = useToast();
@@ -53,6 +120,8 @@ export default function Profile(props: ProfileProps) {
   const [terms, setTerms] = useState<string>(props.terms ?? "");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [LinkText, setLinkText] = useState<string>(props.buyMeACoffee ?? "");
+  const [selectedPublication, setSelectedPublication] = useState<any>(null);
+const [loadingPublication, setLoadingPublication] = useState(false);
 
   // Hooks para mensajes
   const [newMessage, setNewMessage] = useState("");
@@ -272,6 +341,35 @@ export default function Profile(props: ProfileProps) {
       showToast("Error al enviar el link", "error");
     }
   };
+
+ const openModal = async (publicationId: number) => {
+  try {
+    setLoadingPublication(true);
+
+    const token = localStorage.getItem("access_token");
+    const { data } = await axios.get(
+      `https://harixom-desarrollo.onrender.com/api/publications/${publicationId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      }
+    );
+    setSelectedPublication(data);
+    setLoadingPublication(false);
+  } catch (err) {
+    console.error("Error fetching publication:", err);
+    setLoadingPublication(false);
+  }
+};
+
+const closeModal = () => {
+  setSelectedPublication(null);
+};
+
+  function formatDate(date?: string) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+}
 
   return (
     <section
@@ -759,7 +857,7 @@ export default function Profile(props: ProfileProps) {
                     >
                       <button
                         onClick={() => setDeleteModalOpen(card.id)}
-                        className="absolute top-2 right-2 bg-pink-500 hover:bg-pink-600 duration-500 text-white text-xs px-2 py-1 rounded"
+                        className=" top-2 right-2 bg-pink-500 hover:bg-pink-600 duration-500 text-white text-xs px-2 py-1 rounded"
                       >
                         ✕
                       </button>
@@ -789,17 +887,16 @@ export default function Profile(props: ProfileProps) {
                         </div>
                       )}
 
-                      {card.image ? (
-                        <img
-                          src={card.image}
-                          alt={`Card ${card.id}`}
-                          className="w-full h-auto block"
-                        />
-                      ) : (
-                        <div className="w-full bg-gray-600 flex items-center justify-center text-gray-300 text-xs h-40">
-                          Sin imagen
-                        </div>
-                      )}
+                      {cards.slice(0, visibleCount).map((card) => (
+  <div key={card.id} className="mb-6 rounded-2xl bg-stone-800 overflow-hidden relative">
+    <img
+      src={card.image}
+      alt={card.description}
+      className="w-full h-auto block"
+      onClick={() => openModal(card.id)} // <-- aquí abrimos el modal con id
+    />
+  </div>
+))}
                       <p className="text-xs text-gray-200 text-center px-2 py-2">
                         {card.description}
                       </p>
@@ -832,6 +929,31 @@ export default function Profile(props: ProfileProps) {
       >
         +
       </Link>
+      {selectedPublication && (
+  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    {loadingPublication ? (
+      <div className="text-white">Cargando...</div>
+    ) : (
+      <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto">
+        <h2 className="text-white text-2xl font-bold">{selectedPublication.user_name}</h2>
+        <p className="text-gray-400">{formatDate(selectedPublication.created_at)}</p>
+        <img
+          src={selectedPublication.image}
+          alt={selectedPublication.description}
+          className="mt-4 w-full h-64 object-cover rounded-lg"
+        />
+        <p className="text-gray-300 mt-2">{selectedPublication.description}</p>
+        <span className="text-pink-400 mt-2">{selectedPublication.category}</span>
+        <button
+          className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+          onClick={() => setSelectedPublication(null)}
+        >
+          Cerrar
+        </button>
+      </div>
+    )}
+  </div>
+)}
     </section >
   );
 }

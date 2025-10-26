@@ -109,6 +109,28 @@ class PublicationController extends Controller
         ]);
     }
 
+    public function show($id)
+{
+    $pub = Publication::with('user', 'likes', 'comments')->find($id);
+
+    if (!$pub) {
+        return response()->json(['error' => 'Publicación no encontrada'], 404);
+    }
+
+    return response()->json([
+        'id' => $pub->id,
+        'description' => $pub->description,
+        'category' => $pub->category,
+        'image' => $pub->image,
+        'created_at' => $pub->created_at,
+        'user_id' => $pub->user ? $pub->user->id : null,
+        'user_name' => $pub->user ? $pub->user->name : 'Usuario',
+        'user_profile_picture' => $pub->user ? $pub->user->profilePicturePath() : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        'total_likes' => $pub->likes->count(),
+        'total_comments' => $pub->comments->count(),
+    ]);
+}
+
     //Funcion destroy
     public function destroy($id)
     {

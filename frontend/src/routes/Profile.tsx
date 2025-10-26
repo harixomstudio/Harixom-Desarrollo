@@ -24,7 +24,7 @@ function ProfileRoute() {
 });
 
 useEffect(() => {
-  refetch(); // Esto recargará el perfil y traerá el isPremium actualizado
+  refetch();
 }, []);
 
   // Query likes
