@@ -79,15 +79,14 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'error' => 'Las credenciales no son correctas.',
-            ], 401);
+            return response()->json(
+                ['Error, ' , ' Las credenciales no son correctas.'], 401 );
         }
 
         // Validar si el usuario está habilitado
         if (!$user->is_active) {
             return response()->json([
-                'error' => 'Tu cuenta ha sido deshabilitada, contacta con soporte.',
+                'error' , 'Tu cuenta ha sido deshabilitada, contacta con soporte.',
             ], 403);
         }
 
@@ -108,7 +107,6 @@ class UserController extends Controller
         return response()->json([
             'user' => UserResource::make($request->user()),
         ]);
-        
     }
 
     //Funcion updateProfile
@@ -116,7 +114,7 @@ class UserController extends Controller
     {
         $upload = new UploadApi();
         $user = $request->user();
-\Log::info('Usuario autenticado:', ['user' => $user]);
+        \Log::info('Usuario autenticado:', ['user' => $user]);
 
         $data = $request->validate([
             'name' => 'nullable|string|max:255',
@@ -132,10 +130,10 @@ class UserController extends Controller
             'commissions_enabled' => 'nullable|boolean',
         ]);
 
-    // Aseguramos que sea boolean/int correcto
-    if (isset($data['commissions_enabled'])) {
-    $data['commissions_enabled'] = filter_var($data['commissions_enabled'], FILTER_VALIDATE_BOOLEAN);
-}
+        // Aseguramos que sea boolean/int correcto
+        if (isset($data['commissions_enabled'])) {
+            $data['commissions_enabled'] = filter_var($data['commissions_enabled'], FILTER_VALIDATE_BOOLEAN);
+        }
         // Manejo de archivos
         if ($request->hasFile('profile_picture')) {
 
@@ -223,7 +221,7 @@ class UserController extends Controller
                 'profile_picture' => $f->following->profile_picture
             ]);
 
-            
+
 
         return response()->json([
             'user' => $user,
@@ -285,36 +283,36 @@ class UserController extends Controller
     }
 
     // Bloquear usuario
-public function blockUser(Request $request, $id)
-{
-    $user = $request->user();
-    
-    if ($user->id == $id) {
-        return response()->json(['error' => 'No puedes bloquearte a ti mismo'], 400);
+    public function blockUser(Request $request, $id)
+    {
+        $user = $request->user();
+
+        if ($user->id == $id) {
+            return response()->json(['error' => 'No puedes bloquearte a ti mismo'], 400);
+        }
+
+        $block = Block::firstOrCreate([
+            'user_id' => $user->id,
+            'blocked_user_id' => $id,
+        ]);
+
+        return response()->json(['message' => 'Usuario bloqueado']);
     }
 
-    $block = Block::firstOrCreate([
-        'user_id' => $user->id,
-        'blocked_user_id' => $id,
-    ]);
+    // Desbloquear usuario
+    public function unblockUser(Request $request, $id)
+    {
+        $user = $request->user();
 
-    return response()->json(['message' => 'Usuario bloqueado']);
-}
+        Block::where('user_id', $user->id)
+            ->where('blocked_user_id', $id)
+            ->delete();
 
-// Desbloquear usuario
-public function unblockUser(Request $request, $id)
-{
-    $user = $request->user();
+        return response()->json(['message' => 'Usuario desbloqueado']);
+    }
 
-    Block::where('user_id', $user->id)
-         ->where('blocked_user_id', $id)
-         ->delete();
-
-    return response()->json(['message' => 'Usuario desbloqueado']);
-}
-
-public function blockedUsers(Request $request)
-{
-    return $request->user()->blocks()->pluck('blocked_user_id');
-}
+    public function blockedUsers(Request $request)
+    {
+        return $request->user()->blocks()->pluck('blocked_user_id');
+    }
 }

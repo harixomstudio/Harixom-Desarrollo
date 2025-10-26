@@ -62,7 +62,7 @@ class InteractionController extends Controller
     }
 
     //Funcion para seguir
-    public function toggleFollow($userId)
+    public function toggleFollow(Request $request, $userId)
     {
         $user = auth()->user();
         if (!$user) {
@@ -79,6 +79,8 @@ class InteractionController extends Controller
         // Revisamos si ya sigue
         $existingFollow = $user->follows()->where('following_id', $target->id)->first();
 
+
+
         if ($existingFollow) {
             // Deja de seguir
             $existingFollow->delete();
@@ -86,13 +88,17 @@ class InteractionController extends Controller
         } else {
             // Empieza a seguir
             $user->follows()->create([
-                'following_id' => $target->id
+                'title' => $request->title,
+                'following_id' => $target->id,
+                'status' => $request->status
             ]);
             $following = true;
         }
 
         return response()->json([
-            'following' => $following
+            'title' => $request->title,
+            'following' => $following,
+            'status' => $request->status
         ]);
     }
 
@@ -102,6 +108,7 @@ class InteractionController extends Controller
         $exists = $user->follows()->where('following_id', $userId)->exists();
 
         return response()->json([
+
             'following' => $exists
         ]);
     }
@@ -117,8 +124,10 @@ class InteractionController extends Controller
         $followings = $user->follows()->with('following')->get()->map(function ($follow) {
             return [
                 'id' => $follow->following->id,
+                'title' => $follow->title,
                 'name' => $follow->following->name,
-                'profile_picture' => $follow->following->profile_picture
+                'status' => $follow->status,
+                'created_at' => $follow->created_at
             ];
         });
 
@@ -126,8 +135,10 @@ class InteractionController extends Controller
         $followers = $user->followers()->with('follower')->get()->map(function ($follow) {
             return [
                 'id' => $follow->follower->id,
+                'title' => $follow->title,
                 'name' => $follow->follower->name,
-                'profile_picture' => $follow->follower->profile_picture
+                'status' => $follow->status,
+                'created_at' => $follow->created_at
             ];
         });
 
@@ -141,18 +152,32 @@ class InteractionController extends Controller
     public function addComment(Request $request, $publicationId)
     {
         $user = auth()->user(); // Usuario logueado
-        $request->validate(['comment' => 'required|string|max:500']);
+
+        $request->validate([
+            'title' => 'required|string|max:100',
+            'comment' => 'required|string|max:500',
+            'for_user_id' => 'required|exists:users,id',
+            'status' => 'required|in:Low,Medium,High',
+        ]);
+
+
 
         $comment = Comment::create([
+            'title' => $request->title,
             'user_id' => $user->id,
+            'for_user_id' => $request->for_user_id,
             'publication_id' => $publicationId,
-            'comment' => $request->comment
+            'comment' => $request->comment,
+            'status' => $request->status
         ]);
 
         return response()->json([
             'comment' => [
+                'title' => $comment->title,
+                'for_user_id' => $comment->for_user_id,
                 'user' => ['name' => $user ? $user->name : 'Anonimo'],
-                'comment' => $comment->comment
+                'comment' => $comment->comment,
+                'status' => $comment->status
             ]
         ]);
     }
@@ -167,13 +192,40 @@ class InteractionController extends Controller
         return response()->json([
             'comments' => $comments->map(function ($comment) {
                 return [
-                    'user' => ['name' => $comment->user->name],
+                    'title' => $comment->title,
+                    'id' => $comment->id,
+                    'for_user_id' => $comment->for_user_id,
+                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name],
                     'comment' => $comment->comment,
+                    'status' => $comment->status,
                     'created_at' => $comment->created_at->diffForHumans(),
                 ];
             })
         ]);
     }
+
+    public function userComments($userId)
+    {
+        $comments = Comment::with('user')
+            ->where('for_user_id', $userId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json([
+            'comments' => $comments->map(function ($comment) {
+                return [
+                    'title' => $comment->title,
+                    'id' => $comment->id,
+                    'for_user_id' => $comment->for_user_id,
+                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name],
+                    'comment' => $comment->comment,
+                    'status' => $comment->status,
+                    'created_at' => $comment->created_at->diffForHumans(),
+                ];
+            })
+        ]);
+    }
+
 
     public function commisions(Request $request)
     {

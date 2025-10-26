@@ -104,6 +104,10 @@ export default function Register(props: RegisterProps) {
     }
   };
 
+  const passwordMatch = () => {
+    if (user.password === user.confirmPassword || user.confirmPassword === "" || user.password === "") { return true }
+  }
+
   return (
     <section className="relative flex min-h-screen items-center justify-center bg-stone-950 p-10">
       <img
@@ -137,7 +141,7 @@ export default function Register(props: RegisterProps) {
           </h1>
         </div>
 
-        <div className="w-full md:w-1/2 bg-gray-200 opacity-90 px-10 py-10 flex flex-col justify-center rounded-3xl">
+        <div className="w-full xl:w-1/2 bg-gray-200 opacity-90 px-10 py-10 flex flex-col justify-center rounded-3xl">
           <h2 className="text-2xl font-bold text-center mb-6 text-black">
             {props.title}
           </h2>
@@ -209,6 +213,7 @@ export default function Register(props: RegisterProps) {
                 </div>
               </div>
             ))}
+            <p className='max-xl:text-sm text-red-600 animate-pulse max-md:text-xs max-[30rem]:text-[0.6rem]'>{passwordMatch() ? '' : "Password doesn't match"}</p>
 
             <button
               type="submit"

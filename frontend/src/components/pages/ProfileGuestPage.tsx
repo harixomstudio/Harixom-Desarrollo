@@ -227,8 +227,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(data);
 
+      
       const msg = {
         id: data.data.id,
         userId: data.data.from_user.id,

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Api\PublicationController;
 use App\Http\Controllers\Api\InteractionController;
 use App\Http\Controllers\Api\AIController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\Api\TallerApiController;
 use App\Http\Controllers\Api\ProfileMessageController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\StripeController;
+
 
 Route::middleware('auth:sanctum')->group(function () {
     //Rutas de perfil
@@ -47,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas para comentarios
     Route::post('/comment/{publication}', [InteractionController::class, 'addComment']);
     Route::get('/comment/{publication}', [InteractionController::class, 'getComments']);
+    Route::get('/user/comments/{userId}', [InteractionController::class, 'userComments']);
 
     //Rutas para mensajes del perfil
     Route::get('/profile/{userId}/messages', [ProfileMessageController::class, 'index']);
@@ -72,10 +76,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Subgrupo solo para usuarios premium
     Route::middleware(['premium'])->group(function () {
-        Route::post('/events/create', [EventApiController::class, 'storeEvent']);
-        Route::post('/workshops/create', [TallerApiController::class, 'storeTaller']);
+        Route::post('/events/create', [EventApiController::class, 'store']);
+        Route::post('/workshops/create', [TallerApiController::class, 'store']);
     });
 });
+
+Route::post('/events/create', [EventApiController::class, 'store']);
 
 //Stripe
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
@@ -90,7 +96,7 @@ Route::get('/tallers/{id}', [TallerApiController::class, 'show']);
 Route::post('ia/challenge', [AIController::class, 'getChallenge']);
 
 //Rutas de reset password
-Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 
 //Rutas de los Usuarios antes de autenticarse
