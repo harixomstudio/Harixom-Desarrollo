@@ -121,7 +121,7 @@ const SuscriptionsPage = () => {
 
   if (loadingUser) {
     return (
-      <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
+      <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20" style={{ fontFamily: "Monserrat" }}>
         <div className="flex space-x-3">
           <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
           <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
@@ -132,7 +132,7 @@ const SuscriptionsPage = () => {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-800 text-white flex flex-col items-center py-20 px-6">
+    <section className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-800 text-white flex flex-col items-center py-20 px-6" style={{ fontFamily: "Monserrat" }}>
       {/* Título */}
       <h1 className="text-5xl md:text-7xl font-extrabold mb-16 text-center text-pink-300 bg-clip-text animate-pulse">
         {"Premium Plans".split("").map((char, i) => (

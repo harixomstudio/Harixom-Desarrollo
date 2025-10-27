@@ -128,7 +128,7 @@ export default function SetProfilePage() {
 
 
   return (
-    <section className="flex flex-col min-h-screen items-center justify-center bg-stone-950 py-15">
+    <section className="flex flex-col min-h-screen items-center justify-center bg-stone-950 py-15" style={{ fontFamily: "Monserrat" }}>
       <div className={`${loadingProfile ? "flex" : "hidden"} flex-col items-center justify-center w-full`}>
         {/* Banner */}
         <div className="relative w-3/4 h-50 rounded-xl overflow-hidden mb-6">

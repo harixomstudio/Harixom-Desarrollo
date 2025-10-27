@@ -7,9 +7,11 @@ export const Route = createFileRoute("/Landing")({
 
 
 const banners = [
+
   "banner1.svg",
   "banner2.svg",
-  "banner3.svg",
+  "baanner3.svg",
+  "banner4.svg",
 ];
 
 const categoriesUp = [

@@ -64,9 +64,8 @@ export default function Landing(props: LandingProps) {
 
   const { ref: appRef, inView: appVisible } = useInView({ threshold: 0.3 });
   const navigate = useNavigate();
-
-  const [current, setCurrent] = useState(0);
-  const total = props.banners.length;
+const [current, setCurrent] = useState(0);
+const total = 4; // número real de banners
 
   const token = localStorage.getItem("access_token");
   const { data } = useQuery({
@@ -127,8 +126,13 @@ export default function Landing(props: LandingProps) {
     return () => clearInterval(timer);
   }, [total]);
 
-  const nextSlide = () => setCurrent((prev) => (prev + 1) % total);
-  const prevSlide = () => setCurrent((prev) => (prev - 1 + total) % total);
+const nextSlide = () => {
+  setCurrent((prev) => (prev + 1) % total);
+};
+
+const prevSlide = () => {
+  setCurrent((prev) => (prev - 1 + total) % total);
+};
 
   const styleTag = (
     <style
@@ -199,11 +203,37 @@ export default function Landing(props: LandingProps) {
           <div className="absolute w-full h-full bg-gradient-to-r from-pink-300 via-pink-800 to-pink-300 animate-gradient" />
         </div>
         {/* Carrusel */}
-        <div className="relative w-full h-[60vh] max-sm:h-[30vh] max-md:h-[45vh] max-lg:h-[50vh] max-xl:h-[55vh] overflow-hidden text-black">
+        <div className="relative w-full h-[73vh] max-sm:h-[30vh] max-md:h-[45vh] max-lg:h-[50vh] max-xl:h-[55vh] overflow-hidden text-black">
           <div
             className="flex transition-transform duration-[1800ms] ease-in-out h-full w-full "
             style={{ transform: `translateX(-${current * 100}%)` }}
           >
+
+
+             {/* Banner 0 */}
+        <div className="min-w-full h-full relative flex items-center justify-center">
+          <img
+           src="banner4.svg" alt="Banner 0"
+            className="absolute w-full h-full object-cover"
+           />
+          <div className="z-10 text-center flex flex-col items-center gap-7 px-4">
+            <h1
+              className="text-black text-2xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
+              style={{ fontFamily: "Monserrat" }}
+            >
+              Welcome to
+            </h1>
+             <h2
+              className="text-pink-600 text-8xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl"
+               style={{ fontFamily: "Starstruck" }}
+             >
+               Harixom
+             </h2>
+          </div>
+        </div>
+
+
+
             {/* Banner 1 */}
             <div className="min-w-full h-full relative flex items-center justify-center">
               <img
@@ -213,16 +243,16 @@ export default function Landing(props: LandingProps) {
               />
               <div className="z-10 text-center pb-20 sm:pb-32 md:pb-40 lg:pb-48">
                 <h1
-                  className="text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
+                  className="text-pink-700 text-5xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
                   style={{ fontFamily: "Monserrat" }}
                 >
-                  Canvas Flow
+                 The Empty space
                 </h1>
                 <h2
                   className="text-black text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl p-2"
                   style={{ fontFamily: "Monserrat" }}
                 >
-                  Unleash Your Inner Artist
+                 Holds endless possibilities
                 </h2>
               </div>
             </div>
@@ -236,20 +266,20 @@ export default function Landing(props: LandingProps) {
               />
               <div className="z-10 text-center flex flex-col items-center gap-5 pt-10">
                 <h1
-                  className="text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
+                  className="text-black text-5xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
                   style={{ fontFamily: "Monserrat" }}
                 >
                   Participate in incredible Events
                 </h1>
                 <h2
-                  className="text-black text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl"
+                  className="text-pink-700 text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl"
                   style={{ fontFamily: "Monserrat" }}
                 >
                   Discover the power of creativity
                 </h2>
                 <Link
                   to="/Events"
-                  className="mt-2 px-10 sm:px-16 md:px-20 py-2 sm:py-3 bg-purple-500 text-black text-lg sm:text-xl md:text-2xl font-semibold rounded-full hover:bg-purple-600 transition duration-300"
+                  className="mt-2 px-10 sm:px-16 md:px-20 py-2 sm:py-3 bg-purple-400 text-black text-lg sm:text-xl md:text-2xl font-semibold rounded-full hover:bg-purple-600 transition duration-300"
                   style={{ fontFamily: "Monserrat" }}
                 >
                   Join
@@ -266,17 +296,12 @@ export default function Landing(props: LandingProps) {
               />
 
               {/* Contenedor centrado */}
-              <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-4">
+              <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-4 gap-15">
                 {/* Imagen pincelada con texto encima */}
                 <div className="relative w-full flex items-center justify-center">
-                  <img
-                    src="pincelada.svg"
-                    alt="Pincelada"
-                    className={`max-w-[90%] sm:max-w-[700px] md:max-w-[900px] h-auto ${current === 2 ? "animate-paint-stroke" : ""}`}
-                    style={{ animationFillMode: "forwards" }}
-                  />
+               
                   <h2
-                    className={`absolute inset-0 flex items-center justify-center text-black text-6xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
+                    className={`absolute inset-0 flex items-center justify-center text-black text-5xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
                     style={{ fontFamily: "Monserrat" }}
                   >
                     Get inspired and Create your own Art
@@ -287,10 +312,10 @@ export default function Landing(props: LandingProps) {
                 <Link
                   to="/Categories/$name"
                   params={{ name: "Digital Art" }}
-                  className="mt-6 px-10 sm:px-16 md:px-20 py-2 bg-blue-600 text-lg sm:text-xl md:text-2xl font-bold rounded-full hover:scale-110 transition z-10"
+                  className="mt-6 px-10 sm:px-16 md:px- py-2 bg-pink-400 text-black text-lg sm:text-xl md:text-2xl font-bold rounded-full hover:scale-110 transition z-10 "
                   style={{ fontFamily: "Monserrat" }}
                 >
-                  GO!
+                  Create now
                 </Link>
               </div>
             </div>
@@ -312,7 +337,7 @@ export default function Landing(props: LandingProps) {
         </div>
 
         {/* categories section */}
-        <section className="flex flex-col items-center justify-center gap-20 pt-20 pb-32 px-4 ">
+        <section className="flex flex-col items-center justify-center gap-20 pt-40 pb-32 px-4 ">
           <h2
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-pink-300 flex gap-1"
             style={{ fontFamily: "Monserrat" }}
@@ -529,7 +554,7 @@ export default function Landing(props: LandingProps) {
         >
           {/* Título central */}
           <h2
-            className="text-3xl max-sm:text-4xl max-md:text-5xl max-lg:text-6xl font-bold mb-10 sm:mb-16 animate-fade-in text-black"
+            className="text-4xl max-sm:text-4xl max-md:text-5xl max-lg:text-6xl font-bold mb-10 sm:mb-16 animate-fade-in text-black"
             style={{ fontFamily: "Monserrat" }}
           >
             Get to know our artists through the Feed!!

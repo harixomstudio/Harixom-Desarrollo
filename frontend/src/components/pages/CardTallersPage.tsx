@@ -58,7 +58,7 @@ export default function CardTallers({ tallers }: CardTallersProps) {
 
 
   return (
-    <div className="bg-black p-6 min-h-screen">
+    <div className="bg-black p-6 min-h-screen"style={{ fontFamily: "Monserrat" }}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
         {tallers.slice(0, visibleCount).map((taller) => (
           <div

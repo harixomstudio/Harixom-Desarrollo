@@ -15,7 +15,7 @@ interface RegisterProps {
 
 export default function Register(props: RegisterProps) {
   return (
-    <section className="relative flex min-h-screen items-center justify-center bg-black">
+    <section className="relative flex min-h-screen items-center justify-center bg-black" style={{ fontFamily: "Monserrat" }}>
       {/* Header */}
       <h1 className=" mt-15 absolute top-1 text-center text-pink-400 font-semibold text-2xl">
         User registration for admins
