@@ -170,7 +170,7 @@ function RootComponent() {
 
       {/* CONTENIDO PRINCIPAL */}
       {currentPath !== '/Inbox' &&
-        <div className={`flex min-h-screen ${!hideNav ? "pl-14" : ""}`}>
+        <div className={`flex min-h-screen ${!hideNav ? "md:pl-14" : ""}`}>
           {!hideNav}
           <div className="flex-1 bg-stone-950 w-full">
             <Outlet />
