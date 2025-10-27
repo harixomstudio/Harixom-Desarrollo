@@ -399,7 +399,7 @@ const prevSlide = () => {
                 <img
                   src={categoriesDown}
                   alt={`Image ${number}`}
-                  className="w-15 h-15 max-[31rem]:w-10 max-[31rem]:h-10 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
+                  className="w-15 h-15 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 duration-600 hover:scale-110 hover:shadow-lg shadow-black"
                 />
                 <span
                   className="text-center text-sm sm:text-base md:text-lg font-medium"
