@@ -13,7 +13,7 @@ function RouteComponent() {
         siempre puedes volver a activarla para disfrutar de las ventajas premium.
       </p>
       <a
-        href="/"
+        href="/Profile"
         className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
       >
         Volver al inicio
