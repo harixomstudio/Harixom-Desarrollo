@@ -263,7 +263,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   return (
     <div className="bg-stone-950 min-h-screen py-10 px-3"
-      style={{ fontFamily: "Monserrat" }}>
+      style={{ fontFamily: "Montserrat" }}>
       <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around">
         {publications.slice(0, visibleCount).map((pub) => (
           <div

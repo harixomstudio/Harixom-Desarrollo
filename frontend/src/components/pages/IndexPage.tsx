@@ -21,7 +21,7 @@ export default function Home(props: HomeProps) {
     <section
       onClick={() => navigate({ to: "/Login" })}
       className="relative flex h-screen items-center justify-center bg-stone-950 overflow-hidden cursor-pointer "
-    style={{ fontFamily: "Monserrat" }}>
+    style={{ fontFamily: "Montserrat" }}>
       {/* Fondo decorativo */}
       <img
         src="/circles.svg"

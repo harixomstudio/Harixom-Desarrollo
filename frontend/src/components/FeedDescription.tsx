@@ -78,7 +78,7 @@ export default function FeedDescription({ pub, currentUserId }: any) {
 
   return (
     <p className="text-gray-300 text-sm mt-2 break-words"
-       style={{ fontFamily: "Monserrat" }}>
+       style={{ fontFamily: "Montserrat" }}>
       {parseText(pub.description || "")}
     </p>
   );

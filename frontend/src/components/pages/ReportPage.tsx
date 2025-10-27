@@ -39,7 +39,7 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="bg-stone-900 p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20" style={{ fontFamily: "Monserrat" }}>
+    <div className="bg-stone-900 p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20" style={{ fontFamily: "Montserrat" }}>
       <h2 className="text-white text-2xl font-bold mb-4 text-center">Reportar un problema o sugerencia</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

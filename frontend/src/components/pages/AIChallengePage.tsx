@@ -61,7 +61,7 @@ export default function AIChallenge() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-[#0d0d0d] via-[#1a1a1a] to-[#262626] text-white px-4 sm:px-6 py-8 sm:py-12"style={{ fontFamily: "Monserrat" }}>
+    <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-[#0d0d0d] via-[#1a1a1a] to-[#262626] text-white px-4 sm:px-6 py-8 sm:py-12"style={{ fontFamily: "Montserrat" }}>
   {/* Encabezado */}
   <div className="max-w-2xl text-center mb-8 sm:mb-12">
     <h1

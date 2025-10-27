@@ -224,7 +224,7 @@ export default function Categories({
   };
 
   return (
-    <div className="bg-stone-950 min-h-screen px-2 py-10" style={{ fontFamily: "Monserrat" }}>
+    <div className="bg-stone-950 min-h-screen px-2 py-10" style={{ fontFamily: "Montserrat" }}>
       <div className="flex items-center justify-between mb-8 relative px-5">
         <div className="flex items-center gap-6">
           <img src={icon} alt={altIcon} className="w-15 h-15 mt-2" />

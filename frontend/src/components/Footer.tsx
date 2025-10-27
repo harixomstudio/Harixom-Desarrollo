@@ -16,7 +16,7 @@ export default function Footer(props: FooterProps) {
   return (
     <footer
       className="flex flex-col items-center w-full py-10"
-         style={{ fontFamily: "Monserrat" }}>
+         style={{ fontFamily: "Montserrat" }}>
     
 
       <section className="flex w-full text-base max-md:text-base bg-[#141414]">

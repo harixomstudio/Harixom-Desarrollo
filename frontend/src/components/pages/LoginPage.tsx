@@ -76,7 +76,7 @@ export default function Login(props: LoginProps) {
   }
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center bg-stone-950" style={{ fontFamily: "Monserrat" }}>
+    <section className="relative flex min-h-screen items-center justify-center bg-stone-950" style={{ fontFamily: "Montserrat" }}>
       <img
         src="/circles.svg"
         alt="circles background"

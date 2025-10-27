@@ -197,7 +197,7 @@ const prevSlide = () => {
   return (
     <>
       {styleTag}
-      <main className="pt-12 w-full bg-[#141414] text-white">
+      <main className="pt-12 w-full bg-[#141414] text-white"style={{ fontFamily: "Montserrat" }}>
         {/* Línea rosa animada debajo del nav */}
         <div className="relative w-full h-1.5 overflow-hidden bottom-12">
           <div className="absolute w-full h-full bg-gradient-to-r from-pink-300 via-pink-800 to-pink-300 animate-gradient" />
@@ -219,7 +219,7 @@ const prevSlide = () => {
           <div className="z-10 text-center flex flex-col items-center gap-7 px-4">
             <h1
               className="text-black text-2xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
-              style={{ fontFamily: "Monserrat" }}
+              style={{ fontFamily: "Montserrat" }}
             >
               Welcome to
             </h1>
@@ -243,14 +243,14 @@ const prevSlide = () => {
               />
               <div className="z-10 text-center pb-20 sm:pb-32 md:pb-40 lg:pb-48">
                 <h1
-                  className="text-pink-700 text-5xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
-                  style={{ fontFamily: "Monserrat" }}
+                  className="text-pink-700 text-4xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
+                  style={{ fontFamily: "Montserrat" }}
                 >
                  The Empty space
                 </h1>
                 <h2
-                  className="text-black text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl p-2"
-                  style={{ fontFamily: "Monserrat" }}
+                  className="text-black text-2xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl p-2"
+                  style={{ fontFamily: "Montserrat" }}
                 >
                  Holds endless possibilities
                 </h2>
@@ -266,21 +266,21 @@ const prevSlide = () => {
               />
               <div className="z-10 text-center flex flex-col items-center gap-5 pt-10">
                 <h1
-                  className="text-black text-5xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
-                  style={{ fontFamily: "Monserrat" }}
+                  className="text-black text-4xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
+                  style={{ fontFamily: "Montserrat" }}
                 >
                   Participate in incredible Events
                 </h1>
                 <h2
-                  className="text-pink-700 text-3xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl"
-                  style={{ fontFamily: "Monserrat" }}
+                  className="text-pink-700 text-2xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl"
+                  style={{ fontFamily: "Montserrat" }}
                 >
                   Discover the power of creativity
                 </h2>
                 <Link
                   to="/Events"
                   className="mt-2 px-10 sm:px-16 md:px-20 py-2 sm:py-3 bg-purple-400 text-black text-lg sm:text-xl md:text-2xl font-semibold rounded-full hover:bg-purple-600 transition duration-300"
-                  style={{ fontFamily: "Monserrat" }}
+                  style={{ fontFamily: "Montserrat" }}
                 >
                   Join
                 </Link>
@@ -302,7 +302,7 @@ const prevSlide = () => {
                
                   <h2
                     className={`absolute inset-0 flex items-center justify-center text-black text-5xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
-                    style={{ fontFamily: "Monserrat" }}
+                    style={{ fontFamily: "Montserrat" }}
                   >
                     Get inspired and Create your own Art
                   </h2>
@@ -313,7 +313,7 @@ const prevSlide = () => {
                   to="/Categories/$name"
                   params={{ name: "Digital Art" }}
                   className="mt-6 px-10 sm:px-16 md:px- py-2 bg-pink-400 text-black text-lg sm:text-xl md:text-2xl font-bold rounded-full hover:scale-110 transition z-10 "
-                  style={{ fontFamily: "Monserrat" }}
+                  style={{ fontFamily: "Montserrat" }}
                 >
                   Create now
                 </Link>
@@ -339,8 +339,8 @@ const prevSlide = () => {
         {/* categories section */}
         <section className="flex flex-col items-center justify-center gap-20 pt-40 pb-32 px-4 ">
           <h2
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-pink-300 flex gap-1"
-            style={{ fontFamily: "Monserrat" }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl text-pink-300 flex gap-1"
+            style={{ fontFamily: "Montserrat" }}
           >
             {"Categories".split("").map((char, i) => (
               <span
@@ -362,7 +362,7 @@ const prevSlide = () => {
           {/* Upper categories */}
           <div
             className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 pt-5 duration-500"
-            style={{ fontFamily: "Monserrat" }}
+            style={{ fontFamily: "Montserrat" }}
           >
             {props.categoriesUp.map((categoriesUp, number) => (
               <Link
@@ -388,7 +388,7 @@ const prevSlide = () => {
           {/* Lower categories */}
           <div
             className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 duration-500"
-            style={{ fontFamily: "Monserrat" }}
+            style={{ fontFamily: "Montserrat" }}
           >
             {props.categoriesDown.map((categoriesDown, number) => (
               <Link
@@ -439,22 +439,22 @@ const prevSlide = () => {
           {/* Texto de la app */}
           <div className="relative z-10 flex flex-col w-full lg:w-2/3 text-justify justify-center gap-8 sm:gap-10 max-xl:items-center items-start">
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl font-bold text-center lg:text-left transition-all duration-1000 ease-out ${
+              className={`text-3xl sm:text-3xl md:text-3xl font-bold text-center lg:text-left transition-all duration-1000 ease-out ${
                 appVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-10"
               }`}
-              style={{ fontFamily: "Monserrat" }}
+              style={{ fontFamily: "Montserrat" }}
             >
               {props.descriptionApp}
             </h2>
             <p
-              className={`text-base sm:text-lg md:text-xl lg:text-2xl text-center lg:text-left px-2 lg:px-0 transition-all duration-1000 ease-out ${
+              className={`text-base sm:text-lg md:text-xl lg:text-xl text-center lg:text-left px-2 lg:px-0 transition-all duration-1000 ease-out ${
                 appVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-10"
               }`}
-              style={{ fontFamily: "Monserrat" }}
+              style={{ fontFamily: "Montserrat" }}
             >
               {props.textApp}
             </p>
@@ -463,7 +463,7 @@ const prevSlide = () => {
               <Link
                 to="/CreatePublication"
                 className="px-8 sm:px-12 md:px-16 py-3 text-base sm:text-lg md:text-xl font-semibold rounded-full bg-gradient-to-r from-pink-800 to-pink-400 hover:scale-110 transition-transform duration-500 shadow-lg animate-float text-white"
-                style={{ fontFamily: "Monserrat" }}
+                style={{ fontFamily: "Montserrat" }}
               >
                 Create your publication!
               </Link>
@@ -473,12 +473,12 @@ const prevSlide = () => {
 
         {/* artists ranking */}
         <section
-          className="flex flex-col items-center justify-center gap-16 py-20 px-4 sm:px-8 md:px-12 lg:px-20"
-          style={{ fontFamily: "Monserrat" }}
+          className="flex flex-col items-center justify-center gap-16 py-30 px-4 sm:px-8 md:px-12 lg:px-20"
+          style={{ fontFamily: "Montserrat" }}
         >
           <h2
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-pink-300 flex gap-1"
-            style={{ fontFamily: "Monserrat" }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl text-pink-300 flex gap-1 py-5"
+            style={{ fontFamily: "Montserrat" }}
           >
             {"Artist        Ranking".split("").map((char, i) => (
               <span
@@ -555,7 +555,7 @@ const prevSlide = () => {
           {/* Título central */}
           <h2
             className="text-4xl max-sm:text-4xl max-md:text-5xl max-lg:text-6xl font-bold mb-10 sm:mb-16 animate-fade-in text-black"
-            style={{ fontFamily: "Monserrat" }}
+            style={{ fontFamily: "Montserrat" }}
           >
             Get to know our artists through the Feed!!
           </h2>
@@ -564,7 +564,7 @@ const prevSlide = () => {
           <Link
             to="/Feed"
             className="px-8 sm:px-12 md:px-16 py-3 text-base sm:text-lg md:text-xl font-semibold rounded-full bg-gradient-to-r from-purple-800 to-purple-500 hover:scale-110 transition-transform duration-500 shadow-lg animate-float"
-            style={{ fontFamily: "Monserrat" }}
+            style={{ fontFamily: "Montserrat" }}
           >
             GO!
           </Link>
