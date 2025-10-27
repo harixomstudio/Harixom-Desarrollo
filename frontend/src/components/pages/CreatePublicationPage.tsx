@@ -84,11 +84,32 @@ export default function CreatePublicationPage({ title }: { title: string }) {
       setPreviewUrl(null);
       navigate({ to: "/Feed" });
     } catch (err: any) {
-      console.log("Error al crear publicación:", err);
-      showToast("Error al crear publicación", "error");
-    } finally {
-      setLoading(false);
+  console.log("Error al crear publicación:", err);
+
+  if (err.response && err.response.data) {
+    // Si Laravel envía errores de validación
+    if (err.response.data.errors) {
+      const firstError = Object.values(err.response.data.errors)[0] as string[];
+      showToast(firstError[0], "error");
+    } 
+    // Si Laravel envía un mensaje de error general (como en Cloudinary)
+    else if (err.response.data.details) {
+      showToast(err.response.data.details, "error");
+    } 
+    // Si hay mensaje genérico
+    else if (err.response.data.error) {
+      showToast(err.response.data.error, "error");
+    } 
+    else if (err.response.data.message) {
+      showToast(err.response.data.message, "error");
+    } 
+    else {
+      showToast("Error desconocido al crear publicación.", "error");
     }
+  } else {
+    showToast("Error al conectar con el servidor.", "error");
+  }
+}
   };
 
   const categoryOptions = [
