@@ -122,6 +122,8 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
     setIsModalOpen(true);
   };
 
+
+
   // Fetch de perfil guest, comisiones y mensajes
   useEffect(() => {
     if (!token) return;
