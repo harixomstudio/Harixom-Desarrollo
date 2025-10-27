@@ -30,7 +30,7 @@ class PublicationController extends Controller
     }
 
     $publications = $query
-        ->with(['user:is_premium', 'likes'])
+        ->with(['user', 'likes'])
         ->withCount(['likes', 'comments'])
         ->orderBy('created_at', 'desc')
         ->get()
@@ -43,7 +43,6 @@ class PublicationController extends Controller
                 'created_at' => $pub->created_at,
                 'user_id' => $pub->user ? $pub->user->id : null,
                 'user_name' => $pub->user ? $pub->user->name : 'Usuario',
-                'is_premium' => (bool) ($pub->user?->is_premium ?? false),
                 'user_profile_picture' => $pub->user
                     ? $pub->user->profilePicturePath()
                     : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
