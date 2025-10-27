@@ -30,7 +30,7 @@ class SearchController extends Controller
         ->whereDoesntHave('blockedUsers', function ($q) use ($authUser) {
             $q->where('blocked_user_id', $authUser->id);
         })
-        ->select('id', 'name', 'profile_picture')
+        ->select('id', 'name', 'profile_picture', 'is_premium')
         ->limit(10)
         ->get();
 

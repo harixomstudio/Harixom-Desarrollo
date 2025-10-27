@@ -89,6 +89,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCurrentUserId(data.user.id);
+        
       } catch (err) {
         console.error("Error cargando usuario actual", err);
       }

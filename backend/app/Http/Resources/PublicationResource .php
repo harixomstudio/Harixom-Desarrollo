@@ -19,7 +19,7 @@ class PublicationResource extends JsonResource
             'user_profile' => $this->user && $this->user->profile_photo
                 ? asset('storage/profiles/' . $this->user->profile_photo)
                 : null,
-                'is_premium' => $this->user ? $this->user->is_premium : false,
+                'isPremium' => $this->user ? (bool) $this->user->is_premium : false,
         ];
     }
 }

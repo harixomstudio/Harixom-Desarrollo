@@ -80,6 +80,7 @@ export default function Nav() {
     }
   };
 
+  console.log(searchResults);
   const isNotProfile = location.pathname !== "/Profile";
 
   return (
