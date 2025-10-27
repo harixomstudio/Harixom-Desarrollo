@@ -33,7 +33,7 @@ export default function Notifications(props: NotificationsProps) {
 
     }, [visibleCount]);
     return (
-        <section className={`flex flex-col w-full py-10 gap-10 items-center bg-stone-950 text-white ${visibleCount < props.titles.length ? 'h-full' : 'min-h-screen'}`}>
+        <section className={`flex flex-col w-full py-10 gap-10 items-center bg-stone-950 text-white ${visibleCount < props.titles.length ? 'h-full' : 'min-h-screen'}`} style={{ fontFamily: "Monserrat" }}>
             <h1 className=" text-4xl min-lg:text-6xl font-medium cursor-default font-startruc text-pink-500">{props.notification}</h1>
 
             {props.titles.slice(0, visibleCount).map((_, number) => (

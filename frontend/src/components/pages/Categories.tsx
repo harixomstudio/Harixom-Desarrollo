@@ -131,7 +131,7 @@ export default function Categories({
   // Evita renderizar publicaciones hasta conocer el usuario actual
   if (currentUserId === null) {
     return (
-      <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
+      <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20" style={{ fontFamily: "Monserrat" }}>
         <div className="flex space-x-3">
           <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
           <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>

@@ -11,7 +11,7 @@ const icons = [
   { src: "notifications.svg", to: "/Inbox", alt: "Notifications" },
   { src: "user.svg", to: "/Profile", alt: "Profile" },
   { src: "events.svg", to: "/Events", alt: "Events" },
-  { src: "dashboars.svg", to: "/Dashboard", alt: "Dashboard" },
+  { src: "dashboars.svg", to: "/DashboardPage", alt: "Dashboard" },
 ];
 
 const token = localStorage.getItem("access_token");
@@ -53,8 +53,9 @@ export default function SidebarNavigation(props: IconProps) {
   }, [props.numberNotis]);
 
   return (
-    <aside className="fixed top-0 left-0 h-screen bg-[#151515] z-40 transition-all duration-300 w-14 hover:w-48 overflow-hidden">
-      <div className="pt-[100px] flex flex-col gap-6 px-2">
+    <aside className="fixed top-0 left-0 h-screen bg-[#151515] z-40 transition-all duration-300 w-14 hover:w-48 overflow-hidden "
+     style={{ fontFamily: "Monserrat" }}>
+      <div className="pt-[100px] flex flex-col gap-6 px-2 ">
         {icons.map((item, index) => {
           const isActive = currentPath === item.to;
 
@@ -86,7 +87,7 @@ export default function SidebarNavigation(props: IconProps) {
                   {props.numberNotis}
                 </span>
               )}
-              <span className="text-white text-sm font-medium opacity-100 transition-colors duration-300 group-hover:text-pink-500 group-hover:opacity-100 whitespace-nowrap">
+              <span className="text-white text-md font-medium opacity-100 transition-colors duration-300 group-hover:text-pink-500 group-hover:opacity-100 whitespace-nowrap">
                 {item.alt}
               </span>
             </Link>

@@ -56,7 +56,7 @@ export default function CardEvents({ events }: CardEventsProps) {
   }, [token]);
 
   return (
-    <div className="bg-black p-6 min-h-screen">
+    <div className="bg-black p-6 min-h-screen" style={{ fontFamily: "Monserrat" }}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
         {events.slice(0, visibleCount).map((event) => (
           <div

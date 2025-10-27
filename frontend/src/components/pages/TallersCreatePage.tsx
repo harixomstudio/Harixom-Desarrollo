@@ -83,7 +83,8 @@ export default function TallerCreatePage({ title }: { title: string }) {
   };
 
   return (
-    <section className="min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')] font-[Monserrat]">
+    <section className="min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')] "
+    style={{ fontFamily: "Monserrat" }}>
       <div className="mb-10 pl-4">
         <Link
           to="/Workshops"

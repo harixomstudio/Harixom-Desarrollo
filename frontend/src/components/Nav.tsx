@@ -83,7 +83,8 @@ export default function Nav() {
   const isNotProfile = location.pathname !== "/Profile";
 
   return (
-    <section className="bg-[#151515] relative z-50">
+    <section className="bg-[#151515] relative z-50"
+     style={{ fontFamily: "Monserrat" }}>
       <div className="flex items-center justify-between p-4">
         {/* Logo + barra de búsqueda */}
         <div className="flex items-center space-x-4 pl-10 flex-1">
