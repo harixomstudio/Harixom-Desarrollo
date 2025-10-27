@@ -387,7 +387,7 @@ const prevSlide = () => {
 
           {/* Lower categories */}
           <div
-            className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 duration-500"
+            className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 pt-5 duration-500"
             style={{ fontFamily: "Montserrat" }}
           >
             {props.categoriesDown.map((categoriesDown, number) => (
