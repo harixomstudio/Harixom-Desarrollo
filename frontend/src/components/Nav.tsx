@@ -87,7 +87,7 @@ export default function Nav() {
     { src: "premium.svg", to: "/Suscriptions", alt: "Suscriptions" },
     { src: "notifications.svg", to: "/Inbox", alt: "Notifications" },
     { src: "events.svg", to: "/Events", alt: "Events" },
-    { src: "dashboars.svg", to: "/DashboardPage", alt: "Dashboard" },
+    { src: "dashboars.svg", to: "/Dashboard", alt: "Dashboard" },
   ];
 
   return (

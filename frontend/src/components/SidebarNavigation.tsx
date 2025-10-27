@@ -11,7 +11,7 @@ const icons = [
   { src: "notifications.svg", to: "/Inbox", alt: "Notifications" },
   { src: "user.svg", to: "/Profile", alt: "Profile" },
   { src: "events.svg", to: "/Events", alt: "Events" },
-  { src: "dashboars.svg", to: "/DashboardPage", alt: "Dashboard" },
+  { src: "dashboars.svg", to: "/Dashboard", alt: "Dashboard" },
 ];
 
 const token = localStorage.getItem("access_token");
