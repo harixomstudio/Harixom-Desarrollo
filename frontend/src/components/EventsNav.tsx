@@ -13,7 +13,7 @@ export default function EventsNav(props: EventsNavProps) {
       className="w-full bg-[#202020] text-white py-2 px-6 flex justify-center items-center space-x-6 flex-wrap"
       style={{ fontFamily: "Montserrat" }}
     >
-      <nav className="flex flex-wrap justify-center gap-4">
+      <nav className="flex flex-wrap justify-center gap-1">
         {props.listEvents.map((listEvents, i) => {
           const isActive = location.pathname === props.referenceEvents[i];
           return (
