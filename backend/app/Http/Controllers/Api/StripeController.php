@@ -13,7 +13,6 @@ class StripeController extends Controller
 {
     public function createCheckoutSession(Request $request)
     {
-
         // Loguear todo lo que entra
     \Log::info('Headers recibidos:', $request->headers->all());
 
