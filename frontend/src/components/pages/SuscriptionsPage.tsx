@@ -132,7 +132,7 @@ const SuscriptionsPage = () => {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-800 text-white flex flex-col items-center py-20 px-6" style={{ fontFamily: "Monserrat" }}>
+    <section className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-800 text-white flex flex-col items-center py-20 px-6" style={{ fontFamily: "Montserrat" }}>
       {/* Título */}
       <h1 className="text-5xl md:text-7xl font-extrabold mb-16 text-center text-pink-300 bg-clip-text animate-pulse">
         {"Premium Plans".split("").map((char, i) => (
