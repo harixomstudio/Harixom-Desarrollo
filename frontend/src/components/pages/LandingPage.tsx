@@ -337,7 +337,7 @@ const prevSlide = () => {
         </div>
 
         {/* categories section */}
-        <section className="flex flex-col items-center justify-center gap-20 pt-40 pb-32 px-4 ">
+        <section className="flex flex-col items-center justify-center gap-10 pt-40 pb-32 px-4 ">
           <h2
             className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl text-pink-300 flex gap-1"
             style={{ fontFamily: "Montserrat" }}

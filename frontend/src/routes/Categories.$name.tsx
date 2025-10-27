@@ -61,7 +61,7 @@ function RouteComponent() {
   alt: string;
   info: React.ReactNode;
 }> = {
-  "Photography": {
+  "Photos": {
     style: "text-[#ff6161]",
     icon: "../icon-foto.svg",
     alt: "Photography icon",
