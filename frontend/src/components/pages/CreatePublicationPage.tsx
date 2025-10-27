@@ -124,7 +124,7 @@ export default function CreatePublicationPage({ title }: { title: string }) {
   };
 
   return (
-    <section className="min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')] "style={{ fontFamily: "Monserrat" }}>
+    <section className="min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')] "style={{ fontFamily: "Montserrat" }}>
       <div>
         <div className="mb-10 pl-4">
           <Link

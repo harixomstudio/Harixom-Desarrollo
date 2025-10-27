@@ -348,7 +348,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
   return (
     <section className="relative flex items-center justify-center bg-stone-950 min-h-screen"
-      style={{ fontFamily: "Monserrat" }}>
+      style={{ fontFamily: "Montserrat" }}>
       <div className="w-full flex flex-col">
         {/* Banner y Avatar */}
         <div className="relative mb-10">

@@ -54,7 +54,7 @@ export default function SidebarNavigation(props: IconProps) {
 
   return (
     <aside className="fixed top-0 left-0 h-screen bg-[#151515] z-40 transition-all duration-300 w-14 hover:w-48 overflow-hidden "
-     style={{ fontFamily: "Monserrat" }}>
+     style={{ fontFamily: "Montserrat" }}>
       <div className="pt-[100px] flex flex-col gap-6 px-2 ">
         {icons.map((item, index) => {
           const isActive = currentPath === item.to;

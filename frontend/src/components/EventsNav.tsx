@@ -11,7 +11,7 @@ export default function EventsNav(props: EventsNavProps) {
   return (
     <section
       className="w-full bg-[#202020] text-white py-2 px-6 flex justify-center items-center space-x-6 flex-wrap"
-      style={{ fontFamily: "Monserrat" }}
+      style={{ fontFamily: "Montserrat" }}
     >
       <nav className="flex flex-wrap justify-center gap-4">
         {props.listEvents.map((listEvents, i) => {

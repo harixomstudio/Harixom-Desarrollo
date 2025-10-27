@@ -10,7 +10,7 @@ export default function TermsAndConditions({ title, onAccept }: TermsProps) {
 
   return (
     <section className="min-h-screen bg-stone-950 relative flex items-center justify-center p-6"
-       style={{ fontFamily: "Monserrat" }}>
+       style={{ fontFamily: "Montserrat" }}>
       {/* Fondo decorativo con círculos */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.05)_0%,_transparent_70%),_radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.05)_0%,_transparent_70%)] z-0" />
 
