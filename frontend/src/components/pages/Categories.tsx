@@ -244,12 +244,15 @@ export default function Categories({
         )}
       </div>
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+
         {categoriesPublications.map((pub) => (
-          <div
-            key={pub.id}
-            className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px]"
-          >
+    <div
+  key={pub.id}
+  className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-full max-w-[340px] h-[460px] cursor-pointer transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/40"
+>
+
+
             {/* Imagen */}
             <div className="relative w-full h-[340px] aspect-square flex items-center justify-center ">
               {/* Avatar y nombre */}
@@ -267,12 +270,13 @@ export default function Categories({
                 </span>
               </div>
               {pub.image ? (
-                <WatermarkedImage
-                  src={pub.image}
-                  alt={pub.description}
-                  className="w-100px h-full object-cover rounded-lg max-lg:w-4/5"
-                  watermarkText={`Propiedad de ${pub.user_name || "Usuario desconocido"}`}
-                />
+               <WatermarkedImage
+  src={pub.image}
+  alt={pub.description}
+  className="w-full h-full object-cover rounded-lg"
+  watermarkText={`Propiedad de ${pub.user_name || "Usuario desconocido"}`}
+/>
+
               ) : (
                 <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs" />
               )}

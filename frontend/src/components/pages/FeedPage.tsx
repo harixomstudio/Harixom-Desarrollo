@@ -264,13 +264,14 @@ export default function FeedPage({ publications }: FeedPageProps) {
   return (
     <div className="bg-stone-950 min-h-screen py-10 px-3"
       style={{ fontFamily: "Montserrat" }}>
-      <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around">
+      <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around ">
         {publications.slice(0, visibleCount).map((pub) => (
           <div
-            key={pub.id}
-            className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px] max-lg:w-full max-lg:h-full"
-            onClick={() => openModal(pub)}
-          >
+  key={pub.id}
+  onClick={() => openModal(pub)}
+  className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px] max-lg:w-full max-lg:h-full cursor-pointer transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/40"
+>
+
             {/* Imagen */}
             <div
               className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer "

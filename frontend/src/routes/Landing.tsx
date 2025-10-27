@@ -42,14 +42,14 @@ const categoriesDown = [
 const categoriesDownNames = [
   "3D Art",
   "Street Art",
-  "Photography",
+  "Photos",
 ];
 const categoriesDownColors = [
   "#D6FF39", // verde
   "#FDD519", // naranja
   "#FA6063", // rojo
 ];
-const links2 = ["/Categories/3D Art", "/Categories/Street Art", "/Categories/Photography"];
+const links2 = ["/Categories/3D Art", "/Categories/Street Art", "/Categories/Photos"];
 
 const linksArt = ["", "", "", "", "", "", "", "", "", ""];
 

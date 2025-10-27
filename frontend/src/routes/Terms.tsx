@@ -18,7 +18,7 @@ function TermsRoute() {
 
   return (
     <TermsAndConditions
-      title="Términos y Condiciones"
+      title="Terms and Conditions"
       onAccept={handleAccept}
     />
   );
