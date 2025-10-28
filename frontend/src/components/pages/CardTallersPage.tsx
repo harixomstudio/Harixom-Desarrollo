@@ -117,7 +117,7 @@ export default function CardTallers({ tallers }: CardTallersProps) {
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
           </div>
         </div>
-      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS TALLERES</div>}
+      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO MORE WORKSHOPS</div>}
       {/* Solo mostrar el botón si el usuario es premium */}
       {isPremium && (
         <Link

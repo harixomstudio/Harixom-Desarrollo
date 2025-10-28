@@ -548,7 +548,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
           </div>
         </div>
-      ) : <div className="flex space-x-1 items-baseline text-gray-400 text-sm text-center justify-center pb-5 pt-10"> ESPERANDO PUBLICACIONES
+      ) : <div className="flex space-x-1 items-baseline text-gray-400 text-sm text-center justify-center pb-5 pt-10"> WAITING FOR NEW POSTS
         <p className="animate-pulse [animation-delay:-0.8s] text-2xl pl-1">.</p>
         <p className="animate-pulse [animation-delay:-0.3s] text-2xl">.</p>
         <p className="animate-pulse text-2xl" >.</p>
