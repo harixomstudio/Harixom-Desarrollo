@@ -267,10 +267,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
       <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around ">
         {publications.slice(0, visibleCount).map((pub) => (
           <div
-  key={pub.id}
-  onClick={() => openModal(pub)}
-  className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px] max-lg:w-full max-lg:h-full cursor-pointer transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/40"
->
+            key={pub.id}
+            onClick={() => openModal(pub)}
+            className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px] max-lg:w-full max-lg:h-full cursor-pointer transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/40"
+          >
 
             {/* Imagen */}
             <div
@@ -314,26 +314,26 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   }}
                 >
                   <div className="flex items-center gap-1">
-  <span
-    className="text-white font-semibold text-sm drop-shadow hover:text-pink-400 cursor-pointer"
-    onClick={(e) => {
-      e.stopPropagation();
-      if (pub.user_id === currentUserId) {
-        navigate({ to: "/Profile" });
-      } else {
-        navigate({
-          to: "/ProfileGuest",
-          search: { userId: pub.user_id },
-        });
-      }
-    }}
-  >
-    {pub.user_name || "ArtistUser"}
-  </span>
-  {pub.isPremium && (
-    <img src="/premium.svg" alt="Insignia Premium" className="w-4 h-4" />
-  )}
-</div>
+                    <span
+                      className="text-white font-semibold text-sm drop-shadow hover:text-pink-400 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (pub.user_id === currentUserId) {
+                          navigate({ to: "/Profile" });
+                        } else {
+                          navigate({
+                            to: "/ProfileGuest",
+                            search: { userId: pub.user_id },
+                          });
+                        }
+                      }}
+                    >
+                      {pub.user_name || "ArtistUser"}
+                    </span>
+                    {pub.isPremium && (
+                      <img src="/premium.svg" alt="Insignia Premium" className="w-4 h-4" />
+                    )}
+                  </div>
 
                 </span>
               </div>
@@ -471,7 +471,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     className="text-white text-lg font-semibold mb-4"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    Comentarios
+                    Comments
                   </h2>
                   <div className="flex-1 overflow-y-auto mb-4 space-y-2">
                     {comments[pub.id]?.length ? (
@@ -489,7 +489,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         className="text-gray-400 text-sm"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        No hay comentarios aún
+                        No commets yet
                       </p>
                     )}
                   </div>
@@ -512,7 +512,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         setCurrentComment("");
                       }}
                     >
-                      Cancelar
+                      Cancel
                     </button>
                     <button
                       className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
@@ -531,7 +531,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         }
                       }}
                     >
-                      Publicar
+                      Post
                     </button>
                   </div>
                 </div>
@@ -621,7 +621,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 className="absolute hidden max-lg:translate-y-3/1 min-lg:bottom-30 min-lg:translate-x-3/1 px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
                 onClick={closeModal}
               >
-                Cerrar
+                Close
               </button>
 
             </div>

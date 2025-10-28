@@ -30,13 +30,13 @@ export default function TallerDetailPage({ taller }: TallerDetailPageProps) {
           className="w-full max-w-2xl h-auto mb-6 rounded-lg"
         />
         <div className="text-gray-400 space-y-2 text-lg  text-start flex flex-col w-full">
-          <p><strong>Lugar:</strong> {taller.place} </p>
-          <p><strong>Fecha:</strong> {taller.dateStart}{" "}<strong>Hora:</strong> {taller.timeStart} </p>
+          <p><strong>Place:</strong> {taller.place} </p>
+          <p><strong>Date:</strong> {taller.dateStart}{" "}<strong>Time:</strong> {taller.timeStart} </p>
           {taller.duration && (
-            <p><strong>Duración:</strong> {taller.duration} </p>
+            <p><strong>Duration:</strong> {taller.duration} </p>
           )}
           {taller.contributor && (
-            <p> <strong>Impartido por:</strong> {taller.contributor} </p>
+            <p> <strong>Contributor:</strong> {taller.contributor} </p>
           )}
         </div>
         <p className="text-gray-300 mt-4 text-lg text-start flex flex-col w-full"><span className="font-bold flex">Description:</span> {taller.description}</p>

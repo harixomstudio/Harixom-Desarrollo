@@ -40,10 +40,10 @@ export default function ReportPage() {
 
   return (
     <div className="bg-stone-900 p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20" style={{ fontFamily: "Montserrat" }}>
-      <h2 className="text-white text-2xl font-bold mb-4 text-center">Reportar un problema o sugerencia</h2>
+      <h2 className="text-white text-2xl font-bold mb-4 text-center">Report a problem or suggestion</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-300 mb-2">Nombre</label>
+          <label htmlFor="name" className="block text-gray-300 mb-2">name</label>
           <input
             type="text"
             id="name"
@@ -55,7 +55,7 @@ export default function ReportPage() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-300 mb-2">Correo electrónico</label>
+          <label htmlFor="email" className="block text-gray-300 mb-2">Email</label>
           <input
             type="email"
             id="email"
@@ -67,7 +67,7 @@ export default function ReportPage() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="message" className="block text-gray-300 mb-2">Mensaje</label>
+          <label htmlFor="message" className="block text-gray-300 mb-2">Message</label>
           <textarea
             id="message"
             name="message"
@@ -84,13 +84,13 @@ export default function ReportPage() {
             className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
             onClick={() => navigate({ to: "/Landing" })}
           >
-            Volver al Landing
+            Go to Home
           </button>
           <button
             type="submit"
             className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
           >
-            Enviar
+            Send
           </button>
         </div>
       </form>

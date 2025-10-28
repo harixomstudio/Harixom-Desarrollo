@@ -29,7 +29,7 @@ function TallerDetailRouteComponent() {
   });
 
   if (!tallerId)
-    return <p className="text-white text-center mt-10">Taller no especificado.</p>;
+    return <p className="text-white text-center mt-10">Workshop not found.</p>;
   if (isLoading)
     return (
       <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
