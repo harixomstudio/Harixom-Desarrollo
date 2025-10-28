@@ -27,9 +27,9 @@ export default function EventDetailPage({ event }: EventDetailPageProps) {
           className="w-full max-w-2xl h-auto mb-6 rounded-lg"
         />
         <div className="text-gray-200 space-y-2 text-lg text-start flex flex-col w-full">
-          <p><strong>Tipo:</strong> {event.type}</p>
-          <p><strong>Fecha inicio:</strong> {event.dateStart} <strong className="pl-4">Hora:</strong> {event.timeStart}</p>
-          <p><strong>Fecha fin:</strong> {event.dateEnd} <strong className="pl-10">Hora:</strong> {event.timeEnd}</p>
+          <p><strong>Type:</strong> {event.type}</p>
+          <p><strong>Date start:</strong>{event.dateStart}<strong className="pl-7">Time:</strong> {event.timeStart}</p>
+          <p><strong>Date end:</strong>{event.dateEnd}<strong className="pl-10">Time:</strong> {event.timeEnd}</p>
         </div>
         <p className="text-gray-100 my-4 w-full lg:text-xl">{event.description || "Sin descripción"}</p>
       </div>

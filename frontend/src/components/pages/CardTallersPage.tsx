@@ -80,20 +80,20 @@ export default function CardTallers({ tallers }: CardTallersProps) {
 
               <div className="text-sm text-gray-600 space-y-1 mb-4">
                 <p>
-                  <strong>Lugar:</strong> {taller.place}
+                  <strong>Place:</strong> {taller.place}
                 </p>
                 <p>
-                  <strong>Fecha:</strong> {taller.dateStart}{" "}
-                  <strong>Hora:</strong> {taller.timeStart}
+                  <strong>Date:</strong> {taller.dateStart}{" "}
+                  <strong>Time:</strong> {taller.timeStart}
                 </p>
                 {taller.duration && (
                   <p>
-                    <strong>Duración:</strong> {taller.duration}
+                    <strong>Duration:</strong> {taller.duration}
                   </p>
                 )}
                 {taller.contributor && (
                   <p>
-                    <strong>Impartido por:</strong> {taller.contributor}
+                    <strong>Contributor:</strong> {taller.contributor}
                   </p>
                 )}
               </div>
@@ -103,7 +103,7 @@ export default function CardTallers({ tallers }: CardTallersProps) {
                 search={{ tallerId: taller.id.toString() }}
                 className="mt-auto block text-center rounded-full bg-blue-600 text-white font-semibold py-2 text-base transition hover:bg-blue-500"
               >
-                Ver más
+                Read more
               </Link>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function CardTallers({ tallers }: CardTallersProps) {
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
           </div>
         </div>
-      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS TALLERES</div>}
+      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO MORE WORKSHOPS</div>}
       {/* Solo mostrar el botón si el usuario es premium */}
       {isPremium && (
         <Link

@@ -38,7 +38,7 @@ export default function DashboardPage({ followers, following, publications, like
     <div className="rounded-lg shadow-lg mb-11 max-w-screen-lg w-full mx-auto"style={{ fontFamily: "Montserrat" }} >
       <h1 className="text-white text-3xl lg:text-4xl font-bold mb-8 text-center">Dashboard</h1>
       <div className="text-center">
-        <span className="text-gray-300 text-lg">Estadísticas del Usuario</span>
+        <span className="text-gray-300 text-lg">User statistics</span>
       </div>
       <div className="h-[500px] w-full mt-8">
         <Bar data={data} options={options} />

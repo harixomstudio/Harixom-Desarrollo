@@ -29,7 +29,7 @@ function EventDetailRouteComponent() {
 });
 
 
-  if (!eventId) return <p className="text-white text-center mt-10">Evento no especificado.</p>;
+  if (!eventId) return <p className="text-white text-center mt-10">Events not found.</p>;
   if (isLoading) return (
     <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
       <div className="flex space-x-3">

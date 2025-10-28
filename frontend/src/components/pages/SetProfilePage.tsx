@@ -151,7 +151,7 @@ export default function SetProfilePage() {
             htmlFor="banner-upload"
             className="absolute right-4 bottom-4 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full cursor-pointer text-sm"
           >
-            Cambiar Banner
+            Change Banner
           </label>
         </div>
 
@@ -177,13 +177,13 @@ export default function SetProfilePage() {
               htmlFor="profile-upload"
               className="absolute right-0 bottom-0 bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-full cursor-pointer text-xs"
             >
-              Cambiar Foto
+              Change Photo
             </label>
           </div>
 
           <form className="flex flex-col gap-4 w-full">
             <div>
-              <label className="block text-sm mb-1 text-white">Nombre</label>
+              <label className="block text-sm mb-1 text-white">Name</label>
               <input
                 type="text"
                 name="name"
@@ -205,7 +205,7 @@ export default function SetProfilePage() {
             </div>
 
             <div>
-              <label className="block text-sm mb-1 text-white">Teléfono</label>
+              <label className="block text-sm mb-1 text-white">Phone</label>
               <input
                 type="tel"
                 name="phone"
@@ -216,7 +216,7 @@ export default function SetProfilePage() {
             </div>
 
             <div>
-              <label className="block text-sm mb-1 text-white">Dirección</label>
+              <label className="block text-sm mb-1 text-white">Direction</label>
               <input
                 type="text"
                 name="address"
@@ -227,7 +227,7 @@ export default function SetProfilePage() {
             </div>
 
             <div>
-              <label className="block text-sm mb-1 text-white">Descripción</label>
+              <label className="block text-sm mb-1 text-white">Description</label>
               <textarea
                 name="description"
                 value={profile.description ?? ""}
@@ -238,7 +238,7 @@ export default function SetProfilePage() {
 
             <div className="flex items-center gap-4 mt-4">
               <label htmlFor="commissions-toggle" className="text-white text-sm">
-                Activar comisiones
+                Active Commissions
               </label>
               <button
                 id="commissions-toggle"
@@ -266,7 +266,7 @@ export default function SetProfilePage() {
                 onClick={() => navigate({ to: "/Profile" })}
                 className="px-6 py-2 rounded-full font-semibold text-white bg-gray-500 hover:bg-gray-600"
               >
-                Volver
+                Back
               </button>
               <button
                 type="button"
@@ -274,7 +274,7 @@ export default function SetProfilePage() {
                 className="px-6 py-2 rounded-full font-semibold text-white bg-gradient-to-r from-pink-400 to-blue-400"
                 disabled={loading}
               >
-                {loading ? "Guardando..." : "Guardar"}
+                {loading ? "Saving..." : "Save"}
               </button>
             </div>
           </form>

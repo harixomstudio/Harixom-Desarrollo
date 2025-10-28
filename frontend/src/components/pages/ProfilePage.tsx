@@ -530,7 +530,7 @@ export default function Profile(props: ProfileProps) {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-stone-800 rounded-lg border-gray-700 p-6 shadow-lg w-96 border">
                 <h2 className="text-white text-lg font-semibold mb-4">
-                  Escribe tu link de <a href="https://studio.buymeacoffee.com/dashboard" className="text-pink-400 underline underline-offset-2 animate-pulse">Buy Me A Coffee</a>
+                  Write your link to <a href="https://studio.buymeacoffee.com/dashboard" className="text-pink-400 underline underline-offset-2 animate-pulse">Buy Me A Coffee</a>
                 </h2>
                 <textarea
                   value={LinkText}
@@ -542,7 +542,7 @@ export default function Profile(props: ProfileProps) {
                     }
                     setLinkText(value)
                   }}
-                  placeholder="Escribe tu link de Buy Me A Coffee..."
+                  placeholder="Write your link to Buy Me A Coffee..."
                   className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
                   rows={2}
                 />
@@ -554,7 +554,7 @@ export default function Profile(props: ProfileProps) {
                       setLinkText("");
                     }}
                   >
-                    Cerrar
+                    Close
                   </button>
                   <button
                     type="button"
@@ -564,7 +564,7 @@ export default function Profile(props: ProfileProps) {
                       setIsModalOpen(false)
                       handleSendCoffee();
                     }}>
-                    Enviar
+                    Send
                   </button>
                 </div>
               </div>
@@ -775,7 +775,7 @@ export default function Profile(props: ProfileProps) {
                   ))
                 ) : (
                   <p className="text-gray-400 text-sm col-span-4 text-center">
-                    No hay likes aún.
+                    No favorites yet.
                   </p>
                 )}
               </div>
@@ -812,20 +812,20 @@ export default function Profile(props: ProfileProps) {
                         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                           <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96">
                             <h2 className="text-white text-lg font-semibold mb-4">
-                              ¿Estás seguro de que deseas eliminar esta publicación?
+                              ¿Are you sure you want to delete this publication?
                             </h2>
                             <div className="flex justify-end gap-4 mt-4">
                               <button
                                 className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
                                 onClick={() => setDeleteModalOpen(null)}
                               >
-                                Cancelar
+                                Cancel
                               </button>
                               <button
                                 className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
                                 onClick={() => handleDeletePublication(card.id)}
                               >
-                                Eliminar
+                                Delete
                               </button>
                             </div>
                           </div>
@@ -848,7 +848,7 @@ export default function Profile(props: ProfileProps) {
                   ))
                 ) : (
                   <p className="text-gray-400 text-sm text-center col-span-3">
-                    No hay posts aún.
+                   No posts yet.
                   </p>
                 )}
               </div>
@@ -876,7 +876,7 @@ export default function Profile(props: ProfileProps) {
       {selectedPublication && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
           {loadingPublication ? (
-            <div className="text-white">Cargando...</div>
+            <div className="text-white">Loading...</div>
           ) : (
             <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:mb-6 max-lg:items-center relative">
               {/* Imagen a la izquierda */}
@@ -890,7 +890,7 @@ export default function Profile(props: ProfileProps) {
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
-                    Sin imagen
+                    No image
                   </div>
                 )}
               </div>

@@ -75,17 +75,17 @@ export default function CardEvents({ events }: CardEventsProps) {
                 {event.title}
               </h2>
               <p className="text-sm text-gray-700 mb-3 flex-1">
-                {event.description || "Sin descripción"}
+                {event.description || "Without descripción"}
               </p>
 
               <div className="text-sm text-gray-600 space-y-1 mb-4">
                 <p>
-                  <strong>Fecha inicio:</strong> {event.dateStart}{" "}
-                  <strong>Hora:</strong> {event.timeStart}
+                  <strong>Date Start:</strong> {event.dateStart}{" "}
+                  <strong>Time:</strong> {event.timeStart}
                 </p>
                 <p>
-                  <strong>Fecha fin:</strong> {event.dateEnd}{" "}
-                  <strong>Hora:</strong> {event.timeEnd}
+                  <strong>Date End:</strong> {event.dateEnd}{" "}
+                  <strong>Time:</strong> {event.timeEnd}
                 </p>
               </div>
 
@@ -94,7 +94,7 @@ export default function CardEvents({ events }: CardEventsProps) {
                 search={{ eventId: event.id.toString() }}
                 className="mt-auto block text-center rounded-full bg-purple-600 text-white font-semibold py-2 text-base transition hover:bg-purple-500"
               >
-                Más info
+                More info
               </Link>
             </div>
           </div>
@@ -108,7 +108,7 @@ export default function CardEvents({ events }: CardEventsProps) {
             <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
           </div>
         </div>
-      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO HAY MAS EVENTOS</div> }
+      ) : <div className="text-gray-400 text-sm text-center pb-5 pt-10"> NO MORE EVENTS</div> }
       {/* Solo mostrar el botón si el usuario es premium */}
       {isPremium && (
         <Link

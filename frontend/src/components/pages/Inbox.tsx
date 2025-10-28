@@ -42,7 +42,7 @@ export default function Notifications(props: NotificationsProps) {
                     <img className=" w-8 min-md:w-8 m-5 min-lg:m-10" src={props.images[number]} alt={props.alts[number]} />
                     <div className="grid grid-cols-1 gap-2 w-3/4 justify-center items-center">
                         <h1 className=" text-1xl font-semibold cursor-default"> {props.titles[number]} </h1>
-                        <h2>De: <a href={`/ProfileGuest?userId=${props.UsersID[number]}`} className=" hover:text-pink-400 duration-500  animate-pulse [animation-duration:5s]"> {props.users[number]}</a></h2>
+                        <h2>From: <a href={`/ProfileGuest?userId=${props.UsersID[number]}`} className=" hover:text-pink-400 duration-500  animate-pulse [animation-duration:5s]"> {props.users[number]}</a></h2>
                         <p className="max-lg:text-sm max-lg:line-clamp-3"> {props.texts[number]} </p>
                         <p className=""> {props.dates[number]} </p>
                     </div>
@@ -56,7 +56,8 @@ export default function Notifications(props: NotificationsProps) {
                         <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce"></div>
                     </div>
                 </div>
-            ) : <div className="flex space-x-1 text-gray-400 text-sm justify-center items-baseline pt-10 "> ESPERANDO NOTIFICACIONES 
+                
+            ) : <div className="flex space-x-1 text-gray-400 text-sm justify-center items-baseline pt-10 "> WAITING FOR NEW NOTIFICATIONS
                 <p className="animate-pulse [animation-delay:-0.8s] text-2xl pl-1">.</p>
                 <p className="animate-pulse [animation-delay:-0.3s] text-2xl">.</p>
                 <p className="animate-pulse text-2xl" >.</p>

@@ -110,7 +110,7 @@ const SuscriptionsPage = () => {
       );
       console.log("Respuesta al cancelar suscripción:", res.data);
       setIsPremium(false);
-      showToast("Suscripción cancelada con éxito.", "success");
+      showToast("Suscrption canceled successfully.", "success");
     } catch (err: any) {
       console.error("Error cancelando suscripción:", err);
       showToast("No se pudo cancelar la suscripción.", "error");

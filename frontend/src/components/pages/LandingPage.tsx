@@ -535,8 +535,8 @@ const prevSlide = () => {
                 </div>
 
                 <div className="text-center text-white text-base sm:text-lg">
-                  <h4>Artista: {artist.artist_name}</h4>
-                  <p>Obra: {artist.title}</p>
+                  <h4>Artist: {artist.artist_name}</h4>
+                  <p>Oeuvre: {artist.title}</p>
                 </div>
               </div>
             ))}

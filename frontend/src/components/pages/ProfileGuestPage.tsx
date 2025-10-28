@@ -376,11 +376,11 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           {/* Username */}
           <div className="flex items-center w-full gap-15 max-lg:gap-5 max-[19rem]:gap-2 ">
             <span className="text-3xl max-lg:text-2xl font-bold mb-2 max-[19rem]:text-xl flex items-center gap-2">
-    {props.username}
-    {props.isPremium && (
-      <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6" />
-    )}
-  </span>
+              {props.username}
+              {props.isPremium && (
+                <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6" />
+              )}
+            </span>
             <button
               onClick={handleToggleFollow}
               className={`px-4 py-2  max-[19rem]:text-sm rounded-full text-white font-semibold transition-all ${isFollowing ? "bg-gray-600 hover:bg-gray-700" : "bg-pink-500 hover:bg-pink-600"
@@ -659,7 +659,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                   ))
                 ) : (
                   <p className="text-gray-400 text-sm col-span-4 text-center">
-                    No hay likes aún.
+                    No favorites yet.
                   </p>
                 )}
               </div>
@@ -692,7 +692,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                         />
                       ) : (
                         <div className="w-full bg-gray-600 flex items-center justify-center text-gray-300 text-xs h-40">
-                          Sin imagen
+                          No Image
                         </div>
                       )}
                       <div className="px-2 py-2 text-gray-200 text-xs text-center">
@@ -721,7 +721,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         {selectedPublication && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
             {loadingPublication ? (
-              <div className="text-white">Cargando...</div>
+              <div className="text-white">Loading...</div>
             ) : (
               <div className="bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:mb-6 max-lg:items-center relative">
                 {/* Imagen */}
@@ -735,7 +735,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
-                      Sin imagen
+                      No image
                     </div>
                   )}
                 </div>
@@ -780,7 +780,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-stone-800 rounded-lg border-gray-700 p-6 shadow-lg w-96 border">
               <h2 className="text-pink-400 text-lg font-semibold mb-4">
-                Escribe tu comisión
+                Write your commission
               </h2>
               <textarea
                 value={commissionText}
@@ -794,7 +794,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                   className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
                   onClick={() => setIsModalOpen(false)}
                 >
-                  Cerrar
+                  Close
                 </button>
                 <button
                   type="button"
@@ -805,7 +805,7 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                     setIsModalOpen(false)
                     setCommissionText("");
                   }}>
-                  Enviar
+                  Send
                 </button>
               </div>
             </div>
