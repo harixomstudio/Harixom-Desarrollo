@@ -42,6 +42,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const [selectedPublication, setSelectedPublication] =
     useState<Publication | null>(null);
   const [visibleCount, setVisibleCount] = useState(12);
+  const [animatingLikeId, setAnimatingLikeId] = useState<number | null>(null);
+
+
+
 
 
   useEffect(() => { //Despliegue de un feed infinito, scroll aparece cargando y aumentan las publicaciones
@@ -264,6 +268,39 @@ export default function FeedPage({ publications }: FeedPageProps) {
   return (
     <div className="bg-stone-950 min-h-screen py-10 px-3"
       style={{ fontFamily: "Montserrat" }}>
+      <style>
+        {`
+    @keyframes heart-wow {
+      0% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      25% {
+        transform: scale(1.5);
+        filter: brightness(2);
+      }
+      50% {
+        transform: scale(0.9);
+        filter: brightness(1.5);
+      }
+      75% {
+        transform: scale(1.2);
+        filter: brightness(1.2);
+      }
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+    }
+
+    .animate-wow {
+      animation: heart-wow 0.6s ease-out;
+    }
+  `}
+      </style>
+
+
+
       <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around ">
         {publications.slice(0, visibleCount).map((pub) => (
           <div
@@ -352,26 +389,33 @@ export default function FeedPage({ publications }: FeedPageProps) {
             {/* Footer */}
             <div className="flex flex-row justify-between items-center px-4 py-5 bg-[#151515]">
               <div className="flex flex-row gap-5 items-center">
+                );
+
                 {/* Like */}
                 <button
-                  className={`flex items-center gap-1 group transition-colors duration-200
-    ${likes[pub.id] ? "text-pink-500" : "text-gray-300"}`}
+                  className={`flex items-center gap-1 group transition-colors duration-200 ${likes[pub.id] ? "text-pink-500" : "text-gray-300"
+                    }`}
                   title="Like"
                   onClick={(e) => {
                     e.stopPropagation();
-                    toggleLike(pub.id, publications.find((p) => p.id === pub.id)?.user_id!);
+                    setAnimatingLikeId(pub.id); // activa animación
+                    if (typeof pub.user_id === "number") {
+                      toggleLike(pub.id, pub.user_id);
+                    }
+                    setTimeout(() => setAnimatingLikeId(null), 600); // limpia animación
                   }}
                 >
                   <svg
                     width="28"
                     height="28"
                     viewBox="0 0 24 24"
-                    fill={likes[pub.id] ? "currentColor" : "none"}
-                    stroke={likes[pub.id] ? "currentColor" : "white"}
+                    fill={likes[pub.id] ? "#ec4899" : "none"}
+                    stroke={likes[pub.id] ? "#ec4899" : "white"}
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transition-all duration-200 group-hover:stroke-pink-500 ${likes[pub.id] ? "animate-like" : ""}`}
+                    className={`transition-all duration-200 group-hover:stroke-pink-500 ${animatingLikeId === pub.id ? "animate-wow" : ""
+                      }`}
                   >
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
@@ -379,6 +423,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     {likesCount[pub.id] || 0}
                   </span>
                 </button>
+
 
                 {/* Comentario */}
                 <button

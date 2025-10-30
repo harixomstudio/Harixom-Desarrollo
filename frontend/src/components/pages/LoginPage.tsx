@@ -69,7 +69,7 @@ export default function Login(props: LoginProps) {
   if (showTerms) {
     return (
       <TermsAndConditions
-        title="Términos y Condiciones"
+        title="Terms and Conditions"
         onAccept={handleAcceptTerms}
       />
     );
