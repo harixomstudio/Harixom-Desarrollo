@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Register from "../components/pages/RegisterPage";
 
+
 export const Route = createFileRoute("/Register")({
   component: RegisterRoute,
 });
@@ -15,8 +16,8 @@ function RegisterRoute() {
       address="Address"
       password="Password"
       confirmPassword="Confirm Password"
-      text="Already have an account ?"
-      link="Login Up"
+      text="Already have an account?"
+      link="Login"
     />
   );
 }

@@ -19,18 +19,17 @@ class StoreUserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+public function rules(): array
 {
     return [
-        'name' => 'required|max:255',
-        'email' => 'required|email|max:255|unique:users,email',
-                'regex:/^[^\s]+$/',
-        'phone' => ['nullable','string','max:20','regex:/^\+\d{1,3}\d{4,14}$/'],
-        'address' => 'required|max:255',
-        'password' => 'required|min:6|max:255',
-        'description' => 'nullable|string|max:500',
-        'profile_picture' => 'nullable|image|max:2048',
-        'banner_picture' => 'nullable|image|max:4096',
+        'name' => ['required', 'max:255', 'regex:/^[^\s]+$/'], // sin espacios
+        'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+        'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+\d{1,4}\d{6,12}$/'], // código + número
+        'address' => ['required', 'max:255'],
+        'password' => ['required', 'min:6', 'max:255'],
+        'description' => ['nullable', 'string', 'max:500'],
+        'profile_picture' => ['nullable', 'image', 'max:2048'],
+        'banner_picture' => ['nullable', 'image', 'max:4096'],
     ];
 }
 
