@@ -1,5 +1,4 @@
-import  { useEffect, useRef } from "react";
-import { addWatermark } from "../ui/WaterMark";
+import React from "react";
 
 interface ImageProps {
   src: string;
@@ -9,38 +8,30 @@ interface ImageProps {
 }
 
 export default function WatermarkedImage({ src, alt, watermarkText, className }: ImageProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const applyWatermark = async () => {
-      if (!canvasRef.current) return;
-
-      try {
-        const watermarkedUrl = await addWatermark(src, watermarkText);
-        const ctx = canvasRef.current.getContext("2d");
-
-        if (ctx) {
-          const img = new Image();
-          img.src = watermarkedUrl;
-
-          img.onload = () => {
-            canvasRef.current!.width = img.width;
-            canvasRef.current!.height = img.height;
-            ctx.drawImage(img, 0, 0);
-          };
-        }
-      } catch (error) {
-        console.error("Error al aplicar la marca de agua:", error);
-      }
-    };
-
-    applyWatermark();
-  }, [src, watermarkText]);
-
   return (
-    <div className={`relative ${className}`}>
-      {/* Canvas con la imagen y marca de agua */}
-      <canvas ref={canvasRef} aria-label={alt} className="w-full h-full" />
+    <div className={`relative inline-block overflow-hidden ${className}`}>
+      {/* Imagen principal */}
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-cover rounded-lg"
+      />
+
+      {/* Marca de agua centrada, con frases una encima de otra */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 pointer-events-none rotate-[-30deg]">
+        {[...Array(3)].map((_, i) => (
+          <span
+            key={i}
+            className="text-white/8 font-semibold select-none text-center whitespace-pre-wrap break-words"
+            style={{
+              fontSize: "min(2vw, 22px)",
+              lineHeight: "1.3em",
+            }}
+          >
+            {watermarkText}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

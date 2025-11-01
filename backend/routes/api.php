@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\StripeController;
 
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
     //Rutas de perfil
     // Obtener perfil del usuario logueado
     Route::get('/user', [UserController::class, 'profile']);

@@ -38,9 +38,8 @@ export default function Register(props: RegisterProps) {
     confirmPassword: "",
   });
 
-  const [selectedIso, setSelectedIso] = useState("CR");
-  const [selectedCode, setSelectedCode] = useState("+506");
-  const [phoneError, setPhoneError] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(false);
 
   const phoneCodeMap: Record<string, string> = {
@@ -50,34 +49,20 @@ export default function Register(props: RegisterProps) {
   };
 
   const customLabels: Record<string, string> = {
-    CR: "🇨🇷 Costa Rica (+506)", MX: "🇲🇽 México (+52)", ES: "🇪🇸 España (+34)", US: "🇺🇸 Estados Unidos (+1)",
-    FR: "🇫🇷 Francia (+33)", DE: "🇩🇪 Alemania (+49)", IT: "🇮🇹 Italia (+39)", AR: "🇦🇷 Argentina (+54)",
-    CO: "🇨🇴 Colombia (+57)", CL: "🇨🇱 Chile (+56)", PE: "🇵🇪 Perú (+51)", VE: "🇻🇪 Venezuela (+58)",
-    BR: "🇧🇷 Brasil (+55)", CA: "🇨🇦 Canadá (+1)", GB: "🇬🇧 Reino Unido (+44)", JP: "🇯🇵 Japón (+81)",
-    IN: "🇮🇳 India (+91)", CN: "🇨🇳 China (+86)", RU: "🇷🇺 Rusia (+7)", AU: "🇦🇺 Australia (+61)", NZ: "🇳🇿 Nueva Zelanda (+64)"
-  };
-
-  const validatePhone = (value: string) => {
-    const regex = /^\+\d{1,4}\d{6,12}$/;
-    if (value && !regex.test(value)) {
-      setPhoneError("Ejemplo válido: +50612345678");
-    } else {
-      setPhoneError("");
-    }
+    CR: "Costa Rica", MX: "México", ES: "España", US: "Estados Unidos",
+    FR: "Francia", DE: "Alemania", IT: "Italia", AR: "Argentina",
+    CO: "Colombia", CL: "Chile", PE: "Perú", VE: "Venezuela",
+    BR: "Brasil", CA: "Canadá", GB: "Reino Unido)", JP: "Japón",
+    IN: "India", CN: "China", RU: "Rusia", AU: "Australia", NZ: "Nueva Zelanda"
   };
 
   const registerNewUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setErrors({});
 
-    const fullPhone = `${selectedCode}${user.phone}`;
-    validatePhone(fullPhone);
-
-    if (phoneError) {
-      showToast("Corrige el número de teléfono.", "error");
-      setLoading(false);
-      return;
-    }
+    const phoneCode = phoneCodeMap[selectedCountry] || "";
+    const fullPhone = `${phoneCode}${user.phone}`;
 
     const formData = new FormData();
     formData.append("name", user.name);
@@ -94,104 +79,73 @@ export default function Register(props: RegisterProps) {
       showToast(response.data.message, "success");
       navigate({ to: "/Login" });
     } catch (error: any) {
-      showToast("Error al registrar", "error");
+      if (error.response?.status === 422) {
+        setErrors(error.response.data.errors || {});
+        showToast("Please fix the highlighted errors.", "error");
+      } else {
+        showToast("Error al registrar", "error");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center bg-stone-950" style={{ fontFamily: "Montserrat" }}>
-      <img
-        src="/circles.svg"
-        alt="circles background"
-        className="absolute inset-0 w-full h-full object-cover opacity-20"
-      />
-
+    <section className="relative flex min-h-screen items-center justify-center bg-stone-950">
       <div className="relative z-10 flex w-3/4 max-lg:flex-col">
-        {/* Lado izquierdo: animación HARIXOM */}
-        <div className="md:flex w-1/2 flex-col items-center justify-center text-center p-8 max-lg:w-full">
-          <p className="text-lg text-white max-lg:justify-center">Welcome to</p>
-          <h1
-            className="mt-10 text-5xl md:text-7xl text-pink-500 flex gap-1 max-lg:w-full max-lg:justify-center"
-            style={{ fontFamily: "Starstruck" }}
-          >
-            {"HARIXOM".split("").map((char, i) => (
-              <span
-                key={i}
-                className="inline-block animate-bounce"
-                style={{
-                  animationDelay: `${i * 0.2}s`,
-                  animationDuration: "1.5s",
-                  animationIterationCount: "infinite",
-                  animationTimingFunction: "ease-in-out",
-                  display: "inline-block",
-                }}
-              >
-                {char}
-              </span>
-            ))}
-          </h1>
-        </div>
-
-        {/* Lado derecho: formulario */}
-        <div className="w-full min-xl:w-1/2 bg-gray-200 opacity-90 p-5 px-15 flex flex-col justify-center rounded-3xl">
+        {/* Lado derecho del formulario */}
+        <div className="w-full bg-gray-200 opacity-90 p-5 flex flex-col justify-center rounded-3xl">
           <h2 className="text-2xl font-bold text-center mb-2 text-black">
             {props.title}
           </h2>
 
           <form className="flex flex-col gap-2" onSubmit={registerNewUser}>
+            {/* Nombre */}
             <div>
-              <label className="block text-sm mb-1 text-gray-700">{props.name}</label>
+              <label>{props.name}</label>
               <input
                 type="text"
                 value={user.name}
                 onChange={(e) => setUser({ ...user, name: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name[0]}</p>}
             </div>
 
+            {/* Email */}
             <div>
-              <label className="block text-sm mb-1 text-gray-700">{props.email}</label>
+              <label>{props.email}</label>
               <input
                 type="email"
                 value={user.email}
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>}
             </div>
 
-      
-              
             {/* Teléfono */}
             <div>
               <label>{props.phone}</label>
               <div className="flex gap-1 items-center">
                 <ReactFlagsSelect
-                  selected={selectedIso}
-                  onSelect={(isoCode) => {
-                    setSelectedIso(isoCode);
-                    setSelectedCode(phoneCodeMap[isoCode] || "");
-                  }}
+                  selected={selectedCountry}
+                  onSelect={(countryCode) => setSelectedCountry(countryCode)}
                   searchable
                   showSelectedLabel
                   showOptionLabel
                   placeholder="País"
                   className="w-60"
-                  customLabels={customLabels}
                 />
                 <input
                   type="tel"
                   value={user.phone}
-                  onChange={(e) => {
-                    setUser({ ...user, phone: e.target.value });
-                    validatePhone(`${selectedCode}${e.target.value}`);
-                  }}
+                  onChange={(e) => setUser({ ...user, phone: e.target.value })}
                   placeholder="Número sin código"
                   className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
                 />
               </div>
-              {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
+              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone[0]}</p>}
             </div>
 
             {/* Dirección */}
@@ -203,6 +157,7 @@ export default function Register(props: RegisterProps) {
                 onChange={(e) => setUser({ ...user, address: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
+              {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address[0]}</p>}
             </div>
 
             {/* Contraseña */}
@@ -214,6 +169,7 @@ export default function Register(props: RegisterProps) {
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
             </div>
 
             {/* Confirmar contraseña */}
@@ -227,25 +183,20 @@ export default function Register(props: RegisterProps) {
               />
             </div>
 
-             <button
+            <button
               type="submit"
               className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-pink-400 to-blue-400"
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-pink-400 to-blue-400"
               }`}
               disabled={loading}
             >
               {loading ? "Registrando..." : "REGISTER"}
             </button>
-
-            <div className="text-center text-sm mt-4">
-              <p>{props.text}</p>
-              <a href="/Login" className="ml-1 underline font-semibold hover:scale-105 duration-200">
-                {props.link}
-              </a>
-            </div>
           </form>
-        </div> 
-      </div>  
+        </div>
+      </div>
     </section>
   );
 }

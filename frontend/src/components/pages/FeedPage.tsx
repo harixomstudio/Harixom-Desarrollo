@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
@@ -25,40 +25,49 @@ interface FeedPageProps {
   publications: Publication[];
 }
 
+const API_URL = "https://harixom-desarrollo.onrender.com/api";
+
+const apiGet = async (url: string, token: string) => {
+  const { data } = await axios.get(`${API_URL}/${url}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+};
+
+const apiPost = async (url: string, body: any, token: string) => {
+  const { data } = await axios.post(`${API_URL}/${url}`, body, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+};
+
 export default function FeedPage({ publications }: FeedPageProps) {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token")!;
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  // Estados principales
   const [isModalOpen, setIsModalOpen] = useState<number | null>(null);
   const [currentComment, setCurrentComment] = useState("");
-  const [comments, setComments] = useState<{ [key: number]: string[] }>({});
-  const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
-  const [likesCount, setLikesCount] = useState<{ [key: number]: number }>({});
-  const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
-  const [, setHideFollow] = useState<{ [key: number]: boolean }>({});
+  const [comments, setComments] = useState<Record<number, string[]>>({});
+  const [likes, setLikes] = useState<Record<number, boolean>>({});
+  const [likesCount, setLikesCount] = useState<Record<number, number>>({});
+  const [follows, setFollows] = useState<Record<number, boolean>>({});
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  const [selectedPublication, setSelectedPublication] =
-    useState<Publication | null>(null);
+  const [selectedPublication, setSelectedPublication] = useState<Publication | null>(null);
   const [visibleCount, setVisibleCount] = useState(12);
   const [animatingLikeId, setAnimatingLikeId] = useState<number | null>(null);
 
 
-
-
-
-  useEffect(() => { //Despliegue de un feed infinito, scroll aparece cargando y aumentan las publicaciones
+  // Scroll infinito
+  useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
-        setVisibleCount((prevCount) => prevCount + 12);
+        setVisibleCount((prev) => prev + 12);
       }
     };
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [visibleCount]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Funciones para abrir y cerrar el modal
   const openModal = (publication: Publication) => {
@@ -85,185 +94,146 @@ export default function FeedPage({ publications }: FeedPageProps) {
     staleTime: 1000 * 60,
   });
 
-  // Traer usuario actual
+  // Inicializa usuario actual y follows
   useEffect(() => {
-    const fetchCurrentUser = async () => {
+    const initUserData = async () => {
       try {
-        const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user", {
-          headers: { Authorization: `Bearer ${token}` },
+        const [userRes, followRes] = await Promise.all([
+          apiGet("user", token),
+          apiGet("user/follows", token),
+        ]);
+
+        const uid = userRes.user.id;
+        setCurrentUserId(uid);
+
+        const newFollows: Record<number, boolean> = {};
+        publications.forEach((pub) => {
+          if (pub.user_id)
+            newFollows[pub.user_id] = followRes.followings.some(
+              (f: any) => f.id === pub.user_id
+            );
         });
-        setCurrentUserId(data.user.id);
+        setFollows(newFollows);
       } catch (err) {
-        console.error("Error cargando usuario actual", err);
+        console.error("Error cargando usuario o follows", err);
       }
     };
-    fetchCurrentUser();
-  }, [token]);
+    initUserData();
+  }, [token, publications]);
 
-  // Inicialización de likes, follows, comentarios
+  // Inicializa likes y comentarios
   useEffect(() => {
     if (userLikes) setLikes(userLikes);
 
-    const fetchFollows = async () => {
-      try {
-        const { data } = await axios.get(
-          "https://harixom-desarrollo.onrender.com/api/user/follows",
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+    const initialLikes = publications.reduce((acc, pub) => {
+      acc[pub.id] = pub.total_likes || 0;
+      return acc;
+    }, {} as Record<number, number>);
 
-        const newFollows: { [key: number]: boolean } = {};
-        const newHideFollow: { [key: number]: boolean } = {};
+    const initialComments = publications.reduce((acc, pub) => {
+      acc[pub.id] = Array(pub.total_comments || 0).fill("");
+      return acc;
+    }, {} as Record<number, string[]>);
 
-        publications.forEach((pub) => {
-          if (pub.user_id) {
-            const isFollowing = data.followings.some(
-              (f: any) => f.id === pub.user_id
-            );
-            newFollows[pub.user_id] = isFollowing;
-            newHideFollow[pub.user_id] = isFollowing;
-          }
-        });
-
-        setFollows(newFollows);
-        setHideFollow(newHideFollow);
-      } catch (err) {
-        console.error("Error cargando follows:", err);
-      }
-    };
-
-    fetchFollows();
-
-    // Inicializar comentarios y likes
-    const initialComments: { [key: number]: string[] } = {};
-    publications.forEach((pub) => {
-      initialComments[pub.id] = Array(pub.total_comments || 0).fill("");
-    });
+    setLikesCount(initialLikes);
     setComments(initialComments);
+  }, [userLikes, publications]);
 
-    const counts: { [key: number]: number } = {};
-    publications.forEach((pub) => {
-      counts[pub.id] = pub.total_likes || 0;
-    });
-    setLikesCount(counts);
-  }, [userLikes, publications, token]);
-
-  const formatDate = (dateString?: string) => {
+  const formatDate = useCallback((dateString?: string) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
     return new Intl.DateTimeFormat("es-CR", {
       day: "2-digit",
       month: "long",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    }).format(date);
-  };
+    }).format(new Date(dateString));
+  }, []);
 
-  if (currentUserId === null) {
+  const fetchComments = useCallback(async (pubId: number) => {
+    try {
+      const data = await apiGet(`comment/${pubId}`, token);
+      setComments((prev) => ({
+        ...prev,
+        [pubId]: data.comments.map((c: any) => `${c.user.name}: ${c.comment}`),
+      }));
+    } catch {
+      showToast("Error al cargar comentarios", "error");
+    }
+  }, [token, showToast]);
+
+  const toggleLike = useCallback(async (id: number, for_user_id: number) => {
+    try {
+      const data = await apiPost(
+        `like/${id}`,
+        { title: "¡Te han dado like!", for_user_id, status: "Low" },
+        token
+      );
+      setLikes((prev) => ({ ...prev, [id]: data.liked }));
+      setLikesCount((prev) => ({ ...prev, [id]: data.total_likes }));
+      setAnimatingLikeId(id);
+      setTimeout(() => setAnimatingLikeId(null), 600);
+    } catch {
+      showToast("Error al hacer like", "error");
+    }
+  }, [token, showToast]);
+
+  const toggleFollow = useCallback(async (userId: number) => {
+    try {
+      const data = await apiPost(
+        `follow/${userId}`,
+        { title: "¡Te han empezado a seguir!", status: "Medium" },
+        token
+      );
+      setFollows((prev) => ({ ...prev, [userId]: data.following }));
+      showToast("¡Ahora sigues a este usuario!", "success");
+    } catch {
+      showToast("Error al seguir", "error");
+    }
+  }, [token, showToast]);
+
+  const addComment = useCallback(
+    async (id: number, text: string, for_user_id: number) => {
+      if (!text.trim()) return showToast("El comentario no puede estar vacío", "error");
+
+      try {
+        const data = await apiPost(
+          `comment/${id}`,
+          {
+            title: "¡Te han enviado un comentario!",
+            comment: text,
+            for_user_id,
+            status: "Low",
+          },
+          token
+        );
+        setComments((prev) => ({
+          ...prev,
+          [id]: [...(prev[id] || []), `${data.comment.user.name}: ${data.comment.comment}`],
+        }));
+        showToast("¡Comentario publicado!", "success");
+      } catch {
+        showToast("Error al publicar el comentario", "error");
+      }
+    },
+    [token, showToast]
+  );
+
+  if (!currentUserId)
     return (
       <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
         <div className="flex space-x-3">
-          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.6s]"></div>
-          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-          <div className="w-4 h-4 bg-pink-500 rounded-full animate-bounce "></div>
+          {Array(3)
+            .fill(0)
+            .map((_, i) => (
+              <div
+                key={i}
+                className={`w-4 h-4 bg-pink-500 rounded-full animate-bounce [animation-delay:-${0.3 * (3 - i)}s]`}
+              />
+            ))}
         </div>
       </div>
     );
-  }
-
-  // Funciones
-  const fetchComments = async (pubId: number) => {
-    try {
-      const { data } = await axios.get(
-        `https://harixom-desarrollo.onrender.com/api/comment/${pubId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      const formatted = data.comments.map(
-        (c: any) => `${c.user.name}: ${c.comment}`
-      );
-
-      setComments((prev) => ({
-        ...prev,
-        [pubId]: formatted,
-      }));
-    } catch (err) {
-      console.error(err);
-      showToast("Error al cargar comentarios", "error");
-    }
-  };
-
-  const toggleLike = async (id: number, for_user_id: number) => {
-    try {
-      const { data } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/like/${id}`,
-        {
-          title: "¡Te han dado like!",
-          for_user_id: for_user_id,
-          status: "Low",
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setLikes((prev) => ({ ...prev, [id]: data.liked }));
-      setLikesCount((prev) => ({ ...prev, [id]: data.total_likes }));
-    } catch (error) {
-      console.error(error);
-      showToast("Error al hacer like", "error");
-    }
-  };
-
-  const toggleFollow = async (userId: number) => {
-    try {
-      const { data } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/follow/${userId}`,
-        {
-          title: "¡Te han empezado a seguir!",
-          status: "Medium",
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setFollows((prev) => ({ ...prev, [userId]: data.following }));
-      setHideFollow((prev) => ({ ...prev, [userId]: data.following }));
-      showToast("¡Ahora sigues a este usuario!", "success");
-    } catch (err) {
-      console.error(err);
-      showToast("Error al seguir", "error");
-    }
-  };
-
-  const addComment = async (id: number, text: string, for_user_id: number) => {
-    if (!text.trim()) {
-      showToast("El comentario no puede estar vacío", "error");
-      return;
-    }
-    try {
-      const { data } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/comment/${id}`,
-        {
-          title: "¡Te han enviado un comentario!",
-          comment: text,
-          for_user_id: for_user_id,
-          status: "Low",
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setComments((prev) => ({
-        ...prev,
-        [id]: [
-          ...(prev[id] || []),
-          `${data.comment.user.name}: ${data.comment.comment} `,
-        ],
-      }));
-
-      showToast("¡Comentario publicado!", "success");
-    } catch (err) {
-      console.error(err);
-      showToast("Error al publicar el comentario", "error");
-    }
-  };
-
 
   return (
     <div className="bg-stone-950 min-h-screen py-10 px-3"
@@ -298,9 +268,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
     }
   `}
       </style>
-
-
-
       <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around ">
         {publications.slice(0, visibleCount).map((pub) => (
           <div
