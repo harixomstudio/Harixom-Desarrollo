@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Outlet, createRootRoute, useLocation } from "@tanstack/react-router";
+import { Outlet, createRootRoute, useLocation, useNavigate } from "@tanstack/react-router";
 import Nav from "../components/Nav";
 import EventsNav from "../components/EventsNav";
 import SidebarNavigation from "../components/SidebarNavigation";
@@ -23,9 +23,7 @@ function RootComponent() {
   React.useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
     document.addEventListener("contextmenu", handleContextMenu);
-    return () => {
-      document.removeEventListener("contextmenu", handleContextMenu);
-    };
+    return () => document.removeEventListener("contextmenu", handleContextMenu);
   }, []);
 
   const hideNav = [
@@ -134,6 +132,31 @@ function RootComponent() {
     return () => clearInterval(intervalId);
   }, [profileData?.user?.id]);
 
+    const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const publicRoutes = [
+      "/",
+      "/Register",
+      "/Login",
+      "/ForgotPassword",
+      "/ResetPassword",
+    ];
+
+    if (!token && !publicRoutes.includes(currentPath)) {
+      navigate({ to: "/Login" });
+    }
+  }, [token, currentPath, navigate]);
+
+  if (!token && ![
+    "/",
+    "/Register",
+    "/Login",
+    "/ForgotPassword",
+    "/ResetPassword",
+  ].includes(currentPath)) {
+    return null;
+  }
 
   return (
     <React.Fragment>

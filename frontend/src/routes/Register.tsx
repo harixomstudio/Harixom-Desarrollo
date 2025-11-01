@@ -10,7 +10,7 @@ function RegisterRoute() {
   return (
     <Register
       title="Register"
-      name="Name"
+      name="User name"
       email="Email"
       phone="Phone"
       address="Address"
