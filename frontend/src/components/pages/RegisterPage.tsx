@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import {useNavigate } from "@tanstack/react-router";
 import ReactFlagsSelect from "react-flags-select";
 import { axiosRequest } from "../helpers/config";
 import { useToast } from "../ui/Toast";
@@ -48,13 +48,6 @@ export default function Register(props: RegisterProps) {
     GB: "+44", JP: "+81", IN: "+91", CN: "+86", RU: "+7", AU: "+61", NZ: "+64"
   };
 
-  const customLabels: Record<string, string> = {
-    CR: "Costa Rica", MX: "México", ES: "España", US: "Estados Unidos",
-    FR: "Francia", DE: "Alemania", IT: "Italia", AR: "Argentina",
-    CO: "Colombia", CL: "Chile", PE: "Perú", VE: "Venezuela",
-    BR: "Brasil", CA: "Canadá", GB: "Reino Unido)", JP: "Japón",
-    IN: "India", CN: "China", RU: "Rusia", AU: "Australia", NZ: "Nueva Zelanda"
-  };
 
   const registerNewUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
