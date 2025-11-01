@@ -288,7 +288,20 @@ class InteractionController extends Controller
         $commissions = Commission::with('fromUser')
             ->where('to_user_id', $userId)
             ->latest()
-            ->get();
+            ->get()
+            ->map(function ($commission) {
+                return [
+                    'id' => $commission->id,
+                    'from_user' => [
+                        'id' => $commission->fromUser->id,
+                        'name' => $commission->fromUser->name,
+                    ],
+                    'to_user_id' => $commission->to_user_id,
+                    'message' => $commission->message,
+                    'status' => $commission->status,
+                    'created_at' => $commission->created_at->diffForHumans(),
+                ];
+            });
 
         return response()->json(['commissions' => $commissions]);
     }

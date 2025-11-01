@@ -114,7 +114,7 @@ class UserController extends Controller
     {
         $upload = new UploadApi();
         $user = $request->user();
-        \Log::info('Usuario autenticado:', ['user' => $user]);
+        Log::info('Usuario autenticado:', ['user' => $user]);
 
         $data = $request->validate([
             'name' => 'nullable|string|max:255',
