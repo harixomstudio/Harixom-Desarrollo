@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\TallerApiController;
 use App\Http\Controllers\Api\ProfileMessageController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\StripeController;
+use App\Http\Middleware\UserMiddleware;
 
 
 Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
