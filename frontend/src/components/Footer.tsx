@@ -72,7 +72,7 @@ export default function Footer(props: FooterProps) {
               <a
                 key={index}
                 href={props.linksContacts[index]}
-                target="_blank"
+                //target="_blank"
                 rel="noopener noreferrer"
                 className="hover:scale-110 duration-300 hover:text-[#FA6063] pb-2 text-base"
               >

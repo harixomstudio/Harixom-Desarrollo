@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\ProfileMessageController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\StripeController;
 use App\Http\Middleware\UserMiddleware;
+use App\Http\Controllers\Auth\EmailReportController;
+
 
 
 Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
@@ -76,6 +78,10 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
     //Pagos
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
     Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
+
+    //emailReport
+    Route::post('/email/report', [EmailReportController::class, 'sendReport']);
+
 
     // Subgrupo solo para usuarios premium
        Route::post('/events/create', [EventApiController::class, 'store']);
