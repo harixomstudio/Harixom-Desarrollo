@@ -24,7 +24,7 @@ export default function ReportPage() {
 
     try {
       await axios.post(
-        "https://harixom-desarrollo.onrender.com/send-email",
+        "https://harixom-desarrollo.onrender.com/email/report",
         formData
       ); // URL del backend
       setSuccessMessage("¡Tu reporte ha sido enviado exitosamente!");
@@ -37,7 +37,7 @@ export default function ReportPage() {
       );
     }
   };
-
+  console.log("access_token:", localStorage.getItem("access_token"));
   return (
     <div className="bg-stone-900 p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20" style={{ fontFamily: "Montserrat" }}>
       <h2 className="text-white text-2xl font-bold mb-4 text-center">Report a problem or suggestion</h2>
