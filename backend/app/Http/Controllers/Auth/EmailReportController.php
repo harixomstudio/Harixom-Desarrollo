@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Support;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Services\BrevoMailer;
 
-class ReportController extends Controller
+class EmailReportController extends Controller
 {
     /**
      * Recibe el reporte de un usuario y envía un correo al administrador.
@@ -35,6 +35,7 @@ class ReportController extends Controller
         ";
 
         try {
+            Log::info('Intentando enviar correo a: ' . $adminEmail);
             BrevoMailer::send(
                 $adminEmail,
                 "Nuevo reporte de problema - Harixom",

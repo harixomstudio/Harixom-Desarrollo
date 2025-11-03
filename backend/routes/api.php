@@ -79,8 +79,7 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
     Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
 
-    //emailReport
-    Route::post('/email/report', [EmailReportController::class, 'sendReport']);
+    
 
 
     // Subgrupo solo para usuarios premium
@@ -90,6 +89,11 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
 
 //Stripe
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
+
+
+//emailReport
+    Route::post('/email/report', [EmailReportController::class, 'sendReport']);
+    
 
 //Rutas para eventos y talleres
 Route::get('/events', [EventApiController::class, 'index']);
