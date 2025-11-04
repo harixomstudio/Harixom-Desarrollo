@@ -9,28 +9,31 @@ use App\Services\BrevoMailer;
 
 class EmailReportController extends Controller
 {
+    
+
     /**
      * Recibe el reporte de un usuario y envía un correo al administrador.
      */
     public function sendReport(Request $request)
     {
+        // Validación del formulario
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'message' => 'required|string|min:10',
+            'name' => 'required|in:Report,Suggestion', // Asegúrate de que solo acepte "Report" o "Suggestion"
+            'email' => 'required|email', // Valida que sea un correo válido
+            'message' => 'required|string|min:10', // El mensaje debe tener al menos 10 caracteres
         ]);
 
-        $adminEmail = env('MAIL_FROM_ADDRESS', 'harixomstudio@gmail.com');
+        // Correo del administrador
+        $adminEmail = env('MAIL_FROM_ADDRESS', 'admin@harixom.com');
 
+        // Contenido del correo
         $html = "
             <h2>Nuevo reporte de problema</h2>
-            <p><strong>Nombre:</strong> {$request->name}</p>
-            <p><strong>Correo:</strong> {$request->email}</p>
+            <p><strong>Tipo de reporte:</strong> {$request->name}</p>
+            <p><strong>Correo del usuario:</strong> {$request->email}</p>
             <p><strong>Mensaje:</strong></p>
             <p>{$request->message}</p>
             <hr>
-            <p>IP del usuario: " . $request->ip() . "</p>
-            <p>User Agent: " . $request->header('User-Agent') . "</p>
             <p>Enviado desde el sistema Harixom</p>
         ";
 
@@ -38,7 +41,7 @@ class EmailReportController extends Controller
             Log::info('Intentando enviar correo a: ' . $adminEmail);
             BrevoMailer::send(
                 $adminEmail,
-                "Nuevo reporte de problema - Harixom",
+                "Nuevo reporte de problema - Reporte de {$request->email}",
                 $html
             );
 
