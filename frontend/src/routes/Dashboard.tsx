@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Dashboard from "../components/pages/DashboardPage";
+import Dashboard3 from "../components/pages/Dashboard3Page";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -142,7 +143,7 @@ function RouteComponent() {
         <h2 className="text-white text-2xl lg:text-3xl font-bold mb-8 text-center">
           Dashboard Últimos 3 Meses
         </h2>
-        <Dashboard
+        <Dashboard3
           followers={recentFollowers} // Seguidores en los últimos 3 meses
           following={recentFollowings} // Seguidos en los últimos 3 meses
           publications={recentPublications.length} // Publicaciones en los últimos 3 meses
