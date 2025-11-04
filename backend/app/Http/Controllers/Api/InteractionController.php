@@ -10,6 +10,7 @@ use App\Models\Follow;
 use App\Models\Comment;
 use App\Models\Commission;
 use App\Models\Publication;
+use App\Services\BrevoMailer;
 use Illuminate\Http\Request;
 
 class InteractionController extends Controller
@@ -304,5 +305,64 @@ class InteractionController extends Controller
             });
 
         return response()->json(['commissions' => $commissions]);
+    }
+
+
+    public function welcome(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+         $user = User::where('email', $request->email)->first();
+
+          if (!$user) {
+            return response()->json([
+                'error' => 'No se encontró un usuario con ese correo.'
+            ], 409);
+        }
+
+        try{
+            $htmlContent = "
+        <div style=' background-color: #0c0a09;  padding: 30px; font-family: Arial, Helvetica, sans-serif; color: white; border-radius: 10px;'>
+        <div style=' max-width: 600px; margin: auto;  background-color: #202020; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 30px;'>
+            <div style='text-align: center;'>
+                <h2 style='color: #f6339a;'>¡Hola {$user->name}, Bienvenido a Harixom!</h2>
+                <h4>Disfruta de nuestros servicios</h4>
+            </div>
+
+            <p style='font-size: 16px; line-height: 1.6;'>
+                ¡Gracias por unirte a Harixom! Estamos emocionados de tenerte con nosotros.
+                Esperemos que disfrutes de todos los beneficios que ofrecemos y que encuentres lo que 
+                necesitas para tus proyectos
+                y tareas, no dudes en contactarnos si tienes alguna pregunta.
+            </p>
+
+            <p style='font-size: 15px; color: #ffff;'>
+                Gracias por elegirnos.
+            </p>
+
+            <hr style='border: none; border-top: 1px solid #ddd; margin: 30px 0;'>
+
+            <p style='text-align: center; color: #999; font-size: 13px;'>
+                &copy; " . date('Y') . " Harixom. Todos los derechos reservados.
+            </p>
+        </div>
+    </div>
+    ";
+
+            BrevoMailer::send(
+                $request->email,
+                "Bienvenido a Harixom - Disfrute de nuestros servicios.",
+                $htmlContent
+            );
+        } catch (\Exception $e) {
+            Log::error('Error al enviar correo en Notification: ' . $e->getMessage());
+        }
+
+
+        return response()->json([
+            'message' => 'Has recibido un correo de bienvenida.',
+        ], 200);
     }
 }

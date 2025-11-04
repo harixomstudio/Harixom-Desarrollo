@@ -108,6 +108,9 @@ Route::post('ia/challenge', [AIController::class, 'getChallenge']);
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 
+//Ruta de bienvenida a Harixom
+Route::post('/welcome', [InteractionController::class, 'welcome']);
+
 //Rutas de los Usuarios antes de autenticarse
 Route::post('user/register', [UserController::class, 'store']);
 Route::post('user/login', [UserController::class, 'auth']);
