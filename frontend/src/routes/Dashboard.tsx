@@ -1,10 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 import Dashboard from "../components/pages/DashboardPage";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export const Route = createFileRoute('/Dashboard')({
-    component: RouteComponent,
+export const Route = createFileRoute("/Dashboard")({
+  component: RouteComponent,
 });
 
 function RouteComponent() {
@@ -13,9 +13,12 @@ function RouteComponent() {
   const { data: profileData, isLoading, error } = useQuery({
     queryKey: ["userProfile"],
     queryFn: async () => {
-      const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        "https://harixom-desarrollo.onrender.com/api/user",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return data;
     },
     enabled: !!token,
@@ -24,12 +27,15 @@ function RouteComponent() {
   const { data: publicaciones } = useQuery({
     queryKey: ["allPublications"],
     queryFn: async () => {
-      const response = await fetch("https://harixom-desarrollo.onrender.com/api/publications", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://harixom-desarrollo.onrender.com/api/publications",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
       if (!response.ok) throw new Error("Error al obtener las publicaciones");
       const json = await response.json();
       return json.publications;
@@ -40,9 +46,12 @@ function RouteComponent() {
   const { data: followsData } = useQuery({
     queryKey: ["userFollows"],
     queryFn: async () => {
-      const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user/follows", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        "https://harixom-desarrollo.onrender.com/api/user/follows",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return data;
     },
     enabled: !!token,
@@ -72,23 +81,74 @@ function RouteComponent() {
   const followers = followsData?.followers?.length || 0;
   const followings = followsData?.followings?.length || 0;
 
-  // ✅ Publicaciones hechas por el usuario
+  // Datos generales
   const publications = profileData?.user?.posts?.length || 0;
-
-  // ✅ Likes recibidos en tus publicaciones
   const userId = profileData?.user?.id;
-  const likes = publicaciones
-    ?.filter((pub: { user_id: any; }) => pub.user_id === userId)
-    ?.reduce((acc: any, pub: { total_likes: any; }) => acc + (pub.total_likes || 0), 0) || 0;
+  const likesGeneral = publicaciones
+    ?.filter((pub: { user_id: any }) => pub.user_id === userId)
+    ?.reduce((acc: any, pub: { total_likes: any }) => acc + (pub.total_likes || 0), 0) || 0;
+
+  // Datos de los últimos 3 meses
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+  const recentPublications = publicaciones?.filter(
+    (pub: { user_id: any; created_at: string }) => {
+      const publicationDate = new Date(pub.created_at);
+      return pub.user_id === userId && publicationDate >= threeMonthsAgo;
+    }
+  ) || [];
+
+  const likesLastThreeMonths = recentPublications.reduce(
+    (acc: any, pub: { total_likes: any }) => acc + (pub.total_likes || 0),
+    0
+  );
+
+  // Seguidores y seguidos en los últimos 3 meses (si aplica)
+  const recentFollowers = followsData?.followers?.filter(
+    (follower: { created_at: string }) => {
+      const followDate = new Date(follower.created_at);
+      return followDate >= threeMonthsAgo;
+    }
+  ).length || 0;
+
+  const recentFollowings = followsData?.followings?.filter(
+    (following: { created_at: string }) => {
+      const followDate = new Date(following.created_at);
+      return followDate >= threeMonthsAgo;
+    }
+  ).length || 0;
 
   return (
-    <div className="p-6 h-screen overflow-hidden">
-      <Dashboard
-        followers={followers}
-        following={followings}
-        publications={publications}
-        likes={likes}
-      />
+    <div
+      className="p-6 min-h-screen overflow-visible" // Permite que el contenedor crezca dinámicamente
+      style={{ overflowX: "hidden" }} // Evita el desplazamiento horizontal
+    >
+      {/* Dashboard general */}
+      <div className="mb-10">
+        <h2 className="text-white text-2xl lg:text-3xl font-bold mb-8 text-center">
+          Dashboard General
+        </h2>
+        <Dashboard
+          followers={followers}
+          following={followings}
+          publications={publications}
+          likes={likesGeneral}
+        />
+      </div>
+
+      {/* Dashboard de los últimos 3 meses */}
+      <div>
+        <h2 className="text-white text-2xl lg:text-3xl font-bold mb-8 text-center">
+          Dashboard Últimos 3 Meses
+        </h2>
+        <Dashboard
+          followers={recentFollowers} // Seguidores en los últimos 3 meses
+          following={recentFollowings} // Seguidos en los últimos 3 meses
+          publications={recentPublications.length} // Publicaciones en los últimos 3 meses
+          likes={likesLastThreeMonths} // Likes en los últimos 3 meses
+        />
+      </div>
     </div>
   );
 }
