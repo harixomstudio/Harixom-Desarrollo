@@ -94,6 +94,7 @@ export default function Register(props: RegisterProps) {
       });
 
       showToast(response.data.message, "success");
+      await handleSubmit(user.email);
       navigate({ to: "/Login" });
     } catch (error: any) {
       if (error.response?.status === 422) {
@@ -105,6 +106,18 @@ export default function Register(props: RegisterProps) {
       showToast("Error al registrar", "error");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (email: string) => {
+    try {
+      const response = await axiosRequest.post("welcome", { email });
+      setTimeout(() => showToast(response.data.message), 3000);
+    } catch (error: any) {
+      setTimeout(() => showToast(
+        error.response?.data?.error || "Error al enviar el correo.",
+        "error"
+      ), 3000);
     }
   };
 
@@ -211,7 +224,7 @@ export default function Register(props: RegisterProps) {
                 onChange={(e) => setUser({ ...user, address: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
-               {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address[0]}</p>}
+              {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address[0]}</p>}
             </div>
 
             {/* Contraseña */}
@@ -223,7 +236,7 @@ export default function Register(props: RegisterProps) {
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
-               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
             </div>
 
             {/* Confirmar contraseña */}
@@ -238,11 +251,10 @@ export default function Register(props: RegisterProps) {
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
             </div>
 
-             <button
+            <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-pink-400 to-blue-400"
-              }`}
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-pink-400 to-blue-400"
+                }`}
               disabled={loading}
             >
               {loading ? "Registrando..." : "REGISTER"}
@@ -255,8 +267,8 @@ export default function Register(props: RegisterProps) {
               </a>
             </div>
           </form>
-        </div> 
-      </div>  
+        </div>
+      </div>
     </section>
   );
 }
