@@ -13,7 +13,7 @@ function TermsRoute() {
 
   const handleAccept = () => {
     setAccepted(true);
-    navigate({ to: "/Landing" }); // o la ruta que quieras después de aceptar
+    navigate({ to: "/Login" }); // o la ruta que quieras después de aceptar
   };
 
   return (
