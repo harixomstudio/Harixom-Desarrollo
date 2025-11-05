@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import FeedPage from "../components/pages/FeedPage";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/Feed")({
   component: RouteComponent,
@@ -8,6 +9,11 @@ export const Route = createFileRoute("/Feed")({
 
 function RouteComponent() {
   const token = localStorage.getItem("access_token");
+
+  // Desplaza al inicio de la página al montar el componente
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["allPublications"],

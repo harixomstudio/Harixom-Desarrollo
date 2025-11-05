@@ -54,13 +54,18 @@ export default function Footer(props: FooterProps) {
             <h5 className="font-semibold pb-4 text-lg">Social Medias</h5>
             <div className="grid grid-cols-2 gap-4">
               {props.socialMedias.map((socialMedia, index) => (
-                <Link key={index} to={props.linksSocialMedia[index]}>
+                <a
+                  key={index}
+                  href={props.linksSocialMedia[index]}
+                  target="_blank" // Abre en una pestaña nueva
+                  rel="noopener noreferrer" // Mejora la seguridad
+                >
                   <img
                     src={socialMedia}
                     alt=""
                     className="hover:scale-110 duration-300 w-12 h-12 max-lg:w-10 max-lg:h-10 object-cover rounded-full"
                   />
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -72,11 +77,15 @@ export default function Footer(props: FooterProps) {
               <a
                 key={index}
                 href={props.linksContacts[index]}
-                //target="_blank"
+                target={
+                  props.linksContacts[index].startsWith("http")
+                    ? "_blank" // Solo abre en nueva pestaña si es un enlace externo
+                    : "_self"
+                }
                 rel="noopener noreferrer"
                 className="hover:scale-110 duration-300 hover:text-[#FA6063] pb-2 text-base"
               >
-                <li className="list-none ">{contact}</li>
+                <li className="list-none">{contact}</li>
               </a>
             ))}
           </div>

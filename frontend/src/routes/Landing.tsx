@@ -58,7 +58,11 @@ const footer = {
   logo: "LogoHarixom.svg",
   altLogo: "Logo",
   products: ["Explore", "Frequently questions", "Contact us"],
-  linksProducts: ["/Feed", "/FAQ", "https://docs.google.com/forms/d/e/1FAIpQLScROFJWquxRPF6S0Wa9JzfyD8rz2sCJiYz-fjYJ0opYUzmZOw/viewform?usp=sharing&ouid=111796854085052906024"],
+  linksProducts: [
+    "/Feed",
+    "/FAQ",
+    "/Report",
+  ],
   socialMedias: ["instagram.svg", "facebook.svg", "tiktok.svg", "youtube.svg"],
   linksSocialMedia: [
     "https://www.instagram.com/harixom2025",
