@@ -190,9 +190,13 @@ export default function Nav() {
           <li>
             <button
               onClick={() => setOpcion(!opcion)}
-              className="flex items-center font-bold py-2 px-6 rounded-full border-2 transition-all bg-gradient-to-r bg-[#ff4daf] border-pink-600 text-white hover:bg-pink-600 hover:border-[#ff4daf] shadow-lg"
+              className="flex items-center"
             >
-              Opcions
+              <img
+                src={userImage}
+                alt="User Profile"
+                className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-70 transition-opacity"
+              />
             </button>
 
             {opcion && (
@@ -203,8 +207,17 @@ export default function Nav() {
                 <ul className="py-2">
                   <li>
                     <Link
+                      to="/Profile"
+                      className="w-full text-left px-4 py-3 text-white hover:bg-[#155dfc] hover:text-white rounded-lg transition-all flex items-center gap-2"
+                      onClick={() => setOpcion(false)} // Cierra el menú al hacer clic
+                    >
+                      <span className="text-pink-400"></span> Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       to="/ResetPassword"
-                      className=" w-full text-left px-4 py-3 text-white hover:bg-pink-600 hover:text-white rounded-lg transition-all flex items-center gap-2"
+                      className="w-full text-left px-4 py-3 text-white hover:bg-pink-600 hover:text-white rounded-lg transition-all flex items-center gap-2"
                       onClick={() => setOpcion(false)} // Cierra el menú al hacer clic
                     >
                       <span className="text-pink-400"></span> Change Password
@@ -216,7 +229,7 @@ export default function Nav() {
                         handleLogout();
                         setOpcion(false); // Cierra el menú al hacer clic
                       }}
-                      className=" w-full text-left px-4 py-3 text-white hover:bg-red-600 hover:text-white rounded-lg transition-all flex items-center gap-2"
+                      className="w-full text-left px-4 py-3 text-white hover:bg-red-600 hover:text-white rounded-lg transition-all flex items-center gap-2"
                     >
                       <span className="text-red-400"></span> Log out
                     </button>
