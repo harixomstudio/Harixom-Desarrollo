@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { axiosRequest } from "../helpers/config";
-import TermsAndConditions from "./TermsAndConditionsPage";
-
 import { useToast } from "../ui/Toast";
 
 interface LoginProps {
@@ -20,12 +18,9 @@ interface UserForm {
 
 export default function Login(props: LoginProps) {
   const { showToast } = useToast();
-
   const [user, setUser] = useState<UserForm>({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
-  const [tempToken, setTempToken] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,10 +34,9 @@ export default function Login(props: LoginProps) {
       if (response.data.error) {
         alert(response.data.error);
       } else {
-        // Guardar el token en el localStorage
         localStorage.setItem("auth_user", JSON.stringify(response.data.user));
-        setTempToken(response.data.access_token);
-        setShowTerms(true);
+        localStorage.setItem("access_token", response.data.access_token);
+        navigate({ to: "/Landing" });
       }
     } catch (error: any) {
       setLoading(false);
@@ -58,22 +52,6 @@ export default function Login(props: LoginProps) {
       }
     }
   };
-
-  const handleAcceptTerms = () => {
-    if (tempToken) {
-      localStorage.setItem("access_token", tempToken);
-      navigate({ to: "/Landing" });
-    }
-  };
-
-  if (showTerms) {
-    return (
-      <TermsAndConditions
-        title="Terms and Conditions"
-        onAccept={handleAcceptTerms}
-      />
-    );
-  }
 
   return (
     <section className="relative flex min-h-screen items-center justify-center bg-stone-950" style={{ fontFamily: "Montserrat" }}>
@@ -140,7 +118,8 @@ export default function Login(props: LoginProps) {
                 type="button"
                 className="absolute right-3 top-9 text-sm"
                 onClick={() => setShowPassword(!showPassword)}
-              ><img
+              >
+                <img
                   src={showPassword ? "ojociego.svg" : "ojoabierto.svg"}
                   alt={showPassword ? "Ojo cerrado" : "Ojo abierto"}
                   className="w-6 h-6"
