@@ -92,7 +92,7 @@ Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
 
 
 //emailReport
-    Route::post('/email/report', [EmailReportController::class, 'sendReport']);
+Route::post('/email/report', [EmailReportController::class, 'sendReport']);
     
 
 //Rutas para eventos y talleres
@@ -107,6 +107,10 @@ Route::post('ia/challenge', [AIController::class, 'getChallenge']);
 //Rutas de reset password
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset']);
+
+Route::post('/change-password', [PasswordResetController::class, 'changePassword']);
+Route::post('/password-getChange', [PasswordResetController::class, 'change']);
+
 
 //Ruta de bienvenida a Harixom
 Route::post('/welcome', [InteractionController::class, 'welcome']);

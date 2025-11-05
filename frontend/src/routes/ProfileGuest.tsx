@@ -17,7 +17,7 @@ function ProfileGuestRoute() {
   const { data: profileData, isLoading, error } = useQuery({
     queryKey: ["guestProfile", guestUserId],
     queryFn: async () => {
-      const { data } = await axios.get(`https://harixom-desarrollo.onrender.com/api/users/${guestUserId}`, {
+      const { data } = await axios.get(`http://127.0.0.1:8000/api/users/${guestUserId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return data;
@@ -30,7 +30,7 @@ function ProfileGuestRoute() {
   const { data: likesData } = useQuery({
     queryKey: ["guestLikes", guestUserId],
     queryFn: async () => {
-      const { data } = await axios.get(`https://harixom-desarrollo.onrender.com/api/users/${guestUserId}/likes`, {
+      const { data } = await axios.get(`http://127.0.0.1:8000/api/users/${guestUserId}/likes`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return data.likes;
@@ -41,7 +41,7 @@ function ProfileGuestRoute() {
   const { data: followsData } = useQuery({
     queryKey: ["guestFollows", guestUserId],
     queryFn: async () => {
-      const { data } = await axios.get(`https://harixom-desarrollo.onrender.com/api/users/${guestUserId}/follows`, {
+      const { data } = await axios.get(`http://127.0.0.1:8000/api/users/${guestUserId}/follows`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return data;

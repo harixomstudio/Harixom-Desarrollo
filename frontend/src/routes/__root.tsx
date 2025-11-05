@@ -34,6 +34,7 @@ function RootComponent() {
     "/ResetPassword",
     "/SetProfile",
     "/Terms",
+    "/ChangePassword"
   ].includes(currentPath);
 
   const listEvents = ["Events", "Workshop", "AI Challenges"];
@@ -56,35 +57,35 @@ function RootComponent() {
       try {
         // comisiones recibidas
         const { data: commissions } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/user/commisions/${profileData?.user?.id}`,
+          `http://127.0.0.1:8000/api/user/commisions/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         // mensajes recibidos en el wall
         const { data: messages } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/profile/${profileData?.user?.id}/messages`,
+          `http://127.0.0.1:8000/api/profile/${profileData?.user?.id}/messages`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         // comentarios recibidos en las publicaciones
         const { data } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/user/comments/${profileData?.user?.id}`,
+          `http://127.0.0.1:8000/api/user/comments/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         // seguidores recibidos
         const { data: followersData } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/user/follows`,
+          `http://127.0.0.1:8000/api/user/follows`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         // los likes que se reciben en cada publiccacion
         const { data: likesData } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/user/likes/${profileData?.user?.id}`,
+          `http://127.0.0.1:8000/api/user/likes/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -141,6 +142,7 @@ function RootComponent() {
       "/Login",
       "/ForgotPassword",
       "/ResetPassword",
+      "/ChangePassword",
     ];
 
     if (!token && !publicRoutes.includes(currentPath)) {
@@ -154,6 +156,7 @@ function RootComponent() {
     "/Login",
     "/ForgotPassword",
     "/ResetPassword",
+    "/ChangePassword",
   ].includes(currentPath)) {
     return null;
   }

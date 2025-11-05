@@ -15,7 +15,7 @@ function RouteComponent() {
     queryKey: ["userProfile"],
     queryFn: async () => {
       const { data } = await axios.get(
-        "https://harixom-desarrollo.onrender.com/api/user",
+        "http://127.0.0.1:8000/api/user",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -29,7 +29,7 @@ function RouteComponent() {
     queryKey: ["allPublications"],
     queryFn: async () => {
       const response = await fetch(
-        "https://harixom-desarrollo.onrender.com/api/publications",
+        "http://127.0.0.1:8000/api/publications",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ function RouteComponent() {
     queryKey: ["userFollows"],
     queryFn: async () => {
       const { data } = await axios.get(
-        "https://harixom-desarrollo.onrender.com/api/user/follows",
+        "http://127.0.0.1:8000/api/user/follows",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

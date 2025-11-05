@@ -35,6 +35,7 @@ import { Route as EventsCreateRouteImport } from './routes/EventsCreate'
 import { Route as EventsRouteImport } from './routes/Events'
 import { Route as DashboardRouteImport } from './routes/Dashboard'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
+import { Route as ChangePasswordRouteImport } from './routes/ChangePassword'
 import { Route as AIChallengeRouteImport } from './routes/AIChallenge'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CategoriesNameRouteImport } from './routes/Categories.$name'
@@ -169,6 +170,11 @@ const CreatePublicationRoute = CreatePublicationRouteImport.update({
   path: '/CreatePublication',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChangePasswordRoute = ChangePasswordRouteImport.update({
+  id: '/ChangePassword',
+  path: '/ChangePassword',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AIChallengeRoute = AIChallengeRouteImport.update({
   id: '/AIChallenge',
   path: '/AIChallenge',
@@ -188,6 +194,7 @@ const CategoriesNameRoute = CategoriesNameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
+  '/ChangePassword': typeof ChangePasswordRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
@@ -219,6 +226,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
+  '/ChangePassword': typeof ChangePasswordRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
@@ -251,6 +259,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/AIChallenge': typeof AIChallengeRoute
+  '/ChangePassword': typeof ChangePasswordRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
   '/Events': typeof EventsRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/AIChallenge'
+    | '/ChangePassword'
     | '/CreatePublication'
     | '/Dashboard'
     | '/Events'
@@ -315,6 +325,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/AIChallenge'
+    | '/ChangePassword'
     | '/CreatePublication'
     | '/Dashboard'
     | '/Events'
@@ -346,6 +357,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/AIChallenge'
+    | '/ChangePassword'
     | '/CreatePublication'
     | '/Dashboard'
     | '/Events'
@@ -378,6 +390,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AIChallengeRoute: typeof AIChallengeRoute
+  ChangePasswordRoute: typeof ChangePasswordRoute
   CreatePublicationRoute: typeof CreatePublicationRoute
   DashboardRoute: typeof DashboardRoute
   EventsRoute: typeof EventsRoute
@@ -591,6 +604,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreatePublicationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ChangePassword': {
+      id: '/ChangePassword'
+      path: '/ChangePassword'
+      fullPath: '/ChangePassword'
+      preLoaderRoute: typeof ChangePasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/AIChallenge': {
       id: '/AIChallenge'
       path: '/AIChallenge'
@@ -618,6 +638,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AIChallengeRoute: AIChallengeRoute,
+  ChangePasswordRoute: ChangePasswordRoute,
   CreatePublicationRoute: CreatePublicationRoute,
   DashboardRoute: DashboardRoute,
   EventsRoute: EventsRoute,

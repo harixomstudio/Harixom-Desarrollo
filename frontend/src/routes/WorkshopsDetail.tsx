@@ -20,7 +20,7 @@ function TallerDetailRouteComponent() {
     queryKey: ["tallerDetail", tallerId],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://harixom-desarrollo.onrender.com/api/tallers/${tallerId}`,
+        `http://127.0.0.1:8000/api/tallers/${tallerId}`,
         { headers: token ? { Authorization: `Bearer ${token}` } : undefined }
       );
       return data.taller;
