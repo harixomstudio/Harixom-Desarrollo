@@ -34,6 +34,7 @@ function RootComponent() {
     "/ResetPassword",
     "/SetProfile",
     "/Terms",
+    "/ChangePassword"
   ].includes(currentPath);
 
   const listEvents = ["Events", "Workshop", "AI Challenges"];
@@ -141,6 +142,7 @@ function RootComponent() {
       "/Login",
       "/ForgotPassword",
       "/ResetPassword",
+      "/ChangePassword",
     ];
 
     if (!token && !publicRoutes.includes(currentPath)) {
@@ -154,6 +156,7 @@ function RootComponent() {
     "/Login",
     "/ForgotPassword",
     "/ResetPassword",
+    "/ChangePassword",
   ].includes(currentPath)) {
     return null;
   }

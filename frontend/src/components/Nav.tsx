@@ -8,12 +8,13 @@ export default function Nav() {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null); // Referencia para el menú desplegable
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [opcion, setOpcion] = useState(false);
+  const [modalProfile, setModalProfile] = useState(false);
 
   const token = localStorage.getItem("access_token");
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
@@ -48,6 +49,22 @@ export default function Nav() {
       console.error("Error al cerrar sesión:", err);
       showToast("Error al cerrar sesión", "error");
     }
+  };
+  const handleChangePassword = async () => {
+    try {
+      const response = await axiosRequest.post("change-password", 
+        { 
+          email: profileData?.user?.email
+
+         });
+      showToast(response.data.message);
+    } catch (error: any) {
+      showToast(
+        error.response?.data?.error || "Error al enviar el correo.",
+        "error"
+      )
+
+    } 
   };
 
   useEffect(() => {
@@ -93,8 +110,8 @@ export default function Nav() {
   ];
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-      setOpcion(false); // Cierra el menú si se hace clic fuera de él
+    if (menuRef.current && !menuRef.current.contains(event.target as Node) && imageRef.current?.contains(event.target as Node)) {
+      setModalProfile(false); // Cierra el menú si se hace clic fuera de él
     }
   };
 
@@ -105,9 +122,10 @@ export default function Nav() {
     };
   }, []);
 
+
   return (
     <section
-      className="bg-[#151515] relative z-50"
+      className="bg-[#151515] relative z-50 "
       style={{ fontFamily: "Montserrat" }}
     >
       <div className="flex items-center justify-between p-4">
@@ -185,51 +203,50 @@ export default function Nav() {
         </div>
 
         {/* Acceso al perfil (solo escritorio) */}
-        {/* Menú desplegable para Opcions */}
+        {/* Menú desplegable para modalProfiles */}
         <ul className="pr-6 hidden md:flex items-center relative">
           <li>
-            <button
-              onClick={() => setOpcion(!opcion)}
-              className="flex items-center"
-            >
-              <img
-                src={userImage}
-                alt="User Profile"
-                className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-70 transition-opacity"
-              />
-            </button>
 
-            {opcion && (
+            <img
+              ref={imageRef}
+              onClick={() => setModalProfile(!modalProfile)}
+              src={userImage}
+              alt="User Profile"
+              className={`w-12 h-12 rounded-full transition-transform duration-300 hover:scale-110 cursor-pointer`}
+              id="modalProfile" />
+
+            {modalProfile && (
               <div
                 ref={menuRef} // Asocia el menú desplegable a la referencia
-                className="absolute right-0 mt-2 w-56 bg-[#1a1a1a] rounded-lg shadow-lg z-50"
+                className="absolute right-6 mt-4 w-60 bg-[#272727] rounded-2xl shadow-lg z-50 p-3"
               >
-                <ul className="py-2">
+                <div className="flex w-full justify-end-safe px-3">
+                  <button onClick={() => setModalProfile(!modalProfile)} className="flex items-center justify-end text-white hover:text-pink-500 duration-300  hover:bg-stone-700 rounded-full px-2.5 py-1 font-semibold">X</button>
+                </div>
+                <ul className="flex flex-col py-2 gap-1 px-3">
+                  <Link
+                    to="/Profile"
+                    className="w-full text-left px-4 py-3 text-white hover:bg-[#155dfc] bg-stone-900 rounded-t-2xl transition-all "
+                    onClick={() => setModalProfile(false)} // Cierra el menú al hacer clic
+                  > Profile
+                  </Link>
+
                   <li>
-                    <Link
-                      to="/Profile"
-                      className="w-full text-left px-4 py-3 text-white hover:bg-[#155dfc] hover:text-white rounded-lg transition-all flex items-center gap-2"
-                      onClick={() => setOpcion(false)} // Cierra el menú al hacer clic
-                    >
-                      <span className="text-pink-400"></span> Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/ResetPassword"
-                      className="w-full text-left px-4 py-3 text-white hover:bg-pink-600 hover:text-white rounded-lg transition-all flex items-center gap-2"
-                      onClick={() => setOpcion(false)} // Cierra el menú al hacer clic
+                    <button
+                      className=" w-full text-left px-4 py-3 text-white bg-stone-900 hover:bg-pink-600 transition-all flex "
+                      onClick={() => { setModalProfile(false); handleChangePassword(); }} // Cierra el menú al hacer clic
                     >
                       <span className="text-pink-400"></span> Change Password
-                    </Link>
+                    </button>
                   </li>
+
                   <li>
                     <button
                       onClick={() => {
                         handleLogout();
-                        setOpcion(false); // Cierra el menú al hacer clic
+                        setModalProfile(false); // Cierra el menú al hacer clic
                       }}
-                      className="w-full text-left px-4 py-3 text-white hover:bg-red-600 hover:text-white rounded-lg transition-all flex items-center gap-2"
+                      className=" w-full text-left px-4 py-3 text-white hover:bg-red-600 bg-stone-900 rounded-b-2xl transition-all "
                     >
                       <span className="text-red-400"></span> Log out
                     </button>
@@ -243,9 +260,8 @@ export default function Nav() {
 
       {/* Menú lateral móvil */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-[#1a1a1a] shadow-lg transform transition-transform duration-300 z-50 ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-full w-64 bg-[#1a1a1a] shadow-lg transform transition-transform duration-300 z-50 ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         <div className="flex flex-col h-full p-6">
           {/* Info de usuario (ahora con enlace al perfil) */}
