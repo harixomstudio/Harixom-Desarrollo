@@ -5,6 +5,7 @@ export const Route = createFileRoute('/FAQ')({
   component: RouteComponent,
 })
 
+
 function RouteComponent() {
   const faqs = [
     {
