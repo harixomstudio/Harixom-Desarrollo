@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { axiosRequest } from "../components/helpers/config";
@@ -7,11 +7,13 @@ import { useToast } from "../components/ui/Toast";
 export default function Nav() {
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const menuRef = useRef<HTMLDivElement>(null); // Referencia para el menú desplegable
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [opcion, setOpcion] = useState(false);
 
   const token = localStorage.getItem("access_token");
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
@@ -90,8 +92,24 @@ export default function Nav() {
     { src: "dashboars.svg", to: "/Dashboard", alt: "Dashboard" },
   ];
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setOpcion(false); // Cierra el menú si se hace clic fuera de él
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <section className="bg-[#151515] relative z-50" style={{ fontFamily: "Montserrat" }}>
+    <section
+      className="bg-[#151515] relative z-50"
+      style={{ fontFamily: "Montserrat" }}
+    >
       <div className="flex items-center justify-between p-4">
         {/* Logo + barra de búsqueda */}
         <div className="flex items-center space-x-4 pl-4 flex-1">
@@ -167,22 +185,54 @@ export default function Nav() {
         </div>
 
         {/* Acceso al perfil (solo escritorio) */}
-        <ul className="pr-6 hidden md:flex items-center">
+        {/* Menú desplegable para Opcions */}
+        <ul className="pr-6 hidden md:flex items-center relative">
           <li>
             <button
-              onClick={handleLogout}
-              className="flex items-center font-bold py-1 px-4 rounded-full border-2 transition-all bg-[#FA6063] border-[#ff4a4d] text-white hover:bg-[#ff4a4d]"
+              onClick={() => setOpcion(!opcion)}
+              className="flex items-center font-bold py-2 px-6 rounded-full border-2 transition-all bg-gradient-to-r bg-[#ff4daf] border-pink-600 text-white hover:bg-pink-600 hover:border-[#ff4daf] shadow-lg"
             >
-              Log out
+              Opcions
             </button>
+
+            {opcion && (
+              <div
+                ref={menuRef} // Asocia el menú desplegable a la referencia
+                className="absolute right-0 mt-2 w-56 bg-[#1a1a1a] rounded-lg shadow-lg z-50"
+              >
+                <ul className="py-2">
+                  <li>
+                    <Link
+                      to="/ResetPassword"
+                      className=" w-full text-left px-4 py-3 text-white hover:bg-pink-600 hover:text-white rounded-lg transition-all flex items-center gap-2"
+                      onClick={() => setOpcion(false)} // Cierra el menú al hacer clic
+                    >
+                      <span className="text-pink-400"></span> Change Password
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setOpcion(false); // Cierra el menú al hacer clic
+                      }}
+                      className=" w-full text-left px-4 py-3 text-white hover:bg-red-600 hover:text-white rounded-lg transition-all flex items-center gap-2"
+                    >
+                      <span className="text-red-400"></span> Log out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
           </li>
         </ul>
       </div>
 
-      {/* 🧭 Menú lateral móvil */}
+      {/* Menú lateral móvil */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-[#1a1a1a] shadow-lg transform transition-transform duration-300 z-50 ${menuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+        className={`fixed top-0 right-0 h-full w-64 bg-[#1a1a1a] shadow-lg transform transition-transform duration-300 z-50 ${
+          menuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         <div className="flex flex-col h-full p-6">
           {/* Info de usuario (ahora con enlace al perfil) */}
@@ -216,16 +266,30 @@ export default function Nav() {
             ))}
           </nav>
 
-          {/* Botón logout */}
-          <button
-            onClick={() => {
-              handleLogout();
-              setMenuOpen(false);
-            }}
-            className="mt-auto bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 rounded-lg transition-all"
-          >
-            Log out
-          </button>
+          {/* Contenedor para los botones */}
+          <div className="mt-auto flex flex-col gap-4">
+            {/* Botón para cambiar contraseña */}
+            <button
+              onClick={() => {
+                navigate({ to: "/ResetPassword" });
+                setMenuOpen(false); // Cierra el menú al hacer clic
+              }}
+              className="bg-[#8936D2] hover:bg-[#7104d0] text-white font-semibold py-2 rounded-lg transition-all"
+            >
+              Change Password
+            </button>
+
+            {/* Botón logout */}
+            <button
+              onClick={() => {
+                handleLogout();
+                setMenuOpen(false);
+              }}
+              className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 rounded-lg transition-all"
+            >
+              Log out
+            </button>
+          </div>
         </div>
       </div>
 
@@ -281,7 +345,11 @@ export default function Nav() {
                       <span className="text-white font-medium flex items-center gap-1">
                         {user.name}
                         {user.isPremium && (
-                          <img src="/premium.svg" alt="Insignia Premium" className="w-2 h-2" />
+                          <img
+                            src="/premium.svg"
+                            alt="Insignia Premium"
+                            className="w-2 h-2"
+                          />
                         )}
                       </span>
                     </li>
