@@ -300,7 +300,7 @@ export default function Nav() {
             {/* Botón para cambiar contraseña */}
             <button
               onClick={() => {
-                navigate({ to: "/ResetPassword" });
+                handleChangePassword();
                 setMenuOpen(false); // Cierra el menú al hacer clic
               }}
               className="bg-[#8936D2] hover:bg-[#7104d0] text-white font-semibold py-2 rounded-lg transition-all"
