@@ -54,7 +54,7 @@ export default function Categories({
   const { data: userLikes } = useQuery({
     queryKey: ["userLikes"],
     queryFn: async () => {
-      const { data } = await axios.get("http://127.0.0.1:8000/api/user/likes", {
+      const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user/likes", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const likesMap: { [key: number]: boolean } = {};
@@ -70,7 +70,7 @@ export default function Categories({
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const { data } = await axios.get("http://127.0.0.1:8000/api/user", {
+        const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCurrentUserId(data.user.id);
@@ -88,7 +88,7 @@ export default function Categories({
     const fetchFollows = async () => {
       try {
         const { data } = await axios.get(
-          "http://127.0.0.1:8000/api/user/follows",
+          "https://harixom-desarrollo.onrender.com/api/user/follows",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -145,7 +145,7 @@ export default function Categories({
   const fetchComments = async (pubId: number) => {
     try {
       const { data } = await axios.get(
-        `http://127.0.0.1:8000/api/comment/${pubId}`,
+        `https://harixom-desarrollo.onrender.com/api/comment/${pubId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -166,7 +166,7 @@ export default function Categories({
   const toggleLike = async (id: number) => {
     try {
       const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/like/${id}`,
+        `https://harixom-desarrollo.onrender.com/api/like/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -182,7 +182,7 @@ export default function Categories({
   const toggleFollow = async (userId: number) => {
     try {
       const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/follow/${userId}`,
+        `https://harixom-desarrollo.onrender.com/api/follow/${userId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -203,7 +203,7 @@ export default function Categories({
 
     try {
       const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/comment/${id}`,
+        `https://harixom-desarrollo.onrender.com/api/comment/${id}`,
         { comment: text },
         { headers: { Authorization: `Bearer ${token}` } }
       );

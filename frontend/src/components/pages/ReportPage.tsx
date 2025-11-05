@@ -23,7 +23,7 @@ export default function ReportPage() {
         }
 
         // Solicita los datos del usuario al backend
-        const { data } = await axios.get("http://127.0.0.1:8000/api/user", {
+        const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -50,7 +50,7 @@ export default function ReportPage() {
 
     try {
       await axios.post(
-        "http://127.0.0.1:8000/api/email/report",
+        "https://harixom-desarrollo.onrender.com/api/email/report",
         formData
       );
       setSuccessMessage("¡Tu reporte ha sido enviado exitosamente!");

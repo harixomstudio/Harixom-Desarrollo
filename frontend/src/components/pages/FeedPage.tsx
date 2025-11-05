@@ -25,7 +25,7 @@ interface FeedPageProps {
   publications: Publication[];
 }
 
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = "https://harixom-desarrollo.onrender.com/api";
 
 const apiGet = async (url: string, token: string) => {
   const { data } = await axios.get(`${API_URL}/${url}`, {
@@ -82,7 +82,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const { data: userLikes } = useQuery({
     queryKey: ["userLikes"],
     queryFn: async () => {
-      const { data } = await axios.get("http://127.0.0.1:8000/api/user/likes", {
+      const { data } = await axios.get("https://harixom-desarrollo.onrender.com/api/user/likes", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const likesMap: { [key: number]: boolean } = {};
