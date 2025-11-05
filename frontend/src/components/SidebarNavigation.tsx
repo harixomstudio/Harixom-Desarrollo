@@ -9,7 +9,7 @@ const icons = [
   { src: "feed.svg", to: "/Feed", alt: "Feed" },
   { src: "premium.svg", to: "/Suscriptions", alt: "Suscriptions" },
   { src: "notifications.svg", to: "/Inbox", alt: "Notifications" },
-  { src: "user.svg", to: "/Profile", alt: "Profile" },
+ 
   { src: "events.svg", to: "/Events", alt: "Events" },
   { src: "dashboars.svg", to: "/Dashboard", alt: "Dashboard" },
 ];
