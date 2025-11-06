@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback} from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useToast } from "../ui/Toast";
 import { useQuery } from "@tanstack/react-query";
@@ -219,6 +219,12 @@ export default function FeedPage({ publications }: FeedPageProps) {
     [token, showToast]
   );
 
+  useEffect(() => {
+  if (selectedPublication) {
+    fetchComments(selectedPublication.id);
+  }
+}, [selectedPublication, fetchComments]);
+
   if (!currentUserId)
     return (
       <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20">
@@ -356,8 +362,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
             {/* Footer */}
             <div className="flex flex-row justify-between items-center px-4 py-5 bg-[#151515]">
               <div className="flex flex-row gap-5 items-center">
-                );
-
                 {/* Like */}
                 <button
                   className={`flex items-center gap-1 group transition-colors duration-200 ${likes[pub.id] ? "text-pink-500" : "text-gray-300"
@@ -422,7 +426,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 {pub.user_id !== undefined && pub.user_id !== currentUserId && (
                   <button
                     className={`flex items-center justify-center opacity-80 transition-colors duration-200 group
-      ${follows[pub.user_id] ? "text-green-500" : "text-gray-300"}`}
+      ${follows[pub.user_id] ? "text-pink-500" : "text-gray-300"}`}
                     title={follows[pub.user_id] ? "Siguiendo" : "Seguir"}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -567,79 +571,164 @@ export default function FeedPage({ publications }: FeedPageProps) {
       </div>}
 
       {/* Modal publicaciones en grande */}
-      {selectedPublication && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
-          <div className="relative bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:items-center">
+{selectedPublication && (
+  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 max-lg:h-screen">
+    <div className="relative bg-[#151515] rounded-lg p-6 shadow-lg w-[90vw] h-[90vh] overflow-auto flex max-lg:flex-col max-lg:w-3/4 max-lg:h-3/4 max-lg:items-center">
 
-            {/* ❌ Botón de cierre */}
-            <button
-              onClick={closeModal}
-              className="
-          absolute 
-          lg:top-6 lg:right-6    /* 🖥️ En desktop: arriba a la derecha dentro del área del nombre */
-          max-lg:top-4 max-lg:right-4 /* 📱 En móvil: arriba sobre la imagen */
-          px-3 py-1 
-          bg-red-500 text-white 
-          rounded-full font-bold text-lg 
-          hover:bg-red-600 transition-all 
-          shadow-md z-20
-        "
-            >
-              ✕
-            </button>
-            {/* Imagen a la izquierda */}
-            <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
-              {selectedPublication.image ? (
-                <WatermarkedImage
-                  src={selectedPublication.image}
-                  alt={selectedPublication.description}
-                  className="w-100px h-full object-cover rounded-lg max-lg:w-4/5"
-                  watermarkText={`Propiedad de ${selectedPublication.user_name || "Usuario desconocido"}`}
-                />
-              ) : (
-                <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
-                  Sin imagen
-                </div>
-              )}
-            </div>
+      {/* Botón de cierre */}
+      <button
+        onClick={closeModal}
+        className="absolute lg:top-6 lg:right-6 max-lg:top-4 max-lg:right-4 px-3 py-1 bg-red-500 text-white rounded-full font-bold text-lg hover:bg-red-600 transition-all shadow-md z-20"
+      >
+        ✕
+      </button>
 
-            {/* Información a la derecha */}
-            <div className="w-1/3 flex flex-col-2 justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-10 mx-4">
-              <div>
-                <h2 className="text-white text-3xl font-bold">
-                  {selectedPublication.user_name || "Usuario desconocido"}
-                </h2>
-                <p className="text-gray-400 text-sm mt-2">
-                  {formatDate(selectedPublication.created_at)}
-                </p>
-                <p className="text-gray-300 mt-10 text-2xl">
-                  <FeedDescription pub={selectedPublication} currentUserId={currentUserId} />
-                </p>
-                <div className="mt-8 flex gap-5">
-                  <Link
-                    to="/Categories/$name"
-                    params={{
-                      name: selectedPublication.category || "General"
-                    }}
-                    className="px-4 py-2 bg-pink-500 text-white rounded-full text-xl hover:scale-105 transition-transform"
-                  >
-                    {selectedPublication.category || "Sin categoría"}
-                  </Link>
-                </div>
-              </div>
+      {/* Imagen a la izquierda */}
+      <div className="w-2/3 h-full flex items-center justify-center max-lg:h-1/2 max-lg:w-full">
+        {selectedPublication.image ? (
+          <WatermarkedImage
+            src={selectedPublication.image}
+            alt={selectedPublication.description}
+            className="w-100px h-full object-cover rounded-lg max-lg:w-4/5"
+            watermarkText={`Propiedad de ${selectedPublication.user_name || "Usuario desconocido"}`}
+          />
+        ) : (
+          <div className="w-full h-full bg-gray-500 flex items-center justify-center text-gray-300 text-xs">
+            Sin imagen
+          </div>
+        )}
+      </div>
 
-              {/* Botón para cerrar */}
+      {/* Información a la derecha */}
+      <div className="w-1/3 flex flex-col justify-between max-lg:justify-center max-lg:w-4/5 max-lg:flex-col max-lg:pt-10 mx-4">
+        <div>
+          <div className="flex items-center">
+            <h2 className="text-white text-3xl font-bold">
+              {selectedPublication.user_name || "Usuario desconocido"}
+            </h2>
+
+            {/* Seguir */}
+            {selectedPublication.user_id !== currentUserId && (
               <button
-                className="absolute hidden max-lg:translate-y-3/1 min-lg:bottom-30 min-lg:translate-x-3/1 px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 text-lg shadow-lg"
-                onClick={closeModal}
+                className={`flex items-center gap-2 px-3 py-1 rounded-full transition-colors duration-200 ${follows[selectedPublication.user_id || 0] ? "text-pink-500" : "text-gray-300 bg-stone-900/30"}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFollow(selectedPublication.user_id!);
+                }}
+                title={follows[selectedPublication.user_id || 0] ? "Siguiendo" : "Seguir"}
               >
-                Close
+                {follows[selectedPublication.user_id || 0] ? (
+                  <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="17 9 11 17 6 13" />
+                  </svg>
+                ) : (
+                  <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="7" x2="12" y2="17" />
+                    <line x1="7" y1="12" x2="17" y2="12" />
+                  </svg>
+                )}
+                <span className="text-sm font-semibold">{follows[selectedPublication.user_id || 0] ? "" : ""}</span>
               </button>
+            )}
+          </div>
 
+          {/* Like + contador */}
+          <div className="flex items-center gap-4 mt-6">
+            <button
+              className={`flex items-center gap-2 ${likes[selectedPublication.id] ? "text-pink-500" : "text-gray-300"}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (typeof selectedPublication.user_id === "number") {
+                  toggleLike(selectedPublication.id, selectedPublication.user_id);
+                }
+                setAnimatingLikeId(selectedPublication.id);
+                setTimeout(() => setAnimatingLikeId(null), 600);
+              }}
+              title="Like"
+            >
+              <svg width="26" height="26" viewBox="0 0 24 24" fill={likes[selectedPublication.id] ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${animatingLikeId === selectedPublication.id ? "animate-wow" : ""}`}>
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              <span className="text-sm">{likesCount[selectedPublication.id] || 0}</span>
+            </button>
+          </div>
+
+          <p className="text-gray-400 text-sm mt-6">{formatDate(selectedPublication.created_at)}</p>
+
+          <div className="mt-6">
+            <p className="text-gray-300 text-lg">
+              <FeedDescription pub={selectedPublication} currentUserId={currentUserId} />
+            </p>
+
+            <div className="mt-6">
+              <Link
+                to="/Categories/$name"
+                params={{ name: selectedPublication.category || "General" }}
+                className="px-4 py-2 bg-pink-500 text-white rounded-full text-sm hover:scale-105 transition-transform"
+              >
+                {selectedPublication.category || "Sin categoría"}
+              </Link>
             </div>
           </div>
         </div>
-      )}
+
+        {/* Comentarios (movidos al final para que queden abajo) */}
+        <div className="mt-8 w-full">
+          <h2 className="text-white text-lg font-semibold mb-3">Comentarios</h2>
+
+          <div className="flex flex-col gap-2 max-h-[260px] overflow-y-auto mb-4">
+            {comments[selectedPublication.id]?.length ? (
+              comments[selectedPublication.id].map((comment, i) => (
+                <div key={i} className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm">
+                  {comment}
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400 text-sm">No hay comentarios aún.</p>
+            )}
+          </div>
+
+          {/* Área para escribir nuevo comentario */}
+          <div className="mt-2 flex flex-col gap-3">
+            <textarea
+              value={currentComment}
+              onChange={(e) => setCurrentComment(e.target.value)}
+              placeholder="Escribe un comentario..."
+              className="w-full bg-stone-900 text-gray-200 p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-stone-700 shadow-md placeholder:text-pink-300"
+              rows={3}
+            />
+            <div className="flex justify-end gap-3">
+              <button
+                className="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 text-white"
+                onClick={() => {
+                  setCurrentComment("");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
+                onClick={async () => {
+                  if (!currentComment.trim()) {
+                    return showToast("El comentario no puede estar vacío", "error");
+                  }
+                  await addComment(selectedPublication.id, currentComment, selectedPublication.user_id!);
+                  await fetchComments(selectedPublication.id);
+                  setCurrentComment("");
+                }}
+              >
+                Publicar
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }
