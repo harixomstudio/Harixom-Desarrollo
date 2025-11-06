@@ -13,29 +13,16 @@ class StripeController extends Controller
 {
     public function createCheckoutSession(Request $request)
     {
-        // Loguear todo lo que entra
-    \Log::info('Headers recibidos:', $request->headers->all());
-
     // Intentar obtener el usuario autenticado
     $user = $request->user();
 
     // Log para ver si el usuario es null
     if (!$user) {
-        \Log::warning('Usuario no autenticado', ['headers' => $request->headers->all()]);
         return response()->json(['error' => 'Usuario no autenticado'], 401);
     }
 
-// Loguear el usuario recibido
-    \Log::info('Usuario autenticado', [
-        'id' => $user->id,
-        'name' => $user->name,
-        'email' => $user->email
-    ]);
-
-$email = $user->email; // viene del token
+        $email = $user->email; // viene del token
         $plan = $request->plan;   // 'monthly' o 'annual'
-        \Log::info('Plan seleccionado', ['plan' => $plan]);
-
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $priceId = $plan === 'monthly'
@@ -53,7 +40,15 @@ $email = $user->email; // viene del token
             'cancel_url' => env('FRONTEND_URL') . '/subscription-cancelled',
         ]);
 
-        \Log::info('Stripe session creada', ['url' => $session->url]);
+        Subscription::create([
+        'user_id' => $user->id,
+        'stripe_price_id' => $priceId,
+        'plan' => $plan,
+        'amount' => $plan === 'monthly' ? 8.00 : 76.08,
+        'currency' => 'usd',
+        'start_date' => now(),
+        'status' => 'pending', // hasta que se confirme el pago
+    ]);
 
         $user->is_premium = true;
     $user->save();
@@ -97,5 +92,20 @@ $email = $user->email; // viene del token
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()], 500);
     }
+}
+
+public function userSubscriptions(Request $request)
+{
+    $user = $request->user();
+
+    if (!$user) {
+        return response()->json(['error' => 'Usuario no autenticado'], 401);
+    }
+
+    $subscriptions = Subscription::where('user_id', $user->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    return response()->json(['subscriptions' => $subscriptions]);
 }
 }
