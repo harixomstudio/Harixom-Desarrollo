@@ -47,7 +47,7 @@ export default function DataSubscriptionPage() {
               className="p-4 border border-gray-700 rounded-lg bg-stone-800"
             >
               <p>
-                <strong>Plan:</strong> {sub.plan}
+                <strong>Plan:</strong> {sub.plan_type}
               </p>
               <p>
                 <strong>Monto:</strong> ${sub.amount} {sub.currency}
