@@ -52,11 +52,11 @@ export default function Nav() {
   };
   const handleChangePassword = async () => {
     try {
-      const response = await axiosRequest.post("change-password", 
-        { 
+      const response = await axiosRequest.post("change-password",
+        {
           email: profileData?.user?.email
 
-         });
+        });
       showToast(response.data.message);
     } catch (error: any) {
       showToast(
@@ -64,19 +64,19 @@ export default function Nav() {
         "error"
       )
 
-    } 
+    }
   };
 
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      if (searchTerm.trim().length > 0) {
-        handleSearch();
-      } else {
-        setShowModal(false);
-      }
-    }, 400);
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm]);
+    useEffect(() => {
+      const delayDebounce = setTimeout(() => {
+        if (searchTerm.trim().length > 0) {
+          handleSearch();
+        } else {
+          setShowModal(false);
+        }
+      }, 400);
+      return () => clearTimeout(delayDebounce);
+    }, [searchTerm]);
 
   useEffect(() => {
     if (profileData?.user?.id) {
@@ -234,6 +234,18 @@ export default function Nav() {
                   <li>
                     <button
                       className=" w-full text-left px-4 py-3 text-white bg-stone-900 hover:bg-pink-600 transition-all flex "
+                      onClick={() => {
+                        setModalProfile(false);
+                        navigate({ to: "/DataSubscription" });
+                      }} // Cierra el menú al hacer clic
+                    >
+                      <span className="text-pink-400"></span> Show subscriptions
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      className=" w-full text-left px-4 py-3 text-white bg-stone-900 hover:bg-pink-600 transition-all flex "
                       onClick={() => { setModalProfile(false); handleChangePassword(); }} // Cierra el menú al hacer clic
                     >
                       <span className="text-pink-400"></span> Change Password
@@ -296,7 +308,19 @@ export default function Nav() {
           </nav>
 
           {/* Contenedor para los botones */}
+          
           <div className="mt-auto flex flex-col gap-4">
+
+            {/* Botón para mostrar las suscripciones */}
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                navigate({ to: "/DataSubscription" });
+              }}
+              className="bg-[#474cb5] hover:bg-[#343aae] text-white font-semibold py-2 rounded-lg transition-all"
+            >
+              Show Subscriptions
+            </button>
             {/* Botón para cambiar contraseña */}
             <button
               onClick={() => {

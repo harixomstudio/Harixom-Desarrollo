@@ -33,6 +33,7 @@ import { Route as FAQRouteImport } from './routes/FAQ'
 import { Route as EventsDetailRouteImport } from './routes/EventsDetail'
 import { Route as EventsCreateRouteImport } from './routes/EventsCreate'
 import { Route as EventsRouteImport } from './routes/Events'
+import { Route as DataSubscriptionRouteImport } from './routes/DataSubscription'
 import { Route as DashboardRouteImport } from './routes/Dashboard'
 import { Route as CreatePublicationRouteImport } from './routes/CreatePublication'
 import { Route as ChangePasswordRouteImport } from './routes/ChangePassword'
@@ -160,6 +161,11 @@ const EventsRoute = EventsRouteImport.update({
   path: '/Events',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DataSubscriptionRoute = DataSubscriptionRouteImport.update({
+  id: '/DataSubscription',
+  path: '/DataSubscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/Dashboard',
   path: '/Dashboard',
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/ChangePassword': typeof ChangePasswordRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
+  '/DataSubscription': typeof DataSubscriptionRoute
   '/Events': typeof EventsRoute
   '/EventsCreate': typeof EventsCreateRoute
   '/EventsDetail': typeof EventsDetailRoute
@@ -229,6 +236,7 @@ export interface FileRoutesByTo {
   '/ChangePassword': typeof ChangePasswordRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
+  '/DataSubscription': typeof DataSubscriptionRoute
   '/Events': typeof EventsRoute
   '/EventsCreate': typeof EventsCreateRoute
   '/EventsDetail': typeof EventsDetailRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/ChangePassword': typeof ChangePasswordRoute
   '/CreatePublication': typeof CreatePublicationRoute
   '/Dashboard': typeof DashboardRoute
+  '/DataSubscription': typeof DataSubscriptionRoute
   '/Events': typeof EventsRoute
   '/EventsCreate': typeof EventsCreateRoute
   '/EventsDetail': typeof EventsDetailRoute
@@ -296,6 +305,7 @@ export interface FileRouteTypes {
     | '/ChangePassword'
     | '/CreatePublication'
     | '/Dashboard'
+    | '/DataSubscription'
     | '/Events'
     | '/EventsCreate'
     | '/EventsDetail'
@@ -328,6 +338,7 @@ export interface FileRouteTypes {
     | '/ChangePassword'
     | '/CreatePublication'
     | '/Dashboard'
+    | '/DataSubscription'
     | '/Events'
     | '/EventsCreate'
     | '/EventsDetail'
@@ -360,6 +371,7 @@ export interface FileRouteTypes {
     | '/ChangePassword'
     | '/CreatePublication'
     | '/Dashboard'
+    | '/DataSubscription'
     | '/Events'
     | '/EventsCreate'
     | '/EventsDetail'
@@ -393,6 +405,7 @@ export interface RootRouteChildren {
   ChangePasswordRoute: typeof ChangePasswordRoute
   CreatePublicationRoute: typeof CreatePublicationRoute
   DashboardRoute: typeof DashboardRoute
+  DataSubscriptionRoute: typeof DataSubscriptionRoute
   EventsRoute: typeof EventsRoute
   EventsCreateRoute: typeof EventsCreateRoute
   EventsDetailRoute: typeof EventsDetailRoute
@@ -590,6 +603,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/DataSubscription': {
+      id: '/DataSubscription'
+      path: '/DataSubscription'
+      fullPath: '/DataSubscription'
+      preLoaderRoute: typeof DataSubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/Dashboard': {
       id: '/Dashboard'
       path: '/Dashboard'
@@ -641,6 +661,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChangePasswordRoute: ChangePasswordRoute,
   CreatePublicationRoute: CreatePublicationRoute,
   DashboardRoute: DashboardRoute,
+  DataSubscriptionRoute: DataSubscriptionRoute,
   EventsRoute: EventsRoute,
   EventsCreateRoute: EventsCreateRoute,
   EventsDetailRoute: EventsDetailRoute,

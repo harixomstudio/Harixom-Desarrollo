@@ -78,6 +78,8 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
     //Pagos
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
     Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
+    //Mostrar informacion de pagos
+    Route::get('/subscriptions', [StripeController::class, 'userSubscriptions']);
 
     // Subgrupo solo para usuarios premium
        Route::post('/events/create', [EventApiController::class, 'store']);
