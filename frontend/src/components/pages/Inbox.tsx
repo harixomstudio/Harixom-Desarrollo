@@ -8,6 +8,9 @@ interface NotificationsProps {
     users: string[]
     UsersID: number[]
     texts: string[]
+    howDoIt?: string[]
+    details?: string[]
+    dateDoIt?: string[]
     dates: string[]
     images: string[]
     alts: string[]
@@ -40,6 +43,9 @@ export default function Notifications(props: NotificationsProps) {
         user: props.users[index],
         userId: props.UsersID[index],
         text: props.texts[index],
+        howDoIt: (props.howDoIt ?? [])[index] || "",
+        details: (props.details ?? [])[index] || "",
+        dateDoIt: (props.dateDoIt ?? [])[index] || "",
         date: props.dates[index],
         priority: props.prioritys[index],
         image: props.images[index],
@@ -119,7 +125,17 @@ export default function Notifications(props: NotificationsProps) {
                                 {noti.user}
                             </a>
                         </h2>
-                        <p className="max-lg:text-sm max-lg:line-clamp-3">{noti.text}</p>
+                        {noti.priority === "High" && (
+                            <div className="grid grid-cols-1 gap-2 w-3/4 justify-center items-center">
+                                <p className="max-lg:text-sm max-lg:line-clamp-3">Commision: {noti.text}</p>
+                                <p className="max-lg:text-sm max-lg:line-clamp-3">How do it: {noti.howDoIt}</p>
+                                <p className="max-lg:text-sm max-lg:line-clamp-3">More details: {noti.details}</p>
+                                <p className="max-lg:text-sm max-lg:line-clamp-3">Date to do it: {noti.dateDoIt}</p>
+                            </div>
+                        )} {noti.priority !== "High" && (
+                            <p className="max-lg:text-sm max-lg:line-clamp-3">{noti.text}</p>
+                        )}
+
                         <p>{noti.date}</p>
                     </div>
                 </div>

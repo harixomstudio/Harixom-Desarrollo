@@ -62,6 +62,13 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
   const [favoriteCount, setFavoriteCount] = useState(12);
 
 
+  // Modal de comisión
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [commissionText, setCommissionText] = useState("");
+  const [dateDoIt, setDateDoIt] = useState("");
+  const [howDoIt, setHowDoIt] = useState("");
+  const [details, setDetails] = useState("");
+
   useEffect(() => { //Despliegue de un infinito, scroll aparece cargando y aumentan las publicaciones
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
@@ -104,13 +111,20 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
   }, [messageCount]);
 
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden"; // Desactiva el scroll
+    } else {
+      document.body.style.overflow = ""; // Lo reactiva
+    }
+
+  }, [isModalOpen]);
+
   // Messages
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
-  // Modal de comisión
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [commissionText, setCommissionText] = useState("");
 
   const [, setButtonPosition] = useState({ top: 450, left: 1000 });
   (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -204,6 +218,9 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
         {
           to_user_id: toUserId,
           message: commissionText,
+          howDoIt: howDoIt,
+          details: details,
+          dateDoIt: dateDoIt,
           date: new Date().toISOString().split("T")[0],
         },
         { headers: { Authorization: `Bearer ${token}` } },
@@ -785,9 +802,30 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
               <textarea
                 value={commissionText}
                 onChange={(e) => setCommissionText(e.target.value)}
-                placeholder="Describe tu comisión..."
+                placeholder="Write your commission..."
                 className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
-                rows={5}
+                rows={2}
+              />
+
+              <textarea
+                value={howDoIt}
+                onChange={(e) => setHowDoIt(e.target.value)}
+                placeholder="¿How to do it?"
+                className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
+                rows={2}
+              />
+              <textarea
+                value={details}
+                onChange={(e) => setDetails(e.target.value)}
+                placeholder="Details..."
+                className="w-full bg-gray-900 text-white p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
+                rows={2}
+              />
+              <input
+                type="date"
+                value={dateDoIt}
+                onChange={(e) => setDateDoIt(e.target.value)}
+                className="w-full bg-gray-900 text-white  p-3 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 border border-purple-500"
               />
               <div className="flex justify-end gap-4 mt-4">
                 <button
@@ -804,6 +842,9 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
                     handleSendCommission(props.userId);
                     setIsModalOpen(false)
                     setCommissionText("");
+                    setHowDoIt("");
+                    setDetails("");
+                    setDateDoIt("");
                   }}>
                   Send
                 </button>

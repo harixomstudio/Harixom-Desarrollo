@@ -9,7 +9,7 @@ class Commission extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['from_user_id', 'to_user_id', 'message', 'status'];
+    protected $fillable = ['from_user_id', 'to_user_id', 'message', 'howDoIt', 'details', 'dateDoIt', 'status'];
 
     public function fromUser()
     {

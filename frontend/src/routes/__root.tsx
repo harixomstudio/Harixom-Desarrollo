@@ -189,6 +189,9 @@ function RootComponent() {
           users={notificationsData.map((number) => number.from_user?.name || number.user?.name || number.name)}
           UsersID={notificationsData.map((number) => number.from_user?.id || number.user?.id || number.id || number.user_id)}
           texts={notificationsData.map((number) => number.message || number.comment)}
+          howDoIt={notificationsData.map((number) => number.howDoIt)}
+          details={notificationsData.map((number) => number.details)}
+          dateDoIt={notificationsData.map((number) => number.dateDoIt)}
           dates={notificationsData.map((number) => new Date(number.created_at).toLocaleString() === 'Invalid Date' ? number.created_at : new Date(number.created_at).toLocaleString('es-CR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }))}
           images={notificationsData.map(() => 'bell.svg')}
           alts={notificationsData.map(() => 'bell')}

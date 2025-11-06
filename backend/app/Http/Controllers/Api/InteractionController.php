@@ -262,6 +262,9 @@ class InteractionController extends Controller
         $request->validate([
             'to_user_id' => 'required|exists:users,id',
             'message' => 'required|string|max:500',
+            'howDoIt' => 'required|string|max:500',
+            'details' => 'required|string|max:500',
+            'dateDoIt' => 'required|date',
             'date' => 'required|date',
         ]);
 
@@ -269,6 +272,9 @@ class InteractionController extends Controller
             'from_user_id' => auth()->id(),
             'to_user_id' => $request->to_user_id,
             'message' => $request->message,
+            'howDoIt' => $request->howDoIt,
+            'details' => $request->details,
+            'dateDoIt' => $request->dateDoIt,
             'status' => 'High',
         ]);
 
@@ -279,6 +285,9 @@ class InteractionController extends Controller
                 'from_user' => $commission->fromUser->only(['id', 'name', 'profile_picture']),
                 'to_user' => $commission->toUser->only(['id', 'name']),
                 'message' => $commission->message,
+                'howDoIt' => $commission->howDoIt,
+                'details' => $commission->details,
+                'dateDoIt' => $commission->dateDoIt,
                 'created_at' => $commission->created_at->diffForHumans(),
             ],
         ]);
@@ -299,6 +308,9 @@ class InteractionController extends Controller
                     ],
                     'to_user_id' => $commission->to_user_id,
                     'message' => $commission->message,
+                    'howDoIt' => $commission->howDoIt,
+                    'details' => $commission->details,
+                    'dateDoIt' => $commission->dateDoIt,
                     'status' => $commission->status,
                     'created_at' => $commission->created_at->diffForHumans(),
                 ];
