@@ -49,7 +49,7 @@ $email = $user->email; // viene del token
                 'quantity' => 1,
             ]],
             'mode' => 'subscription',
-            'success_url' => env('FRONTEND_URL') . '/subscription-success' . $plan,
+            'success_url' => env('FRONTEND_URL') . '/subscription-success?plan=' . $plan,
             'cancel_url' => env('FRONTEND_URL') . '/subscription-cancelled',
         ]);
 

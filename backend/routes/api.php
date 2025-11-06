@@ -79,9 +79,6 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
     Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
     Route::post('/cancelSubscription', [StripeController::class, 'cancelSubscription']);
 
-    
-
-
     // Subgrupo solo para usuarios premium
        Route::post('/events/create', [EventApiController::class, 'store']);
        Route::post('/workshops/create', [TallerApiController::class, 'store']);
@@ -90,11 +87,9 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
 //Stripe
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
 
-
 //emailReport
 Route::post('/email/report', [EmailReportController::class, 'sendReport']);
     
-
 //Rutas para eventos y talleres
 Route::get('/events', [EventApiController::class, 'index']);
 Route::get('/events/{id}', [EventApiController::class, 'show']);
@@ -110,7 +105,6 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 
 Route::post('/change-password', [PasswordResetController::class, 'changePassword']);
 Route::post('/password-getChange', [PasswordResetController::class, 'change']);
-
 
 //Ruta de bienvenida a Harixom
 Route::post('/welcome', [InteractionController::class, 'welcome']);
