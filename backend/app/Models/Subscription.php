@@ -12,8 +12,8 @@ class Subscription extends Model
     protected $fillable = [
         'user_id',
         'stripe_subscription_id',
-        'stripe_price_id',
-        'plan',
+        'stripe_customer_id',
+        'plan_type',
         'amount',
         'currency',
         'start_date',
