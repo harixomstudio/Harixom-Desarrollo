@@ -110,7 +110,7 @@ export default function Nav() {
   ];
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node) && imageRef.current?.contains(event.target as Node)) {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node) && !imageRef.current?.contains(event.target as Node)) {
       setModalProfile(false); // Cierra el menú si se hace clic fuera de él
     }
   };
