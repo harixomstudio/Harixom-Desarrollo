@@ -123,7 +123,7 @@ class StripeController extends Controller
         <div style='background-color:#0c0a09; padding:30px; color:white; border-radius:10px; font-family:Arial, Helvetica, sans-serif;'>
             <div style='max-width:600px; margin:auto; background-color:#202020; border-radius:10px; padding:30px;'>
                 <h2 style='color:#f6339a;'>¡Hi, the subscription has been completed {$user->name}!</h2>
-                <p>Your subscription <b>{$plan}</b> plan has been successfully completed. Your account is now <b>premium</b> and your plan renewal date is <b>" . now()->addDays($plan === 'monthly' ? 30 : 365) . "</b>. </p>
+                <p>Your <b>{$plan}</b> subscription has been successfully completed. Your account is now <b>premium</b> and your plan renewal date is <b>" . now()->addDays($plan === 'monthly' ? 30 : 365) . "</b>. </p>
                 <p>You can now access all the features of Harixom.</p>
                 <p>¡Thanks for your purchase! Best regards, Harixom team.</p>
                 <hr style='border:none; border-top:1px solid #ddd; margin:30px 0;'>
