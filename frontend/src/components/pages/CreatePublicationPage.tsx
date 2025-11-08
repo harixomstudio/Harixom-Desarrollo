@@ -116,7 +116,7 @@ export default function CreatePublicationPage({ title }: { title: string }) {
     "Digital Art",
     "Animation",
     "Sculpture",
-    "Traditional Art",
+    "Traditional",
     "3D Art",
     "Street Art",
     "Photography",
