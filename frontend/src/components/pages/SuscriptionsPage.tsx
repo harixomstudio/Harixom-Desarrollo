@@ -37,7 +37,8 @@ const SuscriptionsPage = () => {
   const [isPremium, setIsPremium] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loadingUser, setLoadingUser] = useState(true);
-  const [loadingAction, setLoadingAction] = useState(false);
+  const [loadingAction, setLoadingAction] = useState("");
+  const [checkPremium, setCheckPremium] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -66,13 +67,37 @@ const SuscriptionsPage = () => {
     fetchUser();
   }, [token]);
 
+  const checkSubscription = async () => {
+    try {
+      const res = await axios.get(
+        "https://harixom-desarrollo.onrender.com/api/subscriptions",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+
+        }
+      );
+      setCheckPremium(res.data.subscriptions[0].plan_type);
+    } catch (err: any) {
+      console.error("Error al obtener usuario:", err);
+      showToast("Error al cargar tu perfil. Intenta de nuevo.", "error");
+    } finally {
+      setLoadingUser(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!token) return;
+    checkSubscription();
+  }, [token]);
+
+
   const handleSubscribe = async (plan: string) => {
     if (!token || !user) {
       showToast("Debes iniciar sesión antes de suscribirte.");
       return;
     }
 
-    setLoadingAction(true);
+    setLoadingAction(plan);
     try {
       const res = await axios.post(
         `https://harixom-desarrollo.onrender.com/api/create-checkout-session`,
@@ -91,7 +116,7 @@ const SuscriptionsPage = () => {
       console.error("Error creando sesión:", err);
       showToast("Error al crear la sesión de Stripe.", "error");
     } finally {
-      setLoadingAction(false);
+      setLoadingAction("");
     }
   };
 
@@ -101,24 +126,48 @@ const SuscriptionsPage = () => {
       return;
     }
 
-    setLoadingAction(true);
+    setLoadingAction("cancel");
     try {
-      const res = await axios.post(
+      await axios.post(
         `https://harixom-desarrollo.onrender.com/api/cancelSubscription`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("Respuesta al cancelar suscripción:", res.data);
+
       setIsPremium(false);
-      showToast("Suscrption canceled successfully.", "success");
+      showToast("Suscription canceled successfully.", "success");
     } catch (err: any) {
       console.error("Error cancelando suscripción:", err);
       showToast("No se pudo cancelar la suscripción.", "error");
     } finally {
-      setLoadingAction(false);
+      setLoadingAction("");
     }
   };
 
+  const handleEmailConfirmation = async () => {
+    if (!token) {
+      showToast("Usuario no autenticado. Inicia sesión nuevamente.", "error");
+      return;
+    }
+    try {
+      const res = await axios.post("https://harixom-desarrollo.onrender.com/api/subscription-cancel-email",
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      showToast(res.data.message, "success");
+    } catch (error: any) {
+      showToast(
+        error.response?.data?.error || "Error al enviar el correo.",
+        "error"
+      )
+    }
+  };
+
+  useEffect(() => {
+    handleEmailConfirmation();
+  }, []);
   if (loadingUser) {
     return (
       <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20" style={{ fontFamily: "Montserrat" }}>
@@ -131,11 +180,13 @@ const SuscriptionsPage = () => {
     );
   }
 
+
   return (
     <section className="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-800 text-white flex flex-col items-center py-20 px-6" style={{ fontFamily: "Montserrat" }}>
       {/* Título */}
       <h1 className="text-5xl md:text-7xl font-extrabold mb-16 text-center text-pink-300 bg-clip-text animate-pulse">
         {"Premium Plans".split("").map((char, i) => (
+
           <span
             key={i}
             className="inline-block animate-bounce"
@@ -147,7 +198,7 @@ const SuscriptionsPage = () => {
               display: "inline-block",
             }}
           >
-            {char}
+            {char === " " ? "\u00A0" : char}
           </span>
         ))}
       </h1>
@@ -160,10 +211,10 @@ const SuscriptionsPage = () => {
           </p>
           <button
             onClick={handleCancelSubscription}
-            disabled={loadingAction}
+            disabled={loadingAction === "cancel"}
             className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-8 rounded-full transition-all duration-300 hover:scale-105"
           >
-            {loadingAction ? "Cancelling..." : "Cancel Subscription"}
+            {loadingAction === "cancel" ? "Cancelling..." : "Cancel Subscription"}
           </button>
         </div>
       )}
@@ -195,18 +246,39 @@ const SuscriptionsPage = () => {
             {!isPremium ? (
               <button
                 onClick={() => handleSubscribe(plan.title.toLowerCase())}
-                disabled={loadingAction}
+                disabled={loadingAction === plan.title.toLowerCase()}
                 className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-2 px-6 rounded-full shadow-md hover:shadow-lg transition-all duration-300"
               >
-                {loadingAction ? "Processing..." : "Subscribe"}
+                {loadingAction === plan.title.toLowerCase() ? "Processing..." : "Subscribe"}
               </button>
             ) : (
-              <button
-                disabled
-                className="bg-purple-900/50 text-purple-300 font-semibold py-2 px-6 rounded-full cursor-default"
-              >
-                Active
-              </button>
+              plan.title.toLowerCase() === checkPremium ? (
+                <button
+                  disabled
+                  className="bg-purple-900/50 text-purple-300 font-semibold py-2 px-6 rounded-full cursor-default"
+                >
+                  Active
+                </button>
+              ) : (
+                plan.title.toLowerCase() === "annual" ? (
+                  <button
+                    onClick={() => handleSubscribe(plan.title.toLowerCase())}
+                    disabled={loadingAction === plan.title.toLowerCase()}
+                    className=" bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-2 px-6 rounded-full shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-600"
+                  >
+                    {loadingAction === "annual" ? "Upgrading..." : "Upgrade"}
+                  </button>
+                ) : (
+
+                  <button
+                    onClick={() => handleSubscribe(plan.title.toLowerCase())}
+                    disabled={loadingAction === plan.title.toLowerCase()}
+                    className=" bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-2 px-6 rounded-full shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-600"
+                  >
+                    {loadingAction === "monthly" ? "Downgrading..." : "Downgrade"}
+                  </button>
+                )
+              )
             )}
           </div>
         ))}

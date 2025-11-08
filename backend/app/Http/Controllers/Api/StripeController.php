@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use App\Models\Subscription;
+use App\Services\BrevoMailer;
+use Illuminate\Support\Facades\Log;
 
 class StripeController extends Controller
 {
@@ -22,7 +24,7 @@ class StripeController extends Controller
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $priceId = $plan === 'monthly'
-            ? 'price_1SKQXRRtEJ6FFuUtsSOpb7df' 
+            ? 'price_1SKQXRRtEJ6FFuUtsSOpb7df'
             : 'price_1SKQYmRtEJ6FFuUtK9JWK24a';
 
         // Crear la sesión de Stripe
@@ -104,5 +106,67 @@ class StripeController extends Controller
             ->get();
 
         return response()->json(['subscriptions' => $subscriptions]);
+    }
+
+
+    public function sendSuccessEmail(Request $request)
+    {
+        $user = $request->user();
+        $plan = $request->input('plan');
+
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+
+        try {
+            $htmlContent = "
+        <div style='background-color:#0c0a09; padding:30px; color:white; border-radius:10px; font-family:Arial, Helvetica, sans-serif;'>
+            <div style='max-width:600px; margin:auto; background-color:#202020; border-radius:10px; padding:30px;'>
+                <h2 style='color:#f6339a;'>¡Hi, the subscription has been completed {$user->name}!</h2>
+                <p>Your subscription <b>{$plan}</b> plan has been successfully completed. Your account is now <b>premium</b> and your plan renewal date is <b>" . now()->addDays($plan === 'monthly' ? 30 : 365) . "</b>. </p>
+                <p>You can now access all the features of Harixom.</p>
+                <p>¡Thanks for your purchase! Best regards, Harixom team.</p>
+                <hr style='border:none; border-top:1px solid #ddd; margin:30px 0;'>
+                <p style='text-align:center; color:#999; font-size:13px;'>&copy; " . date('Y') . " Harixom - All rights reserved.</p>
+            </div>
+        </div>";
+
+            BrevoMailer::send($user->email, "Subscription Completed - Harixom", $htmlContent);
+
+            return response()->json(['message' => 'Your subscription has been completed successfully']);
+        } catch (\Exception $e) {
+            Log::error("Error enviando correo de éxito: " . $e->getMessage());
+            return response()->json(['error' => 'No se pudo enviar el correo.'], 500);
+        }
+    }
+
+
+    public function sendCancelEmail(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+
+        try {
+            $htmlContent = "
+        <div style='background-color:#0c0a09; padding:30px; color:white; border-radius:10px; font-family:Arial, Helvetica, sans-serif;'>
+            <div style='max-width:600px; margin:auto; background-color:#202020; border-radius:10px; padding:30px;'>
+                <h2 style='color:#f6339a;'>Hi {$user->name}, your subscription has been cancelled</h2>
+                <p>We regret to inform you that your subscription has been cancelled.</p>
+                <p>You can always renew your subscription at any time. Come back soon!</p>
+                <hr style='border:none; border-top:1px solid #ddd; margin:30px 0;'>
+                <p style='text-align:center; color:#999; font-size:13px;'>&copy; " . date('Y') . " Harixom - All rights reserved.</p>
+            </div>
+        </div>";
+
+            BrevoMailer::send($user->email, "Subscription Cancelled - Harixom", $htmlContent);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error("Error send cancel email: " . $e->getMessage());
+            return response()->json(['error' => 'Cannot send email'], 500);
+        }
     }
 }
