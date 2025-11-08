@@ -12,7 +12,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'https://harixom-desarrollo.onrender.com',
+      '/api': 'http://127.0.0.1:8000',
     },
   },
 })
