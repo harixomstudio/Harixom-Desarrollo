@@ -1,12 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Resources\UserResource;
 use App\Http\Controllers\Auth\PasswordResetController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Api\PublicationController;
 use App\Http\Controllers\Api\InteractionController;
 use App\Http\Controllers\Api\AIController;
