@@ -11,17 +11,27 @@ export default function Home(props: HomeProps) {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setAnimate(true), 100);
-    return () => clearTimeout(timeout);
-  }, []);
+    // Animación inicial
+    const animationTimeout = setTimeout(() => setAnimate(true), 100);
+
+    // Redirección automática después de 3 segundos
+    const redirectTimeout = setTimeout(() => {
+      navigate({ to: "/Login" });
+    }, 3000);
+
+    return () => {
+      clearTimeout(animationTimeout);
+      clearTimeout(redirectTimeout);
+    };
+  }, [navigate]);
 
   const letters = props.title.split("");
 
   return (
     <section
-      onClick={() => navigate({ to: "/Login" })}
-      className="relative flex h-screen items-center justify-center bg-stone-950 overflow-hidden cursor-pointer "
-    style={{ fontFamily: "Montserrat" }}>
+      className="relative flex h-screen items-center justify-center bg-stone-950 overflow-hidden"
+      style={{ fontFamily: "Montserrat" }}
+    >
       {/* Fondo decorativo */}
       <img
         src="/circles.svg"
@@ -39,10 +49,11 @@ export default function Home(props: HomeProps) {
           {letters.map((char, i) => (
             <span
               key={i}
-              className={`inline-block transition-all duration-1000 ease-out ${animate
-                  ? "opacity-100 translate-y-0 scale-100 rotate-0 "
-                  : "opacity-0 translate-y-10 scale-50 rotate-12 "
-                }`}
+              className={`inline-block transition-all duration-1000 ease-out ${
+                animate
+                  ? "opacity-100 translate-y-0 scale-100 rotate-0"
+                  : "opacity-0 translate-y-10 scale-50 rotate-12"
+              }`}
               style={{
                 transitionDelay: `${i * 100}ms`,
               }}
@@ -53,8 +64,9 @@ export default function Home(props: HomeProps) {
         </h1>
 
         <p
-          className={`mt-6 text-lg md:text-2xl transition-all duration-1000 ease-in-out ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
-            }`}
+          className={`mt-6 text-lg md:text-2xl transition-all duration-1000 ease-in-out ${
+            animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+          }`}
           style={{
             transitionDelay: `${letters.length * 100 + 300}ms`,
           }}

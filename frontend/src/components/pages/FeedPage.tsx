@@ -45,6 +45,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const token = localStorage.getItem("access_token")!;
   const { showToast } = useToast();
   const navigate = useNavigate();
+  
 
   const [isModalOpen, setIsModalOpen] = useState<number | null>(null);
   const [currentComment, setCurrentComment] = useState("");
@@ -279,13 +280,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
           <div
             key={pub.id}
             onClick={() => openModal(pub)}
-            className="bg-[#151515] rounded-2xl overflow-hidden flex flex-col w-[340px] h-[460px] max-lg:w-full max-lg:h-full cursor-pointer transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/40"
-          >
+            
+            className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-[340px] h-[460px] 
+cursor-pointer transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/20 border-1 border-stone-800"
+>
 
             {/* Imagen */}
             <div
               className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer "
-              onClick={() => openModal(pub)} // Solo abrir el modal al hacer clic en la imagen
+              onClick={() => openModal(pub)}
             >
               {/* Avatar y nombre */}
               <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
@@ -324,6 +327,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   }}
                 >
                   <div className="flex items-center gap-1">
+
                     <span
                       className="text-white font-semibold text-sm drop-shadow hover:text-pink-400 cursor-pointer"
                       onClick={(e) => {
@@ -340,6 +344,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     >
                       {pub.user_name || "ArtistUser"}
                     </span>
+
+
                     {pub.isPremium && (
                       <img src="/premium.svg" alt="Insignia Premium" className="w-4 h-4" />
                     )}
@@ -360,8 +366,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
             </div>
 
             {/* Footer */}
-            <div className="flex flex-row justify-between items-center px-4 py-5 bg-[#151515]">
-              <div className="flex flex-row gap-5 items-center">
+            <div className="flex flex-row justify-between items-center px-4 py-5 bg-[#0b0b0b]">
+              <div className="flex flex-row gap-3 items-center">
                 {/* Like */}
                 <button
                   className={`flex items-center gap-1 group transition-colors duration-200 ${likes[pub.id] ? "text-pink-500" : "text-gray-300"
@@ -422,6 +428,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   </span>
                 </button>
 
+
+
                 {/* Seguir (oculto si es el mismo user) */}
                 {pub.user_id !== undefined && pub.user_id !== currentUserId && (
                   <button
@@ -467,10 +475,22 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     )}
                   </button>
                 )}
+
+
+
                 {/* Categoría */}
-                <span className="ml-10 text-gray-300 font-bold">
-                  {pub.category}
-                </span>
+                
+             {pub.category && (
+              <span className="ml-10 text-gray-300 font-bold border-2 border-gray-500 rounded-full p-2 text-xs hover:border-pink-500">
+               <Link
+                    to="/Categories/$name"
+                    params={{ name: pub.category }}>
+                   {pub.category}
+               </Link>
+               </span>
+              )}
+
+                 
               </div>
             </div>
 
