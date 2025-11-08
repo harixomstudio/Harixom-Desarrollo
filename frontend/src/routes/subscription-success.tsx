@@ -1,4 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useToast } from "../components/ui/Toast";
+import { axiosRequest } from "../components/helpers/config";
 
 export const Route = createFileRoute("/subscription-success")({
   component: RouteComponent,
@@ -11,13 +14,42 @@ export const Route = createFileRoute("/subscription-success")({
 
 function RouteComponent() {
   const { plan } = Route.useSearch();
+  const { showToast } = useToast();
+  const token = localStorage.getItem("access_token");
 
   const planText =
     plan === "monthly"
       ? "Monthly Subscription"
       : plan === "annual"
-      ? "Annual Subscription"
-      : "Subscription";
+        ? "Annual Subscription"
+        : "Subscription";
+
+  const handleEmailConfirmation = async () => {
+    if (!token) {
+      showToast("Usuario no autenticado. Inicia sesión nuevamente.", "error");
+      return;
+    }
+    try {
+      const res = await axiosRequest.post("https://harixom-desarrollo.onrender.com/api/subscription-success-email",
+        {
+          plan
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      showToast(res.data.message, "success");
+    } catch (error: any) {
+      showToast(
+        error.response?.data?.error || "Error al enviar el correo.",
+        "error"
+      )
+    }
+  };
+
+  useEffect(() => {
+    handleEmailConfirmation();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-stone-900 text-white p-6">

@@ -71,9 +71,9 @@ class InteractionController extends Controller
     public function userLikesNotis($userId)
     {
         $likes = Like::with('publication')
-        ->where('for_user_id', $userId)
-        ->orderBy('created_at', 'asc')
-        ->get();
+            ->where('for_user_id', $userId)
+            ->orderBy('created_at', 'asc')
+            ->get();
 
         return response()->json([
             'likes' => $likes->map(function ($like) {
@@ -326,15 +326,15 @@ class InteractionController extends Controller
             'email' => 'required|email',
         ]);
 
-         $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-          if (!$user) {
+        if (!$user) {
             return response()->json([
                 'error' => 'No se encontró un usuario con ese correo.'
             ], 409);
         }
 
-        try{
+        try {
             $htmlContent = "
         <div style=' background-color: #0c0a09;  padding: 30px; font-family: Arial, Helvetica, sans-serif; color: white; border-radius: 10px;'>
         <div style=' max-width: 600px; margin: auto;  background-color: #202020; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 30px;'>

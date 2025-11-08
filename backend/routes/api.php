@@ -82,8 +82,12 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
     Route::get('/subscriptions', [StripeController::class, 'userSubscriptions']);
 
     // Subgrupo solo para usuarios premium
-       Route::post('/events/create', [EventApiController::class, 'store']);
-       Route::post('/workshops/create', [TallerApiController::class, 'store']);
+    Route::post('/events/create', [EventApiController::class, 'store']);
+    Route::post('/workshops/create', [TallerApiController::class, 'store']);
+    
+    //Rutas de envio de emails de stripe para suscripciones
+    Route::post('/subscription-success-email', [StripeController::class, 'sendSuccessEmail']);
+    Route::post('/subscription-cancel-email', [StripeController::class, 'sendCancelEmail']);
 });
 
 //Stripe
@@ -91,7 +95,7 @@ Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
 
 //emailReport
 Route::post('/email/report', [EmailReportController::class, 'sendReport']);
-    
+
 //Rutas para eventos y talleres
 Route::get('/events', [EventApiController::class, 'index']);
 Route::get('/events/{id}', [EventApiController::class, 'show']);
@@ -110,6 +114,7 @@ Route::post('/password-getChange', [PasswordResetController::class, 'change']);
 
 //Ruta de bienvenida a Harixom
 Route::post('/welcome', [InteractionController::class, 'welcome']);
+
 
 //Rutas de los Usuarios antes de autenticarse
 Route::post('user/register', [UserController::class, 'store']);
