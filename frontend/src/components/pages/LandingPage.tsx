@@ -72,7 +72,7 @@ const total = 4; // número real de banners
     queryKey: ["allPublications"],
     queryFn: async () => {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/publications",
+        "https://harixom-desarrollo.onrender.com/api/publications",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ const total = 4; // número real de banners
     (async () => {
       try {
         const { data } = await axios.get(
-          "http://127.0.0.1:8000/api/user",
+          "https://harixom-desarrollo.onrender.com/api/user",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

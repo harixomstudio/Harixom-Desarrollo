@@ -13,7 +13,7 @@ function RouteComponent() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["allPublications"],
     queryFn: async () => {
-      const response = await fetch("http://127.0.0.1:8000/api/publications", {
+      const response = await fetch("https://harixom-desarrollo.onrender.com/api/publications", {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
