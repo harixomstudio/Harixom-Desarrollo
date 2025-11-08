@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
+use Illuminate\Support\Facades\Log;
 
 Configuration::instance('cloudinary://175261732836894:2Cofi1fGKc6rmC1-ELQKZjxKCuw@duxccowqf?secure=true');
 
@@ -18,43 +19,43 @@ class PublicationController extends Controller
 {
 
     public function index()
-{
-    // Verifica si hay usuario autenticado
-    $authUser = Auth::check() ? Auth::user() : null;
+    {
+        // Verifica si hay usuario autenticado
+        $authUser = Auth::check() ? Auth::user() : null;
 
-    // Aplica el filtro de bloqueados solo si hay usuario autenticado
-    $query = Publication::query();
+        // Aplica el filtro de bloqueados solo si hay usuario autenticado
+        $query = Publication::query();
 
-    if ($authUser) {
-        $query->withoutBlocked($authUser);
+        if ($authUser) {
+            $query->withoutBlocked($authUser);
+        }
+
+        $publications = $query
+            ->with(['user', 'likes'])
+            ->withCount(['likes', 'comments'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($pub) {
+                return [
+                    'id' => $pub->id,
+                    'description' => $pub->description,
+                    'category' => $pub->category,
+                    'image' => $pub->image,
+                    'created_at' => $pub->created_at,
+                    'user_id' => $pub->user ? $pub->user->id : null,
+                    'user_name' => $pub->user ? $pub->user->name : 'Usuario',
+                    'user_profile_picture' => $pub->user
+                        ? $pub->user->profilePicturePath()
+                        : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                    'total_likes' => $pub->likes_count,
+                    'total_comments' => $pub->comments_count,
+                ];
+            });
+
+        return response()->json([
+            'publications' => $publications,
+        ]);
     }
-
-    $publications = $query
-        ->with(['user', 'likes'])
-        ->withCount(['likes', 'comments'])
-        ->orderBy('created_at', 'desc')
-        ->get()
-        ->map(function ($pub) {
-            return [
-                'id' => $pub->id,
-                'description' => $pub->description,
-                'category' => $pub->category,
-                'image' => $pub->image,
-                'created_at' => $pub->created_at,
-                'user_id' => $pub->user ? $pub->user->id : null,
-                'user_name' => $pub->user ? $pub->user->name : 'Usuario',
-                'user_profile_picture' => $pub->user
-                    ? $pub->user->profilePicturePath()
-                    : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                'total_likes' => $pub->likes_count,
-                'total_comments' => $pub->comments_count,
-            ];
-        });
-
-    return response()->json([
-        'publications' => $publications,
-    ]);
-}
 
     public function store(Request $request)
     {
@@ -65,48 +66,48 @@ class PublicationController extends Controller
             'category' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:3072',
         ], [
-    'image.max' => 'La imagen no puede superar los 3 MB.',
-    'image.mimes' => 'El archivo debe ser una imagen (jpg, jpeg, png, gif).'
+            'image.max' => 'La imagen no puede superar los 3 MB.',
+            'image.mimes' => 'El archivo debe ser una imagen (jpg, jpeg, png, gif).'
 
         ]);
 
         $imageUrl = null;
 
         if ($request->hasFile('image')) {
-    $file = $request->file('image');
+            $file = $request->file('image');
 
-    ////////////////////////////////////////////////////
-    \Log::info("Archivo recibido: " . $file->getClientOriginalName());
-    \Log::info("Tipo MIME: " . $file->getMimeType());
-    \Log::info("Tamaño: " . $file->getSize());
-    ////////////////////////////////////////////
+            ////////////////////////////////////////////////////
+            Log::info("Archivo recibido: " . $file->getClientOriginalName());
+            Log::info("Tipo MIME: " . $file->getMimeType());
+            Log::info("Tamaño: " . $file->getSize());
+            ////////////////////////////////////////////
 
-    try {
-        $result = $upload->upload(
-            $file->getRealPath(),
-            [
-                'folder' => 'Harixom/Publications',
-                'use_filename' => true,
-                'unique_filename' => true,
-                'overwrite' => true
-            ]
-        );
-        $imageUrl = $result['secure_url'];
+            try {
+                $result = $upload->upload(
+                    $file->getRealPath(),
+                    [
+                        'folder' => 'Harixom/Publications',
+                        'use_filename' => true,
+                        'unique_filename' => true,
+                        'overwrite' => true
+                    ]
+                );
+                $imageUrl = $result['secure_url'];
 
-        ////////////////////////////////////////////////////////
-        \Log::info("Imagen subida correctamente a Cloudinary: " . $imageUrl);
-        //////////////////////////////////////////
+                ////////////////////////////////////////////////////////
+                Log::info("Imagen subida correctamente a Cloudinary: " . $imageUrl);
+                //////////////////////////////////////////
 
-    } catch (\Exception $e) {
-        ///////////////////////////////////////////////////////////
-        \Log::error("Error al subir a Cloudinary: " . $e->getMessage());
-        /////////////////////////////////////
-        return response()->json([
-            'error' => 'No se pudo subir la imagen',
-            'details' => $e->getMessage()
-        ], 500);
-    }
-}
+            } catch (\Exception $e) {
+                ///////////////////////////////////////////////////////////
+                Log::error("Error al subir a Cloudinary: " . $e->getMessage());
+                /////////////////////////////////////
+                return response()->json([
+                    'error' => 'No se pudo subir la imagen',
+                    'details' => $e->getMessage()
+                ], 500);
+            }
+        }
 
         $publication = Publication::create([
             'user_id' => Auth::id(),
@@ -123,26 +124,26 @@ class PublicationController extends Controller
     }
 
     public function show($id)
-{
-    $pub = Publication::with('user', 'likes', 'comments')->find($id);
+    {
+        $pub = Publication::with('user', 'likes', 'comments')->find($id);
 
-    if (!$pub) {
-        return response()->json(['error' => 'Publicación no encontrada'], 404);
+        if (!$pub) {
+            return response()->json(['error' => 'Publicación no encontrada'], 404);
+        }
+
+        return response()->json([
+            'id' => $pub->id,
+            'description' => $pub->description,
+            'category' => $pub->category,
+            'image' => $pub->image,
+            'created_at' => $pub->created_at,
+            'user_id' => $pub->user ? $pub->user->id : null,
+            'user_name' => $pub->user ? $pub->user->name : 'Usuario',
+            'user_profile_picture' => $pub->user ? $pub->user->profilePicturePath() : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            'total_likes' => $pub->likes->count(),
+            'total_comments' => $pub->comments->count(),
+        ]);
     }
-
-    return response()->json([
-        'id' => $pub->id,
-        'description' => $pub->description,
-        'category' => $pub->category,
-        'image' => $pub->image,
-        'created_at' => $pub->created_at,
-        'user_id' => $pub->user ? $pub->user->id : null,
-        'user_name' => $pub->user ? $pub->user->name : 'Usuario',
-        'user_profile_picture' => $pub->user ? $pub->user->profilePicturePath() : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-        'total_likes' => $pub->likes->count(),
-        'total_comments' => $pub->comments->count(),
-    ]);
-}
 
     //Funcion destroy
     public function destroy($id)
