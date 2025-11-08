@@ -84,7 +84,7 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
     // Subgrupo solo para usuarios premium
     Route::post('/events/create', [EventApiController::class, 'store']);
     Route::post('/workshops/create', [TallerApiController::class, 'store']);
-    
+
     //Rutas de envio de emails de stripe para suscripciones
     Route::post('/subscription-success-email', [StripeController::class, 'sendSuccessEmail']);
     Route::post('/subscription-cancel-email', [StripeController::class, 'sendCancelEmail']);

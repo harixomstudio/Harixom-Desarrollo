@@ -45,7 +45,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const token = localStorage.getItem("access_token")!;
   const { showToast } = useToast();
   const navigate = useNavigate();
-  
+
 
   const [isModalOpen, setIsModalOpen] = useState<number | null>(null);
   const [currentComment, setCurrentComment] = useState("");
@@ -280,10 +280,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
           <div
             key={pub.id}
             onClick={() => openModal(pub)}
-            
+
             className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-[340px] h-[460px] 
 cursor-pointer transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/20 border-1 border-stone-800"
->
+          >
 
             {/* Imagen */}
             <div
@@ -479,18 +479,18 @@ cursor-pointer transition-transform duration-300 hover:-translate-y-2 hover:shad
 
 
                 {/* Categoría */}
-                
-             {pub.category && (
-              <span className="ml-10 text-gray-300 font-bold border-2 border-gray-500 rounded-full p-2 text-xs hover:border-pink-500">
-               <Link
-                    to="/Categories/$name"
-                    params={{ name: pub.category }}>
-                   {pub.category}
-               </Link>
-               </span>
-              )}
 
-                 
+                {pub.category && (
+                  <span className="ml-10 text-gray-300 font-bold border-2 border-gray-500 rounded-full p-2 text-xs hover:border-pink-500">
+                    <Link
+                      to="/Categories/$name"
+                      params={{ name: pub.category }}>
+                      {pub.category}
+                    </Link>
+                  </span>
+                )}
+
+
               </div>
             </div>
 
