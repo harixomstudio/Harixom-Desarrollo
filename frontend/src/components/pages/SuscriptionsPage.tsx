@@ -144,7 +144,7 @@ const SuscriptionsPage = () => {
     }
   };
 
-  const handleEmailConfirmation = async () => {
+  const handleEmailCancel = async () => {
     if (!token) {
       showToast("Usuario no autenticado. Inicia sesión nuevamente.", "error");
       return;
@@ -165,9 +165,6 @@ const SuscriptionsPage = () => {
     }
   };
 
-  useEffect(() => {
-    handleEmailConfirmation();
-  }, []);
   if (loadingUser) {
     return (
       <div className="flex bg-stone-950 text-white items-center h-full justify-center pb-20" style={{ fontFamily: "Montserrat" }}>
@@ -210,7 +207,7 @@ const SuscriptionsPage = () => {
             You’re currently a Premium User!
           </p>
           <button
-            onClick={handleCancelSubscription}
+            onClick={() => { handleCancelSubscription; handleEmailCancel }}
             disabled={loadingAction === "cancel"}
             className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-8 rounded-full transition-all duration-300 hover:scale-105"
           >
