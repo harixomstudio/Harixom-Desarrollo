@@ -2,6 +2,7 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import Categories from "../components/pages/Categories";
 
+
 export const Route = createFileRoute("/Categories/$name")({
   component: RouteComponent,
 });
