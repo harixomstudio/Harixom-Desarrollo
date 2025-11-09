@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Like;
-use App\Models\Follow;
 use App\Models\Comment;
 use App\Models\Commission;
 use App\Models\Publication;

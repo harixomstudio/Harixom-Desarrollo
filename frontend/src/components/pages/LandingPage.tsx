@@ -2,8 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import Footer from "../Footer";
 import { useInView } from "./useInView";
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useAppData } from "../helpers/AppDataContext";
 
 interface FooterProps {
   titlePage: string;
@@ -33,20 +32,8 @@ interface LandingProps {
   descriptionApp: string;
   textApp: string;
   linksArt: string[];
+  topArtists?: TopArtist[];
   footer?: FooterProps;
-}
-
-interface Publication {
-  id: number;
-  user_id?: number;
-  user_name?: string;
-  user_profile_picture?: string;
-  description?: string;
-  image?: string;
-  total_likes?: number;
-  total_comments?: number;
-  category?: string;
-  created_at?: string;
 }
 
 interface TopArtist {
@@ -64,57 +51,27 @@ export default function Landing(props: LandingProps) {
 
   const { ref: appRef, inView: appVisible } = useInView({ threshold: 0.3 });
   const navigate = useNavigate();
-const [current, setCurrent] = useState(0);
-const total = 4; // número real de banners
-
-  const token = localStorage.getItem("access_token");
-  const { data } = useQuery({
-    queryKey: ["allPublications"],
-    queryFn: async () => {
-      const response = await fetch(
-        "https://harixom-desarrollo.onrender.com/api/publications",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-      if (!response.ok) throw new Error("Error al obtener las publicaciones");
-      const json = await response.json();
-      return json.publications as Publication[];
-    },
-    enabled: !!token,
-  });
+  const [current, setCurrent] = useState(0);
+  const total = 4; // número real de banners
+  const { currentUser, publications } = useAppData();
 
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  useEffect(() => {
-    if (!token) return;
-    (async () => {
-      try {
-        const { data } = await axios.get(
-          "https://harixom-desarrollo.onrender.com/api/user",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setCurrentUserId(data.user?.id ?? null);
-      } catch (err) {
-        console.log("No se pudo obtener current user:", err);
-      }
-    })();
-  }, [token]);
 
-  const topArtists: TopArtist[] = (data || [])
-    .map((pub) => ({
-      id: pub.id,
-      user_id: pub.user_id ?? 0,
-      artist_name: pub.user_name ?? "Desconocido",
-      title: pub.description ?? "",
-      image: pub.image ?? "",
-      likes: pub.total_likes ?? 0,
-      profile_picture: pub.user_profile_picture ?? "circles.svg",
-    }))
+  useEffect(() => {
+    if (currentUser) {
+      setCurrentUserId(currentUser.id);
+    }
+  }, [currentUser]);
+
+  const topArtists = publications.map((pub) => ({
+    id: pub.id,
+    user_id: pub.user_id ?? 0,
+    artist_name: pub.user_name ?? "Desconocido",
+    title: pub.description ?? "",
+    image: pub.image ?? "",
+    likes: pub.total_likes ?? 0,
+    profile_picture: pub.user_profile_picture ?? "circles.svg",
+  }))
     .sort((a, b) => b.likes - a.likes)
     .slice(0, 4);
 
@@ -126,13 +83,13 @@ const total = 4; // número real de banners
     return () => clearInterval(timer);
   }, [total]);
 
-const nextSlide = () => {
-  setCurrent((prev) => (prev + 1) % total);
-};
+  const nextSlide = () => {
+    setCurrent((prev) => (prev + 1) % total);
+  };
 
-const prevSlide = () => {
-  setCurrent((prev) => (prev - 1 + total) % total);
-};
+  const prevSlide = () => {
+    setCurrent((prev) => (prev - 1 + total) % total);
+  };
 
   const styleTag = (
     <style
@@ -197,7 +154,7 @@ const prevSlide = () => {
   return (
     <>
       {styleTag}
-      <main className="pt-12 w-full bg-[#141414] text-white"style={{ fontFamily: "Montserrat" }}>
+      <main className="pt-12 w-full bg-[#141414] text-white" style={{ fontFamily: "Montserrat" }}>
         {/* Línea rosa animada debajo del nav */}
         <div className="relative w-full h-1.5 overflow-hidden bottom-12">
           <div className="absolute w-full h-full bg-gradient-to-r from-pink-300 via-pink-800 to-pink-300 animate-gradient" />
@@ -210,27 +167,27 @@ const prevSlide = () => {
           >
 
 
-             {/* Banner 0 */}
-        <div className="min-w-full h-full relative flex items-center justify-center">
-          <img
-           src="banner4.svg" alt="Banner 0"
-            className="absolute w-full h-full object-cover"
-           />
-          <div className="z-10 text-center flex flex-col items-center gap-7 px-4">
-            <h1
-              className="text-black text-2xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
-              style={{ fontFamily: "Montserrat" }}
-            >
-              Welcome to
-            </h1>
-             <h2
-              className="text-pink-600 text-8xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl"
-               style={{ fontFamily: "Starstruck" }}
-             >
-               Harixom
-             </h2>
-          </div>
-        </div>
+            {/* Banner 0 */}
+            <div className="min-w-full h-full relative flex items-center justify-center">
+              <img
+                src="banner4.svg" alt="Banner 0"
+                className="absolute w-full h-full object-cover"
+              />
+              <div className="z-10 text-center flex flex-col items-center gap-7 px-4">
+                <h1
+                  className="text-black text-2xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
+                  style={{ fontFamily: "Montserrat" }}
+                >
+                  Welcome to
+                </h1>
+                <h2
+                  className="text-pink-600 text-8xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl"
+                  style={{ fontFamily: "Starstruck" }}
+                >
+                  Harixom
+                </h2>
+              </div>
+            </div>
 
 
 
@@ -246,13 +203,13 @@ const prevSlide = () => {
                   className="text-pink-700 text-4xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold"
                   style={{ fontFamily: "Montserrat" }}
                 >
-                 The Empty space
+                  The Empty space
                 </h1>
                 <h2
                   className="text-black text-2xl max-sm:text-lg max-md:text-xl max-lg:text-1xl max-xl:text-2xl p-2"
                   style={{ fontFamily: "Montserrat" }}
                 >
-                 Holds endless possibilities
+                  Holds endless possibilities
                 </h2>
               </div>
             </div>
@@ -299,7 +256,7 @@ const prevSlide = () => {
               <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-4 gap-15">
                 {/* Imagen pincelada con texto encima */}
                 <div className="relative w-full flex items-center justify-center">
-               
+
                   <h2
                     className={`absolute inset-0 flex items-center justify-center text-black text-5xl max-sm:text-2xl max-md:text-3xl max-lg:text-4xl max-xl:text-5xl font-bold text-center ${current === 2 ? "animate-fade-text" : ""}`}
                     style={{ fontFamily: "Montserrat" }}
@@ -428,32 +385,29 @@ const prevSlide = () => {
             <img
               src={props.imgApp}
               alt={props.imgAppAlt}
-              className={`w-3/4 sm:w-2/3 object-contain transition-all duration-1000 ease-out ${
-                appVisible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-10"
-              }`}
+              className={`w-3/4 sm:w-2/3 object-contain transition-all duration-1000 ease-out ${appVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+                }`}
             />
           </div>
 
           {/* Texto de la app */}
           <div className="relative z-10 flex flex-col w-full lg:w-2/3 text-justify justify-center gap-8 sm:gap-10 max-xl:items-center items-start">
             <h2
-              className={`text-3xl sm:text-3xl md:text-3xl font-bold text-center lg:text-left transition-all duration-1000 ease-out ${
-                appVisible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-10"
-              }`}
+              className={`text-3xl sm:text-3xl md:text-3xl font-bold text-center lg:text-left transition-all duration-1000 ease-out ${appVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+                }`}
               style={{ fontFamily: "Montserrat" }}
             >
               {props.descriptionApp}
             </h2>
             <p
-              className={`text-base sm:text-lg md:text-xl lg:text-xl text-center lg:text-left px-2 lg:px-0 transition-all duration-1000 ease-out ${
-                appVisible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-10"
-              }`}
+              className={`text-base sm:text-lg md:text-xl lg:text-xl text-center lg:text-left px-2 lg:px-0 transition-all duration-1000 ease-out ${appVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+                }`}
               style={{ fontFamily: "Montserrat" }}
             >
               {props.textApp}

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PublicationController;
 use App\Http\Controllers\Api\InteractionController;
 use App\Http\Controllers\Api\AIController;
 use App\Http\Controllers\Api\EventApiController;
+use App\Http\Controllers\Api\NotisController;
 use App\Http\Controllers\Api\TallerApiController;
 use App\Http\Controllers\Api\ProfileMessageController;
 use App\Http\Controllers\Api\SearchController;
@@ -84,6 +85,10 @@ Route::middleware(['auth:sanctum', UserMiddleware::class])->group(function () {
     //Rutas de envio de emails de stripe para suscripciones
     Route::post('/subscription-success-email', [StripeController::class, 'sendSuccessEmail']);
     Route::post('/subscription-cancel-email', [StripeController::class, 'sendCancelEmail']);
+
+    //Ruta obtener todas las notificaciones
+    Route::get('/notifications/{userId}', [NotisController::class, 'notis']);
+
 });
 
 //Stripe

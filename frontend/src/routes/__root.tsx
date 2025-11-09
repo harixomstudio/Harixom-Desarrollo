@@ -7,6 +7,7 @@ import axios from "axios";
 import { axiosRequest } from "../components/helpers/config";
 import { useQuery } from "@tanstack/react-query";
 import Inbox from '../components/pages/Inbox'
+import { AppDataProvider } from "../components/helpers/AppDataContext";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -39,6 +40,7 @@ function RootComponent() {
 
   const listEvents = ["Events", "Workshop", "AI Challenges"];
   const referenceEvents = ["/Events", "/Workshops", "/AIChallenge"];
+  const navigate = useNavigate();
 
   const { data: profileData } = useQuery({
     queryKey: ["userProfile"],
@@ -56,70 +58,32 @@ function RootComponent() {
       if (!token) return
       try {
         // comisiones recibidas
-        const { data: commissions } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/user/commisions/${profileData?.user?.id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        // mensajes recibidos en el wall
-        const { data: messages } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/profile/${profileData?.user?.id}/messages`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        // comentarios recibidos en las publicaciones
-        const { data } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/user/comments/${profileData?.user?.id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        // seguidores recibidos
-        const { data: followersData } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/user/follows`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        // los likes que se reciben en cada publiccacion
-        const { data: likesData } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/user/likes/${profileData?.user?.id}`,
+        const { data: notis } = await axios.get(
+          `https://harixom-desarrollo.onrender.com/api/notifications/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
 
-        //se saca toda la data del json y se filtra
-        const myCommissions = commissions.commissions.filter(
+        const myFollowers = notis.data.followers
+        const myLikes = notis.data.likes
+        const myCommissions = notis.data.commissions.filter(
           (comission: any) => comission.to_user_id === profileData?.user?.id
         )
-        const myNotifications = messages.messages.filter(
-          (profile_message: any) => profile_message.to_user_id === profileData?.user?.id
-        )
-        const myComments = data.comments.filter(
+        const myComments = notis.data.comments.filter(
           (comments: any) => parseInt(comments.for_user_id) === profileData?.user?.id
         )
-        const myFollowers = followersData.followers
-        const myLikes = likesData.likes
-
+        const myMessages = notis.data.messages.filter(
+          (profile_message: any) => profile_message.to_user_id === profileData?.user?.id
+        )
 
         const mergedNotifications = [ //unificacion de la data
-          ...myNotifications,
+          ...myMessages,
           ...myCommissions,
           ...myComments,
           ...myFollowers,
           ...myLikes
         ];
-
-        mergedNotifications.sort((a: any, b: any) => {
-          const dateA = new Date(a.created_at);
-          const dateB = new Date(b.created_at);
-          return dateB.getTime() - dateA.getTime();
-        });
-
-
         setNotifications(mergedNotifications.length)
         setNotificationsData(mergedNotifications)
 
@@ -129,11 +93,10 @@ function RootComponent() {
     }
 
     fetchNotifications()
-    const intervalId = setInterval(fetchNotifications, 25000);
+    const intervalId = setInterval(fetchNotifications, 45000);
     return () => clearInterval(intervalId);
   }, [profileData?.user?.id]);
 
-    const navigate = useNavigate();
 
   React.useEffect(() => {
     const publicRoutes = [
@@ -162,7 +125,7 @@ function RootComponent() {
   }
 
   return (
-    <React.Fragment>
+    <AppDataProvider >
       {/* NAV PRINCIPAL */}
       {!hideNav && (
         <>
@@ -206,6 +169,6 @@ function RootComponent() {
           </div>
         </div>
       }
-    </React.Fragment>
+    </AppDataProvider>
   );
 }

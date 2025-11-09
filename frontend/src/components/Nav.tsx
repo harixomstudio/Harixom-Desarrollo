@@ -3,6 +3,7 @@ import { useNavigate, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { axiosRequest } from "../components/helpers/config";
 import { useToast } from "../components/ui/Toast";
+import { useAppData } from "../components/helpers/AppDataContext";
 
 export default function Nav() {
   const { showToast } = useToast();
@@ -15,6 +16,7 @@ export default function Nav() {
   const [showModal, setShowModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalProfile, setModalProfile] = useState(false);
+  const { currentUser } = useAppData();
 
   const token = localStorage.getItem("access_token");
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
@@ -31,9 +33,9 @@ export default function Nav() {
   });
 
   const userImage =
-    profileData?.user?.profile_picture ||
+    currentUser?.profile_picture ||
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-
+    
   const handleLogout = async () => {
     try {
       if (!token) return;
@@ -67,16 +69,16 @@ export default function Nav() {
     }
   };
 
-    useEffect(() => {
-      const delayDebounce = setTimeout(() => {
-        if (searchTerm.trim().length > 0) {
-          handleSearch();
-        } else {
-          setShowModal(false);
-        }
-      }, 400);
-      return () => clearTimeout(delayDebounce);
-    }, [searchTerm]);
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (searchTerm.trim().length > 0) {
+        handleSearch();
+      } else {
+        setShowModal(false);
+      }
+    }, 400);
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   useEffect(() => {
     if (profileData?.user?.id) {
@@ -308,7 +310,7 @@ export default function Nav() {
           </nav>
 
           {/* Contenedor para los botones */}
-          
+
           <div className="mt-auto flex flex-col gap-4">
 
             {/* Botón para mostrar las suscripciones */}
