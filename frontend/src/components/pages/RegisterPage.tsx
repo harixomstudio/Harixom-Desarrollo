@@ -56,7 +56,7 @@ export default function Register(props: RegisterProps) {
   const validatePhone = (value: string) => {
     const regex = /^\+\d{1,4}\d{6,12}$/;
     if (value && !regex.test(value)) {
-      setPhoneError("Ejemplo válido: +50612345678");
+      setPhoneError("");
     } else {
       setPhoneError("");
     }

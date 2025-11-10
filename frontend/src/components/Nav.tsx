@@ -235,7 +235,7 @@ export default function Nav() {
 
                   <li>
                     <button
-                      className=" w-full text-left px-4 py-3 text-white bg-stone-900 hover:bg-pink-600 transition-all flex "
+                      className=" w-full text-left px-4 py-3 text-white bg-stone-900 hover:bg-purple-600 transition-all flex "
                       onClick={() => {
                         setModalProfile(false);
                         navigate({ to: "/DataSubscription" });
