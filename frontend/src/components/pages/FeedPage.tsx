@@ -72,14 +72,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Funciones para abrir y cerrar el modal
-  const openModal = (publication: Publication) => {
-    setSelectedPublication(publication);
-  };
-
-  const closeModal = () => {
-    setSelectedPublication(null);
-  };
+  
 
   // Likes del usuario logueado
   const { data: userLikes } = useQuery({
@@ -268,6 +261,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
       </div>
     );
 
+    // Funciones para abrir y cerrar el modal
+  const openModal = (publication: Publication) => {
+    setSelectedPublication(publication);
+  };
+
+  const closeModal = () => {
+    setSelectedPublication(null);
+  };
+
   return (
     <div
       className="bg-stone-950 min-h-screen py-10 px-3"
@@ -308,7 +310,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
           <div
             key={pub.id}
             onClick={() => openModal(pub)}
-            className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-[340px] h-[460px] 
+            className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-[400px] h-[460px] 
             cursor-pointer transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/20 border-1 border-stone-800"
           >
             {/* Imagen */}
@@ -397,9 +399,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
               <div className="flex flex-row gap-3 items-center">
                 {/* Like */}
                 <button
-                  className={`flex items-center gap-1 group transition-colors duration-200 ${
-                    likes[pub.id] ? "text-pink-500" : "text-gray-300"
-                  }`}
+                  className={`flex items-center gap-1 group transition-colors duration-200 ${likes[pub.id] ? "text-pink-500" : "text-gray-300"
+                    }`}
                   title="Like"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -419,9 +420,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transition-all duration-200 group-hover:stroke-pink-500 ${
-                      animatingLikeId === pub.id ? "animate-wow" : ""
-                    }`}
+                    className={`transition-all duration-200 group-hover:stroke-pink-500 ${animatingLikeId === pub.id ? "animate-wow" : ""
+                      }`}
                   >
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
@@ -503,7 +503,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 )}
 
                 {/* Categoría */}
-
                 {pub.category && (
                   <span className="ml-10 text-gray-300 font-bold border-2 border-gray-500 rounded-full p-2 text-xs hover:border-pink-500">
                     <Link
@@ -658,7 +657,10 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   <h2 className="text-white text-3xl font-bold">
                     {selectedPublication.user_name || "Usuario desconocido"}
                   </h2>
+                </div>
 
+                {/* Like + contador */}
+                <div className="flex items-center gap-4 mt-6">
                   {/* Seguir */}
                   {selectedPublication.user_id !== currentUserId && (
                     <button
@@ -708,10 +710,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
                       </span>
                     </button>
                   )}
-                </div>
-
-                {/* Like + contador */}
-                <div className="flex items-center gap-4 mt-6">
                   <button
                     className={`flex items-center gap-2 hover:text-pink-500 ${likes[selectedPublication.id] ? "text-pink-500" : "text-gray-300"}`}
                     onClick={(e) => {
@@ -835,6 +833,76 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/*Modal de comentarios*/}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+          onClick={() => {
+            setIsModalOpen(null);
+            setCurrentComment("");
+          }}
+        >
+          <div
+            className="bg-stone-800 rounded-lg p-6 shadow-lg w-96 max-h-[80vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-white text-lg font-semibold mb-4">Comments</h2>
+            <div className="flex-1 overflow-y-auto mb-4 space-y-2">
+              {comments[isModalOpen]?.length ? (
+                comments[isModalOpen].map((comment, i) => (
+                  <div
+                    key={i}
+                    className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm"
+                  >
+                    {comment}
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-400 text-sm">No comments yet</p>
+              )}
+            </div>
+            <textarea
+              value={currentComment}
+              onChange={(e) => setCurrentComment(e.target.value)}
+              placeholder="Escribe tu comentario..."
+              className="w-full bg-stone-900 text-gray-200 p-3 rounded-lg resize-none 
+          focus:outline-none focus:ring-2 focus:ring-pink-400 
+          border border-stone-700 shadow-md placeholder:text-pink-300"
+              rows={3}
+            />
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
+                onClick={() => {
+                  setIsModalOpen(null);
+                  setCurrentComment("");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
+                onClick={async () => {
+                  if (currentComment.trim()) {
+                    const pub = publications.find((p) => p.id === isModalOpen);
+                    if (pub?.user_id) {
+                      await addComment(pub.id, currentComment, pub.user_id);
+                      await fetchComments(pub.id);
+                    }
+                    setIsModalOpen(null);
+                    setCurrentComment("");
+                  } else {
+                    showToast("El comentario no puede estar vacío", "error");
+                  }
+                }}
+              >
+                Post
+              </button>
             </div>
           </div>
         </div>
