@@ -107,8 +107,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
           apiGet("user/follows", token),
         ]);
 
-        console.log("📜 Publicaciones recibidas:", publications);
-
         const uid = userRes.user.id;
         setCurrentUserId(uid);
 
@@ -243,7 +241,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             {
               user_name: data.comment.user.name,
               user_profile_picture:
-                data.comment.user.profile_picture ||
+                data.comment.user.user_profile_picture ||
                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
               is_premium: data.comment.user.is_premium,
               comment: data.comment.comment,
@@ -288,21 +286,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const closeModal = () => {
     setSelectedPublication(null);
   };
-
-  console.log("✅ Estado final antes del render:", {
-  currentUserId,
-  follows,
-  likes,
-  likesCount,
-  comments,
-});
-
-console.log("🖼️ Publicaciones visibles:", publications.slice(0, visibleCount).map(p => ({
-  id: p.id,
-  user_name: p.user_name,
-  profile: p.user_profile_picture,
-  premium: p.is_premium
-})));
 
   return (
     <div

@@ -224,8 +224,17 @@ class InteractionController extends Controller
                     'title' => $comment->title,
                     'id' => $comment->id,
                     'for_user_id' => $comment->for_user_id,
-                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name, 'is_premium' => $comment->user->is_premium, '
-                    user_profile_picture' => $comment->user->user_profile_picture],
+                    'user' => $comment->user ? [
+                'id' => $comment->user->id,
+                'name' => $comment->user->name,
+                'is_premium' => $comment->user->is_premium,
+                'user_profile_picture' => $comment->user->user_profile_picture,
+            ] : [
+                'id' => null,
+                'name' => 'Anónimo',
+                'is_premium' => false,
+                'user_profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            ],
                     'comment' => $comment->comment,
                     'status' => $comment->status,
                     'created_at' => $comment->created_at->diffForHumans(),
@@ -247,8 +256,17 @@ class InteractionController extends Controller
                     'title' => $comment->title,
                     'id' => $comment->id,
                     'for_user_id' => $comment->for_user_id,
-                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name, 'is_premium' => $comment->user->is_premium, '
-                    user_profile_picture' => $comment->user->user_profile_picture],
+                    'user' => $comment->user ? [
+                'id' => $comment->user->id,
+                'name' => $comment->user->name,
+                'is_premium' => $comment->user->is_premium,
+                'user_profile_picture' => $comment->user->user_profile_picture,
+            ] : [
+                'id' => null,
+                'name' => 'Anónimo',
+                'is_premium' => false,
+                'user_profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            ],
                     'comment' => $comment->comment,
                     'status' => $comment->status,
                     'created_at' => $comment->created_at->diffForHumans(),
