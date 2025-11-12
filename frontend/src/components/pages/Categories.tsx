@@ -265,7 +265,7 @@ export default function Categories({
 
   return (
     <div
-      className="bg-stone-950 min-h-screen py-10 px-3"
+      className="bg-stone-950 min-h-screen mx-auto max-w-7xl py-10 px-3"
       style={{ fontFamily: "Montserrat" }}
     >
       <style>
@@ -320,17 +320,17 @@ export default function Categories({
       </div>
 
       {/* Grid de publicaciones con el nuevo diseño */}
-      <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6 justify-items-center">
         {categoriesPublications.map((pub) => (
           <div
             key={pub.id}
             onClick={() => openModal(pub)}
-            className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-[400px] h-[460px] 
-            cursor-pointer transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/20 border-1 border-stone-800"
+            className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-full max-w-[400px] h-[460px] 
+            cursor-pointer transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-pink-500/20 border border-stone-800 hover:border-pink-500"
           >
             {/* Imagen */}
             <div
-              className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer"
+              className="relative w-full h-[340px] flex items-center justify-center cursor-pointer"
               onClick={() => openModal(pub)}
             >
               {/* Avatar y nombre */}

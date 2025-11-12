@@ -139,12 +139,12 @@ export default function FeedPage({ publications }: FeedPageProps) {
     );
 
     const initialComments = publications.reduce(
-    (acc, pub) => {
-      acc[pub.id] = Array(pub.total_comments || 0).fill("");
-      return acc;
-    },
-    {} as Record<number, Comment[]>
-  );
+      (acc, pub) => {
+        acc[pub.id] = Array(pub.total_comments || 0).fill("");
+        return acc;
+      },
+      {} as Record<number, Comment[]>
+    );
 
     setLikesCount(initialLikes);
     setComments(initialComments);
@@ -290,7 +290,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   return (
     <div
-      className="bg-stone-950 min-h-screen py-10 px-3"
+      className="bg-stone-950 min-h-screen mx-auto max-w-7xl py-10 px-3"
       style={{ fontFamily: "Montserrat" }}
     >
       <style>
@@ -323,17 +323,17 @@ export default function FeedPage({ publications }: FeedPageProps) {
     }
   `}
       </style>
-      <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-1 max-xl:grid-cols-2 max-lg:items-center max-xl:flex max-xl:flex-wrap max-xl:justify-around ">
+      <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6 justify-items-center">
         {publications.slice(0, visibleCount).map((pub) => (
           <div
             key={pub.id}
             onClick={() => openModal(pub)}
-            className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-[400px] h-[460px] 
-            cursor-pointer transition-transform duration-800 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/20 border-1 border-stone-800 hover:border-pink-500"
+            className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-full max-w-[400px] h-[460px] 
+            cursor-pointer transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-pink-500/20 border border-stone-800 hover:border-pink-500"
           >
             {/* Imagen */}
             <div
-              className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer"
+              className="relative w-full h-[340px] flex items-center justify-center cursor-pointer"
               onClick={() => openModal(pub)}
             >
               {/* Avatar y nombre */}
@@ -403,8 +403,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
               <div className="flex flex-row gap-4 items-center">
                 {/* Like */}
                 <button
-                  className={`flex items-center gap-1 group transition-colors duration-200 ${likes[pub.id] ? "text-pink-500" : "text-gray-300"
-                    }`}
+                  className={`flex items-center gap-1 group transition-colors duration-200 ${
+                    likes[pub.id] ? "text-pink-500" : "text-gray-300"
+                  }`}
                   title="Like"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -424,8 +425,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transition-all duration-200 group-hover:stroke-pink-500 ${animatingLikeId === pub.id ? "animate-wow" : ""
-                      }`}
+                    className={`transition-all duration-200 group-hover:stroke-pink-500 ${
+                      animatingLikeId === pub.id ? "animate-wow" : ""
+                    }`}
                   >
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
@@ -506,26 +508,21 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   </button>
                 )}
 
-
-
                 {/* Categoría */}
                 <div className="px-3">
-                   {pub.category && (
-                  <span className="ml-10 text-gray-300 font-bold border-2 border-gray-500 rounded-full p-2 text-xs hover:border-pink-500 ">
-                    <Link
-                      to="/Categories/$name"
-                      params={{ name: pub.category }}
-                    >
-                      {pub.category}
-                    </Link>
-                  </span>
-                )}
+                  {pub.category && (
+                    <span className="ml-10 text-gray-300 font-bold border-2 border-gray-500 rounded-full p-2 text-xs hover:border-pink-500 ">
+                      <Link
+                        to="/Categories/$name"
+                        params={{ name: pub.category }}
+                      >
+                        {pub.category}
+                      </Link>
+                    </span>
+                  )}
                 </div>
-               
               </div>
             </div>
-
-
 
             {/* Descripción */}
             <div className="px-4 pb-6">
@@ -720,7 +717,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
                       >
                         <div className="flex flex-col">
                           <div className="flex items-center gap-1">
-                            <span className="font-semibold text-white">{c.user_name}</span>
+                            <span className="font-semibold text-white">
+                              {c.user_name}
+                            </span>
                             {c.is_premium && (
                               <img
                                 src="/premium.svg"
@@ -735,7 +734,9 @@ export default function FeedPage({ publications }: FeedPageProps) {
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-400 text-sm">No hay comentarios aún.</p>
+                    <p className="text-gray-400 text-sm">
+                      No hay comentarios aún.
+                    </p>
                   )}
                 </div>
 
@@ -802,11 +803,12 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     key={i}
                     className="bg-stone-900 text-gray-200 p-3 rounded-md border border-stone-700 shadow-sm flex items-start gap-3"
                   >
-                    
                     {/* Contenido */}
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-white">{c.user_name}</span>
+                        <span className="font-semibold text-white">
+                          {c.user_name}
+                        </span>
                         {c.is_premium && (
                           <img
                             src="/premium.svg"
