@@ -145,20 +145,26 @@ export default function CreatePublicationPage({ title }: { title: string }) {
   };
 
   return (
-    <section className="min-h-screen bg-stone-950 p-10 bg-[url('/circles.svg')] "style={{ fontFamily: "Montserrat" }}>
+    <section className="min-h-screen bg-stone-950 p-10 "style={{ fontFamily: "Montserrat" }}>
+      <img
+        src="/circles.svg"
+        alt="circles background"
+        className="absolute inset-0 w-full h-full object-cover opacity-50"
+      />
       <div>
+
         <div className="mb-10 pl-4">
           <Link
             to="/Profile"
-            className="font-bold bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-2.5"
+            className="font-extrabold text-2xl bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-3"
           >
             ←
           </Link>
         </div>
 
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center relative">
           <div className="mb-8 text-center">
-            <h2 className="text-2xl font-bold text-pink-400">{title}</h2>
+            <h2 className="text-3xl font-bold text-pink-400">{title}</h2>
           </div>
 
           <div className="w-full max-w-xl flex flex-col gap-8 relative">
@@ -190,7 +196,7 @@ export default function CreatePublicationPage({ title }: { title: string }) {
                 value={desc}
                 onChange={handleDescChange}
                 placeholder="Add description with @user or #tag"
-                className="w-full bg-stone-950 text-gray-300 p-3 rounded-lg border-b-2 border-stone-700"
+                className="w-full bg-stone-900 text-gray-300 p-3 rounded-lg border-b-2 border-stone-700"
               />
               {userSuggestions.length > 0 && (
                 <div className="absolute bg-stone-800 text-white rounded-md mt-1 w-full z-10 max-h-60 overflow-auto shadow-lg">
@@ -223,7 +229,7 @@ export default function CreatePublicationPage({ title }: { title: string }) {
               <select
                 value={cat}
                 onChange={(e) => setCat(e.target.value)}
-                className="w-full bg-stone-950 text-gray-300 p-3 rounded-lg border-b-2 border-stone-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="w-full bg-stone-900 text-gray-300 p-3 rounded-lg border-b-2 border-stone-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
               >
                 <option value="" disabled>
                   Select category

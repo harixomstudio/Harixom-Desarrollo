@@ -329,7 +329,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             key={pub.id}
             onClick={() => openModal(pub)}
             className="bg-gradient-to-b from-[#131313] to-[#070707] rounded-xl overflow-hidden flex flex-col w-[400px] h-[460px] 
-            cursor-pointer transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/20 border-1 border-stone-800"
+            cursor-pointer transition-transform duration-800 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/20 border-1 border-stone-800 hover:border-pink-500"
           >
             {/* Imagen */}
             <div
@@ -372,7 +372,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     }
                   }}
                 >
-                  <span className="text-white font-semibold  hover:text-pink-400 transition-colors drop-shadow-md">
+                  <span className="text-white font-semibold  hover:text-pink-400 transition-colors drop-shadow-lg">
                     {pub.user_name || "ArtistUser"}
                   </span>
 
@@ -399,8 +399,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
             </div>
 
             {/* Footer */}
-            <div className="flex flex-row justify-between items-center px-4 py-5 bg-[#0b0b0b]">
-              <div className="flex flex-row gap-3 items-center">
+            <div className="flex flex-row justify-between items-center px-8 py-5 bg-[#0b0b0b]">
+              <div className="flex flex-row gap-4 items-center">
                 {/* Like */}
                 <button
                   className={`flex items-center gap-1 group transition-colors duration-200 ${likes[pub.id] ? "text-pink-500" : "text-gray-300"
@@ -506,9 +506,12 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   </button>
                 )}
 
+
+
                 {/* Categoría */}
-                {pub.category && (
-                  <span className="ml-10 text-gray-300 font-bold border-2 border-gray-500 rounded-full p-2 text-xs hover:border-pink-500">
+                <div className="px-3">
+                   {pub.category && (
+                  <span className="ml-10 text-gray-300 font-bold border-2 border-gray-500 rounded-full p-2 text-xs hover:border-pink-500 ">
                     <Link
                       to="/Categories/$name"
                       params={{ name: pub.category }}
@@ -517,8 +520,12 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     </Link>
                   </span>
                 )}
+                </div>
+               
               </div>
             </div>
+
+
 
             {/* Descripción */}
             <div className="px-4 pb-6">

@@ -368,14 +368,18 @@ export default function Profile(props: ProfileProps) {
           </div>
         </div>
 
+
         {/* Info */}
         <div className="flex flex-col pl-10 text-white mt-6 mb-10 max-[19rem]:pl-5">
           <div className="flex items-center mb-2">
+
+
             {/* Username */}
             <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}</span>
             {props.isPremium && (
               <img src="/premium.svg" alt="Insignia Premium" className="w-8 h-8 mx-1" />
             )}
+
 
             {/* Buy me a coffee button */}
             <button
@@ -385,8 +389,10 @@ export default function Profile(props: ProfileProps) {
             </button>
           </div>
 
+
           {/* Description */}
           <span className="text-gray-400 text-lg mb-6">{props.address}</span>
+
 
           {/* Followers & Followings  */}
           <div className="flex gap-20 max-lg:gap-5 max-lg:text-sm text-white font-semibold text-xl mb-2">
@@ -409,6 +415,7 @@ export default function Profile(props: ProfileProps) {
               </span>
             </span>
           </div>
+
 
           {/* Followers Modal */}
           {showFollowers && (
@@ -594,9 +601,11 @@ export default function Profile(props: ProfileProps) {
           ))}
         </div>
 
+
         {/* Contenido */}
         <div className="w-full flex flex-col py-10 px-6">
           {activeTab === 1 ? (
+            
             /* Commissions tab */
             <>
               <div className="flex justify-end mb-6">
