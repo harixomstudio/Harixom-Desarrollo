@@ -46,6 +46,9 @@ export default function Register(props: RegisterProps) {
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [showTerms, setShowTerms] = useState(false);
   const [tempEmail, setTempEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
 
   const phoneCodeMap: Record<string, string> = {
     CR: "+506", MX: "+52", ES: "+34", US: "+1", FR: "+33", DE: "+49", IT: "+39",
@@ -347,26 +350,57 @@ export default function Register(props: RegisterProps) {
               {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address[0]}</p>}
             </div>
 
-            <div>
+
+
+            <div className="relative">
               <label>{props.password}</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={user.password}
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
+              <button
+                type="button"
+                className="absolute right-3 top-9 text-sm"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <img
+                  src={showPassword ? "ojociego.svg" : "ojoabierto.svg"}
+                  alt={showPassword ? "Ojo cerrado" : "Ojo abierto"}
+                  className="w-6 h-6"
+                />
+              </button>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>
+              )}
             </div>
 
-            <div>
+
+
+
+            <div className="relative">
               <label>{props.confirmPassword}</label>
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 value={user.confirmPassword}
                 onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
                 className="w-full px-3 py-2 border-b border-gray-400 bg-transparent focus:outline-none"
               />
+              <button
+                type="button"
+                className="absolute right-3 top-9 text-sm"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                <img
+                  src={showConfirmPassword ? "ojociego.svg" : "ojoabierto.svg"}
+                  alt={showConfirmPassword ? "Ojo cerrado" : "Ojo abierto"}
+                  className="w-6 h-6"
+                />
+              </button>
             </div>
+
+
 
             <button
               type="submit"
@@ -377,7 +411,7 @@ export default function Register(props: RegisterProps) {
               {loading ? "Registrando..." : "REGISTER"}
             </button>
 
-            <div className="text-center text-sm mt-4">
+            <div className="text-center text-sm mt-4 p-2">
               <p>{props.text}</p>
               <a href="/Login" className="ml-1 underline font-semibold hover:scale-105 duration-200">
                 {props.link}

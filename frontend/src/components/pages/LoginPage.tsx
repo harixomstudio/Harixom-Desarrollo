@@ -104,6 +104,8 @@ export default function Login(props: LoginProps) {
               />
             </div>
 
+
+
             <div className="relative">
               <label className="block text-sm mb-1 text-gray-700">
                 {props.password}
@@ -126,6 +128,9 @@ export default function Login(props: LoginProps) {
                 />
               </button>
             </div>
+
+
+            
 
             <button
               type="submit"
