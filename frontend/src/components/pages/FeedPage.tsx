@@ -710,15 +710,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
                         key={i}
                         className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm flex items-start gap-3"
                       >
-                        
-                        <img
-                          src={
-                            comment.user_profile_picture ||
-                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                          }
-                          alt={comment.user_name}
-                          className="w-8 h-8 rounded-full object-cover border border-pink-400"
-                        />
                         <div className="flex flex-col">
                           <div className="flex items-center gap-1">
                             <span className="font-semibold text-white">{comment.user_name}</span>
@@ -803,14 +794,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     key={i}
                     className="bg-stone-900 text-gray-200 p-3 rounded-md border border-stone-700 shadow-sm flex items-start gap-3"
                   >
-                    
-                    {/* Foto del usuario */}
-                    <img
-                      src={c.user_profile_picture}
-                      alt={c.user_name}
-                      className="w-10 h-10 rounded-full object-cover border border-stone-600"
-                    />
-
                     {/* Contenido */}
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
