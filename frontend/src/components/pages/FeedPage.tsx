@@ -27,7 +27,6 @@ interface FeedPageProps {
 
 interface Comment {
   user_name: string;
-  user_profile_picture: string;
   is_premium: boolean;
   comment: string;
 }
@@ -107,6 +106,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
           apiGet("user/follows", token),
         ]);
 
+        console.log("📜 Publicaciones recibidas:", publications);
+
         const uid = userRes.user.id;
         setCurrentUserId(uid);
 
@@ -137,17 +138,17 @@ export default function FeedPage({ publications }: FeedPageProps) {
       {} as Record<number, number>
     );
 
-    setLikesCount(initialLikes);
     const initialComments = publications.reduce(
     (acc, pub) => {
-      acc[pub.id] = Array(pub.total_comments || 0).fill(null);
+      acc[pub.id] = Array(pub.total_comments || 0).fill("");
       return acc;
     },
     {} as Record<number, Comment[]>
   );
 
-  setComments(initialComments);
-}, [userLikes, publications]);
+    setLikesCount(initialLikes);
+    setComments(initialComments);
+  }, [userLikes, publications]);
 
   const formatDate = useCallback((dateString?: string) => {
     if (!dateString) return "";
@@ -169,7 +170,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
           [pubId]: data.comments.map((c: any) => ({
             user_name: c.user.name,
             user_profile_picture:
-              c.user_profile_picture ||
+              c.user.profile_picture ||
               "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
             is_premium: c.user.is_premium,
             comment: c.comment,
@@ -241,7 +242,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
             {
               user_name: data.comment.user.name,
               user_profile_picture:
-                data.comment.user.user_profile_picture ||
+                data.comment.user.profile_picture ||
                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
               is_premium: data.comment.user.is_premium,
               comment: data.comment.comment,
@@ -371,7 +372,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     }
                   }}
                 >
-                  <span className="text-white font-semibold  hover:text-pink-400 transition-colors">
+                  <span className="text-white font-semibold  hover:text-pink-400 transition-colors drop-shadow-md">
                     {pub.user_name || "ArtistUser"}
                   </span>
 
@@ -705,15 +706,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 {/* Lista de comentarios */}
                 <div className="flex flex-col gap-2 max-h-[260px] overflow-y-auto mb-4">
                   {comments[selectedPublication.id]?.length ? (
-                    comments[selectedPublication.id].map((comment, i) => (
+                    comments[selectedPublication.id].map((c, i) => (
                       <div
                         key={i}
                         className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm flex items-start gap-3"
                       >
                         <div className="flex flex-col">
                           <div className="flex items-center gap-1">
-                            <span className="font-semibold text-white">{comment.user_name}</span>
-                            {comment.is_premium && (
+                            <span className="font-semibold text-white">{c.user_name}</span>
+                            {c.is_premium && (
                               <img
                                 src="/premium.svg"
                                 alt="Premium"
@@ -722,7 +723,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                               />
                             )}
                           </div>
-                          <p className="text-gray-300 text-sm">{comment.comment}</p>
+                          <p className="text-gray-300 text-sm">{c.comment}</p>
                         </div>
                       </div>
                     ))
@@ -794,6 +795,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     key={i}
                     className="bg-stone-900 text-gray-200 p-3 rounded-md border border-stone-700 shadow-sm flex items-start gap-3"
                   >
+                    
                     {/* Contenido */}
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
