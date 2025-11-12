@@ -140,7 +140,16 @@ export default function FeedPage({ publications }: FeedPageProps) {
     );
 
     setLikesCount(initialLikes);
-  }, [userLikes, publications]);
+    const initialComments = publications.reduce(
+    (acc, pub) => {
+      acc[pub.id] = Array(pub.total_comments || 0).fill(null);
+      return acc;
+    },
+    {} as Record<number, Comment[]>
+  );
+
+  setComments(initialComments);
+}, [userLikes, publications]);
 
   const formatDate = useCallback((dateString?: string) => {
     if (!dateString) return "";
@@ -162,7 +171,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
           [pubId]: data.comments.map((c: any) => ({
             user_name: c.user.name,
             user_profile_picture:
-              c.user.profile_picture ||
+              c.user_profile_picture ||
               "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
             is_premium: c.user.is_premium,
             comment: c.comment,

@@ -224,7 +224,8 @@ class InteractionController extends Controller
                     'title' => $comment->title,
                     'id' => $comment->id,
                     'for_user_id' => $comment->for_user_id,
-                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name, 'is_premium' => $comment->user->is_premium],
+                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name, 'is_premium' => $comment->user->is_premium, '
+                    user_profile_picture' => $comment->user->user_profile_picture],
                     'comment' => $comment->comment,
                     'status' => $comment->status,
                     'created_at' => $comment->created_at->diffForHumans(),
@@ -246,7 +247,8 @@ class InteractionController extends Controller
                     'title' => $comment->title,
                     'id' => $comment->id,
                     'for_user_id' => $comment->for_user_id,
-                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name, 'is_premium' => $comment->user->is_premium],
+                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name, 'is_premium' => $comment->user->is_premium, '
+                    user_profile_picture' => $comment->user->user_profile_picture],
                     'comment' => $comment->comment,
                     'status' => $comment->status,
                     'created_at' => $comment->created_at->diffForHumans(),
