@@ -344,7 +344,7 @@ export default function Landing(props: LandingProps) {
 
           {/* Lower categories */}
           <div
-            className="flex flex-wrap justify-center gap-30 max-xl:gap-20 max-lg:gap-10 duration-500"
+            className="flex flex-wrap justify-center gap-28 max-xl:gap-20 max-lg:gap-10 pt-5 duration-500"
             style={{ fontFamily: "Montserrat" }}
           >
             {props.categoriesDown.map((categoriesDown, number) => (
@@ -482,10 +482,14 @@ export default function Landing(props: LandingProps) {
                   />
 
                   <div className="absolute bottom-4 right-4 flex text-white text-lg sm:text-xl">
-                    <button className="hover:scale-110 duration-200">
-                      ❤️ {artist.likes}
-                    </button>
-                  </div>
+  <button
+    className="hover:scale-110 duration-200"
+    style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)" }}
+  >
+    ❤️ {artist.likes}
+  </button>
+</div>
+
                 </div>
 
                 <div className="text-center text-white text-base sm:text-lg">
