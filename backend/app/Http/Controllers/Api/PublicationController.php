@@ -44,6 +44,7 @@ class PublicationController extends Controller
                     'created_at' => $pub->created_at,
                     'user_id' => $pub->user ? $pub->user->id : null,
                     'user_name' => $pub->user ? $pub->user->name : 'Usuario',
+                    'is_premium' => $pub->user ? $pub->user->is_premium : false,
                     'user_profile_picture' => $pub->user
                         ? $pub->user->profilePicturePath()
                         : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
@@ -139,6 +140,7 @@ class PublicationController extends Controller
             'created_at' => $pub->created_at,
             'user_id' => $pub->user ? $pub->user->id : null,
             'user_name' => $pub->user ? $pub->user->name : 'Usuario',
+            'is_premium' => $pub->user ? $pub->user->is_premium : false,
             'user_profile_picture' => $pub->user ? $pub->user->profilePicturePath() : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             'total_likes' => $pub->likes->count(),
             'total_comments' => $pub->comments->count(),

@@ -11,7 +11,7 @@ interface Publication {
   description: string;
   image?: string;
   user_name?: string;
-  isPremium?: boolean;
+  is_premium?: boolean;
   user_profile_picture?: string;
   total_likes?: number;
   total_comments?: number;
@@ -72,8 +72,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
-
   // Likes del usuario logueado
   const { data: userLikes } = useQuery({
     queryKey: ["userLikes"],
@@ -101,6 +99,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
           apiGet("user", token),
           apiGet("user/follows", token),
         ]);
+
+        console.log("📜 Publicaciones recibidas:", publications);
 
         const uid = userRes.user.id;
         setCurrentUserId(uid);
@@ -261,7 +261,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
       </div>
     );
 
-    // Funciones para abrir y cerrar el modal
+  // Funciones para abrir y cerrar el modal
   const openModal = (publication: Publication) => {
     setSelectedPublication(publication);
   };
@@ -340,8 +340,8 @@ export default function FeedPage({ publications }: FeedPageProps) {
                   }}
                 />
 
-                <span
-                  className="text-white font-semibold text-sm drop-shadow hover:text-pink-400 cursor-pointer"
+                <div
+                  className="flex items-center gap-1 cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     if (pub.user_id === currentUserId) {
@@ -354,33 +354,20 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     }
                   }}
                 >
-                  <div className="flex items-center gap-1">
-                    <span
-                      className="text-white font-semibold text-sm drop-shadow hover:text-pink-400 cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (pub.user_id === currentUserId) {
-                          navigate({ to: "/Profile" });
-                        } else {
-                          navigate({
-                            to: "/ProfileGuest",
-                            search: { userId: pub.user_id },
-                          });
-                        }
-                      }}
-                    >
-                      {pub.user_name || "ArtistUser"}
-                    </span>
+                  <span className="text-white font-semibold text-sm hover:text-pink-400 transition-colors">
+                    {pub.user_name || "ArtistUser"}
+                  </span>
 
-                    {pub.isPremium && (
-                      <img
-                        src="/premium.svg"
-                        alt="Insignia Premium"
-                        className="w-4 h-4"
-                      />
-                    )}
-                  </div>
-                </span>
+                  {/* 👑 Insignia Premium */}
+                  {pub.is_premium && (
+                    <img
+                      src="/premium.svg"
+                      alt="Insignia Premium"
+                      className="w-4 h-4 animate-pulse drop-shadow-[0_0_5px_#db2a83]"
+                      title="Usuario Premium"
+                    />
+                  )}
+                </div>
               </div>
               {pub.image ? (
                 <WatermarkedImage
@@ -520,85 +507,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
             <div className="px-4 pb-6">
               <FeedDescription pub={pub} currentUserId={currentUserId} />
             </div>
-
-            {/* Modal comentarios */}
-            {isModalOpen === pub.id && (
-              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                <div className="bg-stone-800 rounded-lg p-6 shadow-lg w-96 max-h-[80vh] flex flex-col">
-                  <h2
-                    className="text-white text-lg font-semibold mb-4"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    Comments
-                  </h2>
-                  <div className="flex-1 overflow-y-auto mb-4 space-y-2">
-                    {comments[pub.id]?.length ? (
-                      comments[pub.id].map((comment, i) => (
-                        <div
-                          key={i}
-                          className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {comment}
-                        </div>
-                      ))
-                    ) : (
-                      <p
-                        className="text-gray-400 text-sm"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        No commets yet
-                      </p>
-                    )}
-                  </div>
-                  <textarea
-                    value={currentComment}
-                    onChange={(e) => setCurrentComment(e.target.value)}
-                    placeholder="Escribe tu comentario..."
-                    className="w-full bg-stone-900 text-gray-200 p-3 rounded-lg resize-none 
-                      focus:outline-none focus:ring-2 focus:ring-pink-400 
-                      border border-stone-700 shadow-md placeholder:text-pink-300"
-                    rows={3}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <div className="flex justify-end gap-4 mt-4">
-                    <button
-                      className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsModalOpen(null);
-                        setCurrentComment("");
-                      }}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white"
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        if (currentComment.trim()) {
-                          await addComment(
-                            pub.id,
-                            currentComment,
-                            publications.find((p) => p.id === pub.id)?.user_id!
-                          );
-                          await fetchComments(pub.id);
-                          setIsModalOpen(null);
-                          setCurrentComment("");
-                        } else {
-                          showToast(
-                            "El comentario no puede estar vacío",
-                            "error"
-                          );
-                        }
-                      }}
-                    >
-                      Post
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         ))}
       </div>
