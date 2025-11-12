@@ -16,7 +16,7 @@ export default function AIChallenge() {
   // 🔥 Nuevo estado para las publicaciones con el hashtag
   const [retoPosts, setRetoPosts] = useState<any[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [currentUserId] = useState<number | null>(null);
 
   const handleGetChallenge = async () => {
     if (!specialty.trim()) return alert("Escribe tu especialidad primero.");

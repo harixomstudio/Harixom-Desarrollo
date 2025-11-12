@@ -139,14 +139,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
       {} as Record<number, number>
     );
 
-    const initialComments = publications.reduce(
-      (acc, pub) => {
-        acc[pub.id] = Array(pub.total_comments || 0).fill("");
-        return acc;
-      },
-      {} as Record<number, string[]>
-    );
-
     setLikesCount(initialLikes);
   }, [userLikes, publications]);
 
