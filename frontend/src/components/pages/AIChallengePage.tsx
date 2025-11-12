@@ -188,7 +188,8 @@ export default function AIChallenge() {
                 className="bg-[#141414] rounded-2xl overflow-hidden w-[400px] shadow-md hover:shadow-[#A39FF6]/40 transition-transform duration-300 hover:-translate-y-2"
               >
                 {/* Encabezado del usuario */}
-                <div className="flex items-center gap-3 p-4">
+                <div className="relative w-full h-[300px] aspect-square flex items-center justify-center cursor-pointer">
+                  <div className="absolute top-3 left-3 flex items-center gap-2 bg-[#07070741] rounded-xl pr-2">
                   <img
                     src={
                       pub.user_profile_picture ||
@@ -223,16 +224,18 @@ export default function AIChallenge() {
                       }
                     }}
                   >
-                    <span className="text-white font-semibold text-sm hover:text-pink-400 transition-colors">
-                      {pub.user_name || "ArtistUser"}
-                    </span>
-                    {pub.isPremium && (
-                      <img
-                        src="/premium.svg"
-                        alt="Insignia Premium"
-                        className="w-4 h-4"
-                      />
-                    )}
+                    <span className="text-white font-semibold  hover:text-pink-400 transition-colors drop-shadow-md">
+                    {pub.user_name || "ArtistUser"}
+                  </span>
+
+                  {pub.is_premium && (
+                    <img
+                      src="/premium.svg"
+                      alt="Insignia Premium"
+                      className="w-6 h-6 drop-shadow-md"
+                      title="Usuario Premium"
+                    />
+                  )}
                   </div>
                 </div>
 
@@ -242,6 +245,7 @@ export default function AIChallenge() {
                   alt={pub.description}
                   className="w-full h-64 object-cover"
                 />
+                </div>
 
                 {/* Descripción */}
                 <div className="p-4 text-left">
