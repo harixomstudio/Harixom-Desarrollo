@@ -222,12 +222,15 @@ class InteractionController extends Controller
             'comments' => $comments->map(function ($comment) {
                 return [
                     'title' => $comment->title,
-                    'id' => $comment->id,
-                    'for_user_id' => $comment->for_user_id,
-                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name],
-                    'comment' => $comment->comment,
-                    'status' => $comment->status,
-                    'created_at' => $comment->created_at->diffForHumans(),
+                'id' => $comment->id,
+                'for_user_id' => $comment->for_user_id,
+                'user_id' => $comment->user->id,
+                'user_name' => $comment->user->name,
+                'user_profile_picture' => $comment->user->profile_picture,
+                'is_premium' => $comment->user->is_premium,
+                'comment' => $comment->comment,
+                'status' => $comment->status,
+                'created_at' => $comment->created_at->diffForHumans(),
                 ];
             })
         ]);
@@ -244,12 +247,15 @@ class InteractionController extends Controller
             'comments' => $comments->map(function ($comment) {
                 return [
                     'title' => $comment->title,
-                    'id' => $comment->id,
-                    'for_user_id' => $comment->for_user_id,
-                    'user' => ['id' => $comment->user->id, 'name' => $comment->user->name],
-                    'comment' => $comment->comment,
-                    'status' => $comment->status,
-                    'created_at' => $comment->created_at->diffForHumans(),
+                'id' => $comment->id,
+                'for_user_id' => $comment->for_user_id,
+                'user_id' => $comment->user->id,
+                'user_name' => $comment->user->name,
+                'user_profile_picture' => $comment->user->profile_picture,
+                'is_premium' => $comment->user->is_premium,
+                'comment' => $comment->comment,
+                'status' => $comment->status,
+                'created_at' => $comment->created_at->diffForHumans(),
                 ];
             })
         ]);

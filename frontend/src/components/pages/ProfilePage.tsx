@@ -374,7 +374,7 @@ export default function Profile(props: ProfileProps) {
             {/* Username */}
             <span className="text-3xl max-lg:text-2xl font-bold max-[19rem]:text-xl">{props.username}</span>
             {props.isPremium && (
-              <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6 mx-2" />
+              <img src="/premium.svg" alt="Insignia Premium" className="w-8 h-8 mx-1" />
             )}
 
             {/* Buy me a coffee button */}

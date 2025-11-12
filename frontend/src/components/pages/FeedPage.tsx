@@ -25,6 +25,13 @@ interface FeedPageProps {
   publications: Publication[];
 }
 
+interface Comment {
+  user_name: string;
+  user_profile_picture: string;
+  is_premium: boolean;
+  comment: string;
+}
+
 const API_URL = "https://harixom-desarrollo.onrender.com/api";
 
 const apiGet = async (url: string, token: string) => {
@@ -48,7 +55,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
 
   const [isModalOpen, setIsModalOpen] = useState<number | null>(null);
   const [currentComment, setCurrentComment] = useState("");
-  const [comments, setComments] = useState<Record<number, string[]>>({});
+  const [comments, setComments] = useState<Record<number, Comment[]>>({});
   const [likes, setLikes] = useState<Record<number, boolean>>({});
   const [likesCount, setLikesCount] = useState<Record<number, number>>({});
   const [follows, setFollows] = useState<Record<number, boolean>>({});
@@ -141,7 +148,6 @@ export default function FeedPage({ publications }: FeedPageProps) {
     );
 
     setLikesCount(initialLikes);
-    setComments(initialComments);
   }, [userLikes, publications]);
 
   const formatDate = useCallback((dateString?: string) => {
@@ -161,9 +167,14 @@ export default function FeedPage({ publications }: FeedPageProps) {
         const data = await apiGet(`comment/${pubId}`, token);
         setComments((prev) => ({
           ...prev,
-          [pubId]: data.comments.map(
-            (c: any) => `${c.user.name}: ${c.comment}`
-          ),
+          [pubId]: data.comments.map((c: any) => ({
+            user_name: c.user.name,
+            user_profile_picture:
+              c.user.profile_picture ||
+              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+            is_premium: c.user.is_premium,
+            comment: c.comment,
+          })),
         }));
       } catch {
         showToast("Error al cargar comentarios", "error");
@@ -228,7 +239,14 @@ export default function FeedPage({ publications }: FeedPageProps) {
           ...prev,
           [id]: [
             ...(prev[id] || []),
-            `${data.comment.user.name}: ${data.comment.comment}`,
+            {
+              user_name: data.comment.user.name,
+              user_profile_picture:
+                data.comment.user.profile_picture ||
+                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+              is_premium: data.comment.user.is_premium,
+              comment: data.comment.comment,
+            },
           ],
         }));
         showToast("¡Comentario publicado!", "success");
@@ -269,6 +287,21 @@ export default function FeedPage({ publications }: FeedPageProps) {
   const closeModal = () => {
     setSelectedPublication(null);
   };
+
+  console.log("✅ Estado final antes del render:", {
+  currentUserId,
+  follows,
+  likes,
+  likesCount,
+  comments,
+});
+
+console.log("🖼️ Publicaciones visibles:", publications.slice(0, visibleCount).map(p => ({
+  id: p.id,
+  user_name: p.user_name,
+  profile: p.user_profile_picture,
+  premium: p.is_premium
+})));
 
   return (
     <div
@@ -315,11 +348,11 @@ export default function FeedPage({ publications }: FeedPageProps) {
           >
             {/* Imagen */}
             <div
-              className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer "
+              className="relative w-full h-[340px] aspect-square flex items-center justify-center cursor-pointer"
               onClick={() => openModal(pub)}
             >
               {/* Avatar y nombre */}
-              <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
+              <div className="absolute top-3 left-3 flex items-center gap-2 z-10 bg-[#07070741] rounded-xl pr-2">
                 <img
                   src={
                     pub.user_profile_picture ||
@@ -341,7 +374,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                 />
 
                 <div
-                  className="flex items-center gap-1 cursor-pointer"
+                  className="flex items-center gap-1 cursor-pointer drop-shadow-md"
                   onClick={(e) => {
                     e.stopPropagation();
                     if (pub.user_id === currentUserId) {
@@ -354,16 +387,15 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     }
                   }}
                 >
-                  <span className="text-white font-semibold text-sm hover:text-pink-400 transition-colors">
+                  <span className="text-white font-semibold  hover:text-pink-400 transition-colors">
                     {pub.user_name || "ArtistUser"}
                   </span>
 
-                  {/* 👑 Insignia Premium */}
                   {pub.is_premium && (
                     <img
                       src="/premium.svg"
                       alt="Insignia Premium"
-                      className="w-4 h-4 animate-pulse drop-shadow-[0_0_5px_#db2a83]"
+                      className="w-6 h-6 drop-shadow-md"
                       title="Usuario Premium"
                     />
                   )}
@@ -395,7 +427,7 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     if (typeof pub.user_id === "number") {
                       toggleLike(pub.id, pub.user_id);
                     }
-                    setTimeout(() => setAnimatingLikeId(null), 600); // limpia animación
+                    setTimeout(() => setAnimatingLikeId(null), 600);
                   }}
                 >
                   <svg
@@ -692,15 +724,35 @@ export default function FeedPage({ publications }: FeedPageProps) {
                     comments[selectedPublication.id].map((comment, i) => (
                       <div
                         key={i}
-                        className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm"
+                        className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm flex items-start gap-3"
                       >
-                        {comment}
+                        
+                        <img
+                          src={
+                            comment.user_profile_picture ||
+                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                          }
+                          alt={comment.user_name}
+                          className="w-8 h-8 rounded-full object-cover border border-pink-400"
+                        />
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-1">
+                            <span className="font-semibold text-white">{comment.user_name}</span>
+                            {comment.is_premium && (
+                              <img
+                                src="/premium.svg"
+                                alt="Premium"
+                                className="w-4 h-4"
+                                title="Usuario Premium"
+                              />
+                            )}
+                          </div>
+                          <p className="text-gray-300 text-sm">{comment.comment}</p>
+                        </div>
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-400 text-sm">
-                      No hay comentarios aún.
-                    </p>
+                    <p className="text-gray-400 text-sm">No hay comentarios aún.</p>
                   )}
                 </div>
 
@@ -762,12 +814,34 @@ export default function FeedPage({ publications }: FeedPageProps) {
             <h2 className="text-white text-lg font-semibold mb-4">Comments</h2>
             <div className="flex-1 overflow-y-auto mb-4 space-y-2">
               {comments[isModalOpen]?.length ? (
-                comments[isModalOpen].map((comment, i) => (
+                comments[isModalOpen].map((c, i) => (
                   <div
                     key={i}
-                    className="bg-stone-900 text-gray-200 p-2 rounded-md border border-stone-700 shadow-sm"
+                    className="bg-stone-900 text-gray-200 p-3 rounded-md border border-stone-700 shadow-sm flex items-start gap-3"
                   >
-                    {comment}
+                    
+                    {/* Foto del usuario */}
+                    <img
+                      src={c.user_profile_picture}
+                      alt={c.user_name}
+                      className="w-10 h-10 rounded-full object-cover border border-stone-600"
+                    />
+
+                    {/* Contenido */}
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-white">{c.user_name}</span>
+                        {c.is_premium && (
+                          <img
+                            src="/premium.svg"
+                            alt="Insignia Premium"
+                            className="w-5 h-5"
+                            title="Usuario Premium"
+                          />
+                        )}
+                      </div>
+                      <p className="text-gray-300 text-sm mt-1">{c.comment}</p>
+                    </div>
                   </div>
                 ))
               ) : (

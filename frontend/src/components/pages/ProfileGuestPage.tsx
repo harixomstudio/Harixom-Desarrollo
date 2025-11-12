@@ -392,10 +392,10 @@ export default function ProfileGuestPage(props: ProfileGuestProps) {
 
           {/* Username */}
           <div className="flex items-center w-full gap-15 max-lg:gap-5 max-[19rem]:gap-2 ">
-            <span className="text-3xl max-lg:text-2xl font-bold mb-2 max-[19rem]:text-xl flex items-center gap-2">
+            <span className="text-3xl max-lg:text-2xl font-bold mb-2 max-[19rem]:text-xl flex items-center gap-1">
               {props.username}
               {props.isPremium && (
-                <img src="/premium.svg" alt="Insignia Premium" className="w-6 h-6" />
+                <img src="/premium.svg" alt="Insignia Premium" className="w-8 h-8" />
               )}
             </span>
             <button
