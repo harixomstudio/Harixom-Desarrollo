@@ -6,7 +6,7 @@ export default function FeedDescription({ pub, currentUserId }: any) {
 
   const token = localStorage.getItem("access_token");
   const axiosRequest = axios.create({
-    baseURL: "http://127.0.0.1:8000/api",
+    baseURL: "https://harixom-desarrollo.onrender.com/api",
     headers: { Authorization: `Bearer ${token}` },
   });
 

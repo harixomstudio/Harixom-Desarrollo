@@ -30,7 +30,7 @@ function RouteComponent() {
       return;
     }
     try {
-      const res = await axiosRequest.post("http://127.0.0.1:8000/api/subscription-success-email",
+      const res = await axiosRequest.post("https://harixom-desarrollo.onrender.com/api/subscription-success-email",
         {
           plan
         },

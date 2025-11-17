@@ -50,7 +50,7 @@ const SuscriptionsPage = () => {
 
       try {
         const res = await axios.get(
-          "http://127.0.0.1:8000/api/user",
+          "https://harixom-desarrollo.onrender.com/api/user",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -70,7 +70,7 @@ const SuscriptionsPage = () => {
   const checkSubscription = async () => {
     try {
       const res = await axios.get(
-        "http://127.0.0.1:8000/api/subscriptions",
+        "https://harixom-desarrollo.onrender.com/api/subscriptions",
         {
           headers: { Authorization: `Bearer ${token}` },
 
@@ -100,7 +100,7 @@ const SuscriptionsPage = () => {
     setLoadingAction(plan);
     try {
       const res = await axios.post(
-        `http://127.0.0.1:8000/api/create-checkout-session`,
+        `https://harixom-desarrollo.onrender.com/api/create-checkout-session`,
         { plan },
         {
           headers: {
@@ -128,7 +128,7 @@ const SuscriptionsPage = () => {
     setLoadingAction("cancel");
     try {
       await axios.post(
-        `http://127.0.0.1:8000/api/cancelSubscription`,
+        `https://harixom-desarrollo.onrender.com/api/cancelSubscription`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -151,7 +151,7 @@ const SuscriptionsPage = () => {
     }
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/subscription-cancel-email",
+      const res = await axios.post("https://harixom-desarrollo.onrender.com/api/subscription-cancel-email",
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

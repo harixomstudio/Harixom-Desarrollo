@@ -59,7 +59,7 @@ function RootComponent() {
       try {
         // comisiones recibidas
         const { data: notis } = await axios.get(
-          `http://127.0.0.1:8000/api/notifications/${profileData?.user?.id}`,
+          `https://harixom-desarrollo.onrender.com/api/notifications/${profileData?.user?.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

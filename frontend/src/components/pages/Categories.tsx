@@ -30,7 +30,7 @@ interface CategoriesProps {
   categoriesPublications: CategoriesPublication[];
 }
 
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = "https://harixom-desarrollo.onrender.com/api";
 
 const apiGet = async (url: string, token: string) => {
   const { data } = await axios.get(`${API_URL}/${url}`, {

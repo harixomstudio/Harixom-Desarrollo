@@ -40,7 +40,7 @@ export default function ChangePasswordPage(props: ChangePasswordProps) {
 
         // Solicita los datos del usuario al backend
         const { data } = await axiosRequest.get(
-          "http://127.0.0.1:8000/api/user",
+          "https://harixom-desarrollo.onrender.com/api/user",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
