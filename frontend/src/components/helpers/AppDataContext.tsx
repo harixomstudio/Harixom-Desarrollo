@@ -36,10 +36,10 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
       const [userRes, publicationsRes] = await Promise.all([
-        axios.get("https://harixom-desarrollo.onrender.com/api/user", {
+        axios.get("http://127.0.0.1:8000/api/user", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("https://harixom-desarrollo.onrender.com/api/publications", {
+        axios.get("http://127.0.0.1:8000/api/publications", {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);

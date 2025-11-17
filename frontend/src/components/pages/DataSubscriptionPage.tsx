@@ -14,7 +14,7 @@ export default function DataSubscriptionPage() {
     }
 
     axios
-      .get("https://harixom-desarrollo.onrender.com/api/subscriptions", {
+      .get("http://127.0.0.1:8000/api/subscriptions", {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",

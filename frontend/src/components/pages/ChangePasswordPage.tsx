@@ -40,7 +40,7 @@ export default function ChangePasswordPage(props: ChangePasswordProps) {
 
         // Solicita los datos del usuario al backend
         const { data } = await axiosRequest.get(
-          "https://harixom-desarrollo.onrender.com/api/user",
+          "http://127.0.0.1:8000/api/user",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -79,10 +79,19 @@ export default function ChangePasswordPage(props: ChangePasswordProps) {
       navigate({ to: "/Landing" });
     } catch (error: any) {
       console.error(error);
-      showToast(
-        error.response?.data?.error || "Error al cambiar la contraseña",
-        "error"
-      );
+
+      let msg = "Error al cambiar la contraseña";
+
+      if (error.response?.data?.error) {
+        msg = error.response.data.error;
+      } else if (error.response?.data?.message) {
+        msg = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        const firstKey = Object.keys(error.response.data.errors)[0];
+        msg = error.response.data.errors[firstKey][0];
+      }
+
+      showToast(msg, "error");
     } finally {
       setLoading(false);
     }
@@ -176,9 +185,6 @@ export default function ChangePasswordPage(props: ChangePasswordProps) {
                     className="w-6 h-6"
                   />
                 </button>
-                <p className="max-xl:text-sm text-red-600 animate-pulse max-md:text-xs max-[30rem]:text-[0.6rem]">
-                  {passwordMatch() ? "" : "Password does not match"}
-                </p>
               </div>
 
               {/* Confirmación de contraseña */}
@@ -208,11 +214,10 @@ export default function ChangePasswordPage(props: ChangePasswordProps) {
             </div>
             <button
               type="submit"
-              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-pink-400 to-blue-400"
-              }`}
+              className={`w-full py-2 mt-4 rounded-full text-white font-semibold ${loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-pink-400 to-blue-400"
+                }`}
               disabled={loading}
             >
               {loading ? "Updating..." : props.buttonText}

@@ -204,11 +204,15 @@ class PasswordResetController extends Controller
             ], 404);
         }
 
+        $request['new_password'] = bcrypt($request['new_password']);
+
         if (Hash::check($request->old_password, $user->password)) {
             $user->password = Hash::make($request->new_password);
             $user->save();
+        } else if (Hash::check($request->new_password, $user->password)) {
+            return response()->json(['error' => 'The new password cannot be the same as the old password.'], 400);
         } else {
-            return response()->json(['error' => 'La contraseña actual es incorrecta.'], 400);
+            return response()->json(['error' => 'The old password is incorrect.'], 400);
         }
 
         return response()->json([

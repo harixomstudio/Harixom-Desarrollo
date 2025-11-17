@@ -120,7 +120,7 @@ export default function Profile(props: ProfileProps) {
     const fetchMessages = async () => {
       try {
         const { data } = await axios.get(
-          `https://harixom-desarrollo.onrender.com/api/profile/${props.userId}/messages`,
+          `http://127.0.0.1:8000/api/profile/${props.userId}/messages`,
           {
             withCredentials: true,
             headers: { Authorization: `Bearer ${token}` }
@@ -159,7 +159,7 @@ export default function Profile(props: ProfileProps) {
   // Funciones
   const handleDeletePublication = async (id: number) => {
     try {
-      await axios.delete(`https://harixom-desarrollo.onrender.com/api/publications/${id}`, {
+      await axios.delete(`http://127.0.0.1:8000/api/publications/${id}`, {
         headers: {
           withCredentials: true,
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -179,7 +179,7 @@ export default function Profile(props: ProfileProps) {
     try {
       const token = localStorage.getItem("access_token");
       const { data } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/like/${postId}`,
+        `http://127.0.0.1:8000/api/like/${postId}`,
         {},
         { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
@@ -199,7 +199,7 @@ export default function Profile(props: ProfileProps) {
     try {
       const token = localStorage.getItem("access_token");
       await axios.put(
-        "https://harixom-desarrollo.onrender.com/api/user/profile",
+        "http://127.0.0.1:8000/api/user/profile",
         {
           services,
           prices,
@@ -222,7 +222,7 @@ export default function Profile(props: ProfileProps) {
     try {
       if (!token || !newMessage.trim()) return;
       const { data } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/profile/messages`,
+        `http://127.0.0.1:8000/api/profile/messages`,
         { to_user_id: props.userId, message: newMessage },
         { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
@@ -246,7 +246,7 @@ export default function Profile(props: ProfileProps) {
   // Función para eliminar mensaje
   const handleDeleteMessage = async (id: number) => {
     try {
-      await axios.delete(`https://harixom-desarrollo.onrender.com/api/profile/messages/${id}`, {
+      await axios.delete(`http://127.0.0.1:8000/api/profile/messages/${id}`, {
         withCredentials: true, headers: { Authorization: `Bearer ${token}` },
       });
       setMessages((prev) => prev.filter((m) => m.id !== id));
@@ -264,7 +264,7 @@ export default function Profile(props: ProfileProps) {
         return;
       }
       const { } = await axios.post(
-        `https://harixom-desarrollo.onrender.com/api/user/update-coffee-link`,
+        `http://127.0.0.1:8000/api/user/update-coffee-link`,
         {
           buymeacoffee_link: LinkText
         },
@@ -285,7 +285,7 @@ export default function Profile(props: ProfileProps) {
 
       const token = localStorage.getItem("access_token");
       const { data } = await axios.get(
-        `https://harixom-desarrollo.onrender.com/api/publications/${publicationId}`,
+        `http://127.0.0.1:8000/api/publications/${publicationId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
@@ -452,13 +452,13 @@ export default function Profile(props: ProfileProps) {
                           try {
                             if (f.isBlocked) {
                               // Desbloquear
-                              await axios.delete(`https://harixom-desarrollo.onrender.com/api/unblock/${f.id}`, {
+                              await axios.delete(`http://127.0.0.1:8000/api/unblock/${f.id}`, {
                                 headers: { Authorization: `Bearer ${token}` },
                               });
                               showToast("Usuario desbloqueado", "success");
                             } else {
                               // Bloquear
-                              await axios.post(`https://harixom-desarrollo.onrender.com/api/block/${f.id}`, {}, {
+                              await axios.post(`http://127.0.0.1:8000/api/block/${f.id}`, {}, {
                                 headers: { Authorization: `Bearer ${token}` },
                               });
                               showToast("Usuario bloqueado", "success");
