@@ -125,7 +125,6 @@ const SuscriptionsPage = () => {
       showToast("Debes iniciar sesión primero.");
       return;
     }
-
     setLoadingAction("cancel");
     try {
       await axios.post(
@@ -135,6 +134,7 @@ const SuscriptionsPage = () => {
       );
 
       setIsPremium(false);
+      setCheckPremium("");
       showToast("Suscription canceled successfully.", "success");
     } catch (err: any) {
       console.error("Error cancelando suscripción:", err);
@@ -149,6 +149,7 @@ const SuscriptionsPage = () => {
       showToast("Usuario no autenticado. Inicia sesión nuevamente.", "error");
       return;
     }
+
     try {
       const res = await axios.post("https://harixom-desarrollo.onrender.com/api/subscription-cancel-email",
         {},
@@ -207,7 +208,10 @@ const SuscriptionsPage = () => {
             You’re currently a Premium User!
           </p>
           <button
-            onClick={() => { handleCancelSubscription; handleEmailCancel }}
+            onClick={() => {
+              handleCancelSubscription();
+              handleEmailCancel();
+            }}
             disabled={loadingAction === "cancel"}
             className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-8 rounded-full transition-all duration-300 hover:scale-105"
           >
@@ -268,11 +272,10 @@ const SuscriptionsPage = () => {
                 ) : (
 
                   <button
-                    onClick={() => handleSubscribe(plan.title.toLowerCase())}
-                    disabled={loadingAction === plan.title.toLowerCase()}
-                    className=" bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-2 px-6 rounded-full shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-600"
+                    disabled
+                    className="bg-purple-900/50 text-purple-300 font-semibold py-2 px-6 rounded-full cursor-default"
                   >
-                    {loadingAction === "monthly" ? "Downgrading..." : "Downgrade"}
+                    Active Annual
                   </button>
                 )
               )
