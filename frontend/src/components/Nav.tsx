@@ -63,7 +63,6 @@ export default function Nav() {
         error.response?.data?.error || "Error al enviar el correo.",
         "error"
       )
-
     }
   };
 
