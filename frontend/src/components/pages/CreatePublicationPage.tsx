@@ -152,15 +152,14 @@ export default function CreatePublicationPage({ title }: { title: string }) {
         className="absolute inset-0 w-full h-full object-cover opacity-50"
       />
       <div>
+<button
+  onClick={() => window.history.back()}
+  className="font-extrabold text-2xl bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-3 relative"
+>
+  ←
+</button>
 
-        <div className="mb-10 pl-4">
-          <Link
-            to="/Profile"
-            className="font-extrabold text-2xl bg-pink-400 hover:bg-pink-600 text-black rounded-full px-4 py-3"
-          >
-            ←
-          </Link>
-        </div>
+
 
         <div className="flex flex-col items-center justify-center relative">
           <div className="mb-8 text-center">
