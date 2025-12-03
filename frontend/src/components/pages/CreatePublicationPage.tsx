@@ -251,7 +251,7 @@ export default function CreatePublicationPage({ title }: { title: string }) {
       bg-gradient-to-r from-pink-400 to-blue-300 hover:scale-102 transition-transform duration-500 
       ${loading || !selectedImage || !cat ? "opacity-50 cursor-not-allowed" : ""}`}
               >
-                {loading ? "Creando..." : "Create"}
+                {loading ? "Creating..." : "Create"}
               </button>
             </div>
           </div>
